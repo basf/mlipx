@@ -12,6 +12,7 @@ zntrack = "0.8.0a4"
 ase = "^3"
 typer = "^0"
 plotly = "^5"
+zndraw = "^0.4.7"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
