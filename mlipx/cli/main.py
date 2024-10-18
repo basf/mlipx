@@ -27,6 +27,7 @@ def compare(
     kwarg: Annotated[list[str], typer.Option("--kwarg", "-k")] = None,
     token: Annotated[str, typer.Option("--token")] = None,
 ):
+    """Compare mlipx nodes and visualize the results using ZnDraw."""
     if kwarg is None:
         kwarg = []
     node_names, revs, remotes = [], [], []
