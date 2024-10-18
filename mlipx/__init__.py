@@ -1,5 +1,6 @@
-from mlipx.nodes import StructureOptimization
+from mlipx.nodes import LoadDataFile, StructureOptimization
 
 __all__ = [
     "StructureOptimization",
+    "LoadDataFile",
 ]
