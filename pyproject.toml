@@ -11,6 +11,7 @@ python = ">=3.10,<3.14"
 zntrack = "0.8.0a4"
 ase = "^3"
 typer = "^0"
+plotly = "^5"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
