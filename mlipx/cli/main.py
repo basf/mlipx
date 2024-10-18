@@ -3,6 +3,7 @@ import uuid
 import typer
 import zntrack
 from tqdm import tqdm
+from typing_extensions import Annotated
 from zndraw import ZnDraw
 
 app = typer.Typer()
@@ -15,13 +16,19 @@ def main():
 
 @app.command()
 def compare(
-    nodes: list[str] = typer.Argument(..., help="Path to the node to compare"),
-    zndraw_url: str = typer.Option(
-        envvar="ZNDRAW_URL", help="URL of the ZnDraw server to visualize the results"
-    ),
-    kwarg: list[str] = typer.Option({}, "--kwarg", "-k"),
-    token: str | None = typer.Option(None, "--token"),
+    nodes: Annotated[list[str], typer.Argument(help="Path to the node to compare")],
+    zndraw_url: Annotated[
+        str,
+        typer.Option(
+            envvar="ZNDRAW_URL",
+            help="URL of the ZnDraw server to visualize the results",
+        ),
+    ],
+    kwarg: Annotated[list[str], typer.Option("--kwarg", "-k")] = None,
+    token: Annotated[str, typer.Option("--token")] = None,
 ):
+    if kwarg is None:
+        kwarg = []
     node_names, revs, remotes = [], [], []
     # TODO support wild cards
     for node in nodes:
