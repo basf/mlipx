@@ -1,37 +1,3 @@
-from mlipx import abc
-from mlipx.nodes import (
-    ApplyCalculator,
-    CalculateFormationEnergy,
-    CompareCalculatorResults,
-    EvaluateCalculatorResults,
-    LangevinConfig,
-    LoadDataFile,
-    MaximumForceObserver,
-    MolecularDynamics,
-    NEBinterpolate,
-    NEBs,
-    PhaseDiagram,
-    PourbaixDiagram,
-    Smiles2Conformers,
-    StructureOptimization,
-    TemperatureRampModifier,
-)
+import lazy_loader as lazy
 
-__all__ = [
-    "abc",
-    "StructureOptimization",
-    "LoadDataFile",
-    "MaximumForceObserver",
-    "TemperatureRampModifier",
-    "MolecularDynamics",
-    "LangevinConfig",
-    "ApplyCalculator",
-    "CalculateFormationEnergy",
-    "EvaluateCalculatorResults",
-    "CompareCalculatorResults",
-    "NEBs",
-    "NEBinterpolate",
-    "Smiles2Conformers",
-    "PhaseDiagram",
-    "PourbaixDiagram",
-]
+__getattr__, __dir__, __all__ = lazy.attach_stub(__name__, __file__)

@@ -14,6 +14,7 @@ typer = "^0"
 plotly = "^5"
 zndraw = "^0.4.7"
 znh5md = "^0.3.6"
+lazy-loader = "^0.4"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"

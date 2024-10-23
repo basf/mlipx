@@ -3,6 +3,7 @@ import pathlib
 import ase
 import ase.io as aio
 import zntrack
+from rdkit2ase import smiles2conformers
 
 
 class Smiles2Conformers(zntrack.Node):
@@ -14,8 +15,6 @@ class Smiles2Conformers(zntrack.Node):
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
 
     def run(self):
-        from rdkit2ase import smiles2conformers
-
         conformers = smiles2conformers(
             self.smiles,
             numConfs=self.num_confs,
