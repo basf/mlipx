@@ -44,8 +44,11 @@ html_title = "Machine Learned Interatomic Potential eXploration"
 html_short_title = "mlipx"
 
 # -- Options for hoverxref extension -----------------------------------------
-# https://hoverxref.readthedocs.io/en/latest/
+# https://sphinx-hoverxref.readthedocs.io/en/latest/
 
+hoverxref_role_types = {
+    "class": "tooltip",
+}
 hoverxref_roles = ["term"]
 
 # -- Options for sphinxcontrib-bibtex ----------------------------------------
