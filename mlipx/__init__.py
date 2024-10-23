@@ -10,6 +10,9 @@ from mlipx.nodes import (
     MolecularDynamics,
     NEBinterpolate,
     NEBs,
+    PhaseDiagram,
+    PourbaixDiagram,
+    Smiles2Conformers,
     StructureOptimization,
     TemperatureRampModifier,
 )
@@ -28,4 +31,7 @@ __all__ = [
     "CompareCalculatorResults",
     "NEBs",
     "NEBinterpolate",
+    "Smiles2Conformers",
+    "PhaseDiagram",
+    "PourbaixDiagram",
 ]
