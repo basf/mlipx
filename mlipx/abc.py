@@ -1,5 +1,7 @@
 """Abstract base classes and type hints."""
 
+import abc
+import dataclasses
 import typing as t
 from enum import Enum
 
@@ -38,3 +40,26 @@ FRAMES = t.List[ase.Atoms]
 class ComparisonResults(t.TypedDict):
     frames: FRAMES
     figures: FIGURES
+
+
+@dataclasses.dataclass
+class DynamicsObserver:
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
+
+    def initialize(self, atoms: ase.Atoms) -> None:
+        pass
+
+    @abc.abstractmethod
+    def check(self, atoms: ase.Atoms) -> bool: ...
+
+
+@dataclasses.dataclass
+class DynamicsModifier:
+    @property
+    def name(self) -> str:
+        return self.__class__.__name__
+
+    @abc.abstractmethod
+    def modify(self, thermostat, step, total_steps) -> None: ...

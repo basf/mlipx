@@ -1,0 +1,6 @@
+{
+    "python.analysis.typeCheckingMode": "basic",
+    "[restructuredtext]": {
+        "editor.wordWrap": "on"
+    }
+}
