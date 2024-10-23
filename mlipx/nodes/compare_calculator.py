@@ -11,7 +11,7 @@ class CompareCalculatorResults(zntrack.Node):
     data: EvaluateCalculatorResults = zntrack.deps()
     reference: EvaluateCalculatorResults = zntrack.deps()
 
-    plots: pd.DataFrame = zntrack.plots(y=[])
+    plots: pd.DataFrame = zntrack.plots(autosave=True)
     rmse: dict = zntrack.metrics()
     error: dict = zntrack.metrics()
 
@@ -26,6 +26,8 @@ class CompareCalculatorResults(zntrack.Node):
             "fmax": rmse(self.data.plots["fmax"], self.reference.plots["fmax"]),
             "fnorm": rmse(self.data.plots["fnorm"], self.reference.plots["fnorm"]),
         }
+
+        self.plots = pd.DataFrame()
 
         for row_idx in tqdm.trange(len(self.data.plots)):
             plots = {}
@@ -57,7 +59,7 @@ class CompareCalculatorResults(zntrack.Node):
                 - self.reference.plots["fnorm"].iloc[row_idx]
             )
 
-            self.state.extend_plots("plots", plots)
+            self.plots = self.plots.append(plots, ignore_index=True)
 
         # iterate over plots and save min/max
         self.error = {}

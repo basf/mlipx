@@ -73,7 +73,7 @@ class MolecularDynamics(zntrack.Node):
     modifiers: list[DynamicsModifier] = zntrack.deps(None)
 
     observer_metrics: dict = zntrack.metrics()
-    plots: pd.DataFrame = zntrack.plots(y=["energy", "fmax"])
+    plots: pd.DataFrame = zntrack.plots(y=["energy", "fmax"], autosave=True)
 
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
 
@@ -87,19 +87,19 @@ class MolecularDynamics(zntrack.Node):
             obs.initialize(atoms)
 
         self.observer_metrics = {}
+        self.plots = pd.DataFrame()
 
         for idx, _ in enumerate(
             tqdm.tqdm(dyn.irun(steps=self.steps), total=self.steps)
         ):
             ase.io.write(self.frames_path, atoms, append=True)
-            self.state.extend_plots(
-                "plots",
-                {
-                    "energy": atoms.get_potential_energy(),
-                    "fmax": np.max(np.linalg.norm(atoms.get_forces(), axis=1)),
-                    "fnorm": np.linalg.norm(atoms.get_forces()),
-                },
-            )
+            plots = {
+                "energy": atoms.get_potential_energy(),
+                "fmax": np.max(np.linalg.norm(atoms.get_forces(), axis=1)),
+                "fnorm": np.linalg.norm(atoms.get_forces()),
+            }
+            self.plots = self.plots.append(plots, ignore_index=True)
+
             for obs in self.observers:
                 if obs.check(atoms):
                     self.observer_metrics[obs.name] = idx

@@ -33,10 +33,11 @@ def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
 class EvaluateCalculatorResults(zntrack.Node):
     data: list[ase.Atoms] = zntrack.deps()
     plots: pd.DataFrame = zntrack.plots(
-        y=["fmax", "fnorm", "energy", "eform"], independent=True
+        y=["fmax", "fnorm", "energy", "eform"], independent=True, autosave=True
     )
 
     def run(self):
+        self.plots = pd.DataFrame()
         for idx in tqdm.tqdm(range(len(self.data))):
             atoms = self.data[idx]
 
@@ -58,10 +59,7 @@ class EvaluateCalculatorResults(zntrack.Node):
                 "energy_per_atom": energy / n_atoms,
                 "eform_per_atom": eform / n_atoms,
             }
-            self.state.extend_plots(
-                "plots",
-                plots,
-            )
+            self.plots = self.plots.append(plots, ignore_index=True)
 
     @property
     def frames(self):
