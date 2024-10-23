@@ -1,0 +1,132 @@
+import ase
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import tqdm
+import zntrack
+
+from mlipx.abc import ASEKeys, ComparisonResults
+from mlipx.utils import shallow_copy_atoms
+
+
+def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
+    fig = go.Figure()
+    for node in nodes:
+        if node.state.rev is None:
+            name = node.name
+        else:
+            name = f"{node.name}@{node.state.remote}@{node.state.rev}"
+        fig.add_trace(
+            go.Scatter(
+                x=node.plots.index,
+                y=node.plots[key],
+                mode="lines+markers",
+                name=name,
+            )
+        )
+    fig.update_traces(customdata=np.stack([np.arange(len(node.plots.index))], axis=1))
+    fig.update_layout(title=key)
+    return fig
+
+
+class EvaluateCalculatorResults(zntrack.Node):
+    data: list[ase.Atoms] = zntrack.deps()
+    plots: pd.DataFrame = zntrack.plots(
+        y=["fmax", "fnorm", "energy", "eform"], independent=True
+    )
+
+    def run(self):
+        for idx in tqdm.tqdm(range(len(self.data))):
+            atoms = self.data[idx]
+
+            forces = atoms.get_forces()
+            fmax = np.max(np.linalg.norm(forces, axis=1))
+            fnorm = np.linalg.norm(forces)
+            energy = atoms.get_potential_energy()
+            eform = atoms.info.get(ASEKeys.formation_energy.value, -1)
+            n_atoms = len(atoms)
+
+            # have energy and formation energy in the plot
+
+            plots = {
+                "fmax": fmax,
+                "fnorm": fnorm,
+                "energy": energy,
+                "eform": eform,
+                "n_atoms": n_atoms,
+                "energy_per_atom": energy / n_atoms,
+                "eform_per_atom": eform / n_atoms,
+            }
+            self.state.extend_plots(
+                "plots",
+                plots,
+            )
+
+    @property
+    def frames(self):
+        return self.data
+
+    def __run_note__(self) -> str:
+        return f"""# {self.name}
+Results from {self.state.remote} at {self.state.rev}.
+
+View the trajectory via zndraw:
+```bash
+zndraw {self.name}.frames --rev {self.state.rev} --remote {self.state.remote} --url https://app-dev.roqs.basf.net/zndraw_app
+```
+"""
+
+    @property
+    def figures(self) -> dict:
+        # TODO: remove index column
+
+        plots = {}
+        for key in self.plots.columns:
+            fig = px.line(
+                self.plots,
+                x=self.plots.index,
+                y=key,
+                title=key,
+            )
+            fig.update_traces(
+                customdata=np.stack([np.arange(len(self.plots))], axis=1),
+            )
+            plots[key] = fig
+        return plots
+
+    @staticmethod
+    def compare(
+        *nodes: "EvaluateCalculatorResults", reference: str | None = None
+    ) -> ComparisonResults:
+        # TODO: if reference, shift energies by
+        # rmse(val, reference) and plot as energy_adjusted
+        figures = {}
+        frames_info = {}
+        for key in nodes[0].plots.columns:
+            if not all(key in node.plots.columns for node in nodes):
+                raise ValueError(f"Key {key} not found in all nodes")
+            # check frames are the same
+            figures[key] = get_figure(key, nodes)
+
+        for node in nodes:
+            for key in node.plots.columns:
+                frames_info[f"{node.name}_{key}"] = node.plots[key].values
+
+            # TODO: calculate the rmse difference between a fixed one
+            # and all the others and shift them accordingly
+            # and plot as energy_shifted
+
+            # plot error between curves
+            # mlipx pass additional flags to compare function
+            # have different compare methods also for correlation plots
+
+        frames = [shallow_copy_atoms(x) for x in nodes[0].frames]
+        for key, values in frames_info.items():
+            for atoms, value in zip(frames, values):
+                atoms.info[key] = value
+
+        return {
+            "frames": frames,
+            "figures": figures,
+        }

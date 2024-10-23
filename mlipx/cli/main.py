@@ -6,7 +6,10 @@ from tqdm import tqdm
 from typing_extensions import Annotated
 from zndraw import ZnDraw
 
+from mlipx import recipes
+
 app = typer.Typer()
+app.add_typer(recipes.app, name="recipes")
 
 
 @app.command()
