@@ -6,6 +6,7 @@ from .nodes.formation_energy import CalculateFormationEnergy
 from .nodes.io import LoadDataFile
 from .nodes.modifier import TemperatureRampModifier
 from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
+from .nodes.mp_api import MPRester
 from .nodes.nebs import NEBinterpolate, NEBs
 from .nodes.observer import MaximumForceObserver
 from .nodes.phase_diagram import PhaseDiagram, PourbaixDiagram
@@ -31,4 +32,5 @@ __all__ = [
     "PhaseDiagram",
     "PourbaixDiagram",
     "VibrationalAnalysis",
+    "MPRester",
 ]
