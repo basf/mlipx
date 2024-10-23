@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mlipx"
-version = "0.1.0"
+version = "0.1.1"
 description = "machine-learned interatomic potential tools"
 authors = ["Fabian Zills <fabian.zills@web.de>", "Sandip De <sandip.de@basf.com>", "Sheena Agarwal <sheena.a.agarwal@basf.com>"]
 license = "MIT"
@@ -13,6 +13,7 @@ ase = "^3"
 typer = "^0"
 plotly = "^5"
 zndraw = "^0.4.7"
+znh5md = "^0.3.6"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
