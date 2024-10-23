@@ -11,6 +11,7 @@ from .nodes.observer import MaximumForceObserver
 from .nodes.phase_diagram import PhaseDiagram, PourbaixDiagram
 from .nodes.smiles import Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
+from .nodes.vibrational_analysis import VibrationalAnalysis
 
 __all__ = [
     "abc",
@@ -29,4 +30,5 @@ __all__ = [
     "Smiles2Conformers",
     "PhaseDiagram",
     "PourbaixDiagram",
+    "VibrationalAnalysis",
 ]
