@@ -3,9 +3,7 @@ pages:
   script:
     - pip install poetry
     - poetry install
-    - cd docs
-    - make html
-    - cd ..
+    - sphinx-build -M html docs/source docs/build/
     - mkdir -p "public"
     - cp -r docs/build/html/* public/
   artifacts:
