@@ -1,6 +1,7 @@
 pages:
   image: registry.roqs.basf.net/base-images/python:latest
   script:
+    - su root -c "apt update && apt install -y git"
     - pip install poetry
     - poetry install
     - poetry run sphinx-build -M html docs/source docs/build/
