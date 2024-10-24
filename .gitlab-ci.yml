@@ -1,11 +1,18 @@
 pages:
-  image: registry.roqs.basf.net/ubuntu-python3:latest
+  image: registry.roqs.basf.net/docker:stable
+  services:
+    - docker:dind
+  before_script:
+    - docker build -t mlipx .
   script:
-    - pip install poetry
-    - poetry install
-    - poetry run sphinx-build -M html docs/source docs/build/
+    - docker run --rm -v $(pwd):/app mlipx sphinx-build -M html docs/source docs/build/
     - mkdir -p "public"
     - cp -r docs/build/html/* public/
+    # - pip install poetry
+    # - poetry install
+    # - poetry run sphinx-build -M html docs/source docs/build/
+    # - mkdir -p "public"
+    # - cp -r docs/build/html/* public/
   artifacts:
     paths:
       - public
