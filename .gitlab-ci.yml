@@ -5,8 +5,9 @@ pages:
     - poetry install
     - cd docs
     - make html
-    - mkdir -p "/public"
-    - cp -r build/html/* "/public"
+    - cd ..
+    - mkdir -p "public"
+    - cp -r docs/build/html/* public/
   artifacts:
     paths:
       - public
