@@ -1,0 +1,13 @@
+pages:
+  image: registry.roqs.basf.net/base-images/python:latest
+  script:
+    - apt update && apt install -y curl
+    - curl -sSL https://install.python-poetry.org | python3 -
+    - poetry install
+    - cd docs
+    - make html
+    - mkdir -p "/public"
+    - cp -r build/html/* "/public"
+  artifacts:
+    paths:
+      - public
