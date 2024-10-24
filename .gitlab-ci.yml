@@ -1,7 +1,7 @@
 pages:
   image: registry.roqs.basf.net/base-images/python:latest
   script:
-    - pip install poetry==1.2.0
+    - pip install poetry
     - poetry install
     - cd docs
     - make html
