@@ -1,8 +1,7 @@
 pages:
   image: registry.roqs.basf.net/base-images/python:latest
   script:
-    - sudo apt update && sudo apt install -y curl
-    - curl -sSL https://install.python-poetry.org | python3 -
+    - pipx install poetry==1.2.0
     - poetry install
     - cd docs
     - make html
