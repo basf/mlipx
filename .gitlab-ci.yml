@@ -1,20 +1,11 @@
 pages:
-  image: registry.roqs.basf.net/docker:stable
-  services:
-    - docker:dind
-  before_script:
-    - docker build -t mlipx .
+  image: registry.roqs.basf.net/ubuntu:latest
   script:
-  # copy /app/docs/html from the container to the host
-    - container_id=$(docker create mlipx)
-    # - docker run --rm -v $(pwd):/app mlipx sphinx-build -M html docs/source docs/build/
-    # - mkdir -p "public"
-    # - cp -r docs/build/html/* public/
-    # - pip install poetry
-    # - poetry install
-    # - poetry run sphinx-build -M html docs/source docs/build/
-    # - mkdir -p "public"
-    # - cp -r docs/build/html/* public/
+    - pip install poetry
+    - poetry install
+    - poetry run sphinx-build -M html docs/source docs/build/
+    - mkdir -p "public"
+    - cp -r docs/build/html/* public/
   artifacts:
     paths:
       - public
