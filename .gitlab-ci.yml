@@ -1,5 +1,5 @@
 pages:
-  image: registry.roqs.basf.net/base-images/snakemake:latest
+  image: registry.roqs.basf.net/base-images/snakebase:latest
   # this image ships with GIT which we need
   script:
     - pip install poetry
