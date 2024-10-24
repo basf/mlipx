@@ -5,9 +5,11 @@ pages:
   before_script:
     - docker build -t mlipx .
   script:
-    - docker run --rm -v $(pwd):/app mlipx sphinx-build -M html docs/source docs/build/
-    - mkdir -p "public"
-    - cp -r docs/build/html/* public/
+  # copy /app/docs/html from the container to the host
+    - container_id=$(docker create mlipx)
+    # - docker run --rm -v $(pwd):/app mlipx sphinx-build -M html docs/source docs/build/
+    # - mkdir -p "public"
+    # - cp -r docs/build/html/* public/
     # - pip install poetry
     # - poetry install
     # - poetry run sphinx-build -M html docs/source docs/build/
