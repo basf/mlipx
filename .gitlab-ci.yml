@@ -1,5 +1,5 @@
 pages:
-  image: registry.roqs.basf.net/ubuntu:latest
+  image: registry.roqs.basf.net/ubuntu
   script:
     - pip install poetry
     - poetry install
