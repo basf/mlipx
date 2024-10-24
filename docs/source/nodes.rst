@@ -1,7 +1,7 @@
 Nodes
 =====
 
-The core functionality of mlipx is based on :term:`ZnTrack` nodes.
+The core functionality of :code:`mlipx` is based on :term:`ZnTrack` nodes.
 Each Node is documented in the following section.
 
 .. glossary::

@@ -30,6 +30,7 @@ sphinx-hoverxref = "^1.4.1"
 sphinxcontrib-bibtex = "^2.6.3"
 sphinx-copybutton = "^0.5.2"
 furo = "^2024.8.6"
+sphinxcontrib-video = "^0.2.1"
 
 [tool.poetry.scripts]
 mlipx = "mlipx.cli.main:app"

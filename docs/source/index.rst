@@ -7,7 +7,7 @@ mlipx documentation
 ===================
 
 Welcome to mlipx's documentation!
-Check out the :doc:`usage` section for installation details.
+Check out the :doc:`installation` section for installation details.
 
 .. note::
 
@@ -18,7 +18,7 @@ Contents
 
 .. toctree::
 
-   usage
+   installation
    concept
    recipes
    glossary
