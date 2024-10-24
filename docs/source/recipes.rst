@@ -53,8 +53,8 @@ Therefore, you want to make a GIT commit and push it to your repository.
    (.venv) $ dvc push
 
 .. note::
-   You need to define a GIT and DVC remote.
-   More information on how to setup a DVC remote can be found at https://dvc.org/doc/user-guide/data-management/remote-storage.
+   You need to define a :term:`GIT` and :term:`DVC` remote to push the results.
+   More information on how to setup a :term:`DVC` remote can be found at https://dvc.org/doc/user-guide/data-management/remote-storage.
 
 
 In combination or as an alternative, you can upload the results to a parameter and metric tracking service, such as :term:`mlflow`.
