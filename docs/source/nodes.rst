@@ -20,3 +20,6 @@ Each Node is documented in the following section.
 
     MolecularDynamics
         .. autofunction:: mlipx.MolecularDynamics
+
+    HomonuclearDiatomics
+        .. autofunction:: mlipx.HomonuclearDiatomics

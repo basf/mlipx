@@ -31,6 +31,7 @@ sphinxcontrib-bibtex = "^2.6.3"
 sphinx-copybutton = "^0.5.2"
 furo = "^2024.8.6"
 sphinxcontrib-video = "^0.2.1"
+jupyter-sphinx = "^0.5.3"
 
 [tool.poetry.scripts]
 mlipx = "mlipx.cli.main:app"
@@ -41,7 +42,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.codespell]
 ignore-words-list = "basf"
-skip = "*.svg"
+skip = "*.svg,*.lock"
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]

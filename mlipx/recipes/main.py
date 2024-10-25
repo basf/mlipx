@@ -81,3 +81,13 @@ def energy_and_forces(initialize: bool = False, datapath: str = "..."):
     template = jinja2.Template((CWD / "energy_and_forces.py").read_text())
     with open("main.py", "w") as f:
         f.write(template.render(datapath=datapath))
+
+
+@app.command()
+def homonuclear_diatomics(initialize: bool = False):
+    if initialize:
+        subprocess.run(["git", "init"], check=True)
+        subprocess.run(["dvc", "init"], check=True)
+    template = jinja2.Template((CWD / "homonuclear_diatomics.py").read_text())
+    with open("main.py", "w") as f:
+        f.write(template.render())

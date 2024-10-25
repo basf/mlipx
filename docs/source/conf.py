@@ -30,6 +30,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
     "sphinxcontrib.video",
+    "jupyter_sphinx",
 ]
 
 templates_path = ["_templates"]
