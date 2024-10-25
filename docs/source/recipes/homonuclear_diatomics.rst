@@ -8,17 +8,13 @@ TBA
 
 
 .. jupyter-execute::
-    :hide-code:
+   :hide-code:
 
-    import numpy as np
-    from matplotlib import pyplot
-    %matplotlib inline
+   import plotly.io as pio
+   pio.renderers.default = "sphinx_gallery"
 
-    x = np.linspace(1E-3, 2 * np.pi)
-
-    pyplot.plot(x, np.sin(x) / x)
-    pyplot.plot(x, np.cos(x))
-    pyplot.grid()
+   figure = pio.read_json("source/figures/fnorm_error.json")
+   figure.show()
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
