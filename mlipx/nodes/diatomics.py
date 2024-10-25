@@ -37,8 +37,8 @@ class HomonuclearDiatomics(zntrack.Node):
         DataFrame with the energy values for each bond length.
     """
 
-    elements: list[str] = zntrack.params(("H", "He", "Li"))
     model: NodeWithCalculator = zntrack.deps()
+    elements: list[str] = zntrack.params(("H", "He", "Li"))
 
     n_points: int = zntrack.params(100)
     min_distance: float = zntrack.params(0.5)
