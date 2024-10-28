@@ -100,3 +100,5 @@ In the following we show the results for the :code:`Li-Li` bond for the three se
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`HomonuclearDiatomics`
+
+A working example can be found at `here <https://gitlab.roqs.basf.net/qm-inorganics/mlip-tracking/mlip-evaluation-templates/-/tree/homonuclear-diatomics?ref_type=heads>`_.
