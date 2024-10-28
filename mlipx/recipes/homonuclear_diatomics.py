@@ -3,8 +3,6 @@ from models import MODELS
 
 import mlipx
 
-DATAPATH = "{{ datapath }}"
-
 project = zntrack.Project()
 
 for model_name, model in MODELS.items():
