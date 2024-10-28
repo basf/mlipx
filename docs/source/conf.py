@@ -32,7 +32,7 @@ extensions = [
     "sphinxcontrib.video",
     "jupyter_sphinx",
     "sphinx_design",
-    "nbsphinx",
+    # "nbsphinx",
 ]
 
 templates_path = ["_templates"]
