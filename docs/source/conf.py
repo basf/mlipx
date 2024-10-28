@@ -31,6 +31,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinxcontrib.video",
     "jupyter_sphinx",
+    "sphinx_design",
 ]
 
 templates_path = ["_templates"]

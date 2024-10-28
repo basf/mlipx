@@ -1,17 +1,18 @@
-import dataclasses
+import functools
+import typing as t
 
 import ase
 import numpy as np
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 import tqdm
 import zntrack
+from ase.data import atomic_numbers, covalent_radii
 
-from mlipx.abc import NodeWithCalculator
+from mlipx.abc import ComparisonResults, NodeWithCalculator
 from mlipx.utils import freeze_copy_atoms
 
 
-@dataclasses.dataclass
 class HomonuclearDiatomics(zntrack.Node):
     """Compute energy-bondlength curves for homonuclear diatomic molecules.
 
@@ -43,6 +44,9 @@ class HomonuclearDiatomics(zntrack.Node):
     n_points: int = zntrack.params(100)
     min_distance: float = zntrack.params(0.5)
     max_distance: float = zntrack.params(2.0)
+    eq_distance: t.Union[t.Literal["covalent-radiuis"], float] = zntrack.params(
+        "covalent-radiuis"
+    )
 
     frames: list[ase.Atoms] = zntrack.outs()  # TODO: change to h5md out
     results: pd.DataFrame = zntrack.plots()
@@ -52,30 +56,49 @@ class HomonuclearDiatomics(zntrack.Node):
 
     def run(self):
         self.frames = []
-        distances = np.linspace(self.min_distance, self.max_distance, self.n_points)
-        self.results = pd.DataFrame(index=distances, columns=self.elements)
+        self.results = pd.DataFrame()
         calc = self.model.get_calculator()
+        e_v = {}
         for element in self.elements:
             energies = []
-            for distance in tqdm.tqdm(distances, desc=f"{element}-{element} bond"):
+            if self.eq_distance == "covalent-radiuis":
+                # convert element to atomic number
+                distances = np.linspace(
+                    self.min_distance * covalent_radii[atomic_numbers[element]],
+                    self.max_distance * covalent_radii[atomic_numbers[element]],
+                    self.n_points,
+                )
+            else:
+                distances = np.linspace(
+                    self.min_distance, self.max_distance, self.n_points
+                )
+            tbar = tqdm.tqdm(
+                distances, desc=f"{element}-{element} bond ({distances[0]:.2f} Å)"
+            )
+            for distance in tbar:
+                tbar.set_description(f"{element}-{element} bond ({distance:.2f} Å)")
                 molecule = self.build_molecule(element, distance)
                 molecule.calc = calc
                 energies.append(molecule.get_potential_energy())
                 self.frames.append(freeze_copy_atoms(molecule))
-                self.state.extend_plots(
-                    "results", {element: energies[-1], "distance": distance}
-                )
+            e_v[element] = pd.DataFrame(energies, index=distances, columns=[element])
+        self.results = functools.reduce(
+            lambda x, y: pd.merge(x, y, left_index=True, right_index=True, how="outer"),
+            e_v.values(),
+        )
 
     @property
     def plots(self) -> dict:
         # return a plot for each element
         plots = {}
         for element in self.elements:
-            fig = px.line(
-                self.results,
-                x=self.results.index,
-                y=element,
-                title=f"{element}-{element} bond",
+            fig = go.Figure()
+            fig.add_trace(
+                go.Scatter(
+                    x=self.results[element].dropna().index,
+                    y=self.results[element].dropna(),
+                    mode="lines",
+                )
             )
             offset = 0
             for prev_element in self.elements:
@@ -88,3 +111,42 @@ class HomonuclearDiatomics(zntrack.Node):
             )
             plots[f"{element}-{element} bond"] = fig
         return plots
+
+    @classmethod
+    def compare(cls, *nodes: "HomonuclearDiatomics") -> ComparisonResults:
+        """Compare the energy-bondlength curves for homonuclear diatomic molecules.
+
+        Parameters
+        ----------
+        nodes : HomonuclearDiatomics
+            Nodes to compare.
+
+        Returns
+        -------
+        ComparisonResults
+            Comparison results.
+        """
+        figures = {}
+        for node in nodes:
+            for element in node.elements:
+                # check if a figure for this element already exists
+                if f"{element}-{element} bond" not in figures:
+                    # create a line plot and label it with node.name
+                    fig = go.Figure()
+                    fig.update_layout(title=f"{element}-{element} bond")
+                    fig.update_xaxes(title="Distance / Å")
+                    fig.update_yaxes(title="Energy / eV")
+                else:
+                    fig = figures[f"{element}-{element} bond"]
+
+                # add a line plot node.results[element] vs node.results.index
+                fig.add_trace(
+                    go.Scatter(
+                        x=node.results[element].dropna().index,
+                        y=node.results[element].dropna(),
+                        mode="lines",
+                        name=node.name.replace(f"_{cls.__name__}", ""),
+                    )
+                )
+                figures[f"{element}-{element} bond"] = fig
+        return {"frames": nodes[0].frames, "figures": figures}

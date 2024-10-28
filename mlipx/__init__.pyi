@@ -4,6 +4,7 @@ from .nodes.compare_calculator import CompareCalculatorResults
 from .nodes.diatomics import HomonuclearDiatomics
 from .nodes.evaluate_calculator import EvaluateCalculatorResults
 from .nodes.formation_energy import CalculateFormationEnergy
+from .nodes.generic_ase import GenericASECalculator
 from .nodes.io import LoadDataFile
 from .nodes.modifier import TemperatureRampModifier
 from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
@@ -35,4 +36,5 @@ __all__ = [
     "VibrationalAnalysis",
     "HomonuclearDiatomics",
     "MPRester",
+    "GenericASECalculator",
 ]

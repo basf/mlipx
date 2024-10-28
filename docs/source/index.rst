@@ -21,6 +21,7 @@ Contents
    installation
    concept
    recipes
-   glossary
+   build_graph
    nodes
+   glossary
    abc
