@@ -9,9 +9,6 @@ Each Node is documented in the following section.
     LoadDataFile
         .. autofunction:: mlipx.LoadDataFile
 
-    LoadDataFile
-        .. autofunction:: mlipx.LoadDataFile
-
     ApplyCalculator
         .. autofunction:: mlipx.ApplyCalculator
 
