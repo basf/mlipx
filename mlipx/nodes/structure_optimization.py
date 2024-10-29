@@ -13,7 +13,7 @@ class StructureOptimization(zntrack.Node):
 
     Relax the geometry for each `ase.Atoms` provided.
 
-    Attributes
+    Parameters
     ----------
     data : list[ase.Atoms]
         Atoms to relax.

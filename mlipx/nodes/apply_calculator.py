@@ -12,6 +12,17 @@ from mlipx.utils import freeze_copy_atoms
 
 
 class ApplyCalculator(zntrack.Node):
+    """
+    Apply a calculator to a list of atoms objects and store the results in a H5MD file.
+
+    Parameters
+    ----------
+    data : list[ase.Atoms]
+        List of atoms objects to calculate.
+    model : NodeWithCalculator, optional
+        Node providing the calculator object to apply to the data.
+    """
+
     data: list[ase.Atoms] = zntrack.deps()
     model: NodeWithCalculator | None = zntrack.deps()
 

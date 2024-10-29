@@ -9,8 +9,17 @@ Each Node is documented in the following section.
     LoadDataFile
         .. autofunction:: mlipx.LoadDataFile
 
-    LangevinConfig
-        .. autofunction:: mlipx.LangevinConfig
+    LoadDataFile
+        .. autofunction:: mlipx.LoadDataFile
+
+    ApplyCalculator
+        .. autofunction:: mlipx.ApplyCalculator
+
+    CompareCalculatorResults
+        .. autofunction:: mlipx.CompareCalculatorResults
+
+    CalculateFormationEnergy
+        .. autofunction:: mlipx.CalculateFormationEnergy
 
     MaximumForceObserver
         .. autofunction:: mlipx.MaximumForceObserver
@@ -23,3 +32,21 @@ Each Node is documented in the following section.
 
     HomonuclearDiatomics
         .. autofunction:: mlipx.HomonuclearDiatomics
+
+    NEBinterpolate
+        .. autofunction:: mlipx.NEBinterpolate
+
+    NEBs
+        .. autofunction:: mlipx.NEBs
+
+    VibrationalAnalysis
+        .. autofunction:: mlipx.VibrationalAnalysis
+
+    PhaseDiagram
+        .. autofunction:: mlipx.PhaseDiagram
+
+    PourbaixDiagram
+        .. autofunction:: mlipx.PourbaixDiagram
+
+    StructureOptimization
+        .. autofunction:: mlipx.StructureOptimization

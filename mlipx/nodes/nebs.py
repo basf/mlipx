@@ -14,6 +14,22 @@ from mlipx.abc import ComparisonResults, NodeWithCalculator, Optimizer
 
 
 class NEBinterpolate(zntrack.Node):
+    """
+    Interpolates between two or three images to create a NEB path.
+
+    Parameters
+    ----------
+    data : list[ase.Atoms]
+        List of atoms objects.
+    n_images : int
+        Number of images to interpolate.
+    mic : bool
+        Whether to use the minimum image convention.
+    frames_path : pathlib.Path
+        Path to save the interpolated frames.
+
+    """
+
     data: list[ase.Atoms] = zntrack.deps()
     n_images: int = zntrack.params(5)
     mic: bool = zntrack.params(False)
@@ -52,6 +68,33 @@ class NEBinterpolate(zntrack.Node):
 
 
 class NEBs(zntrack.Node):
+    """
+    Runs NEB calculation on a list of images.
+
+    Parameters
+    ----------
+    data : list[ase.Atoms]
+        List of atoms objects.
+    model : NodeWithCalculator
+        Node with a calculator.
+    relax : bool
+        Whether to relax the initial and final images.
+    optimizer : Optimizer
+        ASE optimizer to use.
+    fmax : float
+        Maximum force allowed.
+    frames_path : pathlib.Path
+        Path to save the final frames.
+    trajectory_path : pathlib.Path
+        Path to save the neb trajectory file.
+
+    Attributes
+    ----------
+    results : pd.DataFrame
+        DataFrame with the data_id and potential energy of the NEB calculation
+
+    """
+
     data: list[ase.Atoms] = zntrack.deps()
     model: NodeWithCalculator = zntrack.deps()
     relax: bool = zntrack.params(True)

@@ -3,6 +3,7 @@ from .nodes.apply_calculator import ApplyCalculator
 from .nodes.compare_calculator import CompareCalculatorResults
 from .nodes.diatomics import HomonuclearDiatomics
 from .nodes.evaluate_calculator import EvaluateCalculatorResults
+from .nodes.filter_dataset import FilterAtoms
 from .nodes.formation_energy import CalculateFormationEnergy
 from .nodes.generic_ase import GenericASECalculator
 from .nodes.io import LoadDataFile
@@ -37,4 +38,5 @@ __all__ = [
     "HomonuclearDiatomics",
     "MPRester",
     "GenericASECalculator",
+    "FilterAtoms",
 ]

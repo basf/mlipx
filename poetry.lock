@@ -6171,23 +6171,6 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
-name = "varname"
-version = "0.13.5"
-description = "Dark magics about variable names in python."
-optional = false
-python-versions = "<4.0,>=3.8"
-files = [
-    {file = "varname-0.13.5-py3-none-any.whl", hash = "sha256:55bc967573215ff93cbf77d6fe979c353b199080eac660adfb3b35b303f6eda2"},
-    {file = "varname-0.13.5.tar.gz", hash = "sha256:82076a5c08e1b8b4fd0c9b5b1bf4a211a86d5367f97aa7f91d8eccb84017b3bf"},
-]
-
-[package.dependencies]
-executing = ">=2.1,<3.0"
-
-[package.extras]
-all = ["asttokens (==2.*)", "pure_eval (==0.*)"]
-
-[[package]]
 name = "vine"
 version = "5.1.0"
 description = "Python promises."
@@ -6607,13 +6590,13 @@ znjson = ">=0.2.3,<0.3.0"
 
 [[package]]
 name = "zntrack"
-version = "0.8.0a5"
+version = "0.8.0a6"
 description = "Create, Run and Benchmark DVC Pipelines in Python"
 optional = false
 python-versions = "<4,>=3.10"
 files = [
-    {file = "zntrack-0.8.0a5-py3-none-any.whl", hash = "sha256:abe6cb3ccf81e7db85b1e9c814b28e297e436b3d3d66391e5dd2642420059971"},
-    {file = "zntrack-0.8.0a5.tar.gz", hash = "sha256:f2fd16c8cf7b963ff580de73af13695de5e9406321aecfc89237c19db6e586dc"},
+    {file = "zntrack-0.8.0a6-py3-none-any.whl", hash = "sha256:4d7a09f3e3f08ea3a8b85be7ccebf30f6c23b8c8f87566043cdda598e454b610"},
+    {file = "zntrack-0.8.0a6.tar.gz", hash = "sha256:8f0bebe44e36f4138854a960a4027e64b661004334c67f86f36abdb76adc25a7"},
 ]
 
 [package.dependencies]
@@ -6622,7 +6605,6 @@ pandas = ">=2,<3"
 pyyaml = ">=6,<7"
 tqdm = ">=4,<5"
 typer = ">=0,<1"
-varname = ">=0.13,<0.14"
 znfields = ">=0.1.2,<0.2.0"
 znflow = ">=0.2.2,<0.3.0"
 znjson = ">=0.2,<0.3"
@@ -6630,4 +6612,4 @@ znjson = ">=0.2,<0.3"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "ff6bf81b35d293b298b4296223f519113af589a6717bd0f18caee21b6e475818"
+content-hash = "1868b422ab59e974a51305f42a8d20cad4f88c1ffe5f619924c48d79780ec887"

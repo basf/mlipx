@@ -8,6 +8,20 @@ from mlipx.utils import rmse, shallow_copy_atoms
 
 
 class CompareCalculatorResults(zntrack.Node):
+    """
+    CompareCalculatorResults is a node that compares the results of two calculators.
+    It calculates the RMSE between the two calculators and adjusts plots accordingly.
+    It calculates the error between the two calculators and saves the min/max values.
+
+    Parameters
+    ----------
+    data : EvaluateCalculatorResults
+            The results of the first calculator.
+    reference : EvaluateCalculatorResults
+        The results of the second calculator.
+        The results of the first calculator will be compared to these results.
+    """
+
     data: EvaluateCalculatorResults = zntrack.deps()
     reference: EvaluateCalculatorResults = zntrack.deps()
 
@@ -27,7 +41,7 @@ class CompareCalculatorResults(zntrack.Node):
             "fnorm": rmse(self.data.plots["fnorm"], self.reference.plots["fnorm"]),
         }
 
-        self.plots = pd.DataFrame()
+        all_plots = []
 
         for row_idx in tqdm.trange(len(self.data.plots)):
             plots = {}
@@ -58,8 +72,8 @@ class CompareCalculatorResults(zntrack.Node):
                 self.data.plots["fnorm"].iloc[row_idx]
                 - self.reference.plots["fnorm"].iloc[row_idx]
             )
-
-            self.plots = self.plots.append(plots, ignore_index=True)
+            all_plots.append(plots)
+        self.plots = pd.DataFrame(all_plots)
 
         # iterate over plots and save min/max
         self.error = {}

@@ -18,6 +18,37 @@ from mlipx.abc import ComparisonResults, NodeWithCalculator
 
 
 class VibrationalAnalysis(zntrack.Node):
+    """
+    Vibrational Analysis Node
+    This node performs vibrational analysis on the provided images.
+
+    Parameters
+    ----------
+    data : list[ase.Atoms]
+        List of images to perform vibrational analysis on.
+    model : NodeWithCalculator
+        Model node with calculator to perform vibrational analysis.
+    displacement : float
+        Displacement for vibrational analysis.
+    nfree : int
+        Number of free atoms.
+    lower_freq_threshold : float
+        Lower frequency threshold.
+    frames_path : pathlib.Path
+        Path to save frames.
+    modes_path : pathlib.Path
+        Path to save vibrational modes.
+    modes_cache : pathlib.Path
+        Path to save modes cache.
+    vib_cache : pathlib.Path
+        Path to save vibrational cache.
+
+    Attributes
+    ----------
+    results : pd.DataFrame
+        Results of vibrational analysis.
+    """
+
     data: list[ase.Atoms] = zntrack.deps()
     # image_ids: list[int] = zntrack.params()
     model: NodeWithCalculator = zntrack.deps()
