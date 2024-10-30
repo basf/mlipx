@@ -83,3 +83,4 @@ Overview
    recipes/vibrational_analysis
    recipes/energy_and_forces
    recipes/homonuclear_diatomics
+   recipes/energy_volume

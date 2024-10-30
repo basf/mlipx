@@ -40,5 +40,11 @@ Glossary
                 ...
             }
 
+    packmol
+        A package for building initial boxes.
+
+    rdkit2ase
+        A package for converting RDKit molecules to ASE atoms.
+
 
 .. footbibliography::

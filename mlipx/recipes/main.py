@@ -91,3 +91,14 @@ def homonuclear_diatomics(initialize: bool = False):
     template = jinja2.Template((CWD / "homonuclear_diatomics.py").read_text())
     with open("main.py", "w") as f:
         f.write(template.render())
+
+
+@app.command()
+def ev(initialize: bool = False):
+    """Compute Energy-Volume curves."""
+    if initialize:
+        subprocess.run(["git", "init"], check=True)
+        subprocess.run(["dvc", "init"], check=True)
+    template = jinja2.Template((CWD / "energy_volume.py").read_text())
+    with open("main.py", "w") as f:
+        f.write(template.render())

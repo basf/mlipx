@@ -47,3 +47,12 @@ Each Node is documented in the following section.
 
     StructureOptimization
         .. autofunction:: mlipx.StructureOptimization
+
+    Smiles2Conformers
+        .. autofunction:: mlipx.Smiles2Conformers
+
+    BuildBox
+        .. autofunction:: mlipx.BuildBox
+
+    EnergyVolumeCurve
+        .. autofunction:: mlipx.EnergyVolumeCurve
