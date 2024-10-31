@@ -9,6 +9,9 @@ Each Node is documented in the following section.
     LoadDataFile
         .. autofunction:: mlipx.LoadDataFile
 
+    LangevinConfig
+        .. autofunction:: mlipx.LangevinConfig
+
     ApplyCalculator
         .. autofunction:: mlipx.ApplyCalculator
 
