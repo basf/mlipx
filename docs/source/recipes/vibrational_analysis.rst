@@ -6,7 +6,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes relax
+   (.venv) $ mlipx recipes vibrational-analysis
 
 .. mermaid::
    :align: center
