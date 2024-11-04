@@ -40,6 +40,13 @@ Finally, build the recipe using
    (.venv) $ python main.py
    (.venv) $ dvc repro
 
+
+Dynamic Datasets
+----------------
+For recipes that rely on input data in addition to providing a file one can also query data from a remote file or database.
+
+TODO: example mptraj and materials project API
+
 Upload Results
 --------------
 Once the recipe is finished, you can persist the results and upload them to a remote storage.

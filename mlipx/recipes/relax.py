@@ -12,7 +12,7 @@ with project:
 for model_name, model in MODELS.items():
     with project.group(model_name):
         geom_opt = mlipx.StructureOptimization(
-            data=propanol.frames, model=model, fmax=0.05
+            data=propanol.frames, data_id=-1, model=model, fmax=0.05
         )
 
 project.build()

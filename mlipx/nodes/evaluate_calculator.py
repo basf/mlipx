@@ -13,16 +13,12 @@ from mlipx.utils import shallow_copy_atoms
 def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
     fig = go.Figure()
     for node in nodes:
-        if node.state.rev is None:
-            name = node.name
-        else:
-            name = f"{node.name}@{node.state.remote}@{node.state.rev}"
         fig.add_trace(
             go.Scatter(
                 x=node.plots.index,
                 y=node.plots[key],
                 mode="lines+markers",
-                name=name,
+                name=node.name.replace(f"_{node.__class__.__name__}", ""),
             )
         )
     fig.update_traces(customdata=np.stack([np.arange(len(node.plots.index))], axis=1))

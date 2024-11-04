@@ -5,3 +5,62 @@ TBA
 .. code-block:: console
 
    (.venv) $ mlipx recipes energy-and-forces
+
+.. mermaid::
+   :align: center
+
+   graph TD
+
+      data['Reference Data incl. DFT E/F']
+      data --> CalculateFormationEnergy1
+      data --> CalculateFormationEnergy2
+      data --> CalculateFormationEnergy3
+      data --> CalculateFormationEnergy4
+
+         subgraph Reference
+            CalculateFormationEnergy1 --> EvaluateCalculatorResults1
+         end
+
+         subgraph mg1["Model 1"]
+         CalculateFormationEnergy2 --> EvaluateCalculatorResults2
+         EvaluateCalculatorResults2 --> CompareCalculatorResults2
+         EvaluateCalculatorResults1 --> CompareCalculatorResults2
+         end
+         subgraph mg2["Model 2"]
+            CalculateFormationEnergy3 --> EvaluateCalculatorResults3
+            EvaluateCalculatorResults3 --> CompareCalculatorResults3
+            EvaluateCalculatorResults1 --> CompareCalculatorResults3
+         end
+         subgraph mgn["Model <i>N</i>"]
+            CalculateFormationEnergy4 --> EvaluateCalculatorResults4
+            EvaluateCalculatorResults4 --> CompareCalculatorResults4
+            EvaluateCalculatorResults1 --> CompareCalculatorResults4
+         end
+
+
+.. jupyter-execute::
+   :hide-code:
+
+   import plotly.io as pio
+   pio.renderers.default = "sphinx_gallery"
+
+   figure = pio.read_json("source/figures/eform_per_atom.json")
+   figure.show()
+
+.. jupyter-execute::
+   :hide-code:
+
+   figure = pio.read_json("source/figures/fmax.json")
+   figure.show()
+
+.. jupyter-execute::
+   :hide-code:
+
+   figure = pio.read_json("source/figures/adjusted_eform_error_per_atom.json")
+   figure.show()
+
+.. jupyter-execute::
+   :hide-code:
+
+   figure = pio.read_json("source/figures/fmax_error.json")
+   figure.show()

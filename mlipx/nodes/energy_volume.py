@@ -29,12 +29,8 @@ class EnergyVolumeCurve(zntrack.Node):
 
     Attributes
     ----------
-    frames : list[ase.Atoms]
-        List of structures with the volume scaled.
     results : pd.DataFrame
         DataFrame with the volume, energy, and scaling factor.
-    plots : dict[str, go.Figure]
-        Dictionary with the energy-volume curve plot.
 
     """
 
@@ -75,11 +71,13 @@ class EnergyVolumeCurve(zntrack.Node):
 
     @property
     def frames(self) -> list[ase.Atoms]:
+        """List of structures evaluated during the energy-volume curve."""
         with self.state.fs.open(self.frames_path, "r") as f:
             return list(ase.io.iread(f, format="extxyz"))
 
     @property
     def plots(self) -> dict[str, go.Figure]:
+        """Plot the energy-volume curve."""
         fig = px.scatter(self.results, x="volume", y="energy", color="scale")
         fig.update_layout(title="Energy-Volume Curve")
         fig.update_traces(customdata=np.stack([np.arange(self.n_points)], axis=1))
@@ -88,6 +86,7 @@ class EnergyVolumeCurve(zntrack.Node):
 
     @staticmethod
     def compare(*nodes: "EnergyVolumeCurve") -> ComparisonResults:
+        """Compare the energy-volume curves of multiple nodes."""
         fig = go.Figure()
         for node in nodes:
             fig.add_trace(
