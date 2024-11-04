@@ -59,3 +59,6 @@ Each Node is documented in the following section.
 
     EnergyVolumeCurve
         .. autofunction:: mlipx.EnergyVolumeCurve
+
+    FilterAtoms
+        .. autofunction:: mlipx.FilterAtoms

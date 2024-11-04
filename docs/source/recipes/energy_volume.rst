@@ -81,17 +81,41 @@ Now, we could look at a single structure, but instead we iterate over multiple s
       +        with project.group(f"frame_{data_id}", model_name):
                   ev = mlipx.EnergyVolumeCurve(
                      model=model,
-                     data=filtered.frames,
+      +              data=filtered.frames,
       +              data_id=data_id,
                      n_points=50,
                      start=0.75,
                      stop=2.0,
                   )
 
+
+Given these changes, we can use :code:`mlipx compare` to compare the results of the models on the different frames.
+
+.. code-block:: console
+
+   (.venv) $ mlipx compare frame_1_7net_EnergyVolumeCurve frame_1_mace_agne_EnergyVolumeCurve frame_1_mace_medm_EnergyVolumeCurve
+   (.venv) $ mlipx compare frame_4_7net_EnergyVolumeCurve frame_4_mace_agne_EnergyVolumeCurve frame_4_mace_medm_EnergyVolumeCurve
+
+In our example this shows the following plots in :term:`zndraw`.
+
+.. jupyter-execute::
+   :hide-code:
+
+   figure = pio.read_json("source/figures/energy-volume-curve_bf4_1.json")
+   figure.show()
+
+   figure = pio.read_json("source/figures/energy-volume-curve_bf4_4.json")
+   figure.show()
+
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`Smiles2Conformers`
 * :term:`BuildBox`
 * :term:`EnergyVolumeCurve`
+
+and for the dynamic version
+
+* :term:`LoadDataFile`
+* :term:`FilterAtoms`
 
 A working example can be found at `here <https://gitlab.roqs.basf.net/qm-inorganics/mlip-tracking/mlip-evaluation-templates/-/tree/energy-volume?ref_type=heads>`_.
