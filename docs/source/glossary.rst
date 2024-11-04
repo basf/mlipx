@@ -46,5 +46,13 @@ Glossary
     rdkit2ase
         A package for converting RDKit molecules to ASE atoms.
 
+    Node
+        A node is a class that represents a single step in the workflow.
+        It should inherit from the :class:`zntrack.Node` class.
+        The node should implement the :meth:`zntrack.Node.run` method.
+
+    ASE
+        The Atomic Simulation Environment (ASE).
+
 
 .. footbibliography::
