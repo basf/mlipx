@@ -54,5 +54,8 @@ Glossary
     ASE
         The Atomic Simulation Environment (ASE).
 
+    paraffin
+        The paraffin package for the distributed evaluation of :term:`DVC` stages.
+
 
 .. footbibliography::

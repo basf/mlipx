@@ -24,4 +24,5 @@ Contents
    build_graph
    nodes
    glossary
+   distributed
    abc
