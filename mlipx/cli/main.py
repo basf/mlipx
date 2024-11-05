@@ -31,6 +31,7 @@ def compare(
     token: Annotated[str, typer.Option("--token")] = None,
 ):
     """Compare mlipx nodes and visualize the results using ZnDraw."""
+    # TODO: allow for glob patterns
     if kwarg is None:
         kwarg = []
     node_names, revs, remotes = [], [], []

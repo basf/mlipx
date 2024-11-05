@@ -9,7 +9,7 @@ Writing the evaluation in a workflow-like manner allows for the separation of ta
 onto different hardware or software environments.
 For this purpose, the :term:`paraffin` package was developed.
 
-You can use :code:`paraffin repro` to queue the evaluation of the selected stages.
+You can use :code:`paraffin submit` to queue the evaluation of the selected stages.
 With :code:`paraffin worker --concurrency 5` you can start 5 workers to evaluate the stages.
 
 Further, you can select which stage should be picked up by which worker by defining a :code:`paraffin.yaml` file which supports wildcards.

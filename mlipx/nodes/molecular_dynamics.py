@@ -80,6 +80,8 @@ class MolecularDynamics(zntrack.Node):
     def run(self):
         if self.observers is None:
             self.observers = []
+        if self.modifiers is None:
+            self.modifiers = []
         atoms = self.data[self.data_id]
         atoms.calc = self.model.get_calculator()
         dyn = self.thermostat.get_molecular_dynamics(atoms)
@@ -87,7 +89,7 @@ class MolecularDynamics(zntrack.Node):
             obs.initialize(atoms)
 
         self.observer_metrics = {}
-        self.plots = pd.DataFrame()
+        self.plots = pd.DataFrame(columns=["energy", "fmax", "fnorm"])
 
         for idx, _ in enumerate(
             tqdm.tqdm(dyn.irun(steps=self.steps), total=self.steps)
@@ -98,7 +100,7 @@ class MolecularDynamics(zntrack.Node):
                 "fmax": np.max(np.linalg.norm(atoms.get_forces(), axis=1)),
                 "fnorm": np.linalg.norm(atoms.get_forces()),
             }
-            self.plots = self.plots.append(plots, ignore_index=True)
+            self.plots.loc[len(self.plots)] = plots
 
             for obs in self.observers:
                 if obs.check(atoms):
@@ -147,7 +149,7 @@ class MolecularDynamics(zntrack.Node):
                     x=list(range(len(energies))),
                     y=energies,
                     mode="lines+markers",
-                    name=node.name,
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
                     customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )

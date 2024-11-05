@@ -1,4 +1,3 @@
-import functools
 import pathlib
 import typing as t
 
@@ -39,7 +38,7 @@ class LoadDataFile(zntrack.Node):
     def run(self):
         pass
 
-    @functools.cached_property
+    @property
     def frames(self) -> list[ase.Atoms]:
         if pathlib.Path(self.path).suffix in [".h5", ".h5md"]:
             with self.state.fs.open(self.path, "rb") as f:
