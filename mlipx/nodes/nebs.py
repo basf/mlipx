@@ -83,6 +83,8 @@ class NEBs(zntrack.Node):
         ASE optimizer to use.
     fmax : float
         Maximum force allowed.
+    n_steps : int
+        Maximum number of steps allowed.
     frames_path : pathlib.Path
         Path to save the final frames.
     trajectory_path : pathlib.Path
@@ -122,7 +124,7 @@ class NEBs(zntrack.Node):
                 dyn.run(fmax=self.fmax)
         neb = NEB(frames, allow_shared_calculator=False)
         dyn = optimizer(neb, trajectory=self.trajectory_path.as_posix())
-        dyn.run(fmax=self.fmax)
+        dyn.run(fmax=self.fmax, n_steps=self.n_steps)
         ase.io.write(self.frames_path, frames)
         # neb_trajectory = ase.io.read(self.trajectory_path,format="traj",':')
         row_dicts = []
