@@ -124,7 +124,7 @@ class NEBs(zntrack.Node):
                 dyn.run(fmax=self.fmax)
         neb = NEB(frames, allow_shared_calculator=False)
         dyn = optimizer(neb, trajectory=self.trajectory_path.as_posix())
-        dyn.run(fmax=self.fmax, n_steps=self.n_steps)
+        dyn.run(fmax=self.fmax, steps=self.n_steps)
         ase.io.write(self.frames_path, frames)
         # neb_trajectory = ase.io.read(self.trajectory_path,format="traj",':')
         row_dicts = []
