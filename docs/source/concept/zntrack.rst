@@ -109,7 +109,7 @@ With this Node, we can build our graph:
 
             project.build()
 
-To run the graph you can use the :term:`DVC` CLI :code:`dvc repro` (or the :term:`paraffin` package, see `Distributed evaluation`_. )
+To run the graph you can use the :term:`DVC` CLI :code:`dvc repro` (or the :term:`paraffin` package, see :ref:`Distributed evaluation`. )
 
 Once finished, you can look at the results by loading the nodes:
 
