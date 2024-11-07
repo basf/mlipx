@@ -50,7 +50,7 @@ Dynamic Datasets
 ----------------
 Often, one wants to investigate the performance of a model on a dynamic dataset. In the following we will show how to expand this recipe to data gathered dynamically from the mptraj dataset.
 Here, we want to look at systems containing the elements :code:`B` and :code:`F`.
-Therefore, we will make the following changes to the :term:`graph.py` file.
+Therefore, we will make the following changes to the :term:`main.py` file.
 First, we replace the existing data generation with the loading of the mptraj dataset.
 Then, we filter the data to only contain the elements :code:`B` and :code:`F`.
 
@@ -71,7 +71,7 @@ Now, we could look at a single structure, but instead we iterate over multiple s
 
 .. note::
    You can not use :code:`for idx in range(len(filtered.frames))` as the number of frames is not known at this point.
-   The :term:`graph.py` file only defines the workflow, and the number of frames is only known at runtime.
+   The :term:`main.py` file only defines the workflow, and the number of frames is only known at runtime.
 
 
 .. code-block:: diff

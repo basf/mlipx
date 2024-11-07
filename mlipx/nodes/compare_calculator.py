@@ -30,12 +30,9 @@ class CompareCalculatorResults(zntrack.Node):
     error: dict = zntrack.metrics()
 
     def run(self):
-        eform_rmse = rmse(self.data.plots["eform"], self.reference.plots["eform"])
         e_rmse = rmse(self.data.plots["energy"], self.reference.plots["energy"])
         self.rmse = {
-            "eform": eform_rmse,
             "energy": e_rmse,
-            "eform_per_atom": eform_rmse / len(self.data.plots),
             "energy_per_atom": e_rmse / len(self.data.plots),
             "fmax": rmse(self.data.plots["fmax"], self.reference.plots["fmax"]),
             "fnorm": rmse(self.data.plots["fnorm"], self.reference.plots["fnorm"]),
@@ -45,20 +42,10 @@ class CompareCalculatorResults(zntrack.Node):
 
         for row_idx in tqdm.trange(len(self.data.plots)):
             plots = {}
-            plots["adjusted_eform_error"] = (
-                self.data.plots["eform"].iloc[row_idx] - eform_rmse
-            ) - self.reference.plots["eform"].iloc[row_idx]
             plots["adjusted_energy_error"] = (
                 self.data.plots["energy"].iloc[row_idx] - e_rmse
             ) - self.reference.plots["energy"].iloc[row_idx]
-            plots["adjusted_eform"] = (
-                self.data.plots["eform"].iloc[row_idx] - eform_rmse
-            )
             plots["adjusted_energy"] = self.data.plots["energy"].iloc[row_idx] - e_rmse
-
-            plots["adjusted_eform_error_per_atom"] = (
-                plots["adjusted_eform_error"] / self.data.plots["n_atoms"].iloc[row_idx]
-            )
             plots["adjusted_energy_error_per_atom"] = (
                 plots["adjusted_energy_error"]
                 / self.data.plots["n_atoms"].iloc[row_idx]

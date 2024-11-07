@@ -1,5 +1,5 @@
 import zntrack
-from models import MODELS, REFERENCE
+from models import MODELS
 
 import mlipx
 
@@ -11,8 +11,10 @@ project = zntrack.Project()
 with project.group("initialize"):
     data = mlipx.LoadDataFile(path=DATAPATH)
 
+
 with project.group("reference"):
-    updated_data = mlipx.ApplyCalculator(data=data.frames, model=REFERENCE)
+    # TODO: remove rereence model
+    updated_data = mlipx.ApplyCalculator(data=data.frames)
     w_f_energy = mlipx.CalculateFormationEnergy(data=updated_data.frames)
     ref_evaluation = mlipx.EvaluateCalculatorResults(data=w_f_energy.frames)
 

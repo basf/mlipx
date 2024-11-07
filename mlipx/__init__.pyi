@@ -5,7 +5,7 @@ from .nodes.diatomics import HomonuclearDiatomics
 from .nodes.energy_volume import EnergyVolumeCurve
 from .nodes.evaluate_calculator import EvaluateCalculatorResults
 from .nodes.filter_dataset import FilterAtoms
-from .nodes.formation_energy import CalculateFormationEnergy
+from .nodes.formation_energy import CalculateFormationEnergy, CompareFormationEnergy
 from .nodes.generic_ase import GenericASECalculator
 from .nodes.io import LoadDataFile
 from .nodes.modifier import TemperatureRampModifier
@@ -16,6 +16,7 @@ from .nodes.observer import MaximumForceObserver
 from .nodes.phase_diagram import PhaseDiagram, PourbaixDiagram
 from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
+from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
 
 __all__ = [
@@ -42,4 +43,6 @@ __all__ = [
     "FilterAtoms",
     "EnergyVolumeCurve",
     "BuildBox",
+    "CompareFormationEnergy",
+    "UpdateFramesCalc",
 ]

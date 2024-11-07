@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import tqdm
 import zntrack
 
-from mlipx.abc import ASEKeys, ComparisonResults
+from mlipx.abc import ComparisonResults
 from mlipx.utils import shallow_copy_atoms
 
 
@@ -39,7 +39,7 @@ class EvaluateCalculatorResults(zntrack.Node):
 
     data: list[ase.Atoms] = zntrack.deps()
     plots: pd.DataFrame = zntrack.plots(
-        y=["fmax", "fnorm", "energy", "eform"], independent=True, autosave=True
+        y=["fmax", "fnorm", "energy"], independent=True, autosave=True
     )
 
     def run(self):
@@ -52,7 +52,7 @@ class EvaluateCalculatorResults(zntrack.Node):
             fmax = np.max(np.linalg.norm(forces, axis=1))
             fnorm = np.linalg.norm(forces)
             energy = atoms.get_potential_energy()
-            eform = atoms.info.get(ASEKeys.formation_energy.value, -1)
+            # eform = atoms.info.get(ASEKeys.formation_energy.value, -1)
             n_atoms = len(atoms)
 
             # have energy and formation energy in the plot
@@ -61,10 +61,10 @@ class EvaluateCalculatorResults(zntrack.Node):
                 "fmax": fmax,
                 "fnorm": fnorm,
                 "energy": energy,
-                "eform": eform,
+                # "eform": eform,
                 "n_atoms": n_atoms,
                 "energy_per_atom": energy / n_atoms,
-                "eform_per_atom": eform / n_atoms,
+                # "eform_per_atom": eform / n_atoms,
             }
             frame_data.append(plots)
         self.plots = pd.DataFrame(frame_data)

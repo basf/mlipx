@@ -22,7 +22,7 @@ Homonuclear diatomics give a per-element information on the performance of the :
          m3["HomonuclearDiatomics"]
       end
 
-You can edit the elements in the :term:`graph.py` file to include the elements you want to test.
+You can edit the elements in the :term:`main.py` file to include the elements you want to test.
 The models to evaluate are defined in the :term:`models.py` file.
 We will use the following definition combining :code:`mlipx.GenericASECalculator` and a custom :code:`SevenCalc` calculator.
 

@@ -24,7 +24,7 @@ Glossary
     ZnDraw
         The ZnDraw package by :footcite:t:`elijosiusZeroShotMolecular2024`.
 
-    graph.py
+    main.py
         The :term:`ZnTrack` graph definition for the recipe is stored in this file.
 
     models.py
