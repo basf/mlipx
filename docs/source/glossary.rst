@@ -7,19 +7,19 @@ Glossary
         Machine learned interatomic potential.
 
     GIT
-        A distributed version control system.
+        GIT is a distributed version control system. It allows multiple people to work on a project at the same time without overwriting each other's changes. It also keeps a history of all changes made to the project, so you can easily revert to an earlier version if necessary.
 
     DVC
-        Data version control.
+        Data Version Control (DVC) is a tool used in machine learning projects to track and version the datasets used in the project, as well as the code and the results. This makes it easier to reproduce experiments and share results with others.
 
     mlflow
-        An open source platform for model parameter and metric tracking.
+        Mlflow is an open-source platform that helps manage the machine learning lifecycle, including experimentation, reproducibility, and deployment. It keeps track of the parameters used in the model as well as the metrics obtained from the model.
 
     ZnTrack
-        The ZnTrack package by :footcite:t:`zillsZnTrackDataCode2024`.
+        ZnTrack :footcite:t:`zillsZnTrackDataCode2024` is a Python package that provides a framework for defining and executing workflows. It allows users to define a sequence of tasks, each represented by a Node, and manage their execution and dependencies.
 
     IPSuite
-        The IPSuite package by :footcite:t:`zillsCollaborationMachineLearnedPotentials2024`.
+        IPSuite:footcite:t:`zillsCollaborationMachineLearnedPotentials2024` is a software package for the development and application of machine-learned interatomic potentials (MLIPs). It provides functionalities for training and testing MLIPs, as well as for running simulations using these potentials.
 
     ZnDraw
         The ZnDraw package by :footcite:t:`elijosiusZeroShotMolecular2024`.
@@ -41,7 +41,7 @@ Glossary
             }
 
     packmol
-        A package for building initial boxes.
+        Packmol is a software package used for building initial configurations for molecular dynamics or Monte Carlo simulations. It can generate a random collection of molecules using the specified density and composition. TODO add cite
 
     rdkit2ase
         A package for converting RDKit molecules to ASE atoms.

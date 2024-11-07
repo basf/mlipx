@@ -102,6 +102,7 @@ class NEBs(zntrack.Node):
     relax: bool = zntrack.params(True)
     optimizer: Optimizer = zntrack.params(Optimizer.FIRE.value)
     fmax: float = zntrack.params(0.09)
+    n_steps: int = zntrack.params(500)
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
     trajectory_path: pathlib.Path = zntrack.outs_path(
         zntrack.nwd / "neb_trajectory.traj"

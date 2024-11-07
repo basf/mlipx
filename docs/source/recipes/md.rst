@@ -32,6 +32,11 @@ You can run the following command to instantiate a test directory:
       setup --> mgn
 
 
+.. code-block:: console
+
+   (.venv) $ mlipx compare 7net_MolecularDynamics mage_agne_MolecularDynamics mace_medm_MolecularDynamics
+
+
 .. jupyter-execute::
    :hide-code:
 
