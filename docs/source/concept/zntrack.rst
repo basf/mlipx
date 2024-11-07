@@ -1,3 +1,123 @@
 ZnTrack
 =======
-TBA
+
+With ZnTrack you can build complex workflows based on :term:`DVC` and :term:`GIT`.
+The first part of a workflow is defining the steps, which in the context of ZnTrack are called :code:`Node`.
+A :code:`Node` is based on the Python :code:`dataclass` module.
+
+.. code:: python
+
+    import zntrack
+    import ase
+    import rdkit2ase
+
+    class BuildMolecule(zntrack.Node):
+        smiles: str = zntrack.params()
+
+        frames: list[ase.Atoms] = zntrack.outs()
+
+        def run(self):
+            self.frames = [rdkit2ase.smiles2atoms(self.smiles)]
+
+With this :code:`BuildMolecule` class we can bring the `rdkit2ase.smiles2atoms` onto the graph by defining the inputs and outputs.
+Let us now convert a simple example of creating a box of molecules from a Python script to a ZnTrack graph.
+
+.. code:: python
+
+    import rdkit2ase
+
+    water = rdkit2ase.smiles2atoms('O')
+    ethanol = rdkit2ase.smiles2atoms('CCO')
+
+    box = rdkit2ase.pack([[water], [ethanol]], counts=[50, 50], density=800)
+    print(box)
+    >>> ase.Atoms(...)
+
+For this, we need to define the :code:`PackBox` node as follows
+
+.. code:: python
+
+    import ase.io
+
+    class PackBox(zntrack.Node):
+        data: list[list[ase.Atoms]] = zntrack.deps()
+        counts: list[int] = zntrack.params()
+        density: float = zntrack.params()
+
+        frames_path: str = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
+
+        def run(self):
+            box = rdkit2ase.pack(self.data, counts=self.counts, density=self.density)
+            ase.io.write(self.frames_path, box)
+
+
+With this Node, we can build our graph:
+
+.. code:: python
+
+    project = zntrack.Project()
+
+    with project:
+        water = BuildMolecule(smiles="O")
+        ethanol = BuildMolecule(smiles="CCO")
+
+        box = PackBox(data=[water.frames, ethanol.frames], counts=[50, 50], density=800)
+
+    project.build()
+
+.. note::
+
+    The `project.build()` command will not run the graph but only define how the graph is to be executed in the future.
+    Consider it a pure graph definition file.
+    If you write this into a single :code:`main.py` file, it should look like
+
+    .. dropdown:: Content of :code:`main.py`
+
+      .. code-block:: python
+
+        import zntrack
+        import ase.io
+        import rdkit2ase
+
+        class BuildMolecule(zntrack.Node):
+            smiles: str = zntrack.params()
+
+            frames: list[ase.Atoms] = zntrack.outs()
+
+            def run(self):
+                self.frames = [rdkit2ase.smiles2atoms(self.smiles)]
+
+        class PackBox(zntrack.Node):
+            data: list[list[ase.Atoms]] = zntrack.deps()
+            counts: list[int] = zntrack.params()
+            density: float = zntrack.params()
+
+            frames_path: str = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
+
+            def run(self):
+                box = rdkit2ase.pack(self.data, counts=self.counts, density=self.density)
+                ase.io.write(self.frames_path, box)
+
+        if __name__ == "__main__":
+            project = zntrack.Project()
+
+            with project:
+                water = BuildMolecule(smiles="O")
+                ethanol = BuildMolecule(smiles="CCO")
+
+                box = PackBox(data=[water.frames, ethanol.frames], counts=[50, 50], density=800)
+
+            project.build()
+
+To run the graph you can use the :term:`DVC` CLI :code:`dvc repro` (or the :term:`paraffin` package, see `Distributed evaluation`_. )
+
+Once finished, you can look at the results by loading the nodes:
+
+.. code:: python
+
+    import zntrack
+    import ase.io
+
+    box = zntrack.from_rev("PackBox")
+    print(ase.io.read(box.frames_path))
+    >>> ase.Atoms(...)

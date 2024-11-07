@@ -1,3 +1,5 @@
+.. _Distributed evaluation:
+
 Distributed evaluation
 ======================
 
