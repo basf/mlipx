@@ -35,6 +35,27 @@ TBA
 
 In the following we show the results for a box of :code:`CCO`.
 
+.. note::
+
+   You can look at the results from a single node using ZnTrack
+
+   .. code:: python
+
+      import zntrack
+
+      ev = zntrack.from_rev('7net_EnergyVolumeCurve') # adapt the name to your model
+      print(ev.frames)
+      >>> [ase.Atoms(...), ...]
+
+      print(ev.figures)
+      >>> dict[str, plotly.graph_objs.Figure]
+
+   or directly via ZnDraw
+
+   .. code:: console
+
+      (.venv) $ zndraw 7net_EnergyVolumeCurve.frames -p 7net_EnergyVolumeCurve.figures --remote .
+
 
 .. jupyter-execute::
    :hide-code:
@@ -90,10 +111,11 @@ Now, we could look at a single structure, but instead we iterate over multiple s
 
 
 Given these changes, we can use :code:`mlipx compare` to compare the results of the models on the different frames.
+You can use :code:`mlipx compare --glob` to quickly select multiple nodes based on their name pattern.
 
 .. code-block:: console
 
-   (.venv) $ mlipx compare frame_1_7net_EnergyVolumeCurve frame_1_mace_agne_EnergyVolumeCurve frame_1_mace_medm_EnergyVolumeCurve
+   (.venv) $ mlipx compare --glob 'frame_1_*_EnergyVolumeCurve'
    (.venv) $ mlipx compare frame_4_7net_EnergyVolumeCurve frame_4_mace_agne_EnergyVolumeCurve frame_4_mace_medm_EnergyVolumeCurve
 
 In our example this shows the following plots in :term:`zndraw`.

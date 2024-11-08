@@ -16,11 +16,6 @@ Dynamic Tests
 
 Select the dataset you are interested in and evaluate the available :term:`MLIP` on it.
 
-Data as Code
-------------
-
-TBA (see :term:`ZnTrack`)
-
 
 Comparison
 ----------
@@ -29,11 +24,11 @@ To efficiently compare different models, mlipx integrated with :term:`ZnDraw` to
 .. image:: _static/zndraw_compare.png
     :width: 80%
 
-.. video:: _static/mlipx_compare_zndraw_nebs.mp4
-    :nocontrols:
-    :loop:
-    :width: 400
-    :autoplay:
+.. .. video:: _static/mlipx_compare_zndraw_nebs.mp4
+..     :nocontrols:
+..     :loop:
+..     :width: 400
+..     :autoplay:
 
 In addition, metrics can be logged to :term:`mlflow` giving the user a quick overview of all past evaluations and aid the comparison of different model metrics.
 

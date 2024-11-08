@@ -1,6 +1,9 @@
 ZnTrack
 =======
 
+The :code:`mlipx` package is based ZnTrack.
+Although, :code:`mlipx` usage does not require you to understand how ZnTrack works, the following will give a short overview of the concept.
+
 With ZnTrack you can build complex workflows based on :term:`DVC` and :term:`GIT`.
 The first part of a workflow is defining the steps, which in the context of ZnTrack are called :code:`Node`.
 A :code:`Node` is based on the Python :code:`dataclass` module.
@@ -121,3 +124,6 @@ Once finished, you can look at the results by loading the nodes:
     box = zntrack.from_rev("PackBox")
     print(ase.io.read(box.frames_path))
     >>> ase.Atoms(...)
+
+
+For further information have a look at the ZnTrack documentation https://zntrack.readthedocs.io and repository https://github.com/zincware/zntrack

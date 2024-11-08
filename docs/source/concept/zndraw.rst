@@ -1,5 +1,7 @@
 ZnDraw
 ======
+:code:`mlipx` uses ZnDraw as primary tool for visualisation and comparison.
+The following will give you an overview.
 
 The ZnDraw package provides versatile visualisation package for atomisitc structures.
 It is based on :term:`ASE` and runs as a web application.
