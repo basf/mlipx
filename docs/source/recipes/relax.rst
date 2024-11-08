@@ -29,11 +29,6 @@ You can run the following command to instantiate a test directory:
       setup --> mgn
 
 
-Dynamic Datasets
-----------------
-
-TBA mptraj or materials project API
-
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`Smiles2Conformers`

@@ -1,3 +1,5 @@
+.. _Energy Volume Curves:
+
 Energy Volume Curves
 ===========================
 TBA

@@ -39,3 +39,4 @@ In addition, metrics can be logged to :term:`mlflow` giving the user a quick ove
 .. toctree::
    concept/zndraw
    concept/zntrack
+   concept/distributed

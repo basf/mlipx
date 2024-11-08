@@ -34,7 +34,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx compare 7net_MolecularDynamics mage_agne_MolecularDynamics mace_medm_MolecularDynamics
+   (.venv) $ mlipx compare --glob "*_MolecularDynamics"
 
 
 .. jupyter-execute::

@@ -23,64 +23,6 @@ Homonuclear diatomics give a per-element information on the performance of the :
       end
 
 You can edit the elements in the :term:`main.py` file to include the elements you want to test.
-The models to evaluate are defined in the :term:`models.py` file.
-We will use the following definition combining :code:`mlipx.GenericASECalculator` and a custom :code:`SevenCalc` calculator.
-
-.. note::
-
-   See :ref:`custom_nodes` for more information on how to use custom nodes.
-
-   .. dropdown:: Content of :code:`src/__init__.py`
-
-      .. code-block:: python
-
-         import dataclasses
-         from ase.calculators.calculator import Calculator
-
-
-         @dataclasses.dataclass
-         class SevenCalc:
-            model: str
-
-            def get_calculator(self, **kwargs) -> Calculator:
-               from sevenn.sevennet_calculator import SevenNetCalculator
-               sevennet= SevenNetCalculator(self.model, device='cpu')
-
-               return sevennet
-
-.. dropdown:: Content of :code:`models.py`
-
-   .. code-block:: python
-
-      import mlipx
-      from src import SevenCalc
-
-
-      mace_medium = mlipx.GenericASECalculator(
-         module="mace.calculators",
-         class_name="MACECalculator",
-         device='auto',
-         kwargs={
-            "model_paths": "mace_models/y7uhwpje-medium.model",
-         },
-      )
-
-      mace_agnesi = mlipx.GenericASECalculator(
-         module="mace.calculators",
-         class_name="MACECalculator",
-         device='auto',
-         kwargs={
-            "model_paths": "mace_models/mace_mp_agnesi_medium.model",
-         },
-      )
-
-      sevennet = SevenCalc(model='7net-0')
-
-      MODELS = {
-         "mace_medm": mace_medium,
-         "mace_agne": mace_agnesi,
-         "7net": sevennet,
-      }
 
 
 
