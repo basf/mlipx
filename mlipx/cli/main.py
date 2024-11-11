@@ -34,6 +34,7 @@ def compare(  # noqa C901
     glob: Annotated[
         bool, typer.Option("--glob", help="Allow glob patterns to select nodes.")
     ] = False,
+    convert_nan: Annotated[bool, typer.Option()] = False,
 ):
     """Compare mlipx nodes and visualize the results using ZnDraw."""
     # TODO: allow for glob patterns
@@ -85,7 +86,7 @@ def compare(  # noqa C901
     result = node_instances[node_names[0]].compare(*node_instances.values(), **kwargs)
 
     token = token or uuid.uuid4().hex
-    vis = ZnDraw(zndraw_url, token=token)
+    vis = ZnDraw(zndraw_url, token=token, convert_nan=convert_nan)
     vis.extend(result["frames"])
     del vis[0]
     vis.figures = result["figures"]
