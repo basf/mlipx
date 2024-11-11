@@ -1,0 +1,125 @@
+schema: '2.0'
+stages:
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers:
+          max_attempts: 1000
+          num_confs: 100
+          random_seed: 42
+          smiles: C12C3C1C4C2C34
+    outs:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 2469f2ef474a8a425627f65f71410c9d
+      size: 69400
+    - path: nodes/initialize/Smiles2Conformers/node-meta.json
+      hash: md5
+      md5: 43e1c4b3399cc235c346713854184874
+      size: 64
+  7net_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      7net_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 2469f2ef474a8a425627f65f71410c9d
+      size: 69400
+    params:
+      params.yaml:
+        7net_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/7net/StructureOptimization/frames.traj
+      hash: md5
+      md5: 7a978a7134e036713b843c283934d25d
+      size: 14441
+    - path: nodes/7net/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 6a5f1a3df7196437da8a383f026b3004
+      size: 64
+    - path: nodes/7net/StructureOptimization/plots.csv
+      hash: md5
+      md5: cf68dd3d5f764b90afd34a63265b859e
+      size: 490
+  mace_agne_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_agne_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 2469f2ef474a8a425627f65f71410c9d
+      size: 69400
+    params:
+      params.yaml:
+        mace_agne_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/mace_agne/StructureOptimization/frames.traj
+      hash: md5
+      md5: 03e906351febae64a61f82c12b7261dc
+      size: 17279
+    - path: nodes/mace_agne/StructureOptimization/node-meta.json
+      hash: md5
+      md5: bee69feab1480364dd0b4c29e9458b38
+      size: 64
+    - path: nodes/mace_agne/StructureOptimization/plots.csv
+      hash: md5
+      md5: 9f2517611114b2d64b071426f51baa28
+      size: 666
+  mace_medm_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_medm_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 2469f2ef474a8a425627f65f71410c9d
+      size: 69400
+    params:
+      params.yaml:
+        mace_medm_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/mace_medm/StructureOptimization/frames.traj
+      hash: md5
+      md5: fd12003a3a9ae8952484508febd20832
+      size: 14185
+    - path: nodes/mace_medm/StructureOptimization/node-meta.json
+      hash: md5
+      md5: d2af955d58e0cb1b135e73d7536e6b9a
+      size: 64
+    - path: nodes/mace_medm/StructureOptimization/plots.csv
+      hash: md5
+      md5: 4b530a20c86f39d0bf3a574a96615fe5
+      size: 536
