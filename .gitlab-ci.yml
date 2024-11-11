@@ -2,8 +2,8 @@ pages:
   image:
     name: registry.roqs.basf.net/base-images/python
     docker:
-        user: 0:0
-  # this image ships with GIT which we need
+      user: "0:0"
+
   script:
     - apt update
     - apt install -y git pandoc
