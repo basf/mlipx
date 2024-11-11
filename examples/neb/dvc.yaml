@@ -1,0 +1,76 @@
+plots:
+- mace_medm_NEBs_results:
+    x:
+      nodes/mace_medm/NEBs/results.csv: data_id
+    y:
+      nodes/mace_medm/NEBs/results.csv: potential_energy
+- mace_agne_NEBs_results:
+    x:
+      nodes/mace_agne/NEBs/results.csv: data_id
+    y:
+      nodes/mace_agne/NEBs/results.csv: potential_energy
+- 7net_NEBs_results:
+    x:
+      nodes/7net/NEBs/results.csv: data_id
+    y:
+      nodes/7net/NEBs/results.csv: potential_energy
+stages:
+  7net_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name 7net_NEBs
+    deps:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    metrics:
+    - nodes/7net/NEBs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/NEBs/frames.xyz
+    - nodes/7net/NEBs/neb_trajectory.traj
+    - nodes/7net/NEBs/results.csv
+    params:
+    - 7net_NEBs
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/neb_end_p.xyz
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  initialize_NEBinterpolate:
+    cmd: zntrack run mlipx.nodes.nebs.NEBinterpolate --name initialize_NEBinterpolate
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/initialize/NEBinterpolate/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    params:
+    - initialize_NEBinterpolate
+  mace_agne_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_agne_NEBs
+    deps:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    metrics:
+    - nodes/mace_agne/NEBs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/NEBs/frames.xyz
+    - nodes/mace_agne/NEBs/neb_trajectory.traj
+    - nodes/mace_agne/NEBs/results.csv
+    params:
+    - mace_agne_NEBs
+  mace_medm_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_medm_NEBs
+    deps:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    metrics:
+    - nodes/mace_medm/NEBs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/NEBs/frames.xyz
+    - nodes/mace_medm/NEBs/neb_trajectory.traj
+    - nodes/mace_medm/NEBs/results.csv
+    params:
+    - mace_medm_NEBs

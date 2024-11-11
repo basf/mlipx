@@ -28,7 +28,11 @@ This script can also be represented as the following workflow which we will now 
 
 With ZnTrack you can build complex workflows based on :term:`DVC` and :term:`GIT`.
 The first part of a workflow is defining the steps, which in the context of ZnTrack are called :code:`Node`.
-A :code:`Node` is based on the Python :code:`dataclass` module.
+A :code:`Node` is based on the Python :code:`dataclass` module defining it's arguments as class attributes.
+
+.. note::
+
+    It is highly recommend to follow the single-responsibility principle when writing a :code:`Node`. For example if you have a relaxation followed by a molecular dynamics simulation, separate the these into two Nodes. But also keep it mind, that there is some communication overhead between Nodes, so e.g. defining each MD step as a separate Node would not be recommended.
 
 .. code:: python
 
@@ -45,24 +49,28 @@ A :code:`Node` is based on the Python :code:`dataclass` module.
             self.frames = [rdkit2ase.smiles2atoms(self.smiles)]
 
 With this :code:`BuildMolecule` class we can bring the :code:`rdkit2ase.smiles2atoms` onto the graph by defining the inputs and outputs.
-Further, we need to define a :code:`Node` for the :code:`rdkit2ase.pack` functions.
-For this, we define the :code:`PackBox` node as follows
+Further, we need to define a :code:`Node` for the :code:`rdkit2ase.pack` function.
+For this, we define the :code:`PackBox` node as follows:
 
 .. code:: python
 
     import ase.io
+    import pathlib
 
     class PackBox(zntrack.Node):
         data: list[list[ase.Atoms]] = zntrack.deps()
         counts: list[int] = zntrack.params()
         density: float = zntrack.params()
 
-        frames_path: str = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
+        frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
 
         def run(self):
             box = rdkit2ase.pack(self.data, counts=self.counts, density=self.density)
             ase.io.write(self.frames_path, box)
 
+.. note::
+
+    The :code:`zntrack.outs_path(zntrack.nwd / 'frames.xyz')` provides a unique output path per node in the node working directory (nwd). It is crucial to define every input and output as ZnTrack attributes. Otherwise, the results will be lost.
 
 With this Node, we can build our graph:
 
@@ -91,6 +99,7 @@ With this Node, we can build our graph:
         import zntrack
         import ase.io
         import rdkit2ase
+        import pathlib
 
         class BuildMolecule(zntrack.Node):
             smiles: str = zntrack.params()
@@ -105,7 +114,7 @@ With this Node, we can build our graph:
             counts: list[int] = zntrack.params()
             density: float = zntrack.params()
 
-            frames_path: str = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
+            frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / 'frames.xyz')
 
             def run(self):
                 box = rdkit2ase.pack(self.data, counts=self.counts, density=self.density)
@@ -136,4 +145,4 @@ Once finished, you can look at the results by loading the nodes:
     >>> ase.Atoms(...)
 
 
-For further information have a look at the ZnTrack documentation https://zntrack.readthedocs.io and repository https://github.com/zincware/zntrack
+For further information have a look at the ZnTrack documentation https://zntrack.readthedocs.io and repository https://github.com/zincware/zntrack .

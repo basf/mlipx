@@ -1,0 +1,43 @@
+7net_NEBs:
+  fmax: 0.25
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
+initialize_LoadDataFile:
+  start: 0
+  step: 1
+  stop: null
+initialize_NEBinterpolate:
+  mic: true
+  n_images: 5
+mace_agne_NEBs:
+  fmax: 0.25
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_agnesi.model
+    module: mace.calculators
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
+mace_medm_NEBs:
+  fmax: 0.25
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_medium.model
+    module: mace.calculators
+  n_steps: 500
+  optimizer: FIRE
+  relax: true

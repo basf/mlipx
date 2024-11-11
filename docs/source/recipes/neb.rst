@@ -34,3 +34,15 @@ This test uses the following Nodes together with your provided model in the :ter
 * :term:`LoadDataFile`
 * :term:`NEBinterpolate`
 * :term:`NEBs`
+
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/neb/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/neb/models.py
+      :language: Python
