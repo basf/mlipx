@@ -53,3 +53,14 @@ This test uses the following Nodes together with your provided model in the :ter
 * :term:`MaximumForceObserver`
 * :term:`TemperatureRampModifier`
 * :term:`MolecularDynamics`
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/md/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/md/models.py
+      :language: Python

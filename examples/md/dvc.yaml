@@ -1,0 +1,94 @@
+plots:
+- mace_medm_MolecularDynamics_plots_0:
+    x:
+      nodes/mace_medm/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mace_medm/MolecularDynamics/plots.csv: energy
+- mace_medm_MolecularDynamics_plots_1:
+    x:
+      nodes/mace_medm/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mace_medm/MolecularDynamics/plots.csv: fmax
+- mace_agne_MolecularDynamics_plots_0:
+    x:
+      nodes/mace_agne/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mace_agne/MolecularDynamics/plots.csv: energy
+- mace_agne_MolecularDynamics_plots_1:
+    x:
+      nodes/mace_agne/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mace_agne/MolecularDynamics/plots.csv: fmax
+- 7net_MolecularDynamics_plots_0:
+    x:
+      nodes/7net/MolecularDynamics/plots.csv: step
+    y:
+      nodes/7net/MolecularDynamics/plots.csv: energy
+- 7net_MolecularDynamics_plots_1:
+    x:
+      nodes/7net/MolecularDynamics/plots.csv: step
+    y:
+      nodes/7net/MolecularDynamics/plots.csv: fmax
+stages:
+  7net_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name 7net_MolecularDynamics
+    deps:
+    - nodes/initialize/BuildBox/frames.xyz
+    metrics:
+    - nodes/7net/MolecularDynamics/node-meta.json:
+        cache: false
+    - nodes/7net/MolecularDynamics/observer_metrics.json:
+        cache: false
+    outs:
+    - nodes/7net/MolecularDynamics/frames.xyz
+    - nodes/7net/MolecularDynamics/plots.csv
+    params:
+    - 7net_MolecularDynamics
+  initialize_BuildBox:
+    cmd: zntrack run mlipx.nodes.smiles.BuildBox --name initialize_BuildBox
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/initialize/BuildBox/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/BuildBox/frames.xyz
+    params:
+    - initialize_BuildBox
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    metrics:
+    - nodes/initialize/Smiles2Conformers/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    params:
+    - initialize_Smiles2Conformers
+  mace_agne_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_agne_MolecularDynamics
+    deps:
+    - nodes/initialize/BuildBox/frames.xyz
+    metrics:
+    - nodes/mace_agne/MolecularDynamics/node-meta.json:
+        cache: false
+    - nodes/mace_agne/MolecularDynamics/observer_metrics.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/MolecularDynamics/frames.xyz
+    - nodes/mace_agne/MolecularDynamics/plots.csv
+    params:
+    - mace_agne_MolecularDynamics
+  mace_medm_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_medm_MolecularDynamics
+    deps:
+    - nodes/initialize/BuildBox/frames.xyz
+    metrics:
+    - nodes/mace_medm/MolecularDynamics/node-meta.json:
+        cache: false
+    - nodes/mace_medm/MolecularDynamics/observer_metrics.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/MolecularDynamics/frames.xyz
+    - nodes/mace_medm/MolecularDynamics/plots.csv
+    params:
+    - mace_medm_MolecularDynamics

@@ -16,7 +16,7 @@ stages:
       size: 69400
     - path: nodes/initialize/Smiles2Conformers/node-meta.json
       hash: md5
-      md5: 43e1c4b3399cc235c346713854184874
+      md5: 931a0553eb3b57bc7ca11911e5f8454d
       size: 64
   7net_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
@@ -43,16 +43,16 @@ stages:
     outs:
     - path: nodes/7net/StructureOptimization/frames.traj
       hash: md5
-      md5: 7a978a7134e036713b843c283934d25d
+      md5: 1faaa821a8baa95d614f7729c6e32e81
       size: 14441
     - path: nodes/7net/StructureOptimization/node-meta.json
       hash: md5
-      md5: 6a5f1a3df7196437da8a383f026b3004
+      md5: 4d09ea45a799eb23257e157f686bfaae
       size: 64
     - path: nodes/7net/StructureOptimization/plots.csv
       hash: md5
-      md5: cf68dd3d5f764b90afd34a63265b859e
-      size: 490
+      md5: b0ec2a0113fc2749b2cbfbe1236fe2d4
+      size: 496
   mace_agne_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_agne_StructureOptimization
@@ -82,7 +82,7 @@ stages:
       size: 17279
     - path: nodes/mace_agne/StructureOptimization/node-meta.json
       hash: md5
-      md5: bee69feab1480364dd0b4c29e9458b38
+      md5: edf87629daa849888e45c96e4a709b49
       size: 64
     - path: nodes/mace_agne/StructureOptimization/plots.csv
       hash: md5
@@ -117,7 +117,7 @@ stages:
       size: 14185
     - path: nodes/mace_medm/StructureOptimization/node-meta.json
       hash: md5
-      md5: d2af955d58e0cb1b135e73d7536e6b9a
+      md5: db7182b927577e3babc9b44038bf3679
       size: 64
     - path: nodes/mace_medm/StructureOptimization/plots.csv
       hash: md5

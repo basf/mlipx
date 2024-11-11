@@ -1,0 +1,165 @@
+schema: '2.0'
+stages:
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers:
+          max_attempts: 1000
+          num_confs: 10
+          random_seed: 42
+          smiles: CCO
+    outs:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 53394445966d0686e33c9b2c42ecc2a7
+      size: 5310
+    - path: nodes/initialize/Smiles2Conformers/node-meta.json
+      hash: md5
+      md5: dedc1b93725ea283545173e31504757e
+      size: 64
+  initialize_BuildBox:
+    cmd: zntrack run mlipx.nodes.smiles.BuildBox --name initialize_BuildBox
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 53394445966d0686e33c9b2c42ecc2a7
+      size: 5310
+    params:
+      params.yaml:
+        initialize_BuildBox:
+          counts:
+          - 10
+          density: 789
+    outs:
+    - path: nodes/initialize/BuildBox/frames.xyz
+      hash: md5
+      md5: f48873046e8808c1a50c29ad6481175a
+      size: 9570
+    - path: nodes/initialize/BuildBox/node-meta.json
+      hash: md5
+      md5: 3c1804f8e73fdb2d65fef50e135aaff7
+      size: 64
+  7net_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name 7net_MolecularDynamics
+    deps:
+    - path: nodes/initialize/BuildBox/frames.xyz
+      hash: md5
+      md5: f48873046e8808c1a50c29ad6481175a
+      size: 9570
+    params:
+      params.yaml:
+        7net_MolecularDynamics:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          steps: 100
+          thermostat:
+            _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+            friction: 0.05
+            temperature: 300
+            timestep: 0.5
+    outs:
+    - path: nodes/7net/MolecularDynamics/frames.xyz
+      hash: md5
+      md5: 7a0f19a4d20af64365f3df992ff13476
+      size: 2069641
+    - path: nodes/7net/MolecularDynamics/node-meta.json
+      hash: md5
+      md5: 60e70692cfbdd3b3a8258299a8533994
+      size: 64
+    - path: nodes/7net/MolecularDynamics/observer_metrics.json
+      hash: md5
+      md5: 99914b932bd37a50b983c5e7c90ae93b
+      size: 2
+    - path: nodes/7net/MolecularDynamics/plots.csv
+      hash: md5
+      md5: a685efe115be6deba2098b09a7aa4616
+      size: 19
+  mace_agne_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_agne_MolecularDynamics
+    deps:
+    - path: nodes/initialize/BuildBox/frames.xyz
+      hash: md5
+      md5: f48873046e8808c1a50c29ad6481175a
+      size: 9570
+    params:
+      params.yaml:
+        mace_agne_MolecularDynamics:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+          steps: 100
+          thermostat:
+            _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+            friction: 0.05
+            temperature: 300
+            timestep: 0.5
+    outs:
+    - path: nodes/mace_agne/MolecularDynamics/frames.xyz
+      hash: md5
+      md5: edf6827754053e2d90b448eb9537efa1
+      size: 1913821
+    - path: nodes/mace_agne/MolecularDynamics/node-meta.json
+      hash: md5
+      md5: 3313af7ea2b6bea10785a21853387eb8
+      size: 64
+    - path: nodes/mace_agne/MolecularDynamics/observer_metrics.json
+      hash: md5
+      md5: 99914b932bd37a50b983c5e7c90ae93b
+      size: 2
+    - path: nodes/mace_agne/MolecularDynamics/plots.csv
+      hash: md5
+      md5: a685efe115be6deba2098b09a7aa4616
+      size: 19
+  mace_medm_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_medm_MolecularDynamics
+    deps:
+    - path: nodes/initialize/BuildBox/frames.xyz
+      hash: md5
+      md5: f48873046e8808c1a50c29ad6481175a
+      size: 9570
+    params:
+      params.yaml:
+        mace_medm_MolecularDynamics:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          steps: 100
+          thermostat:
+            _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+            friction: 0.05
+            temperature: 300
+            timestep: 0.5
+    outs:
+    - path: nodes/mace_medm/MolecularDynamics/frames.xyz
+      hash: md5
+      md5: 6763a62203d3dcf48a59b5a0a56278d6
+      size: 1913854
+    - path: nodes/mace_medm/MolecularDynamics/node-meta.json
+      hash: md5
+      md5: 49098c3e846aa65d19ab6d6f6640f7c8
+      size: 64
+    - path: nodes/mace_medm/MolecularDynamics/observer_metrics.json
+      hash: md5
+      md5: 99914b932bd37a50b983c5e7c90ae93b
+      size: 2
+    - path: nodes/mace_medm/MolecularDynamics/plots.csv
+      hash: md5
+      md5: a685efe115be6deba2098b09a7aa4616
+      size: 19
