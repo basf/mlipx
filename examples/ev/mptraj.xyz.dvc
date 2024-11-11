@@ -1,0 +1,13 @@
+frozen: true
+deps:
+- hash: md5
+  path:
+    https://github.com/ACEsuit/mace-mp/releases/download/mace_mp_0b/mp_traj_combined.xyz
+  checksum: '"0x8DC67A89FD792D3"'
+  size: 594865331
+outs:
+- hash: md5
+  path: mptraj.xyz
+  md5: 6875b41af36e94367f653cc3e4181a21
+  size: 594865331
+md5: 0c265976d85922e887a134ce8d4a5b38

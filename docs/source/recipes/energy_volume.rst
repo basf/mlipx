@@ -142,4 +142,13 @@ and for the dynamic version
 * :term:`LoadDataFile`
 * :term:`FilterAtoms`
 
-A working example can be found at `here <https://gitlab.roqs.basf.net/qm-inorganics/mlip-tracking/mlip-evaluation-templates/-/tree/energy-volume?ref_type=heads>`_.
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/ev/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/ev/models.py
+      :language: Python

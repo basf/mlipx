@@ -1,0 +1,277 @@
+plots:
+- frame_0_mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_0/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_0/mace_medm/EnergyVolumeCurve/results.csv: energy
+- frame_0_mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_0/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_0/mace_agne/EnergyVolumeCurve/results.csv: energy
+- frame_0_7net_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_0/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_0/7net/EnergyVolumeCurve/results.csv: energy
+- frame_1_mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_1/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_1/mace_medm/EnergyVolumeCurve/results.csv: energy
+- frame_1_mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_1/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_1/mace_agne/EnergyVolumeCurve/results.csv: energy
+- frame_1_7net_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_1/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_1/7net/EnergyVolumeCurve/results.csv: energy
+- frame_2_mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_2/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_2/mace_medm/EnergyVolumeCurve/results.csv: energy
+- frame_2_mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_2/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_2/mace_agne/EnergyVolumeCurve/results.csv: energy
+- frame_2_7net_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_2/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_2/7net/EnergyVolumeCurve/results.csv: energy
+- frame_3_mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_3/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_3/mace_medm/EnergyVolumeCurve/results.csv: energy
+- frame_3_mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_3/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_3/mace_agne/EnergyVolumeCurve/results.csv: energy
+- frame_3_7net_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_3/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_3/7net/EnergyVolumeCurve/results.csv: energy
+- frame_4_mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_4/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_4/mace_medm/EnergyVolumeCurve/results.csv: energy
+- frame_4_mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_4/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_4/mace_agne/EnergyVolumeCurve/results.csv: energy
+- frame_4_7net_EnergyVolumeCurve_results:
+    x:
+      nodes/frame_4/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/frame_4/7net/EnergyVolumeCurve/results.csv: energy
+stages:
+  FilterAtoms:
+    cmd: zntrack run mlipx.nodes.filter_dataset.FilterAtoms --name FilterAtoms
+    deps:
+    - nodes/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/FilterAtoms/node-meta.json:
+        cache: false
+    outs:
+    - nodes/FilterAtoms/frames.xyz
+    params:
+    - FilterAtoms
+  LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name LoadDataFile
+    deps:
+    - mptraj.xyz
+    metrics:
+    - nodes/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - LoadDataFile
+  frame_0_7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_0_7net_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_0/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_0/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_0/7net/EnergyVolumeCurve/results.csv
+    params:
+    - frame_0_7net_EnergyVolumeCurve
+  frame_0_mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_0_mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_0/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_0/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_0/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - frame_0_mace_agne_EnergyVolumeCurve
+  frame_0_mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_0_mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_0/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_0/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_0/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - frame_0_mace_medm_EnergyVolumeCurve
+  frame_1_7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_1_7net_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_1/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_1/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_1/7net/EnergyVolumeCurve/results.csv
+    params:
+    - frame_1_7net_EnergyVolumeCurve
+  frame_1_mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_1_mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_1/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_1/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_1/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - frame_1_mace_agne_EnergyVolumeCurve
+  frame_1_mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_1_mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_1/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_1/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_1/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - frame_1_mace_medm_EnergyVolumeCurve
+  frame_2_7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_2_7net_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_2/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_2/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_2/7net/EnergyVolumeCurve/results.csv
+    params:
+    - frame_2_7net_EnergyVolumeCurve
+  frame_2_mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_2_mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_2/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_2/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_2/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - frame_2_mace_agne_EnergyVolumeCurve
+  frame_2_mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_2_mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_2/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_2/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_2/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - frame_2_mace_medm_EnergyVolumeCurve
+  frame_3_7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_3_7net_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_3/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_3/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_3/7net/EnergyVolumeCurve/results.csv
+    params:
+    - frame_3_7net_EnergyVolumeCurve
+  frame_3_mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_3_mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_3/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_3/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_3/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - frame_3_mace_agne_EnergyVolumeCurve
+  frame_3_mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_3_mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_3/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_3/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_3/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - frame_3_mace_medm_EnergyVolumeCurve
+  frame_4_7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_4_7net_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_4/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_4/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_4/7net/EnergyVolumeCurve/results.csv
+    params:
+    - frame_4_7net_EnergyVolumeCurve
+  frame_4_mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_4_mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_4/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_4/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_4/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - frame_4_mace_agne_EnergyVolumeCurve
+  frame_4_mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name frame_4_mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/FilterAtoms/frames.xyz
+    metrics:
+    - nodes/frame_4/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/frame_4/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/frame_4/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - frame_4_mace_medm_EnergyVolumeCurve
