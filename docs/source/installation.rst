@@ -10,7 +10,7 @@ To use :code:`mlipx`, first install it using pip:
 
    (.venv) $ pip install mlipx
 
-.. warning::
+.. note::
 
    The :code:`mlipx` package installation does not contain any :term:`MLIP` packages.
    Due to different dependencies, it is highly recommended to install your preferred :term:`MLIP` package individually into the same environment.
