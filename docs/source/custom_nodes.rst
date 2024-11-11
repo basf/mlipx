@@ -3,4 +3,6 @@
 Include custom Nodes
 ====================
 
-TBA (how to use custom nodes, src and packages)
+.. toctree::
+
+    notebooks/structure_relaxation.ipynb
