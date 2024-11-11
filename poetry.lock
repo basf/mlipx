@@ -6298,13 +6298,13 @@ test = ["zope.testing"]
 
 [[package]]
 name = "zndraw"
-version = "0.5.1"
+version = "0.5.2"
 description = "Display and Edit Molecular Structures and Trajectories in the Browser."
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "zndraw-0.5.1-py3-none-any.whl", hash = "sha256:14d334b69e22be72bd0122f2ab7856a3e674fc4b42afec75ea54b2762a23017a"},
-    {file = "zndraw-0.5.1.tar.gz", hash = "sha256:4bff91741ad1f68744b64c7328f7ae8caadeba0913c6b7f4d5e4aa5e448493ba"},
+    {file = "zndraw-0.5.2-py3-none-any.whl", hash = "sha256:f386b72e4ef6ffe0d9769db3c411971efe43fcf126f673325018f6d1fa2b6de8"},
+    {file = "zndraw-0.5.2.tar.gz", hash = "sha256:51740c5b406eef53aaceedf26a970db001f6d8709e27f2d751ad5b4d78a19bb7"},
 ]
 
 [package.dependencies]
@@ -6423,4 +6423,4 @@ znjson = ">=0.2,<0.3"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "890b3070b6227b01bb0cbecbb91e744700a2f0417fde840ed6d645b34671ee3b"
+content-hash = "97a3fe493407bcf78de895af1a81ac615311cfb46711681d1a2894585e98cd66"
