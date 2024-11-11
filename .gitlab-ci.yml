@@ -2,8 +2,8 @@ pages:
   image: registry.roqs.basf.net/docker:stable
   # this image ships with GIT which we need
   script:
-    - sudo apt update
-    - sudo apt install pandoc
+    - apt update
+    - apt install pandoc
     - pip install poetry
     - poetry install
     - cd docs
