@@ -16,6 +16,7 @@ repos:
       - id: check-yaml
       - id: debug-statements
       - id: end-of-file-fixer
+        exclude: .*\.json$
       - id: mixed-line-ending
         args: ['--fix=lf']
       - id: sort-simple-yaml

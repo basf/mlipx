@@ -1,0 +1,80 @@
+plots:
+- mace_medm_StructureOptimization_plots_0:
+    x:
+      nodes/mace_medm/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_medm/StructureOptimization/plots.csv: energy
+- mace_medm_StructureOptimization_plots_1:
+    x:
+      nodes/mace_medm/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_medm/StructureOptimization/plots.csv: fmax
+- mace_agne_StructureOptimization_plots_0:
+    x:
+      nodes/mace_agne/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_agne/StructureOptimization/plots.csv: energy
+- mace_agne_StructureOptimization_plots_1:
+    x:
+      nodes/mace_agne/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_agne/StructureOptimization/plots.csv: fmax
+- 7net_StructureOptimization_plots_0:
+    x:
+      nodes/7net/StructureOptimization/plots.csv: step
+    y:
+      nodes/7net/StructureOptimization/plots.csv: energy
+- 7net_StructureOptimization_plots_1:
+    x:
+      nodes/7net/StructureOptimization/plots.csv: step
+    y:
+      nodes/7net/StructureOptimization/plots.csv: fmax
+stages:
+  7net_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      7net_StructureOptimization
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/7net/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/StructureOptimization/frames.traj
+    - nodes/7net/StructureOptimization/plots.csv
+    params:
+    - 7net_StructureOptimization
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    metrics:
+    - nodes/initialize/Smiles2Conformers/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    params:
+    - initialize_Smiles2Conformers
+  mace_agne_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_agne_StructureOptimization
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/mace_agne/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/StructureOptimization/frames.traj
+    - nodes/mace_agne/StructureOptimization/plots.csv
+    params:
+    - mace_agne_StructureOptimization
+  mace_medm_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_medm_StructureOptimization
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/mace_medm/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/StructureOptimization/frames.traj
+    - nodes/mace_medm/StructureOptimization/plots.csv
+    params:
+    - mace_medm_StructureOptimization
