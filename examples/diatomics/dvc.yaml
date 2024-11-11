@@ -1,0 +1,31 @@
+stages:
+  7net_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name 7net_HomonuclearDiatomics
+    metrics:
+    - nodes/7net/HomonuclearDiatomics/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/HomonuclearDiatomics/frames.json
+    - nodes/7net/HomonuclearDiatomics/results.csv
+    params:
+    - 7net_HomonuclearDiatomics
+  mace_agne_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_agne_HomonuclearDiatomics
+    metrics:
+    - nodes/mace_agne/HomonuclearDiatomics/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/HomonuclearDiatomics/frames.json
+    - nodes/mace_agne/HomonuclearDiatomics/results.csv
+    params:
+    - mace_agne_HomonuclearDiatomics
+  mace_medm_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_medm_HomonuclearDiatomics
+    metrics:
+    - nodes/mace_medm/HomonuclearDiatomics/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/HomonuclearDiatomics/frames.json
+    - nodes/mace_medm/HomonuclearDiatomics/results.csv
+    params:
+    - mace_medm_HomonuclearDiatomics

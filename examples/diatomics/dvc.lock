@@ -1,0 +1,101 @@
+schema: '2.0'
+stages:
+  7net_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name 7net_HomonuclearDiatomics
+    params:
+      params.yaml:
+        7net_HomonuclearDiatomics:
+          elements:
+          - H
+          - He
+          - Li
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          n_points: 100
+    outs:
+    - path: nodes/7net/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: fee28bab9c424b6e4a5f30911c6fb01f
+      size: 633900
+    - path: nodes/7net/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: f2d009257e0cab5712d5f0fd956dec66
+      size: 64
+    - path: nodes/7net/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: b0fd12bdce5f1b03def29983bf3db54e
+      size: 11630
+  mace_medm_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_medm_HomonuclearDiatomics
+    params:
+      params.yaml:
+        mace_medm_HomonuclearDiatomics:
+          elements:
+          - H
+          - He
+          - Li
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          n_points: 100
+    outs:
+    - path: nodes/mace_medm/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: e772a2a6e4480146bc21a481135308f8
+      size: 643500
+    - path: nodes/mace_medm/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: 9439af94327c23184b16be443fc3ad09
+      size: 64
+    - path: nodes/mace_medm/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 3c7ba8fa3c73cf6b54c70ba62f188d91
+      size: 11961
+  mace_agne_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_agne_HomonuclearDiatomics
+    params:
+      params.yaml:
+        mace_agne_HomonuclearDiatomics:
+          elements:
+          - H
+          - He
+          - Li
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+          n_points: 100
+    outs:
+    - path: nodes/mace_agne/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: 4beb82d8537c3e39202e7d9095055eec
+      size: 643500
+    - path: nodes/mace_agne/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: 87d2a1692447634fbd14914f6704eff0
+      size: 64
+    - path: nodes/mace_agne/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 41fc0db4ec51889a6007a47b034d3df1
+      size: 11847

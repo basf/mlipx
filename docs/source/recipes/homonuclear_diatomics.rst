@@ -43,4 +43,13 @@ This test uses the following Nodes together with your provided model in the :ter
 
 * :term:`HomonuclearDiatomics`
 
-A working example can be found at `here <https://gitlab.roqs.basf.net/qm-inorganics/mlip-tracking/mlip-evaluation-templates/-/tree/homonuclear-diatomics?ref_type=heads>`_.
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/diatomics/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/diatomics/models.py
+      :language: Python

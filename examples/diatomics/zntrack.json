@@ -1,0 +1,41 @@
+{
+    "mace_medm_HomonuclearDiatomics": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_medm/HomonuclearDiatomics"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        }
+    },
+    "mace_agne_HomonuclearDiatomics": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_agne/HomonuclearDiatomics"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        }
+    },
+    "7net_HomonuclearDiatomics": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/7net/HomonuclearDiatomics"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        }
+    }
+}

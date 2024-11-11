@@ -1,0 +1,48 @@
+7net_HomonuclearDiatomics:
+  elements:
+  - H
+  - He
+  - Li
+  eq_distance: covalent-radiuis
+  max_distance: 2.0
+  min_distance: 0.5
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  n_points: 100
+mace_agne_HomonuclearDiatomics:
+  elements:
+  - H
+  - He
+  - Li
+  eq_distance: covalent-radiuis
+  max_distance: 2.0
+  min_distance: 0.5
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_agnesi.model
+    module: mace.calculators
+  n_points: 100
+mace_medm_HomonuclearDiatomics:
+  elements:
+  - H
+  - He
+  - Li
+  eq_distance: covalent-radiuis
+  max_distance: 2.0
+  min_distance: 0.5
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_medium.model
+    module: mace.calculators
+  n_points: 100
