@@ -51,3 +51,14 @@ This test uses the following Nodes together with your provided model in the :ter
 
 * :term:`Smiles2Conformers`
 * :term:`StructureOptimization`
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/relax/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/relax/models.py
+      :language: Python
