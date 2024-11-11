@@ -92,7 +92,7 @@ class StructureOptimization(zntrack.Node):
 
         figure.update_layout(
             title="Energy vs. Steps",
-            xaxis_title="Steps",
+            xaxis_title="Step",
             yaxis_title="Energy",
         )
         return {"energy_vs_steps": figure}
@@ -114,6 +114,13 @@ class StructureOptimization(zntrack.Node):
                 )
             )
             offset += len(energies)
+
+        fig.update_layout(
+            title="Energy vs. Steps",
+            xaxis_title="Step",
+            yaxis_title="Energy",
+        )
+
         return ComparisonResults(
             frames=frames,
             figures={"energy_vs_steps": fig},

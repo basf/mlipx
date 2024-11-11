@@ -28,6 +28,24 @@ You can run the following command to instantiate a test directory:
       setup --> mg2
       setup --> mgn
 
+With this recipe we can compare the structure relaxation for three different models on the same starting configuration.
+
+.. code:: console
+
+   mlipx compare --glob '*StructureOptimization'
+
+.. note::
+
+   If you relax a non-periodic system and your model yields a stress tensor of :code:`[inf, inf, inf, inf, inf, inf]` you have to add the :code:`--convert-nan` flag to the :code:`mlipx` or :code:`zndraw` command to convert them to :code:`None`.
+
+.. jupyter-execute::
+   :hide-code:
+
+   import plotly.io as pio
+   pio.renderers.default = "sphinx_gallery"
+
+   figure = pio.read_json("source/figures/geomopt.json")
+   figure.show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
