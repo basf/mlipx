@@ -1,7 +1,12 @@
 pages:
-  image: registry.roqs.basf.net/base-images/snakebase:latest
+  image:
+    name: registry.roqs.basf.net/base-images/python
+    docker:
+        user: 0:0
   # this image ships with GIT which we need
   script:
+    - apt update
+    - apt install -y git pandoc
     - pip install poetry
     - poetry install
     - cd docs
