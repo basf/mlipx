@@ -3,6 +3,28 @@ ZnTrack
 
 The :code:`mlipx` package is based ZnTrack.
 Although, :code:`mlipx` usage does not require you to understand how ZnTrack works, the following will give a short overview of the concept.
+We will take an example of building a simulation Box from :code:`smiles` as illustrated in the following Python script.
+
+.. code:: python
+
+    import rdkit2ase
+
+    water = rdkit2ase.smiles2atoms('O')
+    ethanol = rdkit2ase.smiles2atoms('CCO')
+
+    box = rdkit2ase.pack([[water], [ethanol]], counts=[50, 50], density=800)
+    print(box)
+    >>> ase.Atoms(...)
+
+This script can also be represented as the following workflow which we will now convert.
+
+.. mermaid::
+    :align: center
+
+    graph TD
+        BuildWater --> PackBox
+        BuildEtOH --> PackBox
+
 
 With ZnTrack you can build complex workflows based on :term:`DVC` and :term:`GIT`.
 The first part of a workflow is defining the steps, which in the context of ZnTrack are called :code:`Node`.
@@ -22,21 +44,9 @@ A :code:`Node` is based on the Python :code:`dataclass` module.
         def run(self):
             self.frames = [rdkit2ase.smiles2atoms(self.smiles)]
 
-With this :code:`BuildMolecule` class we can bring the `rdkit2ase.smiles2atoms` onto the graph by defining the inputs and outputs.
-Let us now convert a simple example of creating a box of molecules from a Python script to a ZnTrack graph.
-
-.. code:: python
-
-    import rdkit2ase
-
-    water = rdkit2ase.smiles2atoms('O')
-    ethanol = rdkit2ase.smiles2atoms('CCO')
-
-    box = rdkit2ase.pack([[water], [ethanol]], counts=[50, 50], density=800)
-    print(box)
-    >>> ase.Atoms(...)
-
-For this, we need to define the :code:`PackBox` node as follows
+With this :code:`BuildMolecule` class we can bring the :code:`rdkit2ase.smiles2atoms` onto the graph by defining the inputs and outputs.
+Further, we need to define a :code:`Node` for the :code:`rdkit2ase.pack` functions.
+For this, we define the :code:`PackBox` node as follows
 
 .. code:: python
 

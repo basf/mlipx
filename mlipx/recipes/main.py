@@ -76,15 +76,6 @@ def md(initialize: bool = False, datapath: str = "..."):
 
 
 @app.command()
-def energy_and_forces(initialize: bool = False, datapath: str = "..."):
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "energy_and_forces.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
-
-
-@app.command()
 def homonuclear_diatomics(initialize: bool = False):
     if initialize:
         initialize_directory()
@@ -109,7 +100,7 @@ def metrics(
     datapath: str = "...",
     isolated_atom_energies: bool = False,
 ):
-    """Build an MD recipe.
+    """Compute Energy and Force Metrics.
 
     Parameters
     ----------
@@ -117,6 +108,8 @@ def metrics(
         Initialize a git and dvc repository.
     datapath : str
         Path to the data directory.
+    isolated_atom_energies: bool
+        Compute metrics based on isolated atom energies.
     """
     if initialize:
         initialize_directory()

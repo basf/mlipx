@@ -64,3 +64,15 @@ TBA
 
    figure = pio.read_json("source/figures/fmax_error.json")
    figure.show()
+
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/metrics/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/metrics/models.py
+      :language: Python

@@ -21,4 +21,17 @@ To use :code:`mlipx`, first install it using pip:
 
 From Source
 -----------
-TBA
+
+To install and develop :code:`mlipx` from source we recommend using :code:`poetry`.
+More information and installation instructions can be found at https://python-poetry.org/ .
+
+.. code:: console
+
+   git clone https://github.com/basf/mlipx
+   cd mlipx
+   poetry install
+
+.. note::
+
+   You can also use :code:`pip install -e .` for a editable installation.
+   This does not ensure that all dependencies are handled correctly and for adding new requirements it is mandatory to update the :code:`poetry.lock` file.

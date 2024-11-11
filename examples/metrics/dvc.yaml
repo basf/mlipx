@@ -1,0 +1,349 @@
+plots:
+- reference_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: fmax
+- reference_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: fnorm
+- reference_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/reference/EvaluateCalculatorResults/plots.csv: energy
+- reference_CalculateFormationEnergy_plots_0:
+    x:
+      nodes/reference/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/reference/CalculateFormationEnergy/plots.csv: eform
+- reference_CalculateFormationEnergy_plots_1:
+    x:
+      nodes/reference/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/reference/CalculateFormationEnergy/plots.csv: n_atoms
+- mace_medm_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: fmax
+- mace_medm_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: fnorm
+- mace_medm_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_medm/EvaluateCalculatorResults/plots.csv: energy
+- mace_medm_CalculateFormationEnergy_plots_0:
+    x:
+      nodes/mace_medm/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/mace_medm/CalculateFormationEnergy/plots.csv: eform
+- mace_medm_CalculateFormationEnergy_plots_1:
+    x:
+      nodes/mace_medm/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/mace_medm/CalculateFormationEnergy/plots.csv: n_atoms
+- mace_agne_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: fmax
+- mace_agne_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: fnorm
+- mace_agne_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mace_agne/EvaluateCalculatorResults/plots.csv: energy
+- mace_agne_CalculateFormationEnergy_plots_0:
+    x:
+      nodes/mace_agne/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/mace_agne/CalculateFormationEnergy/plots.csv: eform
+- mace_agne_CalculateFormationEnergy_plots_1:
+    x:
+      nodes/mace_agne/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/mace_agne/CalculateFormationEnergy/plots.csv: n_atoms
+- 7net_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: fmax
+- 7net_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: fnorm
+- 7net_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/7net/EvaluateCalculatorResults/plots.csv: energy
+- 7net_CalculateFormationEnergy_plots_0:
+    x:
+      nodes/7net/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/7net/CalculateFormationEnergy/plots.csv: eform
+- 7net_CalculateFormationEnergy_plots_1:
+    x:
+      nodes/7net/CalculateFormationEnergy/plots.csv: step
+    y:
+      nodes/7net/CalculateFormationEnergy/plots.csv: n_atoms
+stages:
+  7net_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name 7net_ApplyCalculator
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/ApplyCalculator/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/ApplyCalculator/frames.h5
+    params:
+    - 7net_ApplyCalculator
+  7net_CalculateFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
+      7net_CalculateFormationEnergy
+    deps:
+    - nodes/7net/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/7net/CalculateFormationEnergy/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/CalculateFormationEnergy/formation_energy.json
+    - nodes/7net/CalculateFormationEnergy/isolated_energies.json
+    - nodes/7net/CalculateFormationEnergy/plots.csv
+    params:
+    - 7net_CalculateFormationEnergy
+  7net_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      7net_CompareCalculatorResults
+    deps:
+    - nodes/7net/EvaluateCalculatorResults/node-meta.json
+    - nodes/7net/EvaluateCalculatorResults/plots.csv
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
+    metrics:
+    - nodes/7net/CompareCalculatorResults/error.json:
+        cache: false
+    - nodes/7net/CompareCalculatorResults/node-meta.json:
+        cache: false
+    - nodes/7net/CompareCalculatorResults/rmse.json:
+        cache: false
+    outs:
+    - nodes/7net/CompareCalculatorResults/plots.csv
+  7net_CompareFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name 7net_CompareFormationEnergy
+    deps:
+    - nodes/7net/CalculateFormationEnergy/formation_energy.json
+    - nodes/7net/CalculateFormationEnergy/isolated_energies.json
+    - nodes/7net/CalculateFormationEnergy/node-meta.json
+    - nodes/7net/CalculateFormationEnergy/plots.csv
+    - nodes/reference/CalculateFormationEnergy/formation_energy.json
+    - nodes/reference/CalculateFormationEnergy/isolated_energies.json
+    - nodes/reference/CalculateFormationEnergy/node-meta.json
+    - nodes/reference/CalculateFormationEnergy/plots.csv
+    metrics:
+    - nodes/7net/CompareFormationEnergy/error.json:
+        cache: false
+    - nodes/7net/CompareFormationEnergy/node-meta.json:
+        cache: false
+    - nodes/7net/CompareFormationEnergy/rmse.json:
+        cache: false
+    outs:
+    - nodes/7net/CompareFormationEnergy/plots.csv
+  7net_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      7net_EvaluateCalculatorResults
+    deps:
+    - nodes/7net/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/7net/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/EvaluateCalculatorResults/plots.csv
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/CoCuFeIrNiHOCl_slab_dft.xyz
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  mace_agne_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_agne_ApplyCalculator
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agne/ApplyCalculator/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/ApplyCalculator/frames.h5
+    params:
+    - mace_agne_ApplyCalculator
+  mace_agne_CalculateFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
+      mace_agne_CalculateFormationEnergy
+    deps:
+    - nodes/mace_agne/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/mace_agne/CalculateFormationEnergy/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/CalculateFormationEnergy/formation_energy.json
+    - nodes/mace_agne/CalculateFormationEnergy/isolated_energies.json
+    - nodes/mace_agne/CalculateFormationEnergy/plots.csv
+    params:
+    - mace_agne_CalculateFormationEnergy
+  mace_agne_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      mace_agne_CompareCalculatorResults
+    deps:
+    - nodes/mace_agne/EvaluateCalculatorResults/node-meta.json
+    - nodes/mace_agne/EvaluateCalculatorResults/plots.csv
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
+    metrics:
+    - nodes/mace_agne/CompareCalculatorResults/error.json:
+        cache: false
+    - nodes/mace_agne/CompareCalculatorResults/node-meta.json:
+        cache: false
+    - nodes/mace_agne/CompareCalculatorResults/rmse.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/CompareCalculatorResults/plots.csv
+  mace_agne_CompareFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name mace_agne_CompareFormationEnergy
+    deps:
+    - nodes/mace_agne/CalculateFormationEnergy/formation_energy.json
+    - nodes/mace_agne/CalculateFormationEnergy/isolated_energies.json
+    - nodes/mace_agne/CalculateFormationEnergy/node-meta.json
+    - nodes/mace_agne/CalculateFormationEnergy/plots.csv
+    - nodes/reference/CalculateFormationEnergy/formation_energy.json
+    - nodes/reference/CalculateFormationEnergy/isolated_energies.json
+    - nodes/reference/CalculateFormationEnergy/node-meta.json
+    - nodes/reference/CalculateFormationEnergy/plots.csv
+    metrics:
+    - nodes/mace_agne/CompareFormationEnergy/error.json:
+        cache: false
+    - nodes/mace_agne/CompareFormationEnergy/node-meta.json:
+        cache: false
+    - nodes/mace_agne/CompareFormationEnergy/rmse.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/CompareFormationEnergy/plots.csv
+  mace_agne_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      mace_agne_EvaluateCalculatorResults
+    deps:
+    - nodes/mace_agne/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/mace_agne/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/EvaluateCalculatorResults/plots.csv
+  mace_medm_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_medm_ApplyCalculator
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medm/ApplyCalculator/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/ApplyCalculator/frames.h5
+    params:
+    - mace_medm_ApplyCalculator
+  mace_medm_CalculateFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
+      mace_medm_CalculateFormationEnergy
+    deps:
+    - nodes/mace_medm/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/mace_medm/CalculateFormationEnergy/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/CalculateFormationEnergy/formation_energy.json
+    - nodes/mace_medm/CalculateFormationEnergy/isolated_energies.json
+    - nodes/mace_medm/CalculateFormationEnergy/plots.csv
+    params:
+    - mace_medm_CalculateFormationEnergy
+  mace_medm_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      mace_medm_CompareCalculatorResults
+    deps:
+    - nodes/mace_medm/EvaluateCalculatorResults/node-meta.json
+    - nodes/mace_medm/EvaluateCalculatorResults/plots.csv
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
+    metrics:
+    - nodes/mace_medm/CompareCalculatorResults/error.json:
+        cache: false
+    - nodes/mace_medm/CompareCalculatorResults/node-meta.json:
+        cache: false
+    - nodes/mace_medm/CompareCalculatorResults/rmse.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/CompareCalculatorResults/plots.csv
+  mace_medm_CompareFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name mace_medm_CompareFormationEnergy
+    deps:
+    - nodes/mace_medm/CalculateFormationEnergy/formation_energy.json
+    - nodes/mace_medm/CalculateFormationEnergy/isolated_energies.json
+    - nodes/mace_medm/CalculateFormationEnergy/node-meta.json
+    - nodes/mace_medm/CalculateFormationEnergy/plots.csv
+    - nodes/reference/CalculateFormationEnergy/formation_energy.json
+    - nodes/reference/CalculateFormationEnergy/isolated_energies.json
+    - nodes/reference/CalculateFormationEnergy/node-meta.json
+    - nodes/reference/CalculateFormationEnergy/plots.csv
+    metrics:
+    - nodes/mace_medm/CompareFormationEnergy/error.json:
+        cache: false
+    - nodes/mace_medm/CompareFormationEnergy/node-meta.json:
+        cache: false
+    - nodes/mace_medm/CompareFormationEnergy/rmse.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/CompareFormationEnergy/plots.csv
+  mace_medm_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      mace_medm_EvaluateCalculatorResults
+    deps:
+    - nodes/mace_medm/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/mace_medm/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/EvaluateCalculatorResults/plots.csv
+  reference_CalculateFormationEnergy:
+    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
+      reference_CalculateFormationEnergy
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/reference/CalculateFormationEnergy/node-meta.json:
+        cache: false
+    outs:
+    - nodes/reference/CalculateFormationEnergy/formation_energy.json
+    - nodes/reference/CalculateFormationEnergy/isolated_energies.json
+    - nodes/reference/CalculateFormationEnergy/plots.csv
+  reference_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      reference_EvaluateCalculatorResults
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
