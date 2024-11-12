@@ -27,9 +27,9 @@ More information and installation instructions can be found at https://python-po
 
 .. code:: console
 
-   git clone https://github.com/basf/mlipx
-   cd mlipx
-   poetry install
+   (.venv) $ git clone https://github.com/basf/mlipx
+   (.venv) $ cd mlipx
+   (.venv) $ poetry install
 
 .. note::
 
