@@ -197,11 +197,18 @@ class NEBs(zntrack.Node):
                     x=list(range(len(energies))),
                     y=energies,
                     mode="lines+markers",
-                    name=node.name,
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
                     customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
             offset += len(energies)
+
+        fig.update_layout(
+            title="Energy vs. iteration",
+            xaxis_title="image number",
+            yaxis_title="Energy",
+        )
+
         return ComparisonResults(
             frames=frames,
             figures={"energy_vs_neb_image": fig},

@@ -29,6 +29,22 @@ You can run the following command to instantiate a test directory:
       setup --> mg2
       setup --> mgn
 
+
+.. code-block:: console
+
+   (.venv) $ zntrack list # show available Nodes
+   (.venv) $ mlipx compare --glob '*NEBs'
+
+
+.. jupyter-execute::
+   :hide-code:
+
+   import plotly.io as pio
+   pio.renderers.default = "sphinx_gallery"
+
+   figure = pio.read_json("source/figures/neb.json")
+   figure.show()
+
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`LoadDataFile`
