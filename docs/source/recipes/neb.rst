@@ -13,8 +13,8 @@ You can run the following command to instantiate a test directory:
 
    graph TD
       subgraph setup
-         setup1["LoadDataFile"]
-         setup2["NEBinterpolate"]
+         setup1["LoadDataFile"] --> setup2["NEBinterpolate"]
+
       end
       subgraph mg1["Model 1"]
          m1["NEBs"]
