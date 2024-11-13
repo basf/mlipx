@@ -4,7 +4,7 @@ TBA
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes energy-and-forces
+   (.venv) $ mlipx recipes metrics
 
 .. mermaid::
    :align: center
