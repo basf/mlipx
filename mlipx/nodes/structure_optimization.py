@@ -121,7 +121,31 @@ class StructureOptimization(zntrack.Node):
             yaxis_title="Energy",
         )
 
+        # now adjusted
+
+        offset = 0
+        fig_adjusted = go.Figure()
+        for idx, node in enumerate(nodes):
+            energies = np.array([atoms.get_potential_energy() for atoms in node.frames])
+            energies -= energies[0]
+            fig_adjusted.add_trace(
+                go.Scatter(
+                    x=list(range(len(energies))),
+                    y=energies,
+                    mode="lines+markers",
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
+                )
+            )
+            offset += len(energies)
+
+        fig_adjusted.update_layout(
+            title="Adjusted energy vs. Steps",
+            xaxis_title="Step",
+            yaxis_title="Adjusted energy",
+        )
+
         return ComparisonResults(
             frames=frames,
-            figures={"energy_vs_steps": fig},
+            figures={"energy_vs_steps": fig, "adjusted_energy_vs_steps": fig_adjusted},
         )
