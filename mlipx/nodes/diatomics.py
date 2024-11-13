@@ -149,4 +149,35 @@ class HomonuclearDiatomics(zntrack.Node):
                     )
                 )
                 figures[f"{element}-{element} bond"] = fig
+
+                # Now with adjusted
+
+                # check if a figure for this element already exists
+                if f"{element}-{element} bond (adjusted)" not in figures:
+                    # create a line plot and label it with node.name
+                    fig = go.Figure()
+                    fig.update_layout(title=f"{element}-{element} bond")
+                    fig.update_xaxes(title="Distance / Å")
+                    fig.update_yaxes(title="Adjusted energy / eV")
+                else:
+                    fig = figures[f"{element}-{element} bond (adjusted)"]
+
+                # find the closest to the cov. dist. index to set the energy to zero
+                one_idx = np.abs(
+                    node.results[element].dropna().index
+                    - covalent_radii[atomic_numbers[element]]
+                ).argmin()
+
+                # add a line plot node.results[element] vs node.results.index
+                fig.add_trace(
+                    go.Scatter(
+                        x=node.results[element].dropna().index,
+                        y=node.results[element].dropna()
+                        - node.results[element].dropna().iloc[one_idx],
+                        mode="lines",
+                        name=node.name.replace(f"_{cls.__name__}", ""),
+                    )
+                )
+                figures[f"{element}-{element} bond (adjusted)"] = fig
+
         return {"frames": nodes[0].frames, "figures": figures}
