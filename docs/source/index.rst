@@ -13,10 +13,12 @@ Check out the :doc:`installation` section for installation details.
 
    This project is under active development.
 
-Contents
---------
+
+
+
 
 .. toctree::
+   :hidden:
 
    installation
    quickstart
