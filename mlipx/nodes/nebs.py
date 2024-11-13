@@ -209,7 +209,33 @@ class NEBs(zntrack.Node):
             yaxis_title="Energy",
         )
 
+        # Now adjusted
+
+        fig_adjusted = go.Figure()
+        for idx, node in enumerate(nodes):
+            energies = np.array([atoms.get_potential_energy() for atoms in node.frames])
+            energies -= energies[0]
+            fig_adjusted.add_trace(
+                go.Scatter(
+                    x=list(range(len(energies))),
+                    y=energies,
+                    mode="lines+markers",
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
+                )
+            )
+            offset += len(energies)
+
+        fig_adjusted.update_layout(
+            title="Adjusted energy vs. iteration",
+            xaxis_title="Image number",
+            yaxis_title="Adjusted energy",
+        )
+
         return ComparisonResults(
             frames=frames,
-            figures={"energy_vs_neb_image": fig},
+            figures={
+                "energy_vs_neb_image": fig,
+                "adjusted_energy_vs_neb_image": fig_adjusted,
+            },
         )
