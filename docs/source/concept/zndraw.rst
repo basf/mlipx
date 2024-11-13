@@ -1,5 +1,5 @@
-ZnDraw
-======
+visualisation
+=============
 :code:`mlipx` uses ZnDraw as primary tool for visualisation and comparison.
 The following will give you an overview.
 

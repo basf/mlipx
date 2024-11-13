@@ -1,5 +1,5 @@
-ZnTrack
-=======
+Workflows
+=========
 
 The :code:`mlipx` package is based ZnTrack.
 Although, :code:`mlipx` usage does not require you to understand how ZnTrack works, the following will give a short overview of the concept.

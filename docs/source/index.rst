@@ -19,6 +19,7 @@ Contents
 .. toctree::
 
    installation
+   quickstart
    concept
    recipes
    build_graph
