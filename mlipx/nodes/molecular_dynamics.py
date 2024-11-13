@@ -154,7 +154,38 @@ class MolecularDynamics(zntrack.Node):
                 )
             )
             offset += len(energies)
+
+        fig.update_layout(
+            title="Energy vs. step",
+            xaxis_title="Step",
+            yaxis_title="Energy",
+        )
+
+        # Now we set the first energy to zero for better compareability.
+
+        offset = 0
+        fig_adjusted = go.Figure()
+        for _, node in enumerate(nodes):
+            energies = np.array([atoms.get_potential_energy() for atoms in node.frames])
+            energies -= energies[0]
+            fig_adjusted.add_trace(
+                go.Scatter(
+                    x=list(range(len(energies))),
+                    y=energies,
+                    mode="lines+markers",
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
+                )
+            )
+            offset += len(energies)
+
+        fig_adjusted.update_layout(
+            title="Adjusted energy vs. step",
+            xaxis_title="Step",
+            yaxis_title="Adjusted energy",
+        )
+
         return ComparisonResults(
             frames=frames,
-            figures={"energy_vs_steps": fig},
+            figures={"energy_vs_steps": fig, "energy_vs_steps_adjusted": fig_adjusted},
         )
