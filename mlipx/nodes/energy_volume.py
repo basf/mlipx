@@ -105,7 +105,33 @@ class EnergyVolumeCurve(zntrack.Node):
         # set x-axis title
         fig.update_xaxes(title_text="Volume / Å³")
         fig.update_yaxes(title_text="Energy / eV")
+
+        # Now adjusted
+
+        fig_adjust = go.Figure()
+        for node in nodes:
+            scale_factor = np.linspace(node.start, node.stop, node.n_points)
+            one_idx = np.abs(scale_factor - 1).argmin()
+            fig_adjust.add_trace(
+                go.Scatter(
+                    x=node.results["volume"],
+                    y=node.results["energy"] - node.results["energy"].iloc[one_idx],
+                    mode="lines+markers",
+                    name=node.name.replace("_EnergyVolumeCurve", ""),
+                )
+            )
+            fig_adjust.update_traces(
+                customdata=np.stack([np.arange(node.n_points)], axis=1)
+            )
+
+        fig_adjust.update_layout(title="Adjusted Energy-Volume Curve Comparison")
+        fig_adjust.update_xaxes(title_text="Volume / Å³")
+        fig_adjust.update_yaxes(title_text="Adjusted Energy / eV")
+
         return {
             "frames": nodes[0].frames,
-            "figures": {"energy-volume-curve": fig},
+            "figures": {
+                "energy-volume-curve": fig,
+                "adjusted_energy-volume-curve": fig_adjust,
+            },
         }
