@@ -7,6 +7,11 @@ from .nodes.evaluate_calculator import EvaluateCalculatorResults
 from .nodes.filter_dataset import FilterAtoms
 from .nodes.formation_energy import CalculateFormationEnergy, CompareFormationEnergy
 from .nodes.generic_ase import GenericASECalculator
+from .nodes.invariances import (
+    PermutationInvariance,
+    RotationalInvariance,
+    TranslationalInvariance,
+)
 from .nodes.io import LoadDataFile
 from .nodes.modifier import TemperatureRampModifier
 from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
@@ -45,4 +50,7 @@ __all__ = [
     "BuildBox",
     "CompareFormationEnergy",
     "UpdateFramesCalc",
+    "RotationalInvariance",
+    "TranslationalInvariance",
+    "PermutationInvariance",
 ]

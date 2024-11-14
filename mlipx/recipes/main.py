@@ -120,3 +120,21 @@ def metrics(
                 datapath=datapath, isolated_atom_energies=isolated_atom_energies
             )
         )
+
+
+@app.command()
+def invariances(initialize: bool = False, datapath: str = "..."):
+    """Test rotational, permutational and translational invariance.
+
+    Parameters
+    ----------
+    initialize : bool
+        Initialize a git and dvc repository.
+    datapath : str
+        Path to the data directory.
+    """
+    if initialize:
+        initialize_directory()
+    template = jinja2.Template((CWD / "invariances.py").read_text())
+    with open("main.py", "w") as f:
+        f.write(template.render(datapath=datapath))

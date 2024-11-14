@@ -1,0 +1,109 @@
+stages:
+  7net_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name 7net_PermutationInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/PermutationInvariance/metrics.json:
+        cache: false
+    - nodes/7net/PermutationInvariance/node-meta.json:
+        cache: false
+    params:
+    - 7net_PermutationInvariance
+  7net_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name 7net_RotationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/RotationalInvariance/metrics.json:
+        cache: false
+    - nodes/7net/RotationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - 7net_RotationalInvariance
+  7net_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name 7net_TranslationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/TranslationalInvariance/metrics.json:
+        cache: false
+    - nodes/7net/TranslationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - 7net_TranslationalInvariance
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/CoCuFeIrNiHOCl_slab_dft.xyz
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  mace_agne_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mace_agne_PermutationInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agne/PermutationInvariance/metrics.json:
+        cache: false
+    - nodes/mace_agne/PermutationInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_agne_PermutationInvariance
+  mace_agne_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mace_agne_RotationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agne/RotationalInvariance/metrics.json:
+        cache: false
+    - nodes/mace_agne/RotationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_agne_RotationalInvariance
+  mace_agne_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mace_agne_TranslationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agne/TranslationalInvariance/metrics.json:
+        cache: false
+    - nodes/mace_agne/TranslationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_agne_TranslationalInvariance
+  mace_medm_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mace_medm_PermutationInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medm/PermutationInvariance/metrics.json:
+        cache: false
+    - nodes/mace_medm/PermutationInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_medm_PermutationInvariance
+  mace_medm_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mace_medm_RotationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medm/RotationalInvariance/metrics.json:
+        cache: false
+    - nodes/mace_medm/RotationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_medm_RotationalInvariance
+  mace_medm_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mace_medm_TranslationalInvariance
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medm/TranslationalInvariance/metrics.json:
+        cache: false
+    - nodes/mace_medm/TranslationalInvariance/node-meta.json:
+        cache: false
+    params:
+    - mace_medm_TranslationalInvariance

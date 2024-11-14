@@ -1,0 +1,279 @@
+{
+    "initialize_LoadDataFile": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/initialize/LoadDataFile"
+        },
+        "path": "../data/CoCuFeIrNiHOCl_slab_dft.xyz"
+    },
+    "mace_medm_RotationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_medm/RotationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mace_medm_TranslationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_medm/TranslationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mace_medm_PermutationInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_medm/PermutationInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mace_agne_RotationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_agne/RotationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mace_agne_TranslationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_agne/TranslationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mace_agne_PermutationInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_agne/PermutationInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "7net_RotationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/7net/RotationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "7net_TranslationalInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/7net/TranslationalInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "7net_PermutationInvariance": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/7net/PermutationInvariance"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    }
+}
