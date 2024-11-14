@@ -32,3 +32,12 @@ def elements(
     template = jinja2.Template((CWD / "elements.py").read_text())
     with open("main.py", "w") as f:
         f.write(template.render(elements=elements, filtering_type=filtering_type.value))
+
+
+@app.command()
+def file(
+    datapath: str,
+):
+    template = jinja2.Template((CWD / "file.py").read_text())
+    with open("main.py", "w") as f:
+        f.write(template.render(datapath=datapath))

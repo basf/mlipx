@@ -2,7 +2,7 @@ import pandas as pd
 import tqdm
 import zntrack
 
-from mlipx.abc import ComparisonResults
+from mlipx.abc import FIGURES, ComparisonResults
 from mlipx.nodes.evaluate_calculator import EvaluateCalculatorResults, get_figure
 from mlipx.utils import rmse, shallow_copy_atoms
 
@@ -73,6 +73,13 @@ class CompareCalculatorResults(zntrack.Node):
     @property
     def frames(self):
         return self.data.frames
+
+    @property
+    def figures(self) -> FIGURES:
+        figures = {}
+        for key in self.plots.columns:
+            figures[key] = get_figure(key, [self])
+        return figures
 
     def compare(self, *nodes: "CompareCalculatorResults") -> ComparisonResults:
         figures = {}
