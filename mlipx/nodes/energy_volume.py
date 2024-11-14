@@ -61,6 +61,7 @@ class EnergyVolumeCurve(zntrack.Node):
                 {
                     "volume": atoms_copy.get_volume(),
                     "energy": atoms_copy.get_potential_energy(),
+                    "fmax": np.linalg.norm(atoms_copy.get_forces(), axis=-1).max(),
                     "scale": scale,
                 }
             )
@@ -76,13 +77,21 @@ class EnergyVolumeCurve(zntrack.Node):
             return list(ase.io.iread(f, format="extxyz"))
 
     @property
-    def plots(self) -> dict[str, go.Figure]:
+    def figures(self) -> dict[str, go.Figure]:
         """Plot the energy-volume curve."""
-        fig = px.scatter(self.results, x="volume", y="energy", color="scale")
+        fig = px.scatter(self.results, x="scale", y="energy", color="scale")
         fig.update_layout(title="Energy-Volume Curve")
         fig.update_traces(customdata=np.stack([np.arange(self.n_points)], axis=1))
+        fig.update_xaxes(title_text="cell vector scale")
+        fig.update_yaxes(title_text="Energy / eV")
 
-        return {"energy-volume-curve": fig}
+        ffig = px.scatter(self.results, x="scale", y="fmax", color="scale")
+        ffig.update_layout(title="Energy-Volume Curve (fmax)")
+        ffig.update_traces(customdata=np.stack([np.arange(self.n_points)], axis=1))
+        ffig.update_xaxes(title_text="cell vector scale")
+        ffig.update_yaxes(title_text="Maximum Force / eV/Å")
+
+        return {"energy-volume-curve": fig, "fmax-volume-curve": ffig}
 
     @staticmethod
     def compare(*nodes: "EnergyVolumeCurve") -> ComparisonResults:
@@ -91,7 +100,7 @@ class EnergyVolumeCurve(zntrack.Node):
         for node in nodes:
             fig.add_trace(
                 go.Scatter(
-                    x=node.results["volume"],
+                    x=node.results["scale"],
                     y=node.results["energy"],
                     mode="lines+markers",
                     name=node.name.replace("_EnergyVolumeCurve", ""),
@@ -103,7 +112,8 @@ class EnergyVolumeCurve(zntrack.Node):
         # What about forces / energies? Update the key?
         fig.update_layout(title="Energy-Volume Curve Comparison")
         # set x-axis title
-        fig.update_xaxes(title_text="Volume / Å³")
+        # fig.update_xaxes(title_text="Volume / Å³")
+        fig.update_xaxes(title_text="cell vector scale")
         fig.update_yaxes(title_text="Energy / eV")
 
         # Now adjusted

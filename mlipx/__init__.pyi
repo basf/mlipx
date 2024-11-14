@@ -19,6 +19,7 @@ from .nodes.mp_api import MPRester
 from .nodes.nebs import NEBinterpolate, NEBs
 from .nodes.observer import MaximumForceObserver
 from .nodes.phase_diagram import PhaseDiagram, PourbaixDiagram
+from .nodes.rattle import Rattle
 from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
@@ -53,4 +54,5 @@ __all__ = [
     "RotationalInvariance",
     "TranslationalInvariance",
     "PermutationInvariance",
+    "Rattle",
 ]

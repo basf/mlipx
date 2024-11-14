@@ -1,7 +1,7 @@
 7net_diatomics_HomonuclearDiatomics:
   elements: &id001
-  - Cu
   - O
+  - Cu
   eq_distance: covalent-radiuis
   max_distance: 2.0
   min_distance: 0.5
@@ -14,7 +14,7 @@
     module: sevenn.sevennet_calculator
   n_points: 100
 7net_ev_0_EnergyVolumeCurve:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: SevenNetCalculator
@@ -26,7 +26,7 @@
   start: 0.75
   stop: 2.0
 7net_md_0_MolecularDynamics:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: SevenNetCalculator
@@ -61,18 +61,6 @@
     module: sevenn.sevennet_calculator
   optimizer: LBFGS
   steps: 100000000
-7net_struct_optim_2_0_StructureOptimization:
-  data_id: -1
-  fmax: 0.1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: SevenNetCalculator
-    device: auto
-    kwargs:
-      model: 7net-0
-    module: sevenn.sevennet_calculator
-  optimizer: LBFGS
-  steps: 100000000
 mace_agne_diatomics_HomonuclearDiatomics:
   elements: *id001
   eq_distance: covalent-radiuis
@@ -87,7 +75,7 @@ mace_agne_diatomics_HomonuclearDiatomics:
     module: mace.calculators
   n_points: 100
 mace_agne_ev_0_EnergyVolumeCurve:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -99,7 +87,7 @@ mace_agne_ev_0_EnergyVolumeCurve:
   start: 0.75
   stop: 2.0
 mace_agne_md_0_MolecularDynamics:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -134,18 +122,6 @@ mace_agne_struct_optim_0_StructureOptimization:
     module: mace.calculators
   optimizer: LBFGS
   steps: 100000000
-mace_agne_struct_optim_2_0_StructureOptimization:
-  data_id: -1
-  fmax: 0.1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  optimizer: LBFGS
-  steps: 100000000
 mace_medm_diatomics_HomonuclearDiatomics:
   elements: *id001
   eq_distance: covalent-radiuis
@@ -160,7 +136,7 @@ mace_medm_diatomics_HomonuclearDiatomics:
     module: mace.calculators
   n_points: 100
 mace_medm_ev_0_EnergyVolumeCurve:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -172,7 +148,7 @@ mace_medm_ev_0_EnergyVolumeCurve:
   start: 0.75
   stop: 2.0
 mace_medm_md_0_MolecularDynamics:
-  data_id: -1
+  data_id: 0
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -207,19 +183,10 @@ mace_medm_struct_optim_0_StructureOptimization:
     module: mace.calculators
   optimizer: LBFGS
   steps: 100000000
-mace_medm_struct_optim_2_0_StructureOptimization:
-  data_id: -1
-  fmax: 0.1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
-  optimizer: LBFGS
-  steps: 100000000
 mptraj_LoadDataFile:
   start: 0
   step: 1
   stop: null
+rattle_Rattle:
+  seed: 42
+  stdev: 0.01

@@ -95,7 +95,23 @@ class StructureOptimization(zntrack.Node):
             xaxis_title="Step",
             yaxis_title="Energy",
         )
-        return {"energy_vs_steps": figure}
+
+        ffigure = go.Figure()
+        ffigure.add_trace(
+            go.Scatter(
+                x=self.plots.index,
+                y=self.plots["fmax"],
+                mode="lines+markers",
+                customdata=np.stack([np.arange(len(energies))], axis=1),
+            )
+        )
+
+        ffigure.update_layout(
+            title="Fmax vs. Steps",
+            xaxis_title="Step",
+            yaxis_title="Maximum force",
+        )
+        return {"energy_vs_steps": figure, "fmax_vs_steps": ffigure}
 
     @staticmethod
     def compare(*nodes: "StructureOptimization") -> ComparisonResults:

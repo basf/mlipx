@@ -22,10 +22,10 @@ stages:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       7net_struct_optim_0_StructureOptimization
     deps:
-    - path: nodes/mptraj/LoadDataFile/node-meta.json
+    - path: nodes/rattle/Rattle/frames.xyz
       hash: md5
-      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
-      size: 64
+      md5: 6ced6755d7804a6adfe7a8d64f49c6b9
+      size: 3000
     params:
       params.yaml:
         7net_struct_optim_0_StructureOptimization:
@@ -43,31 +43,27 @@ stages:
     outs:
     - path: nodes/7net/struct_optim/0/StructureOptimization/frames.traj
       hash: md5
-      md5: e144b8b4b61ef3dc74218af084b367e8
-      size: 3108
+      md5: 5b6eb936a112a54a7c2c57491916b20d
+      size: 16093
     - path: nodes/7net/struct_optim/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: fd8d924c65099ca036ec16bfffba6d24
+      md5: 845c614e72b29d1c13584acf113542d1
       size: 64
     - path: nodes/7net/struct_optim/0/StructureOptimization/plots.csv
       hash: md5
-      md5: 41c52ca7fa23102583b0aaf0126fba81
-      size: 51
+      md5: 8ad5a4895297a06ac8b71d8a2443cad8
+      size: 210
   7net_md_0_MolecularDynamics:
     cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name 7net_md_0_MolecularDynamics
     deps:
-    - path: nodes/7net/struct_optim/0/StructureOptimization/frames.traj
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: e144b8b4b61ef3dc74218af084b367e8
-      size: 3108
-    - path: nodes/7net/struct_optim/0/StructureOptimization/plots.csv
-      hash: md5
-      md5: 41c52ca7fa23102583b0aaf0126fba81
-      size: 51
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         7net_md_0_MolecularDynamics:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: SevenNetCalculator
@@ -93,11 +89,11 @@ stages:
     outs:
     - path: nodes/7net/md/0/MolecularDynamics/frames.xyz
       hash: md5
-      md5: aa3bca9f12f292497b4cc06dea9529d9
-      size: 814421
+      md5: adc85d24038f395749aaaf0c4c07c56c
+      size: 814262
     - path: nodes/7net/md/0/MolecularDynamics/node-meta.json
       hash: md5
-      md5: 0255534f8a03f6ebf6732d19cdb2c18b
+      md5: 238b87fa219fd0d8c1fb1b25b937527b
       size: 64
     - path: nodes/7net/md/0/MolecularDynamics/observer_metrics.json
       hash: md5
@@ -111,10 +107,10 @@ stages:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_agne_struct_optim_0_StructureOptimization
     deps:
-    - path: nodes/mptraj/LoadDataFile/node-meta.json
+    - path: nodes/rattle/Rattle/frames.xyz
       hash: md5
-      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
-      size: 64
+      md5: 6ced6755d7804a6adfe7a8d64f49c6b9
+      size: 3000
     params:
       params.yaml:
         mace_agne_struct_optim_0_StructureOptimization:
@@ -132,31 +128,27 @@ stages:
     outs:
     - path: nodes/mace_agne/struct_optim/0/StructureOptimization/frames.traj
       hash: md5
-      md5: 122a439de659704a6308a3bf2d74f6a4
-      size: 3370
+      md5: 0d013cac5cfec262db5dd95abdbb56b3
+      size: 9298
     - path: nodes/mace_agne/struct_optim/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: f660b5730ac4dd650910474a71130135
+      md5: ead1c6466b53f73dc9a442f59c5982a4
       size: 64
     - path: nodes/mace_agne/struct_optim/0/StructureOptimization/plots.csv
       hash: md5
-      md5: 326bd75401f4cb795e2dbfacd99b7b17
-      size: 60
+      md5: 77607294e91def7f005ff1227341206c
+      size: 141
   mace_agne_md_0_MolecularDynamics:
     cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_agne_md_0_MolecularDynamics
     deps:
-    - path: nodes/mace_agne/struct_optim/0/StructureOptimization/frames.traj
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: 122a439de659704a6308a3bf2d74f6a4
-      size: 3370
-    - path: nodes/mace_agne/struct_optim/0/StructureOptimization/plots.csv
-      hash: md5
-      md5: 326bd75401f4cb795e2dbfacd99b7b17
-      size: 60
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         mace_agne_md_0_MolecularDynamics:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: MACECalculator
@@ -182,11 +174,11 @@ stages:
     outs:
     - path: nodes/mace_agne/md/0/MolecularDynamics/frames.xyz
       hash: md5
-      md5: 346d5d3cb32a389d930a3a18067e6cbb
-      size: 744326
+      md5: 791de1952df372d23558691394fe2429
+      size: 744475
     - path: nodes/mace_agne/md/0/MolecularDynamics/node-meta.json
       hash: md5
-      md5: 41d71992b0eca50dad7b9f94498c0c85
+      md5: 58453d90b4e923d4f589149c2ed2a0e2
       size: 64
     - path: nodes/mace_agne/md/0/MolecularDynamics/observer_metrics.json
       hash: md5
@@ -243,10 +235,10 @@ stages:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_medm_struct_optim_0_StructureOptimization
     deps:
-    - path: nodes/mptraj/LoadDataFile/node-meta.json
+    - path: nodes/rattle/Rattle/frames.xyz
       hash: md5
-      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
-      size: 64
+      md5: 6ced6755d7804a6adfe7a8d64f49c6b9
+      size: 3000
     params:
       params.yaml:
         mace_medm_struct_optim_0_StructureOptimization:
@@ -264,31 +256,27 @@ stages:
     outs:
     - path: nodes/mace_medm/struct_optim/0/StructureOptimization/frames.traj
       hash: md5
-      md5: 6476959122af46803a9dfbff2bc8ccaf
-      size: 3375
+      md5: ffda54f2e3070558c14d4058148d62b4
+      size: 26100
     - path: nodes/mace_medm/struct_optim/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: cdf0efa897b1b5db3ad5b701fd1289d6
+      md5: 7cf30352f61337581a6623bc9031e9da
       size: 64
     - path: nodes/mace_medm/struct_optim/0/StructureOptimization/plots.csv
       hash: md5
-      md5: ee9c867c7e9a41485b33c5de2a30945f
-      size: 58
+      md5: eeac81068301d84146feef463e0826ad
+      size: 391
   mace_medm_md_0_MolecularDynamics:
     cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mace_medm_md_0_MolecularDynamics
     deps:
-    - path: nodes/mace_medm/struct_optim/0/StructureOptimization/frames.traj
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: 6476959122af46803a9dfbff2bc8ccaf
-      size: 3375
-    - path: nodes/mace_medm/struct_optim/0/StructureOptimization/plots.csv
-      hash: md5
-      md5: ee9c867c7e9a41485b33c5de2a30945f
-      size: 58
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         mace_medm_md_0_MolecularDynamics:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: MACECalculator
@@ -314,11 +302,11 @@ stages:
     outs:
     - path: nodes/mace_medm/md/0/MolecularDynamics/frames.xyz
       hash: md5
-      md5: a3731f8313a844c07666595fae65c07f
-      size: 744379
+      md5: 02abbdf90ae5606e9b6f472a7a60c594
+      size: 744364
     - path: nodes/mace_medm/md/0/MolecularDynamics/node-meta.json
       hash: md5
-      md5: ce0079e862ef68234147551791aef437
+      md5: bb93ecb3edb9daaad9dadfc577c66291
       size: 64
     - path: nodes/mace_medm/md/0/MolecularDynamics/observer_metrics.json
       hash: md5
@@ -331,22 +319,14 @@ stages:
   mace_medm_ev_0_EnergyVolumeCurve:
     cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_medm_ev_0_EnergyVolumeCurve
     deps:
-    - path: nodes/mace_medm/md/0/MolecularDynamics/frames.xyz
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: a3731f8313a844c07666595fae65c07f
-      size: 744379
-    - path: nodes/mace_medm/md/0/MolecularDynamics/observer_metrics.json
-      hash: md5
-      md5: 99d1bc2c8fde362f1c1b8ccf64ceac4c
-      size: 28
-    - path: nodes/mace_medm/md/0/MolecularDynamics/plots.csv
-      hash: md5
-      md5: a685efe115be6deba2098b09a7aa4616
-      size: 19
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         mace_medm_ev_0_EnergyVolumeCurve:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: MACECalculator
@@ -360,16 +340,16 @@ stages:
     outs:
     - path: nodes/mace_medm/ev/0/EnergyVolumeCurve/frames.xyz
       hash: md5
-      md5: 2f55387e042ba6a7ab83d32a6027defd
-      size: 372160
+      md5: fe7e89932f43bb8ab44af28bc3e6a5eb
+      size: 269581
     - path: nodes/mace_medm/ev/0/EnergyVolumeCurve/node-meta.json
       hash: md5
-      md5: f075420a6ad5a09345c40abd73e937ba
+      md5: 8268bbc8461355f5abb8d980b61186c4
       size: 64
     - path: nodes/mace_medm/ev/0/EnergyVolumeCurve/results.csv
       hash: md5
-      md5: f5ac8e2bbbc6eb25fd89e2c0ef3b5dbe
-      size: 2961
+      md5: 5084d2bffbe7b52d3baba6b4bb3c372a
+      size: 3933
   mace_medm_struct_optim_2_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_medm_struct_optim_2_0_StructureOptimization
@@ -419,8 +399,8 @@ stages:
       params.yaml:
         7net_diatomics_HomonuclearDiatomics:
           elements:
-          - Cu
           - O
+          - Cu
           eq_distance: covalent-radiuis
           max_distance: 2.0
           min_distance: 0.5
@@ -435,15 +415,15 @@ stages:
     outs:
     - path: nodes/7net/diatomics/HomonuclearDiatomics/frames.json
       hash: md5
-      md5: 8ff39a025d153b28c48cbe570e44c682
+      md5: 9ae5648637f6b6850eb101f5b38109a5
       size: 422600
     - path: nodes/7net/diatomics/HomonuclearDiatomics/node-meta.json
       hash: md5
-      md5: 076d060b8a6641e85f222a5a29a7133d
+      md5: e0f6e2e2a2663e0d43f5901d9159d529
       size: 64
     - path: nodes/7net/diatomics/HomonuclearDiatomics/results.csv
       hash: md5
-      md5: fc53c594534acf91b67e57b0c2e7b669
+      md5: edf69a8329baf5408695c1aad2b8b4ea
       size: 5453
   mace_agne_diatomics_HomonuclearDiatomics:
     cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_agne_diatomics_HomonuclearDiatomics
@@ -451,8 +431,8 @@ stages:
       params.yaml:
         mace_agne_diatomics_HomonuclearDiatomics:
           elements:
-          - Cu
           - O
+          - Cu
           eq_distance: covalent-radiuis
           max_distance: 2.0
           min_distance: 0.5
@@ -467,15 +447,15 @@ stages:
     outs:
     - path: nodes/mace_agne/diatomics/HomonuclearDiatomics/frames.json
       hash: md5
-      md5: 547793cd80c74960546ae49adaff72a1
+      md5: 79f1b6118ce4133ca212586f06de97cd
       size: 429000
     - path: nodes/mace_agne/diatomics/HomonuclearDiatomics/node-meta.json
       hash: md5
-      md5: 0799ee3e27cb910e7e78c607d60a06b8
+      md5: a31afdd72dde7d10026184f3941e0258
       size: 64
     - path: nodes/mace_agne/diatomics/HomonuclearDiatomics/results.csv
       hash: md5
-      md5: c5886d4405399df9c03e55dd12908a26
+      md5: 86e3f6e60d9b4c32a70c55b4c430a254
       size: 5433
   mace_medm_diatomics_HomonuclearDiatomics:
     cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_medm_diatomics_HomonuclearDiatomics
@@ -483,8 +463,8 @@ stages:
       params.yaml:
         mace_medm_diatomics_HomonuclearDiatomics:
           elements:
-          - Cu
           - O
+          - Cu
           eq_distance: covalent-radiuis
           max_distance: 2.0
           min_distance: 0.5
@@ -499,35 +479,27 @@ stages:
     outs:
     - path: nodes/mace_medm/diatomics/HomonuclearDiatomics/frames.json
       hash: md5
-      md5: ffab1b766ea1a5286d229e7619aa1aa6
+      md5: 366102ac17f1c629b7cd9742728a1f83
       size: 429000
     - path: nodes/mace_medm/diatomics/HomonuclearDiatomics/node-meta.json
       hash: md5
-      md5: c315a14dcfef8c8499e0146bac115ea2
+      md5: e0e63e7072fc25322d57ed628dffa228
       size: 64
     - path: nodes/mace_medm/diatomics/HomonuclearDiatomics/results.csv
       hash: md5
-      md5: 5f61eb3acc762b2187592f198f73d7c9
+      md5: 7f091cf4fae56bf02fe8bdb28e76be18
       size: 5471
   7net_ev_0_EnergyVolumeCurve:
     cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name 7net_ev_0_EnergyVolumeCurve
     deps:
-    - path: nodes/7net/md/0/MolecularDynamics/frames.xyz
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: aa3bca9f12f292497b4cc06dea9529d9
-      size: 814421
-    - path: nodes/7net/md/0/MolecularDynamics/observer_metrics.json
-      hash: md5
-      md5: 99d1bc2c8fde362f1c1b8ccf64ceac4c
-      size: 28
-    - path: nodes/7net/md/0/MolecularDynamics/plots.csv
-      hash: md5
-      md5: a685efe115be6deba2098b09a7aa4616
-      size: 19
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         7net_ev_0_EnergyVolumeCurve:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: SevenNetCalculator
@@ -541,16 +513,16 @@ stages:
     outs:
     - path: nodes/7net/ev/0/EnergyVolumeCurve/frames.xyz
       hash: md5
-      md5: 88d3c339a3165f07892aa7e45a4c3dfa
-      size: 406739
+      md5: 035eed121fd564b741c4b36fcf81c316
+      size: 304222
     - path: nodes/7net/ev/0/EnergyVolumeCurve/node-meta.json
       hash: md5
-      md5: 2a085da5753b4c762a513d4e519ccd70
+      md5: 74c0f2d63536d3fcaea1e14e1fa6646c
       size: 64
     - path: nodes/7net/ev/0/EnergyVolumeCurve/results.csv
       hash: md5
-      md5: 7c043e1a026b64de238b749930a0a90f
-      size: 2952
+      md5: fa565e1c9311d650d220ab7c72c59b81
+      size: 3476
   7net_struct_optim_2_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       7net_struct_optim_2_0_StructureOptimization
@@ -597,22 +569,14 @@ stages:
   mace_agne_ev_0_EnergyVolumeCurve:
     cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_agne_ev_0_EnergyVolumeCurve
     deps:
-    - path: nodes/mace_agne/md/0/MolecularDynamics/frames.xyz
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
       hash: md5
-      md5: 346d5d3cb32a389d930a3a18067e6cbb
-      size: 744326
-    - path: nodes/mace_agne/md/0/MolecularDynamics/observer_metrics.json
-      hash: md5
-      md5: 99d1bc2c8fde362f1c1b8ccf64ceac4c
-      size: 28
-    - path: nodes/mace_agne/md/0/MolecularDynamics/plots.csv
-      hash: md5
-      md5: a685efe115be6deba2098b09a7aa4616
-      size: 19
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
     params:
       params.yaml:
         mace_agne_ev_0_EnergyVolumeCurve:
-          data_id: -1
+          data_id: 0
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: MACECalculator
@@ -626,13 +590,34 @@ stages:
     outs:
     - path: nodes/mace_agne/ev/0/EnergyVolumeCurve/frames.xyz
       hash: md5
-      md5: d4eeb50576c748807b4659f720ce06c6
-      size: 372175
+      md5: c58dac43ade6ce229836744358a86748
+      size: 269587
     - path: nodes/mace_agne/ev/0/EnergyVolumeCurve/node-meta.json
       hash: md5
-      md5: d42385deb9174d2c5f317bad985898cf
+      md5: 27585173fd8376b1891f83b4dbe2af54
       size: 64
     - path: nodes/mace_agne/ev/0/EnergyVolumeCurve/results.csv
       hash: md5
-      md5: 624a2d84c4b32c006aa59062f771b44f
-      size: 2960
+      md5: 823501e17c91cdeea859203b1159c8cc
+      size: 3932
+  rattle_Rattle:
+    cmd: zntrack run mlipx.nodes.rattle.Rattle --name rattle_Rattle
+    deps:
+    - path: nodes/mptraj/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 96c0dbdd21a2ac7bff9d54b4796c700c
+      size: 64
+    params:
+      params.yaml:
+        rattle_Rattle:
+          seed: 42
+          stdev: 0.01
+    outs:
+    - path: nodes/rattle/Rattle/frames.xyz
+      hash: md5
+      md5: 6ced6755d7804a6adfe7a8d64f49c6b9
+      size: 3000
+    - path: nodes/rattle/Rattle/node-meta.json
+      hash: md5
+      md5: d22df9af098235799464e8433c9932b0
+      size: 64

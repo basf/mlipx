@@ -185,7 +185,7 @@ class VibrationalAnalysis(zntrack.Node):
             return list(ase.io.iread(f, format="extxyz"))
 
     @property
-    def plots(self) -> dict[str, go.Figure]:
+    def figures(self) -> dict[str, go.Figure]:
         # plotter = PDPlotter(self.pd)
         # fig = plotter.get_plot()
         fig = px.line(self.results, x="Frame", y="ddG_300k", markers=True)

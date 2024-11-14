@@ -151,7 +151,7 @@ class NEBs(zntrack.Node):
             return list(ase.io.iread(f, format="extxyz"))
 
     @property
-    def plots(self) -> dict[str, go.Figure]:
+    def figures(self) -> dict[str, go.Figure]:
         fig = px.scatter(self.results, x="data_id", y="potential_energy")
         fig.update_layout(title="NEB_path")
         fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=1))

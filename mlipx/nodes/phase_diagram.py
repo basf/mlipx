@@ -144,7 +144,7 @@ class PhaseDiagram(zntrack.Node):
         self.results = pd.DataFrame(row_dicts)
 
     @property
-    def plots(self) -> dict[str, go.Figure]:
+    def figures(self) -> dict[str, go.Figure]:
         plotter = PDPlotter(self.phase_diagram)
         fig1 = plotter.get_plot()
         fig2 = px.line(self.results, x="data_id", y="formation_energy")
@@ -185,7 +185,7 @@ class PhaseDiagram(zntrack.Node):
         for i, node in enumerate(nodes):
             name = node.name
             names.append(name)
-            for trace in node.plots["phase-diagram"].data:
+            for trace in node.figures["phase-diagram"].data:
                 fig1.add_trace(trace, row=i // n_cols + 1, col=i % n_cols + 1)
         names_map = {f"plot_{i}": names[i] for i in range(n_nodes)}
         fig1.for_each_annotation(lambda x: x.update(text=names_map[x.text]))
@@ -664,7 +664,7 @@ class PourbaixDiagram(zntrack.Node):
         self.results = pd.DataFrame(row_dicts)
 
     @property
-    def plots(self) -> dict[str, go.Figure]:
+    def figures(self) -> dict[str, go.Figure]:
         plotter = PDPlotter(self.pourbaix_diagram)
         fig1 = plotter.get_plot()
         fig2 = px.line(self.results, x="data_id", y="pourbaix_decomposition_energy")
@@ -697,7 +697,7 @@ class PourbaixDiagram(zntrack.Node):
         for i, node in enumerate(nodes):
             name = node.name
             names.append(name)
-            for trace in node.plots["phase-diagram"].data:
+            for trace in node.figures["phase-diagram"].data:
                 fig1.add_trace(trace, row=i // n_cols + 1, col=i % n_cols + 1)
         names_map = {f"plot_{i}": names[i] for i in range(n_nodes)}
         fig1.for_each_annotation(lambda x: x.update(text=names_map[x.text]))

@@ -88,7 +88,7 @@ class HomonuclearDiatomics(zntrack.Node):
         )
 
     @property
-    def plots(self) -> dict:
+    def figures(self) -> dict:
         # return a plot for each element
         plots = {}
         for element in self.elements:
