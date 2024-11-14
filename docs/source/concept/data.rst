@@ -36,7 +36,7 @@ Here we select all structures containing :code:`F` and :code:`B` atoms.
       )
 
       with project:
-         raw_data = mlipx.LoadDataFile(path=mptraj, stop=2)
+         raw_data = mlipx.LoadDataFile(path=mptraj)
          data = mlipx.FilterAtoms(data=data.frames, elements=["B", "F"])
 
 A third approach is generating data on the fly.

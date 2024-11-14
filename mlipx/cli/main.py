@@ -1,4 +1,5 @@
 import fnmatch
+import json
 import uuid
 
 import dvc.api
@@ -8,10 +9,11 @@ from tqdm import tqdm
 from typing_extensions import Annotated
 from zndraw import ZnDraw
 
-from mlipx import recipes
+from mlipx import benchmark, recipes
 
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
+app.add_typer(benchmark.app, name="benchmark")
 
 
 @app.command()
@@ -43,8 +45,8 @@ def compare(  # noqa C901
     node_names, revs, remotes = [], [], []
     if glob:
         fs = dvc.api.DVCFileSystem()
-        graph = fs.repo.index.graph
-        all_nodes = [x.name for x in graph.nodes if hasattr(x, "name")]
+        with fs.open("zntrack.json", mode="r") as f:
+            all_nodes = list(json.load(f).keys())
 
     for node in nodes:
         # can be name or name@rev or name@remote@rev
