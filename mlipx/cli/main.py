@@ -1,6 +1,7 @@
 import fnmatch
 import json
 import uuid
+import webbrowser
 
 import dvc.api
 import typer
@@ -37,6 +38,12 @@ def compare(  # noqa C901
         bool, typer.Option("--glob", help="Allow glob patterns to select nodes.")
     ] = False,
     convert_nan: Annotated[bool, typer.Option()] = False,
+    browser: Annotated[
+        bool,
+        typer.Option(
+            help="""Whether to open the ZnDraw GUI in the default web browser."""
+        ),
+    ] = True,
 ):
     """Compare mlipx nodes and visualize the results using ZnDraw."""
     # TODO: allow for glob patterns
@@ -87,10 +94,12 @@ def compare(  # noqa C901
         kwargs[key] = value
     result = node_instances[node_names[0]].compare(*node_instances.values(), **kwargs)
 
-    token = token or uuid.uuid4().hex
+    token = token or str(uuid.uuid4())
     vis = ZnDraw(zndraw_url, token=token, convert_nan=convert_nan)
     vis.extend(result["frames"])
     del vis[0]
     vis.figures = result["figures"]
     typer.echo(f"View the results at {zndraw_url}/token/{token}")
+    if browser:
+        webbrowser.open(f"{zndraw_url}/token/{token}")
     vis.socket.sleep(5)
