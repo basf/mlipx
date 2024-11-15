@@ -28,6 +28,10 @@ You can edit the elements in the :term:`main.py` file to include the elements yo
 
 In the following we show the results for the :code:`Li-Li` bond for the three selected models.
 
+.. code-block:: console
+
+   (.venv) $ mlipx compare --glob "*HomonuclearDiatomics"
+
 
 .. jupyter-execute::
    :hide-code:
