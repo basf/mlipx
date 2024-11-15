@@ -62,3 +62,12 @@ Each Node is documented in the following section.
 
     FilterAtoms
         .. autofunction:: mlipx.FilterAtoms
+
+    RotationalInvariance
+        .. autofunction:: mlipx.RotationalInvariance
+
+    TranslationalInvariance
+        .. autofunction:: mlipx.TranslationalInvariance
+
+    PermutationInvariance
+        .. autofunction:: mlipx.PermutationInvariance

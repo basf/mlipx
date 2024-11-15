@@ -85,3 +85,4 @@ Overview
    recipes/energy_and_forces
    recipes/homonuclear_diatomics
    recipes/energy_volume
+   recipes/invariances

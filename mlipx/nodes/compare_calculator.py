@@ -2,7 +2,7 @@ import pandas as pd
 import tqdm
 import zntrack
 
-from mlipx.abc import FIGURES, ComparisonResults
+from mlipx.abc import FIGURES, FRAMES, ComparisonResults
 from mlipx.nodes.evaluate_calculator import EvaluateCalculatorResults, get_figure
 from mlipx.utils import rmse, shallow_copy_atoms
 
@@ -71,7 +71,7 @@ class CompareCalculatorResults(zntrack.Node):
                 self.error[f"{stripped_key}_min"] = self.plots[key].min()
 
     @property
-    def frames(self):
+    def frames(self) -> FRAMES:
         return self.data.frames
 
     @property
