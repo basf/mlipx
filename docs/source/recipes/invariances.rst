@@ -1,5 +1,5 @@
-Homonuclear Diatomics
-===========================
+Invariances
+===========
 Check the rotational, translational and permutational invariance of an :term:`mlip`.
 
 
