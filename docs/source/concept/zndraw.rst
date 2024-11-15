@@ -36,4 +36,10 @@ Modifying them in place, will be reflected in real-time on the GUI.
     vis.append(ase.Atoms(...))
 
 
+.. image:: ../_static/zndraw_render.png
+    :width: 80%
+
+**Figure 1** Graphical user interface of the :term:`ZnDraw` package with GPU path tracing enabled.
+
+
 For further information have a look at the ZnDraw repository https://github.com/zincware/zndraw - a full documentation will be provided soon.
