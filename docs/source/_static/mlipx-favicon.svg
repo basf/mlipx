@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="18mm"
+   height="18mm"
+   viewBox="0 0 18 18"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   sodipodi:docname="mlipx-favicon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="3.4215759"
+     inkscape:cx="134.44098"
+     inkscape:cy="47.93113"
+     inkscape:window-width="1352"
+     inkscape:window-height="815"
+     inkscape:window-x="0"
+     inkscape:window-y="35"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g2"
+     showguides="true"
+     inkscape:lockguides="false" /><defs
+     id="defs1"><style
+       class="style-fonts"
+       id="style1">
+      @font-face {
+        font-family: &quot;Virgil&quot;;
+        src: url(&quot;https://excalidraw.com/Virgil.woff2&quot;);
+      }
+      @font-face {
+        font-family: &quot;Cascadia&quot;;
+        src: url(&quot;https://excalidraw.com/Cascadia.woff2&quot;);
+      }
+      @font-face {
+        font-family: &quot;Assistant&quot;;
+        src: url(&quot;https://excalidraw.com/Assistant-Regular.woff2&quot;);
+      }
+    </style></defs><g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"><g
+       id="g5"
+       transform="matrix(0.26458333,0,0,0.26458333,0.21664316,0.27743081)"><g
+         stroke-linecap="round"
+         id="g2"><g
+           transform="rotate(90.01512,19.512338,32.47035)"
+           id="g1"><path
+             d="M -0.3,1.06 C 1.77,3.87 5.11,9.26 11.26,16 17.41,22.74 32.1,23.79 36.61,41.5 M 1.75,0.57 c 2,2.54 2.75,6.68 8.51,13.73 5.77,7.06 21.43,10.95 26.08,28.6"
+             stroke="#e03131"
+             stroke-width="2"
+             fill="none"
+             id="path1"
+             sodipodi:nodetypes="cscccc" /></g></g><g
+         stroke-linecap="round"
+         id="g4"
+         transform="translate(-80.292263,2)"><g
+           transform="translate(89.391235,10)"
+           id="g3"><path
+             d="m 0,0 c 2.39,1.73 9.45,3.99 14.35,10.38 4.89,6.4 8.66,23.34 15.02,27.99 6.37,4.64 19.31,-0.09 23.17,-0.11 M 0,0 c 2.39,1.73 9.45,3.99 14.35,10.38 4.89,6.4 8.66,23.34 15.02,27.99 6.37,4.64 19.31,-0.09 23.17,-0.11"
+             stroke="#e03131"
+             stroke-width="2"
+             fill="none"
+             id="path2" /></g></g></g></g></svg>

@@ -96,8 +96,8 @@ def compare(  # noqa C901
 
     token = token or str(uuid.uuid4())
     vis = ZnDraw(zndraw_url, token=token, convert_nan=convert_nan)
+    del vis[:]
     vis.extend(result["frames"])
-    del vis[0]
     vis.figures = result["figures"]
     typer.echo(f"View the results at {zndraw_url}/token/{token}")
     if browser:

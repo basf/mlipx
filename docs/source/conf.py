@@ -44,11 +44,13 @@ exclude_patterns = []
 
 html_theme = "furo"
 html_static_path = ["_static"]
-html_logo = "_static/mlipx-logo.svg"
 html_title = "Machine Learned Interatomic Potential eXploration"
 html_short_title = "mlipx"
+html_favicon = "_static/mlipx-favicon.svg"
 
 html_theme_options: t.Dict[str, t.Any] = {
+    "light_logo": "mlipx-light.svg",
+    "dark_logo": "mlipx-dark.svg",
     "footer_icons": [
         {
             "name": "GitHub",
