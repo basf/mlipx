@@ -74,8 +74,10 @@ Given a running :term:`mlflow` server, you can use the following command to uplo
 
 Overview
 --------
+The following recipes are currently available within :code:`mlipx`.
 
 .. toctree::
+   :maxdepth: 2
 
    recipes/md
    recipes/relax
