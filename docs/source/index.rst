@@ -19,6 +19,7 @@ Check out the :doc:`installation` section for installation details.
 
 .. toctree::
    :hidden:
+   :maxdepth: 2
 
    installation
    quickstart

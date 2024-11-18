@@ -22,7 +22,7 @@ Glossary
         The package can be installed via :code:`pip install zntracck` or from source at https://github.com/zincware/zntrack .
 
     IPSuite
-        IPSuite:footcite:t:`zillsCollaborationMachineLearnedPotentials2024` is a software package for the development and application of machine-learned interatomic potentials (MLIPs). It provides functionalities for training and testing MLIPs, as well as for running simulations using these potentials.
+        IPSuite by :footcite:t:`zillsCollaborationMachineLearnedPotentials2024` is a software package for the development and application of machine-learned interatomic potentials (MLIPs). It provides functionalities for training and testing MLIPs, as well as for running simulations using these potentials.
         The package can be installed via :code:`pip install ipsuite` or from source at https://github.com/zincware/ipsuite .
 
     ZnDraw

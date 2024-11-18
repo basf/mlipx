@@ -76,6 +76,7 @@ Overview
 --------
 
 .. toctree::
+
    recipes/md
    recipes/relax
    recipes/neb
