@@ -1,0 +1,306 @@
+schema: '2.0'
+stages:
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - path: ../data/LiMnO_mp_small_vasp_sp.xyz
+      hash: md5
+      md5: 593cc5c3b894cfaf0ce1d87a7ae7c2fb
+      size: 198055
+    params:
+      params.yaml:
+        initialize_LoadDataFile:
+          start: 0
+          step: 1
+          stop:
+    outs:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+  7net_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name 7net_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        7net_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+    outs:
+    - path: nodes/7net/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 81a035fb7f6096891a1123d2deecc3dd
+      size: 204482
+    - path: nodes/7net/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 46ee994213bf4540a364c8d97dc41f55
+      size: 64
+    - path: nodes/7net/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 66aa65ef9127cca150ff55f39874a18e
+      size: 5206367
+    - path: nodes/7net/PhaseDiagram/results.csv
+      hash: md5
+      md5: de7f8276d2f44caa9d0352b56a9aa515
+      size: 2976
+  Orb_d3_sm_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_sm_v2_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_sm_v2_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_sm_v2
+    outs:
+    - path: nodes/Orb_d3_sm_v2/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 0f9f254cf7b8153d09fd8f735f594ee6
+      size: 181286
+    - path: nodes/Orb_d3_sm_v2/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: e01677b0fe615509917bc82723f98ecc
+      size: 64
+    - path: nodes/Orb_d3_sm_v2/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 5bb25d2098800758c3f083369cf11590
+      size: 5212815
+    - path: nodes/Orb_d3_sm_v2/PhaseDiagram/results.csv
+      hash: md5
+      md5: a06b42f2cc51609a26ab3cf5d7ccadcc
+      size: 2941
+  Orb_d3_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_v2_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_v2_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_v2
+    outs:
+    - path: nodes/Orb_d3_v2/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 29c4b4fedcbaee7e9e04313c73d5cdae
+      size: 181259
+    - path: nodes/Orb_d3_v2/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 21f3c53ced99c3f6f9d1898f621d4178
+      size: 64
+    - path: nodes/Orb_d3_v2/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 6aa4da711689ee96ef0a00bf09d3f1dc
+      size: 5214123
+    - path: nodes/Orb_d3_v2/PhaseDiagram/results.csv
+      hash: md5
+      md5: fdffbf44799cea06531fe603c07f9cfc
+      size: 2942
+  Orb_d3_xs_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_xs_v2_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_xs_v2_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_xs_v2
+    outs:
+    - path: nodes/Orb_d3_xs_v2/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: b257ac849dff461026c94a81e0a80a39
+      size: 181236
+    - path: nodes/Orb_d3_xs_v2/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: c55f4d54538305c189ba9e9bd38cbcbe
+      size: 64
+    - path: nodes/Orb_d3_xs_v2/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 1cb993bce89cbb9651a83e86dcccb3db
+      size: 5212815
+    - path: nodes/Orb_d3_xs_v2/PhaseDiagram/results.csv
+      hash: md5
+      md5: 618be004ecddca754335d5c40b912873
+      size: 2937
+  Orb_mptraj_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_mptraj_v2_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        Orb_mptraj_v2_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_mptraj_only_v2
+    outs:
+    - path: nodes/Orb_mptraj_v2/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 34576a6f50e0d1d9ae2f59f9afcc4ee5
+      size: 181540
+    - path: nodes/Orb_mptraj_v2/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 1942726b3d1f178577e36f6c4c906059
+      size: 64
+    - path: nodes/Orb_mptraj_v2/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 00c3ddc21c402216bac51999811a6e91
+      size: 5206359
+    - path: nodes/Orb_mptraj_v2/PhaseDiagram/results.csv
+      hash: md5
+      md5: b5596c9240f3d60c4669074f1f7ce119
+      size: 2993
+  Orb_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_v2_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        Orb_v2_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_v2
+    outs:
+    - path: nodes/Orb_v2/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 6df3f6a6e39bf6e69b3475b8feda7ff8
+      size: 181575
+    - path: nodes/Orb_v2/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 8e59cfa24ec2e42820c48aba9d64ed04
+      size: 64
+    - path: nodes/Orb_v2/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: ce98f5843c5d72bea03ec132e2834e81
+      size: 5206359
+    - path: nodes/Orb_v2/PhaseDiagram/results.csv
+      hash: md5
+      md5: f57edf5110c03fee4bc06e3ffbfd919a
+      size: 2986
+  mace_agnesi_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_agnesi_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        mace_agnesi_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: cpu
+            kwargs:
+              dtype: float64
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+    outs:
+    - path: nodes/mace_agnesi/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 793a5a290bb1aeb27cf3abdea86c239b
+      size: 181478
+    - path: nodes/mace_agnesi/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: b59ad9bc77df6c62516be62ea7e0c73c
+      size: 64
+    - path: nodes/mace_agnesi/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: ff2f4f1c6b25b63b05f9306fbc7a2968
+      size: 5206359
+    - path: nodes/mace_agnesi/PhaseDiagram/results.csv
+      hash: md5
+      md5: ae1d5bf2e8a44ff4428e2e3508c0d2a6
+      size: 3004
+  mace_medium_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_medium_PhaseDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: 1877536941ae2ddf7bd9c16061b8b276
+      size: 64
+    params:
+      params.yaml:
+        mace_medium_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: cpu
+            kwargs:
+              dtype: float64
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+    outs:
+    - path: nodes/mace_medium/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 7bcc7d3f815504b1a3e293f43de8f276
+      size: 181436
+    - path: nodes/mace_medium/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 8730ca612bfbf60a713eeed2f2166e28
+      size: 64
+    - path: nodes/mace_medium/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 6cd20c7000aa0a894b19add2939d3661
+      size: 5206367
+    - path: nodes/mace_medium/PhaseDiagram/results.csv
+      hash: md5
+      md5: a7b1bac0bac71d0964f049efbcfc4e5e
+      size: 2989

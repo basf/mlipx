@@ -17,7 +17,8 @@ for model_name, model in MODELS.items():
             data=trajectory.frames,
             model=model,
             relax=True,
-            fmax=0.25,
+            fmax=0.05,
+            n_steps=500,
         )
 
 project.build()

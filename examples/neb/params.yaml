@@ -1,5 +1,5 @@
 7net_NEBs:
-  fmax: 0.25
+  fmax: 0.05
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: SevenNetCalculator
@@ -15,10 +15,11 @@ initialize_LoadDataFile:
   step: 1
   stop: null
 initialize_NEBinterpolate:
+  add_constraints: true
   mic: true
   n_images: 5
 mace_agne_NEBs:
-  fmax: 0.25
+  fmax: 0.05
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -30,7 +31,7 @@ mace_agne_NEBs:
   optimizer: FIRE
   relax: true
 mace_medm_NEBs:
-  fmax: 0.25
+  fmax: 0.05
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
     class_name: MACECalculator
@@ -38,6 +39,22 @@ mace_medm_NEBs:
     kwargs:
       model_paths: ../models/mace_medium.model
     module: mace.calculators
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
+orb_d3_v2_NEBs:
+  fmax: 0.05
+  model:
+    _cls: models.OrbCalc
+    name: orb_d3_v2
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
+orb_v2_NEBs:
+  fmax: 0.05
+  model:
+    _cls: models.OrbCalc
+    name: orb_v2
   n_steps: 500
   optimizer: FIRE
   relax: true

@@ -6,6 +6,8 @@ import typing as t
 import warnings
 
 import ase.io
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -15,8 +17,9 @@ from mp_api.client import MPRester
 from plotly.subplots import make_subplots
 from pymatgen.analysis.phase_diagram import PDPlotter
 from pymatgen.analysis.phase_diagram import PhaseDiagram as pmg_PhaseDiagram
-from pymatgen.analysis.pourbaix_diagram import PourbaixEntry
-from pymatgen.core import Element, Structure
+from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram as pmg_PourbaixDiagram
+from pymatgen.analysis.pourbaix_diagram import PourbaixEntry, PourbaixPlotter
+from pymatgen.core import Element
 from pymatgen.core.ion import Ion
 from pymatgen.entries.compatibility import (
     MaterialsProject2020Compatibility,
@@ -24,10 +27,8 @@ from pymatgen.entries.compatibility import (
 )
 from pymatgen.entries.computed_entries import (
     ComputedEntry,
-    ComputedStructureEntry,
     GibbsComputedStructureEntry,
 )
-from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
 
@@ -41,6 +42,8 @@ class PhaseDiagram(zntrack.Node):
         List of structures to evaluate.
     model : NodeWithCalculator
         Node providing the calculator object for the energy calculations.
+    chemsys:  list[str], defaeult=None
+        The set of chemical symbols to construct phase diagram.
     data_ids : list[int], default=None
         Index of the structure to evaluate.
     geo_opt: bool, default=False
@@ -60,7 +63,7 @@ class PhaseDiagram(zntrack.Node):
 
     model: NodeWithCalculator = zntrack.deps()
     data: list[ase.Atoms] = zntrack.deps()
-    api_key: str = zntrack.params(None)
+    chemsys: list[str] = zntrack.params(None)
     data_ids: list[int] = zntrack.params(None)
     geo_opt: bool = zntrack.params(False)
     fmax: float = zntrack.params(0.05)
@@ -68,7 +71,7 @@ class PhaseDiagram(zntrack.Node):
     results: pd.DataFrame = zntrack.plots(x="data_id", y="formation_energy")
     phase_diagram: t.Any = zntrack.outs()
 
-    def run(self):
+    def run(self):  # noqa C901
         if self.data_ids is None:
             atoms_list = self.data
         else:
@@ -87,6 +90,11 @@ class PhaseDiagram(zntrack.Node):
             "V": 3.25,
             "W": 6.2,
         }
+        try:
+            api_key = os.environ["MP_API_KEY"]
+        except KeyError:
+            api_key = None
+
         entries, epots = [], []
         for atoms in atoms_list:
             metals = [s for s in set(atoms.symbols) if s not in ["O", "H"]]
@@ -124,11 +132,23 @@ class PhaseDiagram(zntrack.Node):
             )
             entries.append(entry)
         compat = MaterialsProject2020Compatibility()
-        corrected_entries = compat.process_entries(entries)
-        self.phase_diagram = pmg_PhaseDiagram(corrected_entries)
+        computed_entries = compat.process_entries(entries)
+        if api_key is None:
+            mp_entries = []
+        else:
+            mpr = MPRester(api_key)
+            if self.chemsys is None:
+                chemsys = set(
+                    itertools.chain.from_iterable(atoms.symbols for atoms in atoms_list)
+                )
+            else:
+                chemsys = self.chemsys
+            mp_entries = mpr.get_entries_in_chemsys(chemsys)
+        all_entries = computed_entries + mp_entries
+        self.phase_diagram = pmg_PhaseDiagram(all_entries)
 
         row_dicts = []
-        for i, entry in enumerate(corrected_entries):
+        for i, entry in enumerate(computed_entries):
             if self.data_ids is None:
                 data_id = i
             else:
@@ -189,6 +209,8 @@ class PhaseDiagram(zntrack.Node):
                 fig1.add_trace(trace, row=i // n_cols + 1, col=i % n_cols + 1)
         names_map = {f"plot_{i}": names[i] for i in range(n_nodes)}
         fig1.for_each_annotation(lambda x: x.update(text=names_map[x.text]))
+        fig1.update_xaxes(showticklabels=False)  # Hide x axis ticks
+        fig1.update_yaxes(showticklabels=False)  # Hide y axis ticks
         fig1.update_layout(title="Phase Diagram Comparison")
 
         fig2 = go.Figure()
@@ -231,8 +253,6 @@ class PourbaixDiagram(zntrack.Node):
         List of structures to evaluate.
     model : NodeWithCalculator
         Node providing the calculator object for the energy calculations.
-    api_key : str
-        API key for mp_api.client.MPRester
     pH : float
         pH where the Pourbaix stability is evaluated ,
     V : float
@@ -277,233 +297,6 @@ class PourbaixDiagram(zntrack.Node):
         x="data_id", y="pourbaix_decomposition_energy"
     )
     pourbaix_diagram: t.Any = zntrack.outs()
-
-    def get_entries(  # noqa: C901
-        self,
-        chemsys_formula_mpids: str | list[str],
-        compatible_only: bool = True,
-        inc_structure: bool | None = None,
-        property_data: list[str] | None = None,
-        conventional_unit_cell: bool = False,
-        additional_criteria: dict | None = None,
-    ) -> list:
-        """Get a list of ComputedEntries or ComputedStructureEntries corresponding
-        to a chemical system or formula. This returns entries for all thermo types
-        represented in the database. Each type corresponds to a different mixing scheme
-        (i.e. GGA/GGA+U, GGA/GGA+U/R2SCAN, R2SCAN). By default the thermo_type of the
-        entry is also returned.
-
-        Args:
-            chemsys_formula_mpids (str, List[str]): A chemical system, list
-            of chemical systems
-                (e.g., Li-Fe-O, Si-*, [Si-O, Li-Fe-P]), formula, list of formulas
-                (e.g., Fe2O3, Si*, [SiO2, BiFeO3]), Materials Project ID, or
-                list of Materials
-                Project IDs (e.g., mp-22526, [mp-22526, mp-149]).
-            compatible_only (bool): Whether to return only "compatible"
-                entries. Compatible entries are entries that have been
-                processed using the MaterialsProject2020Compatibility class,
-                which performs adjustments to allow mixing of GGA and GGA+U
-                calculations for more accurate phase diagrams and reaction
-                energies. This data is obtained from the core "thermo" API endpoint.
-            inc_structure (str): *This is a deprecated argument*. Previously,
-            if None, entries
-                returned were ComputedEntries. If inc_structure="initial",
-                ComputedStructureEntries with initial structures were returned.
-                Otherwise, ComputedStructureEntries with final structures
-                were returned. This is no longer needed as all entries will contain
-                structure data by default.
-            property_data (list): Specify additional properties to include in
-                entry.data. If None, only default data is included. Should be
-                  a subset of
-                input parameters in the 'MPRester.thermo.available_fields' list.
-            conventional_unit_cell (bool): Whether to get the standard
-                conventional unit cell
-            additional_criteria (dict): Any additional criteria to pass. The keys
-              and values should
-                correspond to proper function inputs to `MPRester.thermo.search`.
-                  For instance,
-                if you are only interested in entries on the convex hull,
-                you could pass
-                {"energy_above_hull": (0.0, 0.0)} or {"is_stable": True}.
-
-        Returns:
-            List ComputedStructureEntry objects.
-        """
-        if inc_structure is not None:
-            warnings.warn(
-                "The 'inc_structure' argument is deprecated as structure "
-                "data is now always included in all returned entry objects."
-            )
-
-        if isinstance(chemsys_formula_mpids, str):
-            chemsys_formula_mpids = [chemsys_formula_mpids]
-
-        try:
-
-            def validate_ids(ids):
-                return ids
-
-            input_params = {"material_ids": validate_ids(chemsys_formula_mpids)}
-        except ValueError:
-            if any("-" in entry for entry in chemsys_formula_mpids):
-                input_params = {"chemsys": chemsys_formula_mpids}
-            else:
-                input_params = {"formula": chemsys_formula_mpids}
-
-        if additional_criteria:
-            input_params = {**input_params, **additional_criteria}
-
-        entries = []
-
-        fields = (
-            ["entries", "thermo_type"]
-            if not property_data
-            else ["entries", "thermo_type"] + property_data
-        )
-
-        docs = self.thermo.search(
-            **input_params,  # type: ignore
-            all_fields=False,
-            fields=fields,
-        )
-
-        for doc in docs:
-            entry_list = (
-                doc.entries.values()  # type: ignore
-                if self.use_document_model
-                else doc["entries"].values()  # type: ignore
-            )
-            for entry in entry_list:
-                entry_dict: dict = entry.as_dict() if self.monty_decode else entry  # type: ignore
-                if not compatible_only:
-                    entry_dict["correction"] = 0.0
-                    entry_dict["energy_adjustments"] = []
-
-                if property_data:
-                    for property in property_data:
-                        entry_dict["data"][property] = (
-                            doc.model_dump()[property]  # type: ignore
-                            if self.use_document_model
-                            else doc[property]  # type: ignore
-                        )
-
-                if conventional_unit_cell:
-                    entry_struct = Structure.from_dict(entry_dict["structure"])
-                    s = SpacegroupAnalyzer(
-                        entry_struct
-                    ).get_conventional_standard_structure()
-                    site_ratio = len(s) / len(entry_struct)
-                    new_energy = entry_dict["energy"] * site_ratio
-
-                    entry_dict["energy"] = new_energy
-                    entry_dict["structure"] = s.as_dict()
-                    entry_dict["correction"] = 0.0
-
-                    for element in entry_dict["composition"]:
-                        entry_dict["composition"][element] *= site_ratio
-
-                    for correction in entry_dict["energy_adjustments"]:
-                        if "n_atoms" in correction:
-                            correction["n_atoms"] *= site_ratio
-
-                entry = (
-                    ComputedStructureEntry.from_dict(entry_dict)
-                    if self.monty_decode
-                    else entry_dict
-                )
-
-                entries.append(entry)
-
-        return entries
-
-    def get_entries_in_chemsys(
-        self,
-        elements: str | list[str],
-        use_gibbs: int | None = None,
-        compatible_only: bool = True,
-        inc_structure: bool | None = None,
-        property_data: list[str] | None = None,
-        conventional_unit_cell: bool = False,
-        additional_criteria=None,
-    ):
-        """Helper method to get a list of ComputedEntries in a chemical system.
-        For example, elements = ["Li", "Fe", "O"] will return a list of all
-        entries in the parent Li-Fe-O chemical system, as well as all subsystems
-        (i.e., all LixOy, FexOy, LixFey, LixFeyOz, Li, Fe and O phases). Extremely
-        useful for creating phase diagrams of entire chemical systems.
-
-        Note that by default this returns mixed GGA/GGA+U entries. For others,
-        pass GGA/GGA+U/R2SCAN, or R2SCAN as thermo_types in additional_criteria.
-
-        Args:
-            elements (str or [str]): Parent chemical system string comprising element
-                symbols separated by dashes, e.g., "Li-Fe-O" or List of element
-                symbols, e.g., ["Li", "Fe", "O"].
-            use_gibbs: If None (default), DFT energy is returned. If a number, return
-                the free energy of formation estimated using a machine learning model
-                (see GibbsComputedStructureEntry). The number is the temperature in
-                Kelvin at which to estimate the free energy. Must be between 300 K and
-                2000 K.
-            compatible_only (bool): Whether to return only "compatible"
-                entries. Compatible entries are entries that have been
-                processed using the MaterialsProject2020Compatibility class,
-                which performs adjustments to allow mixing of GGA and GGA+U
-                calculations for more accurate phase diagrams and reaction
-                energies. This data is obtained from the core "thermo" API endpoint.
-            inc_structure (str): *This is a deprecated argument*. Previously, if None,
-                entries returned were ComputedEntries. If inc_structure="initial",
-                ComputedStructureEntries with initial structures were returned.
-                Otherwise, ComputedStructureEntries with final structures
-                were returned. This is no longer needed as all entries will contain
-                structure data by default.
-            property_data (list): Specify additional properties to include in
-                entry.data. If None, only default data is included. Should be
-                a subset of
-                input parameters in the 'MPRester.thermo.available_fields' list.
-            conventional_unit_cell (bool): Whether to get the standard
-                conventional unit cell
-            additional_criteria (dict): Any additional criteria to pass. The keys
-                and values should
-                correspond to proper function inputs to `MPRester.thermo.search`.
-                For instance,
-                if you are only interested in entries on the convex hull, you could pass
-                {"energy_above_hull": (0.0, 0.0)} or {"is_stable": True}, or if
-                you are only interested in entry data
-        Returns:
-            List of ComputedStructureEntries.
-        """
-        if isinstance(elements, str):
-            elements = elements.split("-")
-
-        elements_set = set(elements)  # remove duplicate elements
-
-        all_chemsyses = []
-        for i in range(len(elements_set)):
-            for els in itertools.combinations(elements_set, i + 1):
-                all_chemsyses.append("-".join(sorted(els)))
-
-        entries = []
-
-        entries.extend(
-            self.get_entries(
-                all_chemsyses,
-                compatible_only=compatible_only,
-                inc_structure=inc_structure,
-                property_data=property_data,
-                conventional_unit_cell=conventional_unit_cell,
-                additional_criteria=additional_criteria
-                or {"thermo_types": ["GGA_GGA+U"]},
-            )
-        )
-
-        if self.use_gibbs:
-            # replace the entries with GibbsComputedStructureEntry
-            from pymatgen.entries.computed_entries import GibbsComputedStructureEntry
-
-            entries = GibbsComputedStructureEntry.from_entries(entries, temp=use_gibbs)
-
-        return entries
 
     def run(self):  # noqa: C901
         if self.data_ids is None:
@@ -550,12 +343,12 @@ class PourbaixDiagram(zntrack.Node):
         # TODO - would be great if the commented line below would work
         # However for some reason you cannot process GibbsComputedStructureEntry with
         # MaterialsProjectAqueousCompatibility
-        ion_ref_entries = self.get_entries_in_chemsys(
+        ion_ref_entries = mpr.get_entries_in_chemsys(
             list([str(e) for e in ion_ref_elts] + ["O", "H"]), use_gibbs=self.use_gibbs
         )
 
-        epots, new_ion_ref_entries, metal_comp_dicts = [], [], []
-        for atoms in atoms_list:
+        epots, new_ion_ref_entries, metal_comp_dicts, metallic_ids = [], [], [], []
+        for i, atoms in enumerate(atoms_list):
             metals = [s for s in set(atoms.symbols) if s not in ["O", "H"]]
             hubbards = {}
             if set(metals) & U_metal_set:
@@ -579,8 +372,10 @@ class PourbaixDiagram(zntrack.Node):
                 m: len([a for a in atoms if a.symbol == m]) for m in set(atoms.symbols)
             }
             n_metals = len([a for a in atoms if a.symbol not in ["O", "H"]])
-            metal_comp_dict = {m: amt_dict[m] / n_metals for m in metals}
-            metal_comp_dicts.append(metal_comp_dict)
+            if n_metals > 0:
+                metal_comp_dict = {m: amt_dict[m] / n_metals for m in metals}
+                metallic_ids.append(i)
+                metal_comp_dicts.append(metal_comp_dict)
             entry = ComputedEntry(
                 composition=amt_dict,
                 energy=epot,
@@ -646,14 +441,23 @@ class PourbaixDiagram(zntrack.Node):
         pbx_entries = new_pbx_entries + pbx_entries
         row_dicts = []
         epbx_min = 10000.0
-        for i, entry in enumerate(pbx_entries):
+        for i, atoms in enumerate(atoms_list):
             if self.data_ids is None:
                 data_id = i
             else:
                 data_id = self.data_id[i]
-            epbx = pd.get_decomposition_energy(entry, pH=self.pH, V=self.V)
-            if epbx < epbx_min:
-                self.pourbaix_diagram = pd
+            if i in metallic_ids:
+                idx = metallic_ids.index(i)
+                entry = pbx_entries[idx]
+                pbx_dia = pmg_PourbaixDiagram(
+                    pbx_entries, comp_dict=metal_comp_dicts[idx]
+                )
+                epbx = pbx_dia.get_decomposition_energy(entry, pH=self.pH, V=self.V)
+                if epbx < epbx_min:
+                    self.pourbaix_diagram = pbx_dia
+                    epbx_min = epbx
+            else:
+                epbx = 0.0
             row_dicts.append(
                 {
                     "data_id": data_id,
@@ -665,22 +469,27 @@ class PourbaixDiagram(zntrack.Node):
 
     @property
     def figures(self) -> dict[str, go.Figure]:
-        plotter = PDPlotter(self.pourbaix_diagram)
-        fig1 = plotter.get_plot()
+        plotter = PourbaixPlotter(self.pourbaix_diagram)
+        mpl_fig = plotter.get_pourbaix_plot().get_figure()
+        mpl_fig.canvas.draw()
+        mpl_data = np.frombuffer(mpl_fig.canvas.tostring_rgb(), dtype=np.uint8)
+        mpl_data = mpl_data.reshape(mpl_fig.canvas.get_width_height()[::-1] + (3,))
+        plt.close()
+        fig1 = px.imshow(mpl_data)
         fig2 = px.line(self.results, x="data_id", y="pourbaix_decomposition_energy")
         fig2.update_layout(title="Pourbaix Decomposition Energy Plot")
 
         return {"pourbaix-diagram": fig1, "pourbaix-decomposition-energy-plot": fig2}
 
     @staticmethod
-    def compare(*nodes: "PhaseDiagram") -> ComparisonResults:
+    def compare(*nodes: "PourbaixDiagram") -> ComparisonResults:
         n_nodes = len(nodes)
         n_cols, n_rows = 0, n_nodes
         while n_cols + 1 <= n_rows:
             n_cols += 1
             if n_nodes % n_cols == 0:
                 n_rows = n_nodes // n_cols
-        trace_type = nodes[0].plots["phase-diagram"].data[0].type
+        trace_type = nodes[0].plots["pourbaix-diagram"].data[0].type
         specs = [[{"type": trace_type} for i in range(n_cols)] for _ in range(n_rows)]
 
         fig1 = make_subplots(
@@ -697,11 +506,13 @@ class PourbaixDiagram(zntrack.Node):
         for i, node in enumerate(nodes):
             name = node.name
             names.append(name)
-            for trace in node.figures["phase-diagram"].data:
+            for trace in node.figures["pourbaix-diagram"].data:
                 fig1.add_trace(trace, row=i // n_cols + 1, col=i % n_cols + 1)
         names_map = {f"plot_{i}": names[i] for i in range(n_nodes)}
         fig1.for_each_annotation(lambda x: x.update(text=names_map[x.text]))
-        fig1.update_layout(title="Phase Diagram Comparison")
+        fig1.update_xaxes(showticklabels=False)  # Hide x axis ticks
+        fig1.update_yaxes(showticklabels=False)  # Hide y axis ticks
+        fig1.update_layout(title="Pourbaix Diagram Comparison")
 
         fig2 = go.Figure()
         for node in nodes:
@@ -723,7 +534,7 @@ class PourbaixDiagram(zntrack.Node):
         return {
             "frames": nodes[0].frames,
             "figures": {
-                "phase-diagram-comparison": fig1,
+                "pourbaix-diagram-comparison": fig1,
                 "pourbaix_decomposition-energy-comparison": fig2,
             },
         }

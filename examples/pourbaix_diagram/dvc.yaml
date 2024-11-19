@@ -1,0 +1,155 @@
+plots:
+- mace_medium_PourbaixDiagram_results:
+    x:
+      nodes/mace_medium/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/mace_medium/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- mace_agnesi_PourbaixDiagram_results:
+    x:
+      nodes/mace_agnesi/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/mace_agnesi/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- 7net_PourbaixDiagram_results:
+    x:
+      nodes/7net/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/7net/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- Orb_v2_PourbaixDiagram_results:
+    x:
+      nodes/Orb_v2/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/Orb_v2/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- Orb_d3_v2_PourbaixDiagram_results:
+    x:
+      nodes/Orb_d3_v2/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_v2/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- Orb_d3_sm_v2_PourbaixDiagram_results:
+    x:
+      nodes/Orb_d3_sm_v2/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_sm_v2/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- Orb_d3_xs_v2_PourbaixDiagram_results:
+    x:
+      nodes/Orb_d3_xs_v2/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_xs_v2/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- Orb_mptraj_v2_PourbaixDiagram_results:
+    x:
+      nodes/Orb_mptraj_v2/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/Orb_mptraj_v2/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+stages:
+  7net_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name 7net_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/PourbaixDiagram/frames.xyz
+    - nodes/7net/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/7net/PourbaixDiagram/results.csv
+    params:
+    - 7net_PourbaixDiagram
+  Orb_d3_sm_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_sm_v2_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_sm_v2/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_sm_v2/PourbaixDiagram/frames.xyz
+    - nodes/Orb_d3_sm_v2/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/Orb_d3_sm_v2/PourbaixDiagram/results.csv
+    params:
+    - Orb_d3_sm_v2_PourbaixDiagram
+  Orb_d3_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_v2_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_v2/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_v2/PourbaixDiagram/frames.xyz
+    - nodes/Orb_d3_v2/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/Orb_d3_v2/PourbaixDiagram/results.csv
+    params:
+    - Orb_d3_v2_PourbaixDiagram
+  Orb_d3_xs_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_xs_v2_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_xs_v2/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_xs_v2/PourbaixDiagram/frames.xyz
+    - nodes/Orb_d3_xs_v2/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/Orb_d3_xs_v2/PourbaixDiagram/results.csv
+    params:
+    - Orb_d3_xs_v2_PourbaixDiagram
+  Orb_mptraj_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_mptraj_v2_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_mptraj_v2/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_mptraj_v2/PourbaixDiagram/frames.xyz
+    - nodes/Orb_mptraj_v2/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/Orb_mptraj_v2/PourbaixDiagram/results.csv
+    params:
+    - Orb_mptraj_v2_PourbaixDiagram
+  Orb_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_v2_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_v2/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_v2/PourbaixDiagram/frames.xyz
+    - nodes/Orb_v2/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/Orb_v2/PourbaixDiagram/results.csv
+    params:
+    - Orb_v2_PourbaixDiagram
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/LiMnO_mp_small_vasp_sp.xyz
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  mace_agnesi_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_agnesi_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agnesi/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agnesi/PourbaixDiagram/frames.xyz
+    - nodes/mace_agnesi/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/mace_agnesi/PourbaixDiagram/results.csv
+    params:
+    - mace_agnesi_PourbaixDiagram
+  mace_medium_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_medium_PourbaixDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medium/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medium/PourbaixDiagram/frames.xyz
+    - nodes/mace_medium/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/mace_medium/PourbaixDiagram/results.csv
+    params:
+    - mace_medium_PourbaixDiagram

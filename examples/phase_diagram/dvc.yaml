@@ -1,0 +1,155 @@
+plots:
+- mace_medium_PhaseDiagram_results:
+    x:
+      nodes/mace_medium/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/mace_medium/PhaseDiagram/results.csv: formation_energy
+- mace_agnesi_PhaseDiagram_results:
+    x:
+      nodes/mace_agnesi/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/mace_agnesi/PhaseDiagram/results.csv: formation_energy
+- 7net_PhaseDiagram_results:
+    x:
+      nodes/7net/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/7net/PhaseDiagram/results.csv: formation_energy
+- Orb_v2_PhaseDiagram_results:
+    x:
+      nodes/Orb_v2/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/Orb_v2/PhaseDiagram/results.csv: formation_energy
+- Orb_d3_v2_PhaseDiagram_results:
+    x:
+      nodes/Orb_d3_v2/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_v2/PhaseDiagram/results.csv: formation_energy
+- Orb_d3_sm_v2_PhaseDiagram_results:
+    x:
+      nodes/Orb_d3_sm_v2/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_sm_v2/PhaseDiagram/results.csv: formation_energy
+- Orb_d3_xs_v2_PhaseDiagram_results:
+    x:
+      nodes/Orb_d3_xs_v2/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/Orb_d3_xs_v2/PhaseDiagram/results.csv: formation_energy
+- Orb_mptraj_v2_PhaseDiagram_results:
+    x:
+      nodes/Orb_mptraj_v2/PhaseDiagram/results.csv: data_id
+    y:
+      nodes/Orb_mptraj_v2/PhaseDiagram/results.csv: formation_energy
+stages:
+  7net_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name 7net_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/PhaseDiagram/frames.xyz
+    - nodes/7net/PhaseDiagram/phase_diagram.json
+    - nodes/7net/PhaseDiagram/results.csv
+    params:
+    - 7net_PhaseDiagram
+  Orb_d3_sm_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_sm_v2_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_sm_v2/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_sm_v2/PhaseDiagram/frames.xyz
+    - nodes/Orb_d3_sm_v2/PhaseDiagram/phase_diagram.json
+    - nodes/Orb_d3_sm_v2/PhaseDiagram/results.csv
+    params:
+    - Orb_d3_sm_v2_PhaseDiagram
+  Orb_d3_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_v2_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_v2/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_v2/PhaseDiagram/frames.xyz
+    - nodes/Orb_d3_v2/PhaseDiagram/phase_diagram.json
+    - nodes/Orb_d3_v2/PhaseDiagram/results.csv
+    params:
+    - Orb_d3_v2_PhaseDiagram
+  Orb_d3_xs_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_d3_xs_v2_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_d3_xs_v2/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_d3_xs_v2/PhaseDiagram/frames.xyz
+    - nodes/Orb_d3_xs_v2/PhaseDiagram/phase_diagram.json
+    - nodes/Orb_d3_xs_v2/PhaseDiagram/results.csv
+    params:
+    - Orb_d3_xs_v2_PhaseDiagram
+  Orb_mptraj_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_mptraj_v2_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_mptraj_v2/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_mptraj_v2/PhaseDiagram/frames.xyz
+    - nodes/Orb_mptraj_v2/PhaseDiagram/phase_diagram.json
+    - nodes/Orb_mptraj_v2/PhaseDiagram/results.csv
+    params:
+    - Orb_mptraj_v2_PhaseDiagram
+  Orb_v2_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name Orb_v2_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/Orb_v2/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/Orb_v2/PhaseDiagram/frames.xyz
+    - nodes/Orb_v2/PhaseDiagram/phase_diagram.json
+    - nodes/Orb_v2/PhaseDiagram/results.csv
+    params:
+    - Orb_v2_PhaseDiagram
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/LiMnO_mp_small_vasp_sp.xyz
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  mace_agnesi_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_agnesi_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agnesi/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agnesi/PhaseDiagram/frames.xyz
+    - nodes/mace_agnesi/PhaseDiagram/phase_diagram.json
+    - nodes/mace_agnesi/PhaseDiagram/results.csv
+    params:
+    - mace_agnesi_PhaseDiagram
+  mace_medium_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_medium_PhaseDiagram
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medium/PhaseDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medium/PhaseDiagram/frames.xyz
+    - nodes/mace_medium/PhaseDiagram/phase_diagram.json
+    - nodes/mace_medium/PhaseDiagram/results.csv
+    params:
+    - mace_medium_PhaseDiagram

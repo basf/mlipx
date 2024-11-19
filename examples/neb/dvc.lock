@@ -17,18 +17,20 @@ stages:
     outs:
     - path: nodes/initialize/LoadDataFile/node-meta.json
       hash: md5
-      md5: c37b4ba40246e1dbae2b424e17612043
+      md5: 1ebeb10f95b390ad8c6d6d80b364f2d5
       size: 64
+      isexec: true
   initialize_NEBinterpolate:
     cmd: zntrack run mlipx.nodes.nebs.NEBinterpolate --name initialize_NEBinterpolate
     deps:
     - path: nodes/initialize/LoadDataFile/node-meta.json
       hash: md5
-      md5: c37b4ba40246e1dbae2b424e17612043
+      md5: 1ebeb10f95b390ad8c6d6d80b364f2d5
       size: 64
     params:
       params.yaml:
         initialize_NEBinterpolate:
+          add_constraints: true
           mic: true
           n_images: 5
     outs:
@@ -38,7 +40,7 @@ stages:
       size: 46938
     - path: nodes/initialize/NEBinterpolate/node-meta.json
       hash: md5
-      md5: 3e1ff1ffefcbbf1a65acc33f74307c33
+      md5: b4821d91c585614ec5b69f17fb7bff5c
       size: 64
   7net_NEBs:
     cmd: zntrack run mlipx.nodes.nebs.NEBs --name 7net_NEBs
@@ -47,10 +49,11 @@ stages:
       hash: md5
       md5: ac286aa14f3a3365b4236c80b1767895
       size: 46938
+      isexec: true
     params:
       params.yaml:
         7net_NEBs:
-          fmax: 0.25
+          fmax: 0.05
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: SevenNetCalculator
@@ -66,56 +69,22 @@ stages:
       hash: md5
       md5: b72677eab7c12392a20d13700aa9803e
       size: 70856
+      isexec: true
     - path: nodes/7net/NEBs/neb_trajectory.traj
       hash: md5
       md5: 3757a8092a66e187a6058f2129197a46
       size: 804781
+      isexec: true
     - path: nodes/7net/NEBs/node-meta.json
       hash: md5
-      md5: 412d59bdbd93588cc24b5163f5382bed
+      md5: 025496109923665a33f9c67ea8b276b4
       size: 64
+      isexec: true
     - path: nodes/7net/NEBs/results.csv
       hash: md5
       md5: 2403dfc31976355502bee869c9a6ef51
       size: 233
-  mace_medm_NEBs:
-    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_medm_NEBs
-    deps:
-    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
-      hash: md5
-      md5: ac286aa14f3a3365b4236c80b1767895
-      size: 46938
-    params:
-      params.yaml:
-        mace_medm_NEBs:
-          fmax: 0.25
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: MACECalculator
-            device: auto
-            kwargs:
-              model_paths: ../models/mace_medium.model
-            module: mace.calculators
-          n_steps: 500
-          optimizer: FIRE
-          relax: true
-    outs:
-    - path: nodes/mace_medm/NEBs/frames.xyz
-      hash: md5
-      md5: f17baa11e9a366bbb62237336382bec2
-      size: 64193
-    - path: nodes/mace_medm/NEBs/neb_trajectory.traj
-      hash: md5
-      md5: 0129ed5d04761ffc87507d51b5a1f47a
-      size: 1067552
-    - path: nodes/mace_medm/NEBs/node-meta.json
-      hash: md5
-      md5: cf9465e1883871f99bb08586605fcf88
-      size: 64
-    - path: nodes/mace_medm/NEBs/results.csv
-      hash: md5
-      md5: f8c4a981efcb4c5a10f98801165c41c6
-      size: 246
+      isexec: true
   mace_agne_NEBs:
     cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_agne_NEBs
     deps:
@@ -126,7 +95,7 @@ stages:
     params:
       params.yaml:
         mace_agne_NEBs:
-          fmax: 0.25
+          fmax: 0.05
           model:
             _cls: mlipx.nodes.generic_ase.GenericASECalculator
             class_name: MACECalculator
@@ -142,15 +111,231 @@ stages:
       hash: md5
       md5: a62884a1b44beda1ba96b9d7fbf7afaf
       size: 64184
+      isexec: true
     - path: nodes/mace_agne/NEBs/neb_trajectory.traj
       hash: md5
       md5: a0e2a0338eb4f9eb29597cf124ab72a1
       size: 913977
+      isexec: true
     - path: nodes/mace_agne/NEBs/node-meta.json
       hash: md5
-      md5: d0851618acaa60a96e7b46cc8f03e9bb
+      md5: b46618a3bf3bdddf7683f72a4eda9873
       size: 64
+      isexec: true
     - path: nodes/mace_agne/NEBs/results.csv
       hash: md5
       md5: a1e4a259d2aee61d11b7a62c6a714c02
       size: 240
+      isexec: true
+  mace_medm_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_medm_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        mace_medm_NEBs:
+          fmax: 0.05
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/mace_medm/NEBs/frames.xyz
+      hash: md5
+      md5: f17baa11e9a366bbb62237336382bec2
+      size: 64193
+      isexec: true
+    - path: nodes/mace_medm/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: 0129ed5d04761ffc87507d51b5a1f47a
+      size: 1067552
+      isexec: true
+    - path: nodes/mace_medm/NEBs/node-meta.json
+      hash: md5
+      md5: aeac77acbca358d7e15d1c9ed20c6b27
+      size: 64
+      isexec: true
+    - path: nodes/mace_medm/NEBs/results.csv
+      hash: md5
+      md5: f8c4a981efcb4c5a10f98801165c41c6
+      size: 246
+      isexec: true
+  orb_d3_v1_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_d3_v1_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        orb_d3_v1_NEBs:
+          fmax: 0.05
+          model:
+            _cls: models.OrbV1Calc
+            name: orb_d3_v1
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/orb_d3_v1/NEBs/frames.xyz
+      hash: md5
+      md5: ef1a50790bebb91c0cd1d9bfb2e669ab
+      size: 64164
+    - path: nodes/orb_d3_v1/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: a4efeb1d71cd71db0077c9abe3ece44f
+      size: 1598519
+    - path: nodes/orb_d3_v1/NEBs/node-meta.json
+      hash: md5
+      md5: bac7b46363ae83ca2dd2cf27dad20885
+      size: 64
+    - path: nodes/orb_d3_v1/NEBs/results.csv
+      hash: md5
+      md5: 170dba4e09132cda8d44a468dd5552d5
+      size: 235
+  orb_d3_v2_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_d3_v2_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        orb_d3_v2_NEBs:
+          fmax: 0.05
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_v2
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/orb_d3_v2/NEBs/frames.xyz
+      hash: md5
+      md5: 7ddca660e021bcf45640ca18fa492bc5
+      size: 64171
+    - path: nodes/orb_d3_v2/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: f5e545220d1de2e43a48f511ca63cb46
+      size: 2200552
+    - path: nodes/orb_d3_v2/NEBs/node-meta.json
+      hash: md5
+      md5: 97d3abd77f1be13b6df8c705695728cd
+      size: 64
+    - path: nodes/orb_d3_v2/NEBs/results.csv
+      hash: md5
+      md5: d572e9209bd554d50445a09f1f182ea8
+      size: 235
+  orb_v1_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_v1_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        orb_v1_NEBs:
+          fmax: 0.05
+          model:
+            _cls: models.OrbV1Calc
+            name: orb_v1
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/orb_v1/NEBs/frames.xyz
+      hash: md5
+      md5: e3a6cbd473814bd43c2b3295b95953b0
+      size: 64159
+    - path: nodes/orb_v1/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: c9b84b06af4d1ed19c356c799fcd3e02
+      size: 1357780
+    - path: nodes/orb_v1/NEBs/node-meta.json
+      hash: md5
+      md5: 1aed295d6d570f70c02b591b278ed2eb
+      size: 64
+    - path: nodes/orb_v1/NEBs/results.csv
+      hash: md5
+      md5: 53cfe5f9f93b661751626980036a83ad
+      size: 231
+  orb_v1_mptraj_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_v1_mptraj_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        orb_v1_mptraj_NEBs:
+          fmax: 0.05
+          model:
+            _cls: models.OrbV1Calc
+            name: orb_v1_mptraj_only
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/orb_v1_mptraj/NEBs/frames.xyz
+      hash: md5
+      md5: 27b9badc21fd509c46b01b5dbc7ae768
+      size: 64153
+    - path: nodes/orb_v1_mptraj/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: 39f07feed58f387097bb7826045ab439
+      size: 3303817
+    - path: nodes/orb_v1_mptraj/NEBs/node-meta.json
+      hash: md5
+      md5: 2d603ea2717e888fa0931f0e4490369e
+      size: 64
+    - path: nodes/orb_v1_mptraj/NEBs/results.csv
+      hash: md5
+      md5: c531351fceee5c60413b77ee452fd7b5
+      size: 237
+  orb_v2_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_v2_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: ac286aa14f3a3365b4236c80b1767895
+      size: 46938
+    params:
+      params.yaml:
+        orb_v2_NEBs:
+          fmax: 0.05
+          model:
+            _cls: models.OrbCalc
+            name: orb_v2
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/orb_v2/NEBs/frames.xyz
+      hash: md5
+      md5: 33a47a13a7140a52952171fb963f6bb5
+      size: 64170
+    - path: nodes/orb_v2/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: 4e8f838ee8bd342bee5f8fba0c57afdf
+      size: 1317679
+    - path: nodes/orb_v2/NEBs/node-meta.json
+      hash: md5
+      md5: 3d45e3d903477f3db5b0eb51e353f5d4
+      size: 64
+    - path: nodes/orb_v2/NEBs/results.csv
+      hash: md5
+      md5: 3dd88c174bc4004169640cd3d1caed86
+      size: 231

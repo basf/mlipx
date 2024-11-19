@@ -25,6 +25,8 @@ class NEBinterpolate(zntrack.Node):
         Number of images to interpolate.
     mic : bool
         Whether to use the minimum image convention.
+    add_constraints : bool
+        Whether to copy constraints from initial image to all the interpolated images
     frames_path : pathlib.Path
         Path to save the interpolated frames.
 
@@ -33,6 +35,7 @@ class NEBinterpolate(zntrack.Node):
     data: list[ase.Atoms] = zntrack.deps()
     n_images: int = zntrack.params(5)
     mic: bool = zntrack.params(False)
+    add_constraints: bool = zntrack.params(True)
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "initial_frames.xyz")
 
     def run(self):
@@ -57,8 +60,13 @@ class NEBinterpolate(zntrack.Node):
                 frames += [atoms_copy]
             atoms_copy = atoms2.copy()
             frames += [atoms_copy]
+        if self.add_constraints is True:
+            _constraints = self.data[0].constraints
+            for image in frames:
+                image.set_constraint(_constraints)
+
         neb = NEB(frames)
-        neb.interpolate(mic=self.mic)
+        neb.interpolate(mic=self.mic, apply_constraint=self.add_constraints)
         ase.io.write(self.frames_path, frames)
 
     @property
@@ -212,7 +220,7 @@ class NEBs(zntrack.Node):
         # Now adjusted
 
         fig_adjusted = go.Figure()
-        for idx, node in enumerate(nodes):
+        for _, node in enumerate(nodes):
             energies = np.array([atoms.get_potential_energy() for atoms in node.frames])
             energies -= energies[0]
             fig_adjusted.add_trace(

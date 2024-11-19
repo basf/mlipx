@@ -1,0 +1,281 @@
+{
+    "initialize_LoadDataFile": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/initialize/LoadDataFile"
+        },
+        "path": "../data/LiMnO_mp_small_vasp_sp.xyz"
+    },
+    "mace_medium_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_medium/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "mace_agnesi_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_agnesi/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "7net_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/7net/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "Orb_v2_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/Orb_v2/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "Orb_d3_v2_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/Orb_d3_v2/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "Orb_d3_sm_v2_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/Orb_d3_sm_v2/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "Orb_d3_xs_v2_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/Orb_d3_xs_v2/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "Orb_mptraj_v2_PourbaixDiagram": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/Orb_mptraj_v2/PourbaixDiagram"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    }
+}

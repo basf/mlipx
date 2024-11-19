@@ -1,13 +1,10 @@
 {
-    "initialize_Smiles2Conformers": {
+    "initialize_LoadDataFile": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/initialize/Smiles2Conformers"
+            "value": "nodes/initialize/LoadDataFile"
         },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.xyz"
-        }
+        "path": "../data/DODH_adsorption_dft.xyz"
     },
     "mace_medm_StructureOptimization": {
         "nwd": {
@@ -20,9 +17,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
                         "remote": null,
                         "rev": null
                     }
@@ -54,9 +51,43 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "mace_large_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_large/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
                         "remote": null,
                         "rev": null
                     }
@@ -88,9 +119,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
                         "remote": null,
                         "rev": null
                     }
@@ -104,6 +135,176 @@
             "value": {
                 "module": "mlipx.nodes.generic_ase",
                 "cls": "GenericASECalculator"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "orb_v1_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/orb_v1/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "orb_d3_v1_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/orb_d3_v1/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "orb_v1_mptraj_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/orb_v1_mptraj/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "orb_v2_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/orb_v2/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.traj"
+        }
+    },
+    "orb_d3_v2_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/orb_d3_v2/StructureOptimization"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "models",
+                "cls": "OrbCalc"
             }
         },
         "frames_path": {
