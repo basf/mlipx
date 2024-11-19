@@ -57,12 +57,13 @@ class VibrationalAnalysis(zntrack.Node):
     # fmax: float = zntrack.params(0.09)
     displacement: float = zntrack.params(0.01)
     nfree: int = zntrack.params(4)
+    temperature: float = zntrack.params(298.15)
     lower_freq_threshold: float = zntrack.params(12.0)
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
     modes_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "modes.xyz")
     modes_cache: pathlib.Path = zntrack.outs_path(zntrack.nwd / "modes")
     vib_cache: pathlib.Path = zntrack.outs_path(zntrack.nwd / "vib")
-    results: pd.DataFrame = zntrack.plots(y="ddG_300k", x="Frame")
+    results: pd.DataFrame = zntrack.plots(y="ddG", x="Frame")
 
     def run(self):
         # frames = []
@@ -127,13 +128,13 @@ class VibrationalAnalysis(zntrack.Node):
 
             thermo = HarmonicThermo(vib_energies=vib_energies, potentialenergy=0.0)
 
-            dg_300k = thermo.get_helmholtz_energy(300, verbose=True)
-            atoms.info["dg_300.0k"] = dg_300k
+            dg_Tk = thermo.get_helmholtz_energy(self.temperature, verbose=True)
+            atoms.info[f"dg_{self.temperature}k"] = dg_Tk
 
             # results["Frame"].append(current_frame)
             # results["ddG_300k"].append(dg_300k)
 
-            results.append({"Frame": current_frame, "ddG_300k": dg_300k})
+            results.append({"Frame": current_frame, "ddG": dg_Tk})
 
             for temp in np.linspace(10, 1000, 10):
                 dg = thermo.get_helmholtz_energy(temp, verbose=True)
@@ -155,7 +156,7 @@ class VibrationalAnalysis(zntrack.Node):
 
             for mode in range(len(atoms.info["molecule_indices"]) * 3):
                 mode_cache = modes_cache / f"mode_{mode}.traj"
-                kT = units.kB * 300
+                kT = units.kB * self.temperature
                 with ase.io.Trajectory(mode_cache, "w") as traj:
                     for image in vib.get_vibrations().iter_animated_mode(
                         mode, temperature=kT, frames=30
@@ -188,9 +189,9 @@ class VibrationalAnalysis(zntrack.Node):
     def figures(self) -> dict[str, go.Figure]:
         # plotter = PDPlotter(self.pd)
         # fig = plotter.get_plot()
-        fig = px.line(self.results, x="Frame", y="ddG_300k", markers=True)
+        fig = px.line(self.results, x="Frame", y="ddG", markers=True)
         fig.update_layout(
-            title="Gibbs Free Energy at 300K",
+            title=f"Gibbs Free Energy at {self.temperature}K",
             xaxis_title="Frame",
             yaxis_title="ddG (eV)",
         )
@@ -206,18 +207,18 @@ class VibrationalAnalysis(zntrack.Node):
             fig.add_trace(
                 go.Scatter(
                     x=node.results["Frame"],
-                    y=node.results["ddG_300k"],
+                    y=node.results["ddG"],
                     mode="lines+markers",
                     name=node.name,
                     customdata=np.stack(
-                        [np.arange(len(node.results["ddG_300k"])) + offset], axis=1
+                        [np.arange(len(node.results["ddG"])) + offset], axis=1
                     ),
                 )
             )
-            offset += len(node.results["ddG_300k"])
-
+            offset += len(node.results["ddG"])
+            temperature = node.temperature
         fig.update_layout(
-            title="Comparison of Gibbs Free Energies at 300K",
+            title=f"Comparison of Gibbs Free Energies at {temperature}K",
             xaxis_title="Frame",
             yaxis_title="ddG (eV)",
         )

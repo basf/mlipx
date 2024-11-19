@@ -15,6 +15,7 @@ for model_name, model in MODELS.items():
         phon = mlipx.VibrationalAnalysis(
             data=data.frames,
             model=model,
+            temperature=298.15,
             displacement=0.015,
             nfree=4,
             lower_freq_threshold=12,
