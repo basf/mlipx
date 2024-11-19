@@ -1,0 +1,83 @@
+7net_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  nfree: 4
+initialize_LoadDataFile:
+  start: 0
+  step: 1
+  stop: null
+mace_agne_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_agnesi.model
+    module: mace.calculators
+  nfree: 4
+mace_large_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/43117273-large.model
+    module: mace.calculators
+  nfree: 4
+mace_medm_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_medium.model
+    module: mace.calculators
+  nfree: 4
+orb_d3_v1_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    name: orb_d3_v1
+  nfree: 4
+orb_d3_v2_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    name: orb_d3_v2
+  nfree: 4
+orb_v1_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    name: orb_v1
+  nfree: 4
+orb_v1_mptraj_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    name: orb_v1_mptraj_only
+  nfree: 4
+orb_v2_VibrationalAnalysis:
+  displacement: 0.015
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    name: orb_v2
+  nfree: 4

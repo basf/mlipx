@@ -19,6 +19,16 @@ plots:
       nodes/mace_agne/StructureOptimization/plots.csv: step
     y:
       nodes/mace_agne/StructureOptimization/plots.csv: fmax
+- mace_large_StructureOptimization_plots_0:
+    x:
+      nodes/mace_large/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_large/StructureOptimization/plots.csv: energy
+- mace_large_StructureOptimization_plots_1:
+    x:
+      nodes/mace_large/StructureOptimization/plots.csv: step
+    y:
+      nodes/mace_large/StructureOptimization/plots.csv: fmax
 - 7net_StructureOptimization_plots_0:
     x:
       nodes/7net/StructureOptimization/plots.csv: step
@@ -29,12 +39,62 @@ plots:
       nodes/7net/StructureOptimization/plots.csv: step
     y:
       nodes/7net/StructureOptimization/plots.csv: fmax
+- orb_v1_StructureOptimization_plots_0:
+    x:
+      nodes/orb_v1/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v1/StructureOptimization/plots.csv: energy
+- orb_v1_StructureOptimization_plots_1:
+    x:
+      nodes/orb_v1/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v1/StructureOptimization/plots.csv: fmax
+- orb_d3_v1_StructureOptimization_plots_0:
+    x:
+      nodes/orb_d3_v1/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_d3_v1/StructureOptimization/plots.csv: energy
+- orb_d3_v1_StructureOptimization_plots_1:
+    x:
+      nodes/orb_d3_v1/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_d3_v1/StructureOptimization/plots.csv: fmax
+- orb_v1_mptraj_StructureOptimization_plots_0:
+    x:
+      nodes/orb_v1_mptraj/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v1_mptraj/StructureOptimization/plots.csv: energy
+- orb_v1_mptraj_StructureOptimization_plots_1:
+    x:
+      nodes/orb_v1_mptraj/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v1_mptraj/StructureOptimization/plots.csv: fmax
+- orb_v2_StructureOptimization_plots_0:
+    x:
+      nodes/orb_v2/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v2/StructureOptimization/plots.csv: energy
+- orb_v2_StructureOptimization_plots_1:
+    x:
+      nodes/orb_v2/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_v2/StructureOptimization/plots.csv: fmax
+- orb_d3_v2_StructureOptimization_plots_0:
+    x:
+      nodes/orb_d3_v2/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_d3_v2/StructureOptimization/plots.csv: energy
+- orb_d3_v2_StructureOptimization_plots_1:
+    x:
+      nodes/orb_d3_v2/StructureOptimization/plots.csv: step
+    y:
+      nodes/orb_d3_v2/StructureOptimization/plots.csv: fmax
 stages:
   7net_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       7net_StructureOptimization
     deps:
-    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/LoadDataFile/node-meta.json
     metrics:
     - nodes/7net/StructureOptimization/node-meta.json:
         cache: false
@@ -43,20 +103,20 @@ stages:
     - nodes/7net/StructureOptimization/plots.csv
     params:
     - 7net_StructureOptimization
-  initialize_Smiles2Conformers:
-    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/DODH_adsorption_dft.xyz
     metrics:
-    - nodes/initialize/Smiles2Conformers/node-meta.json:
+    - nodes/initialize/LoadDataFile/node-meta.json:
         cache: false
-    outs:
-    - nodes/initialize/Smiles2Conformers/frames.xyz
     params:
-    - initialize_Smiles2Conformers
+    - initialize_LoadDataFile
   mace_agne_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_agne_StructureOptimization
     deps:
-    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/LoadDataFile/node-meta.json
     metrics:
     - nodes/mace_agne/StructureOptimization/node-meta.json:
         cache: false
@@ -65,11 +125,24 @@ stages:
     - nodes/mace_agne/StructureOptimization/plots.csv
     params:
     - mace_agne_StructureOptimization
+  mace_large_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_large_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_large/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_large/StructureOptimization/frames.traj
+    - nodes/mace_large/StructureOptimization/plots.csv
+    params:
+    - mace_large_StructureOptimization
   mace_medm_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_medm_StructureOptimization
     deps:
-    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/LoadDataFile/node-meta.json
     metrics:
     - nodes/mace_medm/StructureOptimization/node-meta.json:
         cache: false
@@ -78,3 +151,68 @@ stages:
     - nodes/mace_medm/StructureOptimization/plots.csv
     params:
     - mace_medm_StructureOptimization
+  orb_d3_v1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_d3_v1_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_d3_v1/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_d3_v1/StructureOptimization/frames.traj
+    - nodes/orb_d3_v1/StructureOptimization/plots.csv
+    params:
+    - orb_d3_v1_StructureOptimization
+  orb_d3_v2_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_d3_v2_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_d3_v2/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_d3_v2/StructureOptimization/frames.traj
+    - nodes/orb_d3_v2/StructureOptimization/plots.csv
+    params:
+    - orb_d3_v2_StructureOptimization
+  orb_v1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_v1_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_v1/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v1/StructureOptimization/frames.traj
+    - nodes/orb_v1/StructureOptimization/plots.csv
+    params:
+    - orb_v1_StructureOptimization
+  orb_v1_mptraj_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_v1_mptraj_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_v1_mptraj/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v1_mptraj/StructureOptimization/frames.traj
+    - nodes/orb_v1_mptraj/StructureOptimization/plots.csv
+    params:
+    - orb_v1_mptraj_StructureOptimization
+  orb_v2_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_v2_StructureOptimization
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_v2/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v2/StructureOptimization/frames.traj
+    - nodes/orb_v2/StructureOptimization/plots.csv
+    params:
+    - orb_v2_StructureOptimization

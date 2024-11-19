@@ -1,0 +1,322 @@
+schema: '2.0'
+stages:
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - path: ../data/LiMnO_mp_small_vasp_sp.xyz
+      hash: md5
+      md5: 593cc5c3b894cfaf0ce1d87a7ae7c2fb
+      size: 198055
+    params:
+      params.yaml:
+        initialize_LoadDataFile:
+          start: 0
+          step: 1
+          stop:
+    outs:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+  7net_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name 7net_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        7net_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/7net/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: d9e6f241d479ea762309aa675a689a4b
+      size: 204478
+    - path: nodes/7net/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: bbc2e6cfc27008135947b23bfda19352
+      size: 64
+    - path: nodes/7net/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: 6f02c7b494b2e700f4f192b2562d2844
+      size: 192107
+    - path: nodes/7net/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 2212eb7bf9b97fc9b8817d796d881b75
+      size: 2623
+  Orb_d3_sm_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_sm_v2_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_sm_v2_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_sm_v2
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/Orb_d3_sm_v2/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 0f9f254cf7b8153d09fd8f735f594ee6
+      size: 181286
+    - path: nodes/Orb_d3_sm_v2/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: e9241e4dea354aec868c2b7b97beaee7
+      size: 64
+    - path: nodes/Orb_d3_sm_v2/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: d5094f201e4778575061f78565ff4824
+      size: 194615
+    - path: nodes/Orb_d3_sm_v2/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 73d125ef89784802a4a563f365d8daab
+      size: 2632
+  Orb_d3_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_v2_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_v2_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_v2
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/Orb_d3_v2/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 29c4b4fedcbaee7e9e04313c73d5cdae
+      size: 181259
+    - path: nodes/Orb_d3_v2/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: 93cd812d7f61229898fe1a6dc9cc2c40
+      size: 64
+    - path: nodes/Orb_d3_v2/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: 105c3fa8962b81af213d5f0c293ed68f
+      size: 197391
+    - path: nodes/Orb_d3_v2/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 76dd8574c0d37ab51501b0e5c27ed82f
+      size: 2630
+  Orb_d3_xs_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_d3_xs_v2_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        Orb_d3_xs_v2_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_xs_v2
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/Orb_d3_xs_v2/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: b257ac849dff461026c94a81e0a80a39
+      size: 181236
+    - path: nodes/Orb_d3_xs_v2/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: bde0fef92fee2f8b19b7bf42f03fd13d
+      size: 64
+    - path: nodes/Orb_d3_xs_v2/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: 77cb88a0af5fe9c4e12ec2bb55d2ca63
+      size: 191491
+    - path: nodes/Orb_d3_xs_v2/PourbaixDiagram/results.csv
+      hash: md5
+      md5: d657f27e30692cadf839dbdf5353024a
+      size: 2632
+  Orb_mptraj_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_mptraj_v2_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        Orb_mptraj_v2_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_mptraj_only_v2
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/Orb_mptraj_v2/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 34576a6f50e0d1d9ae2f59f9afcc4ee5
+      size: 181540
+    - path: nodes/Orb_mptraj_v2/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: 7caef6e06446ae2271d524cbfc7ae1b3
+      size: 64
+    - path: nodes/Orb_mptraj_v2/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: da9419d3da474cad4be7077b91882cba
+      size: 192107
+    - path: nodes/Orb_mptraj_v2/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 4f8700765480ec12bc40dc090231f2a9
+      size: 2627
+  Orb_v2_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name Orb_v2_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        Orb_v2_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            name: orb_v2
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/Orb_v2/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 6df3f6a6e39bf6e69b3475b8feda7ff8
+      size: 181575
+    - path: nodes/Orb_v2/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: 95d64db9a5571e937fcbb07c40d72b60
+      size: 64
+    - path: nodes/Orb_v2/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: b160dbaccf48034f5eb8fbcd1a444256
+      size: 192107
+    - path: nodes/Orb_v2/PourbaixDiagram/results.csv
+      hash: md5
+      md5: fbd4b374b47eaa7ae77309a075efbdf4
+      size: 2632
+  mace_agnesi_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_agnesi_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        mace_agnesi_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: cpu
+            kwargs:
+              dtype: float64
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/mace_agnesi/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 793a5a290bb1aeb27cf3abdea86c239b
+      size: 181478
+    - path: nodes/mace_agnesi/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: f3525ba6b3176a52bdce87097c3d5eec
+      size: 64
+    - path: nodes/mace_agnesi/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: e98b0d17a6be4b9b9760e1e5f910e7a2
+      size: 192107
+    - path: nodes/mace_agnesi/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 23e105c34de66825bbb1d492e59e3282
+      size: 2632
+  mace_medium_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_medium_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: c6045ecd9ca362b83cbe3b12c1038251
+      size: 64
+    params:
+      params.yaml:
+        mace_medium_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: cpu
+            kwargs:
+              dtype: float64
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/mace_medium/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 7bcc7d3f815504b1a3e293f43de8f276
+      size: 181436
+    - path: nodes/mace_medium/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: faaf34af8310c76cd780390e7323b39b
+      size: 64
+    - path: nodes/mace_medium/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: c853c3fbe3b4293e5238cf38d2d5da39
+      size: 192107
+    - path: nodes/mace_medium/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 5b809b11807bb299ca0e156c621ee32d
+      size: 2635

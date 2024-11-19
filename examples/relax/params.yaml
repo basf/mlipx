@@ -10,11 +10,10 @@
     module: sevenn.sevennet_calculator
   optimizer: LBFGS
   steps: 100000000
-initialize_Smiles2Conformers:
-  max_attempts: 1000
-  num_confs: 100
-  random_seed: 42
-  smiles: C12C3C1C4C2C34
+initialize_LoadDataFile:
+  start: 0
+  step: 1
+  stop: null
 mace_agne_StructureOptimization:
   data_id: -1
   fmax: 0.1
@@ -24,6 +23,18 @@ mace_agne_StructureOptimization:
     device: auto
     kwargs:
       model_paths: ../models/mace_agnesi.model
+    module: mace.calculators
+  optimizer: LBFGS
+  steps: 100000000
+mace_large_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/43117273-large.model
     module: mace.calculators
   optimizer: LBFGS
   steps: 100000000
@@ -37,5 +48,45 @@ mace_medm_StructureOptimization:
     kwargs:
       model_paths: ../models/mace_medium.model
     module: mace.calculators
+  optimizer: LBFGS
+  steps: 100000000
+orb_d3_v1_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: models.OrbCalc
+    name: orb_d3_v1
+  optimizer: LBFGS
+  steps: 100000000
+orb_d3_v2_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: models.OrbCalc
+    name: orb_d3_v2
+  optimizer: LBFGS
+  steps: 100000000
+orb_v1_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: models.OrbCalc
+    name: orb_v1
+  optimizer: LBFGS
+  steps: 100000000
+orb_v1_mptraj_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: models.OrbCalc
+    name: orb_v1_mptraj_only
+  optimizer: LBFGS
+  steps: 100000000
+orb_v2_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: models.OrbCalc
+    name: orb_v2
   optimizer: LBFGS
   steps: 100000000
