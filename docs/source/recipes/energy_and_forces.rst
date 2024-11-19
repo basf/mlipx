@@ -41,29 +41,23 @@ TBA
 .. jupyter-execute::
    :hide-code:
 
-   import plotly.io as pio
-   pio.renderers.default = "sphinx_gallery"
-
-   figure = pio.read_json("source/figures/eform_per_atom.json")
-   figure.show()
+   from mlipx.doc_utils import show
+   show("eform_per_atom.json")
 
 .. jupyter-execute::
    :hide-code:
 
-   figure = pio.read_json("source/figures/fmax.json")
-   figure.show()
+   show("fmax.json")
 
 .. jupyter-execute::
    :hide-code:
 
-   figure = pio.read_json("source/figures/adjusted_eform_error_per_atom.json")
-   figure.show()
+   show("adjusted_eform_error_per_atom.json")
 
 .. jupyter-execute::
    :hide-code:
 
-   figure = pio.read_json("source/figures/fmax_error.json")
-   figure.show()
+   show("fmax_error.json")
 
 
 .. dropdown:: Content of :code:`main.py`

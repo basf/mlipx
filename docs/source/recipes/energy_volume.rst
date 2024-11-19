@@ -62,11 +62,9 @@ In the following we show the results for a box of :code:`CCO`.
 .. jupyter-execute::
    :hide-code:
 
-   import plotly.io as pio
-   pio.renderers.default = "sphinx_gallery"
+   from mlipx.doc_utils import show
 
-   figure = pio.read_json("source/figures/energy-volume-curve.json")
-   figure.show()
+   show("energy-volume-curve.json")
 
 
 Dynamic Datasets
@@ -125,11 +123,8 @@ In our example this shows the following plots in :ref:`ZnDraw <zndraw>`.
 .. jupyter-execute::
    :hide-code:
 
-   figure = pio.read_json("source/figures/energy-volume-curve_bf4_1.json")
-   figure.show()
-
-   figure = pio.read_json("source/figures/energy-volume-curve_bf4_4.json")
-   figure.show()
+   show("energy-volume-curve_bf4_1.json")
+   show("energy-volume-curve_bf4_4.json")
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

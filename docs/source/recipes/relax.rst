@@ -43,11 +43,9 @@ With this recipe we can compare the structure relaxation for three different mod
 .. jupyter-execute::
    :hide-code:
 
-   import plotly.io as pio
-   pio.renderers.default = "sphinx_gallery"
+   from mlipx.doc_utils import show
 
-   figure = pio.read_json("source/figures/geomopt.json")
-   figure.show()
+   show("geomopt.json")
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
