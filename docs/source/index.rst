@@ -29,3 +29,4 @@ Check out the :doc:`installation` section for installation details.
    nodes
    glossary
    abc
+   authors
