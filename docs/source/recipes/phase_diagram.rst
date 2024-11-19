@@ -32,14 +32,11 @@ You can run the following command to instantiate a test directory:
 .. jupyter-execute::
    :hide-code:
 
-   import plotly.io as pio
-   pio.renderers.default = "sphinx_gallery"
+   from mlipx.doc_utils import show
 
-   figure = pio.read_json("source/figures/formation-energy-comparison.json")
-   figure.show()
+   show("formation-energy-comparison.json")
+   show("mace_agnesiphase-diagram.json")
 
-   figure = pio.read_json("source/figures/mace_agnesiphase-diagram.json")
-   figure.show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

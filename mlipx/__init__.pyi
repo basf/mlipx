@@ -24,6 +24,7 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
+from .project import Project
 
 __all__ = [
     "abc",
@@ -55,4 +56,5 @@ __all__ = [
     "TranslationalInvariance",
     "PermutationInvariance",
     "Rattle",
+    "Project",
 ]

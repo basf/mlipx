@@ -26,7 +26,7 @@ Glossary
         The package can be installed via :code:`pip install ipsuite` or from source at https://github.com/zincware/ipsuite .
 
     ZnDraw
-        The ZnDraw package for visualisation and editing of atomistic structures :footcite:`elijosiusZeroShotMolecular2024`.
+        The :ref:`ZnDraw <zndraw>` package for visualisation and editing of atomistic structures :footcite:`elijosiusZeroShotMolecular2024`.
         The package can be installed via :code:`pip install zndraw` or from source at https://github.com/zincware/zndraw .
 
     main.py

@@ -1,3 +1,5 @@
+.. _data:
+
 Datasets
 ========
 All recipes come with a predefined dataset section.
@@ -64,4 +66,4 @@ Here we generate a simulation box consisting of 10 ethanol molecules.
    If you do not need a simulation box, you can also use :code:`confs.frames` directly.
 
 
-This is described with an example for :ref:`Energy Volume Curves`.
+This is described with an example for :ref:`ev`.

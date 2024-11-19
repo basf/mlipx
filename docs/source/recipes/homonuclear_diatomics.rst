@@ -1,3 +1,5 @@
+.. _homonuclear_diatomics:
+
 Homonuclear Diatomics
 ===========================
 Homonuclear diatomics give a per-element information on the performance of the :term:`mlip`.
@@ -36,11 +38,8 @@ In the following we show the results for the :code:`Li-Li` bond for the three se
 .. jupyter-execute::
    :hide-code:
 
-   import plotly.io as pio
-   pio.renderers.default = "sphinx_gallery"
-
-   figure = pio.read_json("source/figures/Li-Li_bond.json")
-   figure.show()
+   from mlipx.doc_utils import show
+   show("Li-Li_bond.json")
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
