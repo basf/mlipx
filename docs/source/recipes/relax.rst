@@ -1,3 +1,5 @@
+.. _relax:
+
 Structure Relaxation
 ====================
 

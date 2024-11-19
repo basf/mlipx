@@ -1,3 +1,5 @@
+.. _homonuclear_diatomics:
+
 Homonuclear Diatomics
 ===========================
 Homonuclear diatomics give a per-element information on the performance of the :term:`mlip`.

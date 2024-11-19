@@ -1,3 +1,5 @@
+.. _md:
+
 Molecular Dynamics
 ==================
 

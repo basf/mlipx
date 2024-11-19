@@ -1,4 +1,4 @@
-.. _Energy Volume Curves:
+.. _ev:
 
 Energy Volume Curves
 ===========================
@@ -52,7 +52,7 @@ In the following we show the results for a box of :code:`CCO`.
       print(ev.figures)
       >>> dict[str, plotly.graph_objs.Figure]
 
-   or directly via ZnDraw
+   or directly via :ref:`ZnDraw <zndraw>`
 
    .. code:: console
 
@@ -120,7 +120,7 @@ You can use :code:`mlipx compare --glob` to quickly select multiple nodes based 
    (.venv) $ mlipx compare --glob 'frame_1_*_EnergyVolumeCurve'
    (.venv) $ mlipx compare frame_4_7net_EnergyVolumeCurve frame_4_mace_agne_EnergyVolumeCurve frame_4_mace_medm_EnergyVolumeCurve
 
-In our example this shows the following plots in :term:`zndraw`.
+In our example this shows the following plots in :ref:`ZnDraw <zndraw>`.
 
 .. jupyter-execute::
    :hide-code:
