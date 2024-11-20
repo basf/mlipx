@@ -1,0 +1,103 @@
+Rattle:
+  seed: 42
+  stdev: 0.1
+initialize_LoadDataFile:
+  start: 0
+  step: 1
+  stop: null
+mace-mp_EV_EnergyVolumeCurve:
+  data_id: 1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+mace-mp_EV_EnergyVolumeCurve_1:
+  data_id: 2
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+mace-mp_EV_EnergyVolumeCurve_2:
+  data_id: 3
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+mace-mp_diatomics_HomonuclearDiatomics:
+  elements:
+  - C
+  - O
+  - N
+  eq_distance: covalent-radiuis
+  max_distance: 2.0
+  min_distance: 0.5
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 100
+mace-mp_geomopt_StructureOptimization:
+  data_id: 1
+  fmax: 0.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  optimizer: LBFGS
+  steps: 100000000
+mace-mp_geomopt_StructureOptimization_1:
+  data_id: 2
+  fmax: 0.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  optimizer: LBFGS
+  steps: 100000000
+mace-mp_geomopt_StructureOptimization_2:
+  data_id: 3
+  fmax: 0.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  optimizer: LBFGS
+  steps: 100000000
+mace-mp_metrics_ApplyCalculator:
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
