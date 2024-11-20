@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
-zntrack = "0.8.0a7"
+zntrack = "0.8.0a8"
 ase = "^3"
 typer = "^0"
 plotly = "^5"

@@ -80,6 +80,12 @@ class ProcessAtoms(zntrack.Node):
             with h5py.File(f, "r") as h5f:
                 return znh5md.IO(file_handle=h5f)[:]
 
+    @property
+    def figures(self) -> FIGURES: ...
+
+    @staticmethod
+    def compare(*nodes: "ProcessAtoms") -> ComparisonResults: ...
+
 
 class ProcessFrames(zntrack.Node):
     data: list[ase.Atoms] = zntrack.deps()
