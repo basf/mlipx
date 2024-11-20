@@ -6,6 +6,10 @@ authors = ["Fabian Zills <fabian.zills@web.de>", "Sandip De <sandip.de@basf.com>
 license = "MIT"
 readme = "README.md"
 
+[tool.poetry.urls]
+documentation = "https://mlipx.readthedocs.io"
+repository = "https://github.com/basf/mlipx"
+
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
 zntrack = "0.8.0a8"
