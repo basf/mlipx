@@ -26,9 +26,9 @@ Create a new Python file named ``main.py`` in the project directory, and add the
     import mlipx
     import zntrack
 
-    data = zntrack.add(
+    mptraj = zntrack.add(
         url="https://github.com/zincware/ips-mace/releases/download/v0.1.0/mptraj_slice.xyz",
-        path="mptraj_slice.xyz",
+        path="data.xyz",
     )
 
 This will download the reference data file ``mptraj_slice.xyz`` into your project directory.
@@ -59,7 +59,7 @@ Next, set up the recipe to compute metrics for the MLIP. Add the following code 
     project = mlipx.Project()
 
     with project.group("reference"):
-        data = mlipx.LoadDataFile(path=data)
+        data = mlipx.LoadDataFile(path=mptraj)
         ref_evaluation = mlipx.EvaluateCalculatorResults(data=data.frames)
 
     with project.group("mace-mp"):
@@ -74,13 +74,13 @@ Running the Workflow
 
 Finally, run the workflow by executing the ``main.py`` file:
 
-.. note::
-
-    If you want to execute the workflow using ``dvc repro``, replace ``project.repro()`` with ``project.build()`` in the ``main.py`` file.
-
 .. code-block:: bash
 
     (.venv) $ python main.py
+
+.. note::
+
+    If you want to execute the workflow using ``dvc repro``, replace ``project.repro()`` with ``project.build()`` in the ``main.py`` file.
 
 This will compute the metrics for the MLIP against the reference DFT data.
 

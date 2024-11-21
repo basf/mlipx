@@ -20,11 +20,16 @@ Next, add a reference DFT dataset to the project. For this example, we use a sli
 
 .. note::
 
-    If you have your own data, replace this file with any dataset that can be read by ``ase.io.read`` and includes reference energies and forces.
+    If you have your own data, replace this file with any dataset that can be read by ``ase.io.read`` and includes reference energies and forces. Run the following command instead:
+
+    .. code-block:: bash
+
+        (.venv) $ cp /path/to/your/data.xyz data.xyz
+        (.venv) $ dvc add data.xyz
 
 .. code-block:: bash
 
-    (.venv) $ dvc import-url https://github.com/zincware/ips-mace/releases/download/v0.1.0/mptraj_slice.xyz mptraj_slice.xyz
+    (.venv) $ dvc import-url https://github.com/zincware/ips-mace/releases/download/v0.1.0/mptraj_slice.xyz data.xyz
 
 Adding the Recipe
 -----------------
@@ -32,13 +37,13 @@ With the reference data in place, add a ``mlipx`` recipe to compute metrics:
 
 .. code-block:: bash
 
-    (.venv) $ mlipx recipes metrics --datapath mptraj_slice.xyz
+    (.venv) $ mlipx recipes metrics --datapath data.xyz
 
 This command generates a ``main.py`` file in the current directory, which defines the workflow for the recipe.
 
 Defining Models
 ---------------
-Define the models to evaluate. For simplicity, this example uses the MACE-MP-0 model :footcite:`batatiaFoundationModelAtomistic2023`.
+Define the models to evaluate. This example uses the MACE-MP-0 model :footcite:`batatiaFoundationModelAtomistic2023` which is provided by the ``mace-torch`` package..
 
 Create a file named ``models.py`` in the current directory with the following content:
 
