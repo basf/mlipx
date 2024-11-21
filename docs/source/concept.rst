@@ -36,3 +36,13 @@ This facilitates the comparison of different model metrics.
 
 .. image:: _static/mlflow_compare.png
    :width: 80%
+
+.. toctree::
+   :hidden:
+
+   concept/data
+   concept/models
+   concept/recipes
+   concept/zntrack
+   concept/zndraw
+   concept/distributed

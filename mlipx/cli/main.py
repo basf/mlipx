@@ -95,11 +95,12 @@ def compare(  # noqa C901
     result = node_instances[node_names[0]].compare(*node_instances.values(), **kwargs)
 
     token = token or str(uuid.uuid4())
-    vis = ZnDraw(zndraw_url, token=token, convert_nan=convert_nan)
-    del vis[:]
-    vis.extend(result["frames"])
-    vis.figures = result["figures"]
     typer.echo(f"View the results at {zndraw_url}/token/{token}")
+    vis = ZnDraw(zndraw_url, token=token, convert_nan=convert_nan)
+    length = len(vis)
+    vis.extend(result["frames"])
+    del vis[:length]  # temporary fix
+    vis.figures = result["figures"]
     if browser:
         webbrowser.open(f"{zndraw_url}/token/{token}")
     vis.socket.sleep(5)
