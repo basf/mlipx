@@ -39,7 +39,7 @@ dvc add file.xyz
 ### Step 2: Define Your MLIPs
 
 Create a `models.py` file to specify the MLIPs you want to evaluate. For the
-[MACE-MP-0] model this could look like this
+[MACE-MP-0](https://github.com/ACEsuit/mace?tab=readme-ov-file#mace-mp-materials-project-force-fields) model this could look like this
 
 > [!NOTE]
 > `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
