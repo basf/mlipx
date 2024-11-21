@@ -33,11 +33,17 @@ mkdir relax
 cd relax
 git init && dvc init
 cp /your/data/file.xyz .
+dvc add file.xyz
 ```
 
 ### Step 2: Define Your MLIPs
 
-Create a `models.py` file to specify the MLIPs you want to evaluate:
+Create a `models.py` file to specify the MLIPs you want to evaluate. For the
+[MACE-MP-0] model this could look like this
+
+> [!NOTE] `mlipx` leverages [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
+> meaning any ASE-compatible calculator for your MLIP will seamlessly integrate
+> with `mlipx`.
 
 ```python
 import mlipx
@@ -77,9 +83,9 @@ Below is an example of the resulting comparison:
 You can also use all the recipes from the `mlipx` command-line interface
 programmatically in Python.
 
-> \[!NOTE\] Whether you use the CLI or the Python API, you must work within a
-> GIT and DVC repository. This setup ensures reproducibility and enables
-> automatic caching and other features from DVC and ZnTrack.
+> [!NOTE] Whether you use the CLI or the Python API, you must work within a GIT
+> and DVC repository. This setup ensures reproducibility and enables automatic
+> caching and other features from DVC and ZnTrack.
 
 ```python
 import mlipx
