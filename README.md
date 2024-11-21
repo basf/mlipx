@@ -42,7 +42,7 @@ Create a `models.py` file to specify the MLIPs you want to evaluate. For the
 [MACE-MP-0] model this could look like this
 
 > [!NOTE]
-> `mlipx` leverages [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
+> `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
 > meaning any ASE-compatible calculator for your MLIP can be used.
 
 ```python
