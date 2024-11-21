@@ -43,8 +43,7 @@ Create a `models.py` file to specify the MLIPs you want to evaluate. For the
 
 > [!NOTE]
 > `mlipx` leverages [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
-> meaning any ASE-compatible calculator for your MLIP will seamlessly integrate
-> with `mlipx`.
+> meaning any ASE-compatible calculator for your MLIP can be used.
 
 ```python
 import mlipx
