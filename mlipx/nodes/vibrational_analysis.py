@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 import zntrack
 from ase import units
 from ase.constraints import FixAtoms
-from ase.thermochemistry import HarmonicThermo
+from ase.thermochemistry import HarmonicThermo, IdealGasThermo
 from ase.vibrations import Vibrations
 
 # from copy import deepcopy
@@ -57,7 +57,7 @@ class VibrationalAnalysis(zntrack.Node):
     # fmax: float = zntrack.params(0.09)
     displacement: float = zntrack.params(0.01)
     nfree: int = zntrack.params(4)
-    temperature: float = zntrack.params(298.15)
+    temperature: float = zntrack.params(298.15) #in Kelvin
     lower_freq_threshold: float = zntrack.params(12.0)
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
     modes_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "modes.xyz")
@@ -75,9 +75,10 @@ class VibrationalAnalysis(zntrack.Node):
         for current_frame, atoms in tqdm(enumerate(self.data)):
             # these type/molecule checks should go into a separate node.
             if (
-                "type" not in atoms.info
-                or "molecule_indices" not in atoms.info
-                or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
+                "type" not in atoms.info 
+                or "calc_type" not in atoms.info
+                or "free_indices" not in atoms.info
+                #or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
             ):
                 continue
 
@@ -90,7 +91,7 @@ class VibrationalAnalysis(zntrack.Node):
             constraints = [
                 i
                 for i, j in enumerate(atoms)
-                if i not in atoms.info["molecule_indices"]
+                if i not in atoms.info["free_indices"]
             ]
             c = FixAtoms(constraints)
             atoms.constraints = c
@@ -105,7 +106,7 @@ class VibrationalAnalysis(zntrack.Node):
                 nfree=self.nfree,
                 name=cache,
                 delta=self.displacement,
-                indices=atoms.info["molecule_indices"],
+                indices=atoms.info["free_indices"],
             )
             vib.run()
             _freq = vib.get_frequencies()
@@ -124,11 +125,33 @@ class VibrationalAnalysis(zntrack.Node):
                 freq = freq[1:]
                 # freq[0] = _freq[0]
 
-            vib_energies = [i * 0.0001239843 for i in freq]
+            if atoms.info['type'].lower() in ['mol', 'molecule']:
+                if 'molecule_geometry' in atoms.info and  atoms.info['molecule_geometry'].lower()=='linear':
+                    freq = freq[5:]
+                    geometry = 'linear'
+                else:
+                    freq = freq[6:]
+                    geometry = 'nonlinear'
 
-            thermo = HarmonicThermo(vib_energies=vib_energies, potentialenergy=0.0)
+                vib_energies = [i * 0.0001239843 for i in freq]
+               
+                symm_number = 1
+                p_pascal    = 1E5
+                spin        = 0
+               
+                if 'symmetry_number' in atoms.info: symm_number = atoms.info['symmetry_number']
+                if 'pressure' in atoms.info: p_pascal = atoms.info['pressure'] * 1E5
+                if 'spin' in atoms.info: spin = atoms.info['spin']
 
-            dg_Tk = thermo.get_helmholtz_energy(self.temperature, verbose=True)
+                thermo = IdealGasThermo(atoms=atoms, vib_energies=vib_energies, geometry=geometry,
+                                        potentialenergy=0.0, symmetrynumber=symm_number, spin=spin)
+                dg_Tk = thermo.get_gibbs_energy(self.temperature, p_pascal, verbose=True)
+
+            else:
+                vib_energies = [i * 0.0001239843 for i in freq]
+                thermo = HarmonicThermo(vib_energies=vib_energies, potentialenergy=0.0)
+                dg_Tk = thermo.get_helmholtz_energy(self.temperature, verbose=True)
+
             atoms.info[f"dg_{self.temperature}k"] = dg_Tk
 
             # results["Frame"].append(current_frame)
@@ -137,7 +160,11 @@ class VibrationalAnalysis(zntrack.Node):
             results.append({"Frame": current_frame, "ddG": dg_Tk})
 
             for temp in np.linspace(10, 1000, 10):
-                dg = thermo.get_helmholtz_energy(temp, verbose=True)
+                if atoms.info['type'].lower() in ['mol', 'molecule']:
+                    dg = thermo.get_gibbs_energy(temp, p_pascal, verbose=True)
+                else:
+                    dg = thermo.get_helmholtz_energy(temp, verbose=True)
+
                 atoms.info[f"dg_{temp:.1f}k"] = dg
             # vibenergies=vib.get_energies()
             # vib.summary(log='vib.txt')
@@ -154,7 +181,7 @@ class VibrationalAnalysis(zntrack.Node):
             # frames += [atoms]
             ase.io.write(self.frames_path, atoms, append=True)
 
-            for mode in range(len(atoms.info["molecule_indices"]) * 3):
+            for mode in range(len(atoms.info["free_indices"]) * 3):
                 mode_cache = modes_cache / f"mode_{mode}.traj"
                 kT = units.kB * self.temperature
                 with ase.io.Trajectory(mode_cache, "w") as traj:
