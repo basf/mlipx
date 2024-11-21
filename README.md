@@ -41,10 +41,6 @@ dvc add file.xyz
 Create a `models.py` file to specify the MLIPs you want to evaluate. For the
 [MACE-MP-0](https://github.com/ACEsuit/mace?tab=readme-ov-file#mace-mp-materials-project-force-fields) model this could look like this
 
-> [!NOTE]
-> `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
-> meaning any ASE-compatible calculator for your MLIP can be used.
-
 ```python
 import mlipx
 
@@ -59,6 +55,10 @@ mace_mp = mlipx.GenericASECalculator(
 
 MODELS = {"mace_mp": mace_mp}
 ```
+
+> [!NOTE]
+> `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
+> meaning any ASE-compatible calculator for your MLIP can be used.
 
 ### Step 3: Run an Example Recipe
 
