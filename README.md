@@ -22,7 +22,7 @@ pip install mlipx
 ## Quickstart
 
 This section provides a brief overview of the core features of mlipx. For more
-detailed instructions, visit the documentation.
+detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).
 
 ### Step 1: Set Up Your Project
 
