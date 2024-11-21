@@ -1,10 +1,13 @@
 Python Interface
 ================
 
-In the :ref:`cli-quickstart` guide, we used the CLI to compute metrics for an MLIP against reference DFT data.
-Now we will show you how to achieve the same result using the Python interface.
+In the :ref:`cli-quickstart` guide, we demonstrated how to compute metrics for an MLIP against reference DFT data using the CLI.
+This guide shows how to achieve the same result using the Python interface.
 
-First, create a new project directory and initialize it with Git and DVC as before:
+Getting Started
+---------------
+
+First, create a new project directory and initialize it with Git and DVC, as shown below:
 
 .. code-block:: bash
 
@@ -13,12 +16,10 @@ First, create a new project directory and initialize it with Git and DVC as befo
     (.venv) $ git init
     (.venv) $ dvc init
 
-
-
 Adding Reference Data
 ----------------------
 
-Create a new Python file named ``main.py`` in the project directory with the following content:
+Create a new Python file named ``main.py`` in the project directory, and add the following code to download the reference dataset:
 
 .. code-block:: python
 
@@ -30,18 +31,14 @@ Create a new Python file named ``main.py`` in the project directory with the fol
         path="mptraj_slice.xyz",
     )
 
-
-This will download the reference data to the project directory.
-
+This will download the reference data file ``mptraj_slice.xyz`` into your project directory.
 
 Defining Models
 ---------------
 
-Next, define the models to evaluate.
-Therefore add the following code to the ``main.py`` file:
+Define the MLIP models to evaluate by adding the following code to the ``main.py`` file:
 
 .. code-block:: python
-
 
     mace_mp = mlipx.GenericASECalculator(
         module="mace.calculators",
@@ -52,17 +49,14 @@ Therefore add the following code to the ``main.py`` file:
         },
     )
 
-
 Adding the Recipe
 -----------------
 
-Next, add a recipe to compute metrics for the MLIP.
-Add to the ``main.py`` file:
+Next, set up the recipe to compute metrics for the MLIP. Add the following code to the ``main.py`` file:
 
 .. code-block:: python
 
     project = mlipx.Project()
-
 
     with project.group("reference"):
         data = mlipx.LoadDataFile(path=data)
@@ -90,12 +84,22 @@ Finally, run the workflow by executing the ``main.py`` file:
 
 This will compute the metrics for the MLIP against the reference DFT data.
 
-
 Listing Steps and Visualizing Results
 -------------------------------------
-As before, to explore the available steps and visualize results, use the commands below:
+
+As with the CLI approach, you can list the available steps and visualize results using the following commands:
 
 .. code-block:: bash
 
     (.venv) $ zntrack list
     (.venv) $ mlipx compare mace_mp_CompareCalculatorResults
+
+Alternatively, you can load the results for this and any other Node directly into a Python kernel using the following code:
+
+.. code-block:: python
+
+    import zntrack
+
+    node = zntrack.from_rev("mace_mp_CompareCalculatorResults")
+    print(node.figures)
+    >>> {"fmax_error": plotly.graph_objects.Figure(), ...}
