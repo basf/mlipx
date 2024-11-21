@@ -1,3 +1,5 @@
+.. _cli-quickstart:
+
 Command Line Interface
 ======================
 
