@@ -1,3 +1,5 @@
+.. _python-quickstart:
+
 Python Interface
 ================
 

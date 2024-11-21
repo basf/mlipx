@@ -47,6 +47,12 @@ Define the models to evaluate. This example uses the MACE-MP-0 model :footcite:`
 
 Create a file named ``models.py`` in the current directory with the following content:
 
+
+.. note::
+
+    If you already have the data you can use two different data files or one file and update the keys.
+    For more information, see the section on :ref:`update-frames-calc`.
+
 .. code-block:: python
 
     import mlipx
@@ -61,6 +67,14 @@ Create a file named ``models.py`` in the current directory with the following co
     )
 
     MODELS = {"mace_mp": mace_mp}
+
+.. note::
+
+    The ``GenericASECalculator`` class passes any provided ``kwargs`` to the specified ``class_name``.
+    A special case is the ``device`` argument.
+    When set to ``auto``, the class uses ``torch.cuda.is_available()`` to check if a GPU is available and automatically selects it if possible.
+    If you are not using ``torch`` or wish to specify a device explicitly, you can omit the ``device`` argument or define it directly in the ``kwargs``.
+
 
 Running the Workflow
 ---------------------
