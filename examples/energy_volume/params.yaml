@@ -1,0 +1,48 @@
+7net_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+initialize_LoadDataFile:
+  start: 0
+  step: 1
+  stop: null
+mace_agne_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_agnesi.model
+    module: mace.calculators
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+mace_medm_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MACECalculator
+    device: auto
+    kwargs:
+      model_paths: ../models/mace_medium.model
+    module: mace.calculators
+  n_points: 50
+  start: 0.75
+  stop: 2.0
+orb_v2_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: models.OrbCalc
+    name: orb_v2
+  n_points: 50
+  start: 0.75
+  stop: 2.0

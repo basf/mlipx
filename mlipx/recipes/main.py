@@ -97,13 +97,13 @@ def homonuclear_diatomics(initialize: bool = False, repro: bool = False):
 
 
 @app.command()
-def ev(initialize: bool = False, repro: bool = False):
+def ev(initialize: bool = False, datapath: str = "...", repro: bool = False):
     """Compute Energy-Volume curves."""
     if initialize:
         initialize_directory()
     template = jinja2.Template((CWD / "energy_volume.py").read_text())
     with open("main.py", "w") as f:
-        f.write(template.render())
+        f.write(template.render(datapath=datapath))
     repro_if_requested(repro)
 
 

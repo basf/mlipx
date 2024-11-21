@@ -1,0 +1,79 @@
+plots:
+- mace_medm_EnergyVolumeCurve_results:
+    x:
+      nodes/mace_medm/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/mace_medm/EnergyVolumeCurve/results.csv: energy
+- mace_agne_EnergyVolumeCurve_results:
+    x:
+      nodes/mace_agne/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/mace_agne/EnergyVolumeCurve/results.csv: energy
+- 7net_EnergyVolumeCurve_results:
+    x:
+      nodes/7net/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/7net/EnergyVolumeCurve/results.csv: energy
+- orb_v2_EnergyVolumeCurve_results:
+    x:
+      nodes/orb_v2/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/orb_v2/EnergyVolumeCurve/results.csv: energy
+stages:
+  7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name 7net_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/7net/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/7net/EnergyVolumeCurve/frames.xyz
+    - nodes/7net/EnergyVolumeCurve/results.csv
+    params:
+    - 7net_EnergyVolumeCurve
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - ../data/mp_data_mp-1143_conventional_standard.cif
+    metrics:
+    - nodes/initialize/LoadDataFile/node-meta.json:
+        cache: false
+    params:
+    - initialize_LoadDataFile
+  mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_agne_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_agne/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_agne/EnergyVolumeCurve/frames.xyz
+    - nodes/mace_agne/EnergyVolumeCurve/results.csv
+    params:
+    - mace_agne_EnergyVolumeCurve
+  mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_medm_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mace_medm/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_medm/EnergyVolumeCurve/frames.xyz
+    - nodes/mace_medm/EnergyVolumeCurve/results.csv
+    params:
+    - mace_medm_EnergyVolumeCurve
+  orb_v2_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name orb_v2_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/orb_v2/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v2/EnergyVolumeCurve/frames.xyz
+    - nodes/orb_v2/EnergyVolumeCurve/results.csv
+    params:
+    - orb_v2_EnergyVolumeCurve

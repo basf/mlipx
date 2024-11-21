@@ -1,0 +1,182 @@
+schema: '2.0'
+stages:
+  initialize_LoadDataFile:
+    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    deps:
+    - path: ../data/mp_data_mp-1143_conventional_standard.cif
+      hash: md5
+      md5: 576f3f184772bcde681e69f54e64e2a9
+      size: 2202
+    params:
+      params.yaml:
+        initialize_LoadDataFile:
+          start: 0
+          step: 1
+          stop:
+    outs:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+  mace_agne_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_agne_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+    params:
+      params.yaml:
+        mace_agne_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_agnesi.model
+            module: mace.calculators
+          n_points: 50
+          start: 0.75
+          stop: 2.0
+    outs:
+    - path: nodes/mace_agne/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: c5feb0b0549d8b1ce446a6a44255e9f0
+      size: 226314
+    - path: nodes/mace_agne/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: 6c826d238ec80daf92a7cdf634ee9278
+      size: 64
+    - path: nodes/mace_agne/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: c31d300ac92b409cc7030870e3336da8
+      size: 3959
+  7net_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name 7net_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+    params:
+      params.yaml:
+        7net_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          n_points: 50
+          start: 0.75
+          stop: 2.0
+    outs:
+    - path: nodes/7net/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: b27a4c98f1fa790e4205dfda696548c4
+      size: 252397
+    - path: nodes/7net/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: 4910708d6eec0e3405040a6c27b5b4ed
+      size: 64
+    - path: nodes/7net/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: 42214b149f7c2ddb50f0b8cfd6522121
+      size: 3498
+  mace_medm_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_medm_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+    params:
+      params.yaml:
+        mace_medm_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MACECalculator
+            device: auto
+            kwargs:
+              model_paths: ../models/mace_medium.model
+            module: mace.calculators
+          n_points: 50
+          start: 0.75
+          stop: 2.0
+    outs:
+    - path: nodes/mace_medm/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: dceb8e7c0f7e253eb600f9edab1be621
+      size: 226302
+    - path: nodes/mace_medm/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: ce16eb44b9dce7f3f62b283b013cd85a
+      size: 64
+    - path: nodes/mace_medm/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: 38e1b7c16763d2481f9436a6160c488b
+      size: 3950
+  orb_v2_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name orb_v2_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+    params:
+      params.yaml:
+        orb_v2_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: models.OrbCalc
+            name: orb_v2
+          n_points: 50
+          start: 0.75
+          stop: 2.0
+    outs:
+    - path: nodes/orb_v2/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: 38485fa2996cb14df1535ccacde29d01
+      size: 226342
+    - path: nodes/orb_v2/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: d1daa0e17696ae10a905df17cb9462a1
+      size: 64
+    - path: nodes/orb_v2/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: 4e3816da2bd38f4212d2654e82605dea
+      size: 3526
+  orb_d3_v2_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name orb_d3_v2_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: e4f1ef6f2ae75edc3bb05f2f1e36e49c
+      size: 64
+    params:
+      params.yaml:
+        orb_d3_v2_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: models.OrbCalc
+            name: orb_d3_v2
+          n_points: 50
+          start: 0.75
+          stop: 2.0
+    outs:
+    - path: nodes/orb_d3_v2/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: a94154216b897865282d1ad68eec9966
+      size: 226372
+    - path: nodes/orb_d3_v2/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: e63cfdf02e05782d331d378da3130ff6
+      size: 64
+    - path: nodes/orb_d3_v2/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: 711acad4c7a72786aa63b5ecadf391b5
+      size: 3530

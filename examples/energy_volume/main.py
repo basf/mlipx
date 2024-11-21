@@ -3,7 +3,7 @@ from models import MODELS
 
 import mlipx
 
-DATAPATH = "{{ datapath }}"
+DATAPATH = "../data/mp_data_mp-1143_conventional_standard.cif"
 
 project = zntrack.Project()
 
