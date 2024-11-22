@@ -19,6 +19,10 @@ Install `mlipx` via pip:
 pip install mlipx
 ```
 
+> [!NOTE]
+> The `mlipx` package does not include the installation of any MLIP code, as we aim to keep the package as lightweight as possible.
+> If you encounter any `ImportError`, you may need to install the additional dependencies manually.
+
 ## Quickstart
 
 This section provides a brief overview of the core features of `mlipx`. For more detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).

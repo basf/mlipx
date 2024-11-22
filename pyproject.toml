@@ -13,9 +13,9 @@ repository = "https://github.com/basf/mlipx"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
-zntrack = "0.8.0a8"
+zntrack = "0.8.0"
 ase = "^3"
-typer = "^0"
+typer = "^0.13"
 plotly = "^5"
 zndraw = "^0.5.2"
 znh5md = "^0.3.6"
