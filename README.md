@@ -32,9 +32,9 @@ Most recipes support different input formats, such as data file paths, `SMILES` 
 > mkdir exp
 > cd exp
 > git init && dvc init
-
+> ```
 If you want to use datafiles, it is recommend to track them with `dvc add <file>` instead of `git add <file>`.
-
+> ```bash
 > cp /your/data/file.xyz .
 > dvc add file.xyz
 > ```
