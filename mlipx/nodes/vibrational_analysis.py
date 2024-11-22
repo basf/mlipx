@@ -57,7 +57,7 @@ class VibrationalAnalysis(zntrack.Node):
     # fmax: float = zntrack.params(0.09)
     displacement: float = zntrack.params(0.01)
     nfree: int = zntrack.params(4)
-    temperature: float = zntrack.params(298.15) #in Kelvin
+    temperature: float = zntrack.params(298.15)  # in Kelvin
     lower_freq_threshold: float = zntrack.params(12.0)
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
     modes_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "modes.xyz")
@@ -65,7 +65,7 @@ class VibrationalAnalysis(zntrack.Node):
     vib_cache: pathlib.Path = zntrack.outs_path(zntrack.nwd / "vib")
     results: pd.DataFrame = zntrack.plots(y="ddG", x="Frame")
 
-    def run(self):
+    def run(self):  # noqa C901
         # frames = []
         # molecules = {}
         calc = self.model.get_calculator()
@@ -75,10 +75,10 @@ class VibrationalAnalysis(zntrack.Node):
         for current_frame, atoms in tqdm(enumerate(self.data)):
             # these type/molecule checks should go into a separate node.
             if (
-                "type" not in atoms.info 
+                "type" not in atoms.info
                 or "calc_type" not in atoms.info
                 or "free_indices" not in atoms.info
-                #or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
+                # or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
             ):
                 continue
 
@@ -89,9 +89,7 @@ class VibrationalAnalysis(zntrack.Node):
             modes_cache.mkdir(parents=True, exist_ok=True)
 
             constraints = [
-                i
-                for i, j in enumerate(atoms)
-                if i not in atoms.info["free_indices"]
+                i for i, j in enumerate(atoms) if i not in atoms.info["free_indices"]
             ]
             c = FixAtoms(constraints)
             atoms.constraints = c
@@ -125,27 +123,41 @@ class VibrationalAnalysis(zntrack.Node):
                 freq = freq[1:]
                 # freq[0] = _freq[0]
 
-            if atoms.info['type'].lower() in ['mol', 'molecule']:
-                if 'molecule_geometry' in atoms.info and  atoms.info['molecule_geometry'].lower()=='linear':
+            if atoms.info["type"].lower() in ["mol", "molecule"]:
+                if (
+                    "molecule_geometry" in atoms.info
+                    and atoms.info["molecule_geometry"].lower() == "linear"
+                ):
                     freq = freq[5:]
-                    geometry = 'linear'
+                    geometry = "linear"
                 else:
                     freq = freq[6:]
-                    geometry = 'nonlinear'
+                    geometry = "nonlinear"
 
                 vib_energies = [i * 0.0001239843 for i in freq]
-               
-                symm_number = 1
-                p_pascal    = 1E5
-                spin        = 0
-               
-                if 'symmetry_number' in atoms.info: symm_number = atoms.info['symmetry_number']
-                if 'pressure' in atoms.info: p_pascal = atoms.info['pressure'] * 1E5
-                if 'spin' in atoms.info: spin = atoms.info['spin']
 
-                thermo = IdealGasThermo(atoms=atoms, vib_energies=vib_energies, geometry=geometry,
-                                        potentialenergy=0.0, symmetrynumber=symm_number, spin=spin)
-                dg_Tk = thermo.get_gibbs_energy(self.temperature, p_pascal, verbose=True)
+                symm_number = 1
+                p_pascal = 1e5
+                spin = 0
+
+                if "symmetry_number" in atoms.info:
+                    symm_number = atoms.info["symmetry_number"]
+                if "pressure" in atoms.info:
+                    p_pascal = atoms.info["pressure"] * 1e5
+                if "spin" in atoms.info:
+                    spin = atoms.info["spin"]
+
+                thermo = IdealGasThermo(
+                    atoms=atoms,
+                    vib_energies=vib_energies,
+                    geometry=geometry,
+                    potentialenergy=0.0,
+                    symmetrynumber=symm_number,
+                    spin=spin,
+                )
+                dg_Tk = thermo.get_gibbs_energy(
+                    self.temperature, p_pascal, verbose=True
+                )
 
             else:
                 vib_energies = [i * 0.0001239843 for i in freq]
@@ -160,7 +172,7 @@ class VibrationalAnalysis(zntrack.Node):
             results.append({"Frame": current_frame, "ddG": dg_Tk})
 
             for temp in np.linspace(10, 1000, 10):
-                if atoms.info['type'].lower() in ['mol', 'molecule']:
+                if atoms.info["type"].lower() in ["mol", "molecule"]:
                     dg = thermo.get_gibbs_energy(temp, p_pascal, verbose=True)
                 else:
                     dg = thermo.get_helmholtz_energy(temp, verbose=True)
