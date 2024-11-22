@@ -21,16 +21,15 @@ pip install mlipx
 
 ## Quickstart
 
-This section provides a brief overview of the core features of mlipx. For more
-detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).
+This section provides a brief overview of the core features of `mlipx`. For more detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).
 
+Most recipes support different input formats, such as data file paths, `SMILES` strings, or Materials Project structure IDs.
 
+---
 
+### Energy-Volume Curve
 
-### Energy Volume Curve
-
-Choose from one of the many
-[recipes](https://mlipx.readthedocs.io/en/latest/recipes.html). For example, to compute an energy-volume curve with the `mp-1143` structure from the materials project and the `mace-mp-0`, `sevennet` and `orb_v2` MLIP
+Compute an energy-volume curve using the `mp-1143` structure from the Materials Project and MLIPs such as `mace-mp`, `sevennet`, and `orb_v2`:
 
 ```bash
 mlipx recipes ev --models mace_mp,sevennet,orb_v2 --material-ids=mp-1143 --repro
@@ -47,11 +46,11 @@ Below is an example of the resulting comparison:
 ![ZnDraw UI](https://github.com/user-attachments/assets/c2479d17-c443-4550-a641-c513ede3be02#gh-light-mode-only "ZnDraw UI")
 
 > [!NOTE]
-> You can set your default visualiser path using `export ZNDRAW_URL=http://localhost:1234`.
+> Set your default visualizer path using: `export ZNDRAW_URL=http://localhost:1234`.
 
 ### Structure Optimization
 
-Alternatively, you can compare how the different models can run a structure optimization for multiple molecules from `SMILE` representations.
+Compare the performance of different models in optimizing multiple molecular structures from `SMILES` representations:
 
 ```bash
 mlipx recipes relax --models mace_mp,sevennet,orb_v2 --smiles "CCO,C1=CC2=C(C=C1O)C(=CN2)CCN" --repro
@@ -62,9 +61,9 @@ mlipx compare --glob "*1_StructureOptimization"
 ![ZnDraw UI](https://github.com/user-attachments/assets/7e26a502-3c59-4498-9b98-af8e17a227ce#gh-dark-mode-only "ZnDraw UI")
 ![ZnDraw UI](https://github.com/user-attachments/assets/a68ac9f5-e3fe-438d-ad4e-88b60499b79e#gh-light-mode-only "ZnDraw UI")
 
-### NEB
+### Nudged Elastic Band (NEB)
 
-Alternatively, you can compare how the different models can run a structure optimization for multiple molecules from `SMILE` representations.
+Run and compare nudged elastic band (NEB) calculations for a given start and end structure:
 
 ```bash
 mlipx recipes neb --models mace_mp,sevennet,orb_v2 --datapath ../data/neb_end_p.xyz --repro
