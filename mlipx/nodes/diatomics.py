@@ -29,6 +29,9 @@ class HomonuclearDiatomics(zntrack.Node):
         Minimum bond length to consider in Angstrom.
     max_distance : float, default=2.0
         Maximum bond length to consider in Angstrom.
+    data : list[ase.Atoms]|None
+        Optional list of ase.Atoms. Diatomics for each element in
+        this list will be added to `elements`.
 
     Attributes
     ----------
@@ -40,6 +43,7 @@ class HomonuclearDiatomics(zntrack.Node):
 
     model: NodeWithCalculator = zntrack.deps()
     elements: list[str] = zntrack.params(("H", "He", "Li"))
+    data: list[ase.Atoms] | None = zntrack.deps(None)
 
     n_points: int = zntrack.params(100)
     min_distance: float = zntrack.params(0.5)
@@ -59,7 +63,13 @@ class HomonuclearDiatomics(zntrack.Node):
         self.results = pd.DataFrame()
         calc = self.model.get_calculator()
         e_v = {}
-        for element in self.elements:
+
+        elements = set(self.elements)
+        if self.data is not None:
+            for atoms in self.data:
+                elements.update(set(atoms.symbols))
+
+        for element in elements:
             energies = []
             if self.eq_distance == "covalent-radiuis":
                 # convert element to atomic number

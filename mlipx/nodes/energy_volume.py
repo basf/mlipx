@@ -124,7 +124,7 @@ class EnergyVolumeCurve(zntrack.Node):
             one_idx = np.abs(scale_factor - 1).argmin()
             fig_adjust.add_trace(
                 go.Scatter(
-                    x=node.results["volume"],
+                    x=node.results["scale"],
                     y=node.results["energy"] - node.results["energy"].iloc[one_idx],
                     mode="lines+markers",
                     name=node.name.replace("_EnergyVolumeCurve", ""),
@@ -135,8 +135,42 @@ class EnergyVolumeCurve(zntrack.Node):
             )
 
         fig_adjust.update_layout(title="Adjusted Energy-Volume Curve Comparison")
-        fig_adjust.update_xaxes(title_text="Volume / Å³")
+        fig_adjust.update_xaxes(title_text="cell vector scale")
         fig_adjust.update_yaxes(title_text="Adjusted Energy / eV")
+
+        fig_adjust.update_layout(
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig_adjust.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig_adjust.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+
+        fig.update_layout(
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
 
         return {
             "frames": nodes[0].frames,

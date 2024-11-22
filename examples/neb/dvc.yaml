@@ -1,43 +1,20 @@
 plots:
-- mace_medm_NEBs_results:
+- mace_mp_NEBs_results:
     x:
-      nodes/mace_medm/NEBs/results.csv: data_id
+      nodes/mace_mp/NEBs/results.csv: data_id
     y:
-      nodes/mace_medm/NEBs/results.csv: potential_energy
-- mace_agne_NEBs_results:
+      nodes/mace_mp/NEBs/results.csv: potential_energy
+- sevennet_NEBs_results:
     x:
-      nodes/mace_agne/NEBs/results.csv: data_id
+      nodes/sevennet/NEBs/results.csv: data_id
     y:
-      nodes/mace_agne/NEBs/results.csv: potential_energy
-- 7net_NEBs_results:
-    x:
-      nodes/7net/NEBs/results.csv: data_id
-    y:
-      nodes/7net/NEBs/results.csv: potential_energy
+      nodes/sevennet/NEBs/results.csv: potential_energy
 - orb_v2_NEBs_results:
     x:
       nodes/orb_v2/NEBs/results.csv: data_id
     y:
       nodes/orb_v2/NEBs/results.csv: potential_energy
-- orb_d3_v2_NEBs_results:
-    x:
-      nodes/orb_d3_v2/NEBs/results.csv: data_id
-    y:
-      nodes/orb_d3_v2/NEBs/results.csv: potential_energy
 stages:
-  7net_NEBs:
-    cmd: zntrack run mlipx.nodes.nebs.NEBs --name 7net_NEBs
-    deps:
-    - nodes/initialize/NEBinterpolate/initial_frames.xyz
-    metrics:
-    - nodes/7net/NEBs/node-meta.json:
-        cache: false
-    outs:
-    - nodes/7net/NEBs/frames.xyz
-    - nodes/7net/NEBs/neb_trajectory.traj
-    - nodes/7net/NEBs/results.csv
-    params:
-    - 7net_NEBs
   initialize_LoadDataFile:
     cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
     deps:
@@ -58,45 +35,19 @@ stages:
     - nodes/initialize/NEBinterpolate/initial_frames.xyz
     params:
     - initialize_NEBinterpolate
-  mace_agne_NEBs:
-    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_agne_NEBs
+  mace_mp_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_mp_NEBs
     deps:
     - nodes/initialize/NEBinterpolate/initial_frames.xyz
     metrics:
-    - nodes/mace_agne/NEBs/node-meta.json:
+    - nodes/mace_mp/NEBs/node-meta.json:
         cache: false
     outs:
-    - nodes/mace_agne/NEBs/frames.xyz
-    - nodes/mace_agne/NEBs/neb_trajectory.traj
-    - nodes/mace_agne/NEBs/results.csv
+    - nodes/mace_mp/NEBs/frames.xyz
+    - nodes/mace_mp/NEBs/neb_trajectory.traj
+    - nodes/mace_mp/NEBs/results.csv
     params:
-    - mace_agne_NEBs
-  mace_medm_NEBs:
-    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mace_medm_NEBs
-    deps:
-    - nodes/initialize/NEBinterpolate/initial_frames.xyz
-    metrics:
-    - nodes/mace_medm/NEBs/node-meta.json:
-        cache: false
-    outs:
-    - nodes/mace_medm/NEBs/frames.xyz
-    - nodes/mace_medm/NEBs/neb_trajectory.traj
-    - nodes/mace_medm/NEBs/results.csv
-    params:
-    - mace_medm_NEBs
-  orb_d3_v2_NEBs:
-    cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_d3_v2_NEBs
-    deps:
-    - nodes/initialize/NEBinterpolate/initial_frames.xyz
-    metrics:
-    - nodes/orb_d3_v2/NEBs/node-meta.json:
-        cache: false
-    outs:
-    - nodes/orb_d3_v2/NEBs/frames.xyz
-    - nodes/orb_d3_v2/NEBs/neb_trajectory.traj
-    - nodes/orb_d3_v2/NEBs/results.csv
-    params:
-    - orb_d3_v2_NEBs
+    - mace_mp_NEBs
   orb_v2_NEBs:
     cmd: zntrack run mlipx.nodes.nebs.NEBs --name orb_v2_NEBs
     deps:
@@ -110,3 +61,16 @@ stages:
     - nodes/orb_v2/NEBs/results.csv
     params:
     - orb_v2_NEBs
+  sevennet_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name sevennet_NEBs
+    deps:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    metrics:
+    - nodes/sevennet/NEBs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/NEBs/frames.xyz
+    - nodes/sevennet/NEBs/neb_trajectory.traj
+    - nodes/sevennet/NEBs/results.csv
+    params:
+    - sevennet_NEBs

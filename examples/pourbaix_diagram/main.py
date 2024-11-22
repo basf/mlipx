@@ -1,12 +1,9 @@
-import os
-
 import zntrack
 from models import MODELS
 
 import mlipx
 
 DATAPATH = "../data/LiMnO_mp_small_vasp_sp.xyz"
-os.environ["MP_API_KEY"] = "MuO8J79CEdO7NHXouX976bNDMtd6KkiA"
 
 project = zntrack.Project()
 

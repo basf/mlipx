@@ -11,6 +11,24 @@ Ultimately, you should be able to determine the applicability of a given MLIP fo
    This project is under active development.
 
 
+Create a ``mlipx`` :ref:`recipe <recipes>` to compute :ref:`ev` for the `mp-1143 <https://next-gen.materialsproject.org/materials/mp-1143>`_ structure using different :term:`MLIP` models
+
+.. code-block:: console
+
+   (.venv) $ mlipx recipes ev --models mace_mp,sevennet,orb_v2 --material-ids=mp-1143 --repro
+   (.venv) $ mlipx compare --glob "*EnergyVolumeCurve"
+
+and use the integration with :ref:`ZnDraw <zndraw>` to visualize the resulting trajectories and compare the energies interactively.
+
+.. image:: https://github.com/user-attachments/assets/c2479d17-c443-4550-a641-c513ede3be02
+   :width: 80%
+   :alt: ZnDraw
+   :class: only-light
+
+.. image:: https://github.com/user-attachments/assets/2036e6d9-3342-4542-9ddb-bbc777d2b093
+   :width: 80%
+   :alt: ZnDraw
+   :class: only-dark
 
 .. toctree::
    :hidden:

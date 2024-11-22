@@ -18,7 +18,6 @@ for model_name, model in MODELS.items():
             model=model,
             relax=True,
             fmax=0.05,
-            n_steps=500,
         )
 
 project.build()

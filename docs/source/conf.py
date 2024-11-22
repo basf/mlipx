@@ -29,7 +29,6 @@ extensions = [
     "hoverxref.extension",
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
-    "sphinxcontrib.video",
     "jupyter_sphinx",
     "sphinx_design",
     "nbsphinx",

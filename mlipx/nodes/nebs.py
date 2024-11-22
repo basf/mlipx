@@ -215,11 +215,26 @@ class NEBs(zntrack.Node):
             title="Energy vs. iteration",
             xaxis_title="image number",
             yaxis_title="Energy",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
         )
 
         # Now adjusted
 
         fig_adjusted = go.Figure()
+        offset = 0
         for _, node in enumerate(nodes):
             energies = np.array([atoms.get_potential_energy() for atoms in node.frames])
             energies -= energies[0]
@@ -238,6 +253,20 @@ class NEBs(zntrack.Node):
             title="Adjusted energy vs. iteration",
             xaxis_title="Image number",
             yaxis_title="Adjusted energy",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig_adjusted.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig_adjusted.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
         )
 
         return ComparisonResults(

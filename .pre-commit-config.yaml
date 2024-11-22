@@ -35,8 +35,8 @@ repos:
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
-    hooks:
-    - id: mdformat
-      args: ["--wrap=80"]
+  # - repo: https://github.com/executablebooks/mdformat
+  #   rev: 0.7.19
+  #   hooks:
+  #   - id: mdformat
+  #     args: ["--wrap=80"]

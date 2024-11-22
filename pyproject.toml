@@ -1,16 +1,21 @@
 [tool.poetry]
 name = "mlipx"
-version = "0.1.1"
-description = "machine-learned interatomic potential tools"
+version = "0.1.2"
+description = "Machine-Learned Interatomic Potential eXploration"
 authors = ["Fabian Zills <fabian.zills@web.de>", "Sandip De <sandip.de@basf.com>", "Sheena Agarwal <sheena.a.agarwal@basf.com>"]
 license = "MIT"
 readme = "README.md"
+keywords=["data-version-control", "machine-learning", "reproducibility", "collaboration", "machine-learned interatomic potential", "mlip", "mlff"]
+
+[tool.poetry.urls]
+documentation = "https://mlipx.readthedocs.io"
+repository = "https://github.com/basf/mlipx"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4"
-zntrack = "0.8.0a8"
+zntrack = "0.8.0"
 ase = "^3"
-typer = "^0"
+typer = "^0.13"
 plotly = "^5"
 zndraw = "^0.5.2"
 znh5md = "^0.3.6"
@@ -32,7 +37,6 @@ sphinx-hoverxref = "^1.4.1"
 sphinxcontrib-bibtex = "^2.6.3"
 sphinx-copybutton = "^0.5.2"
 furo = "^2024.8.6"
-sphinxcontrib-video = "^0.2.1"
 jupyter-sphinx = "^0.5.3"
 sphinx-design = "^0.6.1"
 nbsphinx = "^0.9.5"

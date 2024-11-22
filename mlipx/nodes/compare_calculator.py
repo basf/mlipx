@@ -1,6 +1,9 @@
+import contextlib
+
 import pandas as pd
 import tqdm
 import zntrack
+from ase.calculators.calculator import PropertyNotImplementedError
 
 from mlipx.abc import FIGURES, FRAMES, ComparisonResults
 from mlipx.nodes.evaluate_calculator import EvaluateCalculatorResults, get_figure
@@ -106,6 +109,16 @@ class CompareCalculatorResults(zntrack.Node):
         for key, values in frames_info.items():
             for atoms, value in zip(frames, values):
                 atoms.info[key] = value
+
+        for node in nodes:
+            for node_atoms, atoms in zip(node.frames, frames):
+                if len(node_atoms) != len(atoms):
+                    raise ValueError("Atoms objects have different lengths")
+                with contextlib.suppress(RuntimeError, PropertyNotImplementedError):
+                    atoms.info[f"{node.name}_energy"] = (
+                        node_atoms.get_potential_energy()
+                    )
+                    atoms.arrays[f"{node.name}_forces"] = node_atoms.get_forces()
 
         return {
             "frames": frames,

@@ -1,3 +1,5 @@
+import contextlib
+
 import ase
 import numpy as np
 import pandas as pd
@@ -5,6 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import tqdm
 import zntrack
+from ase.calculators.calculator import PropertyNotImplementedError
 
 from mlipx.abc import ComparisonResults
 from mlipx.utils import shallow_copy_atoms
@@ -22,7 +25,23 @@ def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
             )
         )
     fig.update_traces(customdata=np.stack([np.arange(len(node.plots.index))], axis=1))
-    fig.update_layout(title=key)
+    fig.update_layout(
+        title=key,
+        plot_bgcolor="rgba(0, 0, 0, 0)",
+        paper_bgcolor="rgba(0, 0, 0, 0)",
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="rgba(120, 120, 120, 0.3)",
+        zeroline=False,
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridwidth=1,
+        gridcolor="rgba(120, 120, 120, 0.3)",
+        zeroline=False,
+    )
     return fig
 
 
@@ -131,6 +150,16 @@ zndraw {self.name}.frames --rev {self.state.rev} --remote {self.state.remote} --
         for key, values in frames_info.items():
             for atoms, value in zip(frames, values):
                 atoms.info[key] = value
+
+        for node in nodes:
+            for node_atoms, atoms in zip(node.frames, frames):
+                if len(node_atoms) != len(atoms):
+                    raise ValueError("Atoms objects have different lengths")
+                with contextlib.suppress(RuntimeError, PropertyNotImplementedError):
+                    atoms.info[f"{node.name}_energy"] = (
+                        node_atoms.get_potential_energy()
+                    )
+                    atoms.arrays[f"{node.name}_forces"] = node_atoms.get_forces()
 
         return {
             "frames": frames,
