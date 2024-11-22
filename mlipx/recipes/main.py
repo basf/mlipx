@@ -70,11 +70,11 @@ def relax(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Perform a relaxation task."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         CWD / "relax.py.jinja2",
         initialize=initialize,
@@ -103,11 +103,11 @@ def vibrational_analysis(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Run vibrational analysis."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "vibrational_analysis.py.jinja2",
         initialize=initialize,
@@ -125,11 +125,11 @@ def phase_diagram(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build a phase diagram."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "phase_diagram.py.jinja2",
         initialize=initialize,
@@ -146,11 +146,11 @@ def pourbaix_diagram(
     repro: bool = False,
     datapath: str | None = None,
     material_ids: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build a Pourbaix diagram."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "pourbaix_diagram.py.jinja2",
         initialize=initialize,
@@ -168,11 +168,11 @@ def md(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build an MD recipe."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "md.py.jinja2",
         initialize=initialize,
@@ -190,11 +190,11 @@ def homonuclear_diatomics(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Run homonuclear diatomics calculations."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "homonuclear_diatomics.py.jinja2",
         initialize=initialize,
@@ -212,11 +212,11 @@ def ev(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Compute Energy-Volume curves."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "energy_volume.py.jinja2",
         initialize=initialize,
@@ -264,11 +264,11 @@ def invariances(
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Test rotational, permutational, and translational invariance."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "invariances.py.jinja2",
         initialize=initialize,
