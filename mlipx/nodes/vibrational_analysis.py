@@ -1,4 +1,5 @@
 import pathlib
+import typing as t
 
 import ase.io
 import numpy as np
@@ -65,6 +66,17 @@ class VibrationalAnalysis(zntrack.Node):
     vib_cache: pathlib.Path = zntrack.outs_path(zntrack.nwd / "vib")
     results: pd.DataFrame = zntrack.plots(y="ddG", x="Frame")
 
+    free_indices: list[int] = zntrack.params(None)
+    # by default freeze no index
+    system: (
+        t.Literal["molecule"]
+        | t.Literal["other"]
+        | t.Literal["linear-molecule"]
+        | t.Literal["isolated-atom"]
+        | None
+    ) = zntrack.params(None)
+    calc_type: t.Literal["ts"] | t.Literal["relax"] | None = zntrack.params(None)
+
     def run(self):  # noqa C901
         # frames = []
         # molecules = {}
@@ -74,6 +86,15 @@ class VibrationalAnalysis(zntrack.Node):
 
         for current_frame, atoms in tqdm(enumerate(self.data)):
             # these type/molecule checks should go into a separate node.
+            if self.system is None:
+                system = atoms.info["type"]  # raises IndexError if neither is set
+            else:
+                system = self.system
+
+            print(system)
+
+            # same for the other
+
             if (
                 "type" not in atoms.info
                 or "calc_type" not in atoms.info
