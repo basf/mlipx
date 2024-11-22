@@ -1,19 +1,19 @@
 import pathlib
 import shutil
 import subprocess
+import typing as t
 
 import jinja2
-from typer import Typer
+import typer
 
 CWD = pathlib.Path(__file__).parent
 
-app = Typer()
+app = typer.Typer()
 
 
 def initialize_directory():
     subprocess.run(["git", "init"], check=True)
     subprocess.run(["dvc", "init"], check=True)
-    shutil.copy(CWD / "models.py", "models.py")
 
 
 def repro_if_requested(repro: bool):
@@ -23,12 +23,40 @@ def repro_if_requested(repro: bool):
 
 
 @app.command()
-def relax(initialize: bool = False, datapath: str = "...", repro: bool = False):
+def relax(
+    initialize: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    repro: bool = False,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    if sum([datapath is not None, material_ids is not None, smiles is not None]) == 0:
+        raise ValueError(
+            "At least one of `datapath`, `material_ids` or `smiles` must be provided."
+        )
+    datapath_ = None
+    material_ids_ = None
+    smiles_ = None
+    if datapath is not None:
+        datapath_ = datapath.split(",")
+    if material_ids is not None:
+        material_ids_ = material_ids.split(",")
+    if smiles is not None:
+        smiles_ = smiles.split(",")
+
     if initialize:
         initialize_directory()
-    template = jinja2.Template((CWD / "relax.py").read_text())
+    template = jinja2.Template((CWD / "relax.jinja2").read_text())
     with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
+        f.write(
+            template.render(
+                datapath=datapath_, material_ids=material_ids_, smiles=smiles_
+            )
+        )
+        template = jinja2.Template((CWD / "models.jinja2").read_text())
+        with open("models.py", "w") as f:
+            f.write(template.render(models=models))
     repro_if_requested(repro)
 
 
