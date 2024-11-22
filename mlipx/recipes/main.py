@@ -1,5 +1,4 @@
 import pathlib
-import shutil
 import subprocess
 import typing as t
 
@@ -12,52 +11,78 @@ app = typer.Typer()
 
 
 def initialize_directory():
+    """Initialize a Git and DVC repository."""
     subprocess.run(["git", "init"], check=True)
     subprocess.run(["dvc", "init"], check=True)
 
 
+def render_template(template_name: str, output_name: str, **context):
+    """Render a Jinja2 template and write it to a file."""
+    template_path = CWD / template_name
+    template = jinja2.Template(template_path.read_text())
+    with open(output_name, "w") as f:
+        f.write(template.render(**context))
+
+
 def repro_if_requested(repro: bool):
+    """Run the repro pipeline if requested."""
     if repro:
         subprocess.run(["python", "main.py"], check=True)
         subprocess.run(["dvc", "repro"], check=True)
 
 
+def parse_inputs(datapath: str | None, material_ids: str | None, smiles: str | None):
+    """Parse and validate input arguments."""
+    if not any([datapath, material_ids, smiles]):
+        raise ValueError(
+            "Provide at least one of `datapath`, `material_ids`, or `smiles`."
+        )
+
+    return {
+        "datapath": datapath.split(",") if datapath else None,
+        "material_ids": material_ids.split(",") if material_ids else None,
+        "smiles": smiles.split(",") if smiles else None,
+    }
+
+
+def handle_recipe(
+    template_name: str,
+    initialize: bool,
+    repro: bool,
+    datapath: str | None,
+    material_ids: str | None,
+    smiles: str | None,
+    **additional_context,
+):
+    """Common logic for handling recipes."""
+    if initialize:
+        initialize_directory()
+
+    inputs = parse_inputs(datapath, material_ids, smiles)
+    render_template(template_name, "main.py", **inputs, **additional_context)
+    repro_if_requested(repro)
+
+
 @app.command()
 def relax(
     initialize: bool = False,
+    repro: bool = False,
     datapath: str | None = None,
     material_ids: str | None = None,
     smiles: str | None = None,
-    repro: bool = False,
     models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
 ):
-    if sum([datapath is not None, material_ids is not None, smiles is not None]) == 0:
-        raise ValueError(
-            "At least one of `datapath`, `material_ids` or `smiles` must be provided."
-        )
-    datapath_ = None
-    material_ids_ = None
-    smiles_ = None
-    if datapath is not None:
-        datapath_ = datapath.split(",")
-    if material_ids is not None:
-        material_ids_ = material_ids.split(",")
-    if smiles is not None:
-        smiles_ = smiles.split(",")
-
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "relax.py.jinja2").read_text())
-    with open("main.py", "w") as f:
-        f.write(
-            template.render(
-                datapath=datapath_, material_ids=material_ids_, smiles=smiles_
-            )
-        )
-        template = jinja2.Template((CWD / "models.py.jinja2").read_text())
-        with open("models.py", "w") as f:
-            f.write(template.render(models=models))
-    repro_if_requested(repro)
+    """Perform a relaxation task."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        CWD / "relax.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
 
 
 @app.command()
@@ -72,67 +97,134 @@ def neb(initialize: bool = False, datapath: str = "...", repro: bool = False):
 
 
 @app.command()
-def vibrational_analysis(initialize: bool = False, repro: bool = False):
-    if initialize:
-        initialize_directory()
-    shutil.copy(CWD / "vibrational_analysis.py", "main.py")
-    repro_if_requested(repro)
+def vibrational_analysis(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Run vibrational analysis."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "vibrational_analysis.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
 
 
 @app.command()
-def phase_diagram(initialize: bool = False, repro: bool = False):
-    if initialize:
-        initialize_directory()
-    shutil.copy(CWD / "phase_diagram.py", "main.py")
-    repro_if_requested(repro)
+def phase_diagram(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Build a phase diagram."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "phase_diagram.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
 
 
 @app.command()
-def pourbaix_diagram(initialize: bool = False, repro: bool = False):
-    if initialize:
-        initialize_directory()
-    shutil.copy(CWD / "pourbaix_diagram.py", "main.py")
-    repro_if_requested(repro)
+def pourbaix_diagram(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Build a Pourbaix diagram."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "pourbaix_diagram.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=None,
+    )
 
 
 @app.command()
-def md(initialize: bool = False, datapath: str = "...", repro: bool = False):
-    """Build an MD recipe.
-
-    Parameters
-    ----------
-    initialize : bool
-        Initialize a git and dvc repository.
-    datapath : str
-        Path to the data directory.
-    """
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "md.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
-    repro_if_requested(repro)
-
-
-@app.command()
-def homonuclear_diatomics(initialize: bool = False, repro: bool = False):
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "homonuclear_diatomics.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render())
-    repro_if_requested(repro)
+def md(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Build an MD recipe."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "md.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
 
 
 @app.command()
-def ev(initialize: bool = False, datapath: str = "...", repro: bool = False):
+def homonuclear_diatomics(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Run homonuclear diatomics calculations."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "homonuclear_diatomics.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
+
+
+@app.command()
+def ev(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
     """Compute Energy-Volume curves."""
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "energy_volume.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
-    repro_if_requested(repro)
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "energy_volume.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
 
 
 @app.command()
@@ -166,19 +258,22 @@ def metrics(
 
 
 @app.command()
-def invariances(initialize: bool = False, datapath: str = "...", repro: bool = False):
-    """Test rotational, permutational and translational invariance.
-
-    Parameters
-    ----------
-    initialize : bool
-        Initialize a git and dvc repository.
-    datapath : str
-        Path to the data directory.
-    """
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "invariances.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
-    repro_if_requested(repro)
+def invariances(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[t.List[str] | None, typer.Argument()] = None,
+):
+    """Test rotational, permutational, and translational invariance."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models)
+    handle_recipe(
+        "invariances.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )

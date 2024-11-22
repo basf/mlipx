@@ -188,7 +188,7 @@ class PhaseDiagram(zntrack.Node):
             n_cols += 1
             if n_nodes % n_cols == 0:
                 n_rows = n_nodes // n_cols
-        trace_type = nodes[0].plots["phase-diagram"].data[0].type
+        trace_type = nodes[0].figures["phase-diagram"].data[0].type
         specs = [[{"type": trace_type} for i in range(n_cols)] for _ in range(n_rows)]
 
         fig1 = make_subplots(

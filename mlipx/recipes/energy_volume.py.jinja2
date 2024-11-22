@@ -24,6 +24,12 @@ with project.group("initialize"):
 for model_name, model in MODELS.items():
     for idx, data in enumerate(frames):
         with project.group(model_name, str(idx)):
-            geom_opt = mlipx.StructureOptimization(data=data.frames, model=model, fmax=0.1)
+            neb = mlipx.EnergyVolumeCurve(
+                model=model,
+                data=data.frames,
+                n_points=50,
+                start=0.75,
+                stop=2.0,
+            )
 
 project.build()
