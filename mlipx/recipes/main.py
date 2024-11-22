@@ -47,14 +47,14 @@ def relax(
 
     if initialize:
         initialize_directory()
-    template = jinja2.Template((CWD / "relax.jinja2").read_text())
+    template = jinja2.Template((CWD / "relax.py.jinja2").read_text())
     with open("main.py", "w") as f:
         f.write(
             template.render(
                 datapath=datapath_, material_ids=material_ids_, smiles=smiles_
             )
         )
-        template = jinja2.Template((CWD / "models.jinja2").read_text())
+        template = jinja2.Template((CWD / "models.py.jinja2").read_text())
         with open("models.py", "w") as f:
             f.write(template.render(models=models))
     repro_if_requested(repro)
