@@ -4,7 +4,7 @@
             "_type": "pathlib.Path",
             "value": "nodes/initialize/LoadDataFile"
         },
-        "path": "../data/CoCuFeIrNiHOCl_slab_dft.xyz"
+        "path": "../data/DODH_adsorption_dft.xyz"
     },
     "reference_EvaluateCalculatorResults": {
         "nwd": {
@@ -29,34 +29,10 @@
             }
         }
     },
-    "reference_CalculateFormationEnergy": {
+    "mace_mp_ApplyCalculator": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/reference/CalculateFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": null
-    },
-    "mace_medm_ApplyCalculator": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/ApplyCalculator"
+            "value": "nodes/mace_mp/ApplyCalculator"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -87,10 +63,10 @@
             "value": "$nwd$/frames.h5"
         }
     },
-    "mace_medm_EvaluateCalculatorResults": {
+    "mace_mp_EvaluateCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/EvaluateCalculatorResults"
+            "value": "nodes/mace_mp/EvaluateCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -99,7 +75,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.apply_calculator",
-                        "name": "mace_medm_ApplyCalculator",
+                        "name": "mace_mp_ApplyCalculator",
                         "cls": "ApplyCalculator",
                         "remote": null,
                         "rev": null
@@ -110,10 +86,10 @@
             }
         }
     },
-    "mace_medm_CompareCalculatorResults": {
+    "mace_mp_CompareCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/CompareCalculatorResults"
+            "value": "nodes/mace_mp/CompareCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -122,7 +98,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.evaluate_calculator",
-                        "name": "mace_medm_EvaluateCalculatorResults",
+                        "name": "mace_mp_EvaluateCalculatorResults",
                         "cls": "EvaluateCalculatorResults",
                         "remote": null,
                         "rev": null
@@ -150,80 +126,10 @@
             }
         }
     },
-    "mace_medm_CalculateFormationEnergy": {
+    "sevennet_ApplyCalculator": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/CalculateFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.apply_calculator",
-                        "name": "mace_medm_ApplyCalculator",
-                        "cls": "ApplyCalculator",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
-            }
-        }
-    },
-    "mace_medm_CompareFormationEnergy": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/CompareFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "mace_medm_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        },
-        "reference": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "reference_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        }
-    },
-    "mace_agne_ApplyCalculator": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/ApplyCalculator"
+            "value": "nodes/sevennet/ApplyCalculator"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -254,10 +160,10 @@
             "value": "$nwd$/frames.h5"
         }
     },
-    "mace_agne_EvaluateCalculatorResults": {
+    "sevennet_EvaluateCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/EvaluateCalculatorResults"
+            "value": "nodes/sevennet/EvaluateCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -266,7 +172,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.apply_calculator",
-                        "name": "mace_agne_ApplyCalculator",
+                        "name": "sevennet_ApplyCalculator",
                         "cls": "ApplyCalculator",
                         "remote": null,
                         "rev": null
@@ -277,10 +183,10 @@
             }
         }
     },
-    "mace_agne_CompareCalculatorResults": {
+    "sevennet_CompareCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/CompareCalculatorResults"
+            "value": "nodes/sevennet/CompareCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -289,7 +195,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.evaluate_calculator",
-                        "name": "mace_agne_EvaluateCalculatorResults",
+                        "name": "sevennet_EvaluateCalculatorResults",
                         "cls": "EvaluateCalculatorResults",
                         "remote": null,
                         "rev": null
@@ -317,80 +223,10 @@
             }
         }
     },
-    "mace_agne_CalculateFormationEnergy": {
+    "orb_v2_ApplyCalculator": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/CalculateFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.apply_calculator",
-                        "name": "mace_agne_ApplyCalculator",
-                        "cls": "ApplyCalculator",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
-            }
-        }
-    },
-    "mace_agne_CompareFormationEnergy": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/CompareFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "mace_agne_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        },
-        "reference": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "reference_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        }
-    },
-    "7net_ApplyCalculator": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/7net/ApplyCalculator"
+            "value": "nodes/orb_v2/ApplyCalculator"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -412,8 +248,8 @@
         "model": {
             "_type": "@dataclasses.dataclass",
             "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
+                "module": "models",
+                "cls": "OrbCalc"
             }
         },
         "frames_path": {
@@ -421,10 +257,10 @@
             "value": "$nwd$/frames.h5"
         }
     },
-    "7net_EvaluateCalculatorResults": {
+    "orb_v2_EvaluateCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/7net/EvaluateCalculatorResults"
+            "value": "nodes/orb_v2/EvaluateCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -433,7 +269,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.apply_calculator",
-                        "name": "7net_ApplyCalculator",
+                        "name": "orb_v2_ApplyCalculator",
                         "cls": "ApplyCalculator",
                         "remote": null,
                         "rev": null
@@ -444,10 +280,10 @@
             }
         }
     },
-    "7net_CompareCalculatorResults": {
+    "orb_v2_CompareCalculatorResults": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/7net/CompareCalculatorResults"
+            "value": "nodes/orb_v2/CompareCalculatorResults"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -456,7 +292,7 @@
                     "_type": "zntrack.Node",
                     "value": {
                         "module": "mlipx.nodes.evaluate_calculator",
-                        "name": "7net_EvaluateCalculatorResults",
+                        "name": "orb_v2_EvaluateCalculatorResults",
                         "cls": "EvaluateCalculatorResults",
                         "remote": null,
                         "rev": null
@@ -475,76 +311,6 @@
                         "module": "mlipx.nodes.evaluate_calculator",
                         "name": "reference_EvaluateCalculatorResults",
                         "cls": "EvaluateCalculatorResults",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        }
-    },
-    "7net_CalculateFormationEnergy": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/7net/CalculateFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.apply_calculator",
-                        "name": "7net_ApplyCalculator",
-                        "cls": "ApplyCalculator",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
-            }
-        }
-    },
-    "7net_CompareFormationEnergy": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/7net/CompareFormationEnergy"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "7net_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": null,
-                "item": null
-            }
-        },
-        "reference": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.formation_energy",
-                        "name": "reference_CalculateFormationEnergy",
-                        "cls": "CalculateFormationEnergy",
                         "remote": null,
                         "rev": null
                     }

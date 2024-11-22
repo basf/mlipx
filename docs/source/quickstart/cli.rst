@@ -96,7 +96,7 @@ To explore the available steps and visualize results, use the commands below:
 
 .. note::
 
-    To use ``mlipx compare``, you must have an active ZnDraw server running. Provide the server URL via the ``--zndraw_url`` argument or the ``ZNDRAW_URL`` environment variable.
+    To use ``mlipx compare``, you must have an active ZnDraw server running. Provide the server URL via the ``--zndraw-url`` argument or the ``ZNDRAW_URL`` environment variable.
 
     You can start a server locally with the command ``zndraw`` in a separate terminal or use the public server at https://zndraw.icp.uni-stuttgart.de.
 

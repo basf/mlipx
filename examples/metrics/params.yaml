@@ -1,52 +1,25 @@
-7net_ApplyCalculator:
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: SevenNetCalculator
-    device: auto
-    kwargs:
-      model: 7net-0
-    module: sevenn.sevennet_calculator
-7net_CalculateFormationEnergy:
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: SevenNetCalculator
-    device: auto
-    kwargs:
-      model: 7net-0
-    module: sevenn.sevennet_calculator
 initialize_LoadDataFile:
   start: 0
   step: 1
   stop: null
-mace_agne_ApplyCalculator:
+mace_mp_ApplyCalculator:
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
+    class_name: mace_mp
     device: auto
     kwargs:
-      model_paths: ../models/mace_agnesi.model
+      model: medium
     module: mace.calculators
-mace_agne_CalculateFormationEnergy:
+orb_v2_ApplyCalculator:
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+sevennet_ApplyCalculator:
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
+    class_name: SevenNetCalculator
     device: auto
     kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-mace_medm_ApplyCalculator:
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
-mace_medm_CalculateFormationEnergy:
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
+      model: 7net-0
+    module: sevenn.sevennet_calculator

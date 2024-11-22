@@ -6360,13 +6360,13 @@ znjson = ">=0.2.3,<0.3.0"
 
 [[package]]
 name = "zntrack"
-version = "0.8.0a8"
+version = "0.8.0"
 description = "Create, Run and Benchmark DVC Pipelines in Python"
 optional = false
 python-versions = "<4,>=3.10"
 files = [
-    {file = "zntrack-0.8.0a8-py3-none-any.whl", hash = "sha256:c0b270410b7fdece4bc049e875343d22cba7b541a57ed5db5afbbb4a5e945a11"},
-    {file = "zntrack-0.8.0a8.tar.gz", hash = "sha256:39679e6572d020bf6a04b73f374f904a06e59decb09dce63bee9b52e15a4d2cd"},
+    {file = "zntrack-0.8.0-py3-none-any.whl", hash = "sha256:8b1d3e98b026ad3312bddf7ef8cef6ba56455c542be0163629daf1214500a205"},
+    {file = "zntrack-0.8.0.tar.gz", hash = "sha256:5ad0dd4ec517880cb49ac794e0ff990b7dc2ba8395f1b3d9326998ecb69ebe97"},
 ]
 
 [package.dependencies]
@@ -6374,7 +6374,7 @@ dvc = ">=3.50,<4.0"
 pandas = ">=2,<3"
 pyyaml = ">=6,<7"
 tqdm = ">=4,<5"
-typer = ">=0,<1"
+typer = ">=0.13,<0.14"
 znfields = ">=0.1.2,<0.2.0"
 znflow = ">=0.2.2,<0.3.0"
 znjson = ">=0.2,<0.3"
@@ -6382,4 +6382,4 @@ znjson = ">=0.2,<0.3"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<4"
-content-hash = "73524a1b7cead50f47a81fe67659006bc591d5fe3f58cf2e1864f21a61ed66d5"
+content-hash = "75e269420b610c5147baabaea215ae4e6ed212d95a0e0704d57190b0946a1164"

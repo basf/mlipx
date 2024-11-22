@@ -8,8 +8,8 @@ except ImportError:
 
 import mlipx
 
-DATAPATH = "../data/CoCuFeIrNiHOCl_slab_dft.xyz"
-ISOLATED_ATOM_ENERGIES = True
+DATAPATH = "../data/DODH_adsorption_dft.xyz"
+ISOLATED_ATOM_ENERGIES = False  # noqa F821
 
 
 project = zntrack.Project()
