@@ -1,15 +1,28 @@
 {
-    "initialize_LoadDataFile": {
+    "initialize_Smiles2Conformers": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/initialize/LoadDataFile"
+            "value": "nodes/initialize/Smiles2Conformers"
         },
-        "path": "../data/DODH_adsorption_dft.xyz"
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
     },
-    "mace_medm_StructureOptimization": {
+    "initialize_Smiles2Conformers_1": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_medm/StructureOptimization"
+            "value": "nodes/initialize/Smiles2Conformers_1"
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
+    },
+    "mace_mp_0_StructureOptimization": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mace_mp/0/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -17,9 +30,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -40,10 +53,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "mace_agne_StructureOptimization": {
+    "mace_mp_1_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_agne/StructureOptimization"
+            "value": "nodes/mace_mp/1/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -51,9 +64,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers_1",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -74,10 +87,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "mace_large_StructureOptimization": {
+    "sevennet_0_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/mace_large/StructureOptimization"
+            "value": "nodes/sevennet/0/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -85,9 +98,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -108,10 +121,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "7net_StructureOptimization": {
+    "sevennet_1_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/7net/StructureOptimization"
+            "value": "nodes/sevennet/1/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -119,9 +132,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers_1",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -142,10 +155,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "orb_v1_StructureOptimization": {
+    "orb_v2_0_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/orb_v1/StructureOptimization"
+            "value": "nodes/orb_v2/0/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -153,9 +166,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -176,10 +189,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "orb_d3_v1_StructureOptimization": {
+    "orb_v2_1_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/orb_d3_v1/StructureOptimization"
+            "value": "nodes/orb_v2/1/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -187,111 +200,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "models",
-                "cls": "OrbCalc"
-            }
-        },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.traj"
-        }
-    },
-    "orb_v1_mptraj_StructureOptimization": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/orb_v1_mptraj/StructureOptimization"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "models",
-                "cls": "OrbCalc"
-            }
-        },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.traj"
-        }
-    },
-    "orb_v2_StructureOptimization": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/orb_v2/StructureOptimization"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "models",
-                "cls": "OrbCalc"
-            }
-        },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.traj"
-        }
-    },
-    "orb_d3_v2_StructureOptimization": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/orb_d3_v2/StructureOptimization"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.io",
-                        "name": "initialize_LoadDataFile",
-                        "cls": "LoadDataFile",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers_1",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }

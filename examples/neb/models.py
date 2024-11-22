@@ -1,64 +1,61 @@
 import dataclasses
 
-from ase.calculators.calculator import Calculator
-
 import mlipx
+from mlipx.nodes.generic_ase import Device
 
-mace_medium = mlipx.GenericASECalculator(
+MODELS = {}
+
+
+# https://github.com/ACEsuit/mace
+MODELS["mace_mp"] = mlipx.GenericASECalculator(
     module="mace.calculators",
-    class_name="MACECalculator",
+    class_name="mace_mp",
     device="auto",
-    kwargs={
-        "model_paths": "../models/mace_medium.model",
-    },
+    kwargs={"model": "medium"},
 )
 
-mace_agnesi = mlipx.GenericASECalculator(
-    module="mace.calculators",
-    class_name="MACECalculator",
-    device="auto",
-    kwargs={
-        "model_paths": "../models/mace_agnesi.model",
-    },
-)
 
-sevennet = mlipx.GenericASECalculator(
+# https://github.com/MDIL-SNU/SevenNet
+MODELS["sevennet"] = mlipx.GenericASECalculator(
     module="sevenn.sevennet_calculator",
     class_name="SevenNetCalculator",
     device="auto",
-    kwargs={
-        "model": "7net-0",
-    },
+    kwargs={"model": "7net-0"},
 )
 
 
+# https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
 class OrbCalc:
-    name: str = "orb_v1"
+    name: str
+    device: Device | None = None
 
-    def get_calculator(self) -> Calculator:
+    def get_calculator(self, **kwargs):
         from orb_models.forcefield import pretrained
         from orb_models.forcefield.calculator import ORBCalculator
 
         method = getattr(pretrained, self.name)
-        orbff = method(device="cuda")
-        orb_calc = ORBCalculator(orbff, device="cuda")
-        return orb_calc
+        if self.device is None:
+            orbff = method(**kwargs)
+            calc = ORBCalculator(orbff, **kwargs)
+        elif self.device == Device.AUTO:
+            orbff = method(device=Device.resolve_auto(), **kwargs)
+            calc = ORBCalculator(orbff, device=Device.resolve_auto(), **kwargs)
+        else:
+            orbff = method(device=self.device, **kwargs)
+            calc = ORBCalculator(orbff, device=self.device, **kwargs)
+        return calc
 
 
-# orb_v1 = OrbCalc(name='orb_v1')
-# orb_d3_v1 = OrbCalc(name='orb_d3_v1')
-# orb_v1_mptraj = OrbCalc(name='orb_v1_mptraj_only')
-orb_v2 = OrbCalc(name="orb_v2")
-orb_d3_v2 = OrbCalc(name="orb_d3_v2")
+MODELS["orb_v2"] = OrbCalc(name="orb_v2", device="auto")
 
-MODELS = {
-    "mace_medm": mace_medium,
-    "mace_agne": mace_agnesi,
-    "7net": sevennet,
-    #   "orb_v1": orb_v1,
-    #   "orb_d3_v1": orb_d3_v1,
-    #   "orb_v1_mptraj": orb_v1_mptraj,
-    "orb_v2": orb_v2,
-    "orb_d3_v2": orb_d3_v2,
-}
+
+# OPTIONAL
+# ========
+# If you have custom property names you can use the UpdatedFramesCalc
+# to set the energy, force and isolated_energies keys mlipx expects.
+
+# REFERENCE = mlipx.UpdateFramesCalc(
+#     results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
+#     info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
+# )

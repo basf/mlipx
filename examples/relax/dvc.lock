@@ -348,3 +348,243 @@ stages:
       hash: md5
       md5: 3191e2d3ed2d0befae6d5008da871c07
       size: 335
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers:
+          max_attempts: 1000
+          num_confs: 1
+          random_seed: 42
+          smiles: CCO
+    outs:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
+      size: 531
+    - path: nodes/initialize/Smiles2Conformers/node-meta.json
+      hash: md5
+      md5: 4e1cf2faa54ff25431034f669a84e4c5
+      size: 64
+  sevennet_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      sevennet_0_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
+      size: 531
+    params:
+      params.yaml:
+        sevennet_0_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/sevennet/0/StructureOptimization/frames.traj
+      hash: md5
+      md5: c1de12b7801d6991b1938ee6ebd2d40e
+      size: 7496
+    - path: nodes/sevennet/0/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 01789529d77203957c3a4d724b0e3ba4
+      size: 64
+    - path: nodes/sevennet/0/StructureOptimization/plots.csv
+      hash: md5
+      md5: b0be78b5140d70e25c69f985af2f7519
+      size: 272
+  initialize_Smiles2Conformers_1:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers_1
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers_1:
+          max_attempts: 1000
+          num_confs: 1
+          random_seed: 42
+          smiles: C1=CC2=C(C=C1O)C(=CN2)CCN
+    outs:
+    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+      hash: md5
+      md5: 0f763baa30d3347172feded92fbe22ef
+      size: 1396
+    - path: nodes/initialize/Smiles2Conformers_1/node-meta.json
+      hash: md5
+      md5: 409e1947357de89b65a8d9b49e05292d
+      size: 64
+  mace_mp_1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_mp_1_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+      hash: md5
+      md5: 0f763baa30d3347172feded92fbe22ef
+      size: 1396
+    params:
+      params.yaml:
+        mace_mp_1_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/mace_mp/1/StructureOptimization/frames.traj
+      hash: md5
+      md5: 5c953c215003ee8cdae31427a0388b85
+      size: 38975
+    - path: nodes/mace_mp/1/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 538316d58600a6204b2a13dcfb7b3e81
+      size: 64
+    - path: nodes/mace_mp/1/StructureOptimization/plots.csv
+      hash: md5
+      md5: 6060d806ae24a43bbaa2d4e835523681
+      size: 934
+  mace_mp_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mace_mp_0_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
+      size: 531
+    params:
+      params.yaml:
+        mace_mp_0_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/mace_mp/0/StructureOptimization/frames.traj
+      hash: md5
+      md5: 8680c714d0052fc0dd00758bd2f31489
+      size: 32784
+    - path: nodes/mace_mp/0/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 875837d4f8abbb500d458a3f96552ba6
+      size: 64
+    - path: nodes/mace_mp/0/StructureOptimization/plots.csv
+      hash: md5
+      md5: 48c7694387cacad11c97d7161b65c90e
+      size: 1350
+  sevennet_1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      sevennet_1_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+      hash: md5
+      md5: 0f763baa30d3347172feded92fbe22ef
+      size: 1396
+    params:
+      params.yaml:
+        sevennet_1_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/sevennet/1/StructureOptimization/frames.traj
+      hash: md5
+      md5: a540361fa2e892421840f30b4442d9a9
+      size: 41310
+    - path: nodes/sevennet/1/StructureOptimization/node-meta.json
+      hash: md5
+      md5: cfb660ca15486f2638b3229cb84b4281
+      size: 64
+    - path: nodes/sevennet/1/StructureOptimization/plots.csv
+      hash: md5
+      md5: 35ed64606cdb0714960bba869aeb9bd9
+      size: 893
+  orb_v2_1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_v2_1_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+      hash: md5
+      md5: 0f763baa30d3347172feded92fbe22ef
+      size: 1396
+    params:
+      params.yaml:
+        orb_v2_1_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: models.OrbCalc
+            device: auto
+            name: orb_v2
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/orb_v2/1/StructureOptimization/frames.traj
+      hash: md5
+      md5: 3400fc2a5f6349725f6c9250e3159493
+      size: 32127
+    - path: nodes/orb_v2/1/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 21cad0243a40e1a5e1ab59c44edfb937
+      size: 64
+    - path: nodes/orb_v2/1/StructureOptimization/plots.csv
+      hash: md5
+      md5: 9f617e55e51091f50295e30287721f22
+      size: 772
+  orb_v2_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      orb_v2_0_StructureOptimization
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
+      size: 531
+    params:
+      params.yaml:
+        orb_v2_0_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: models.OrbCalc
+            device: auto
+            name: orb_v2
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/orb_v2/0/StructureOptimization/frames.traj
+      hash: md5
+      md5: 8fc9927af6d55d3076b456dbd3704563
+      size: 6140
+    - path: nodes/orb_v2/0/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 24b0d92a76ad6e48b19a88c2d73ac262
+      size: 64
+    - path: nodes/orb_v2/0/StructureOptimization/plots.csv
+      hash: md5
+      md5: dd5a400b203e8be70e256a13969a7fdc
+      size: 243

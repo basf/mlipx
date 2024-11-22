@@ -27,7 +27,7 @@ detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).
 
 
 
-### Step 3: Run an Example Recipe
+### Energy Volume Curve
 
 Choose from one of the many
 [recipes](https://mlipx.readthedocs.io/en/latest/recipes.html). For example, to compute an energy-volume curve with the `mp-1143` structure from the materials project and the `mace-mp-0`, `sevennet` and `orb_v2` MLIP
@@ -41,8 +41,6 @@ mlipx compare --glob "*EnergyVolumeCurve"
 > `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
 > meaning any ASE-compatible calculator for your MLIP can be used.
 
-### Visualization Example
-
 Below is an example of the resulting comparison:
 
 ![ZnDraw UI](https://github.com/user-attachments/assets/2036e6d9-3342-4542-9ddb-bbc777d2b093#gh-dark-mode-only "ZnDraw UI")
@@ -50,6 +48,32 @@ Below is an example of the resulting comparison:
 
 > [!NOTE]
 > You can set your default visualiser path using `export ZNDRAW_URL=http://localhost:1234`.
+
+### Structure Optimization
+
+Alternatively, you can compare how the different models can run a structure optimization for multiple molecules from `SMILE` representations.
+
+```bash
+mlipx recipes relax --models mace_mp,sevennet,orb_v2 --smiles "CCO,C1=CC2=C(C=C1O)C(=CN2)CCN" --repro
+mlipx compare --glob "*0_StructureOptimization"
+mlipx compare --glob "*1_StructureOptimization"
+```
+
+![ZnDraw UI](https://github.com/user-attachments/assets/7e26a502-3c59-4498-9b98-af8e17a227ce#gh-dark-mode-only "ZnDraw UI")
+![ZnDraw UI](https://github.com/user-attachments/assets/a68ac9f5-e3fe-438d-ad4e-88b60499b79e#gh-light-mode-only "ZnDraw UI")
+
+### NEB
+
+Alternatively, you can compare how the different models can run a structure optimization for multiple molecules from `SMILE` representations.
+
+```bash
+mlipx recipes neb --models mace_mp,sevennet,orb_v2 --datapath ../data/neb_end_p.xyz --repro
+mlipx compare --glob "*NEBs"
+```
+
+![ZnDraw UI](https://github.com/user-attachments/assets/a2e80caf-dd86-4f14-9101-6d52610b9c34#gh-dark-mode-only "ZnDraw UI")
+![ZnDraw UI](https://github.com/user-attachments/assets/0c1eb681-a32c-41c2-a15e-2348104239dc#gh-light-mode-only "ZnDraw UI")
+
 
 ## Python API
 

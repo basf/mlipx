@@ -86,8 +86,15 @@ def relax(
 
 
 @app.command()
-def neb(initialize: bool = False, datapath: str = "...", repro: bool = False):
+def neb(
+    initialize: bool = False,
+    datapath: str = "...",
+    repro: bool = False,
+    models: str | None = None,
+):
     """Build a NEB recipe."""
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     if initialize:
         initialize_directory()
     template = jinja2.Template((CWD / "neb.py").read_text())
@@ -233,6 +240,7 @@ def metrics(
     datapath: str = "...",
     isolated_atom_energies: bool = False,
     repro: bool = False,
+    models: str | None = None,
 ):
     """Compute Energy and Force Metrics.
 
@@ -247,6 +255,8 @@ def metrics(
     """
     if initialize:
         initialize_directory()
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     template = jinja2.Template((CWD / "metrics.py").read_text())
     with open("main.py", "w") as f:
         f.write(
