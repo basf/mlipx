@@ -51,7 +51,7 @@ mlipx compare --glob "*EnergyVolumeCurve"
 > [!NOTE]
 > `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
 > meaning any ASE-compatible calculator for your MLIP can be used.
-> If we do not provide a preset for your model, you can either adapt the `models.py` file, raise an issue to request support, or submit a pull request to add your model directly.
+> If we do not provide a preset for your model, you can either adapt the `models.py` file, raise an [issue](https://github.com/basf/mlipx/issues/new) to request support, or submit a pull request to add your model directly.
 
 Below is an example of the resulting comparison:
 
