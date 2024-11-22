@@ -25,7 +25,16 @@ This section provides a brief overview of the core features of `mlipx`. For more
 
 Most recipes support different input formats, such as data file paths, `SMILES` strings, or Materials Project structure IDs.
 
----
+> [!NOTE]
+> Because `mlipx` uses Git and [DVC](https://dvc.org/doc), you need to create a new project directory to run your experiments in. Here's how to set up your project:
+>
+> ```bash
+> mkdir relax
+> cd relax
+> git init && dvc init
+> cp /your/data/file.xyz .
+> dvc add file.xyz
+> ```
 
 ### Energy-Volume Curve
 
