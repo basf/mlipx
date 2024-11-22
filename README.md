@@ -24,59 +24,32 @@ pip install mlipx
 This section provides a brief overview of the core features of mlipx. For more
 detailed instructions, visit the [documentation](https://mlipx.readthedocs.io).
 
-### Step 1: Set Up Your Project
 
-Create a new directory and initialize a GIT and DVC repository:
+
+
+### Step 3: Run an Example Recipe
+
+Choose from one of the many
+[recipes](https://mlipx.readthedocs.io/en/latest/recipes.html). For example, to compute an energy-volume curve with the `mp-1143` structure from the materials project and the `mace-mp-0`, `sevennet` and `orb_v2` MLIP
 
 ```bash
-mkdir relax
-cd relax
-git init && dvc init
-cp /your/data/file.xyz .
-dvc add file.xyz
-```
-
-### Step 2: Define Your MLIPs
-
-Create a `models.py` file to specify the MLIPs you want to evaluate. For the
-[MACE-MP-0](https://github.com/ACEsuit/mace?tab=readme-ov-file#mace-mp-materials-project-force-fields) model this could look like this
-
-```python
-import mlipx
-
-mace_mp = mlipx.GenericASECalculator(
-    module="mace.calculators",
-    class_name="mace_mp",
-    device="auto",
-    kwargs={
-        "model": "medium",
-    },
-)
-
-MODELS = {"mace_mp": mace_mp}
+mlipx recipes ev --models mace_mp,sevennet,orb_v2 --material-ids=mp-1143 --repro
+mlipx compare --glob "*EnergyVolumeCurve"
 ```
 
 > [!NOTE]
 > `mlipx` utilizes [ASE](https://wiki.fysik.dtu.dk/ase/index.html),
 > meaning any ASE-compatible calculator for your MLIP can be used.
 
-### Step 3: Run an Example Recipe
-
-Choose from one of the many
-[recipes](https://mlipx.readthedocs.io/en/latest/recipes.html). For example, to
-perform a structure optimization, run:
-
-```bash
-mlipx recipes relax --datapath file.xyz --repro
-mlipx compare --glob '*StructureOptimization'
-```
-
 ### Visualization Example
 
 Below is an example of the resulting comparison:
 
-![ZnDraw UI](https://github.com/user-attachments/assets/18159cf5-613c-4779-8d52-7c5e37e2a32f#gh-dark-mode-only "ZnDraw UI")
-![ZnDraw UI](https://github.com/user-attachments/assets/0d673ef4-0131-4b74-892c-0b848d0669f7#gh-light-mode-only "ZnDraw UI")
+![ZnDraw UI](https://github.com/user-attachments/assets/2036e6d9-3342-4542-9ddb-bbc777d2b093#gh-dark-mode-only "ZnDraw UI")
+![ZnDraw UI](https://github.com/user-attachments/assets/c2479d17-c443-4550-a641-c513ede3be02#gh-light-mode-only "ZnDraw UI")
+
+> [!NOTE]
+> You can set your default visualiser path using `export ZNDRAW_URL=http://localhost:1234`.
 
 ## Python API
 

@@ -1,0 +1,62 @@
+plots:
+- mace_mp_0_EnergyVolumeCurve_results:
+    x:
+      nodes/mace_mp/0/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/mace_mp/0/EnergyVolumeCurve/results.csv: energy
+- sevennet_0_EnergyVolumeCurve_results:
+    x:
+      nodes/sevennet/0/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/sevennet/0/EnergyVolumeCurve/results.csv: energy
+- orb_v2_0_EnergyVolumeCurve_results:
+    x:
+      nodes/orb_v2/0/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/orb_v2/0/EnergyVolumeCurve/results.csv: energy
+stages:
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    metrics:
+    - nodes/initialize/MPRester/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/MPRester/frames.xyz
+    params:
+    - initialize_MPRester
+  mace_mp_0_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mace_mp_0_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mace_mp/0/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_mp/0/EnergyVolumeCurve/frames.xyz
+    - nodes/mace_mp/0/EnergyVolumeCurve/results.csv
+    params:
+    - mace_mp_0_EnergyVolumeCurve
+  orb_v2_0_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name orb_v2_0_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/orb_v2/0/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v2/0/EnergyVolumeCurve/frames.xyz
+    - nodes/orb_v2/0/EnergyVolumeCurve/results.csv
+    params:
+    - orb_v2_0_EnergyVolumeCurve
+  sevennet_0_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name sevennet_0_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/sevennet/0/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/0/EnergyVolumeCurve/frames.xyz
+    - nodes/sevennet/0/EnergyVolumeCurve/results.csv
+    params:
+    - sevennet_0_EnergyVolumeCurve
