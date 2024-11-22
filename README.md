@@ -29,9 +29,12 @@ Most recipes support different input formats, such as data file paths, `SMILES` 
 > Because `mlipx` uses Git and [DVC](https://dvc.org/doc), you need to create a new project directory to run your experiments in. Here's how to set up your project:
 >
 > ```bash
-> mkdir relax
-> cd relax
+> mkdir exp
+> cd exp
 > git init && dvc init
+
+If you want to use datafiles, it is recommend to track them with `dvc add <file>` instead of `git add <file>`.
+
 > cp /your/data/file.xyz .
 > dvc add file.xyz
 > ```
