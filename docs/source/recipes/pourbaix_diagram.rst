@@ -2,7 +2,6 @@ Pourbaix Diagram
 ================
 
 :code:`mlipx` provides a command line interface to generate Pourbaix diagrams.
-You can run the following command to instantiate a test directory:
 
 .. note::
 
@@ -10,29 +9,18 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes pourbaix-diagram
+   (.venv) $ mlipx recipes pourbaix-diagram  --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
+   (.venv) $ mlipx compare --glob "*PourbaixDiagram"
 
-.. mermaid::
-   :align: center
 
-   graph TD
-      subgraph setup
-         setup1["LoadDataFile"]
-      end
-      subgraph mg1["Model 1"]
-         m1["PourbaixDiagram"]
-      end
-      subgraph mg2["Model 2"]
-         m2["PourbaixDiagram"]
-      end
-      subgraph mgn["Model <i>N</i>"]
-         m3["PourbaixDiagram"]
-      end
-      setup --> mg1
-      setup --> mg2
-      setup --> mgn
+.. jupyter-execute::
+   :hide-code:
+
+   from mlipx.doc_utils import get_plots
+
+   plots = get_plots("*PourbaixDiagram", "../examples/pourbaix_diagram/")
+   plots["mace_mp_0-pourbaix-diagram"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
-* :term:`LoadDataFile`
 * :term:`PourbaixDiagram`

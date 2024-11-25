@@ -6,15 +6,14 @@ import typing as t
 import warnings
 
 import ase.io
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import zntrack
 from ase.optimize import BFGS
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from mp_api.client import MPRester
-from plotly.subplots import make_subplots
 from pymatgen.analysis.phase_diagram import PhaseDiagram as pmg_PhaseDiagram
 from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram as pmg_PourbaixDiagram
 from pymatgen.analysis.pourbaix_diagram import PourbaixEntry, PourbaixPlotter
@@ -257,74 +256,65 @@ class PourbaixDiagram(zntrack.Node):
 
     @property
     def figures(self) -> dict[str, go.Figure]:
+        # Create the Pourbaix diagram plot using Matplotlib
         plotter = PourbaixPlotter(self.pourbaix_diagram)
         mpl_fig = plotter.get_pourbaix_plot().get_figure()
-        mpl_fig.canvas.draw()
-        mpl_data = np.frombuffer(mpl_fig.canvas.tostring_rgb(), dtype=np.uint8)
-        mpl_data = mpl_data.reshape(mpl_fig.canvas.get_width_height()[::-1] + (3,))
-        plt.close()
+
+        # Ensure the figure has a consistent size
+        mpl_fig.set_size_inches(16, 9)  # Adjust dimensions if needed
+        mpl_canvas = FigureCanvas(mpl_fig)
+        mpl_canvas.draw()
+
+        # Convert Matplotlib figure to an image array
+        width, height = mpl_canvas.get_width_height()
+        mpl_data = np.frombuffer(mpl_canvas.tostring_rgb(), dtype=np.uint8)
+        mpl_data = mpl_data.reshape((height, width, 3))  # Use actual dimensions
+
+        # Convert the Matplotlib image to a Plotly figure
         fig1 = px.imshow(mpl_data)
+        fig1.update_layout(title="Pourbaix Diagram")
+
+        # Create an additional Plotly figure for decomposition energy
         fig2 = px.line(self.results, x="data_id", y="pourbaix_decomposition_energy")
         fig2.update_layout(title="Pourbaix Decomposition Energy Plot")
 
-        return {"pourbaix-diagram": fig1, "pourbaix-decomposition-energy-plot": fig2}
+        return {
+            "pourbaix-diagram": fig1,
+            "pourbaix-decomposition-energy-plot": fig2,
+        }
 
     @staticmethod
     def compare(*nodes: "PourbaixDiagram") -> ComparisonResults:
-        n_nodes = len(nodes)
-        n_cols, n_rows = 0, n_nodes
-        while n_cols + 1 <= n_rows:
-            n_cols += 1
-            if n_nodes % n_cols == 0:
-                n_rows = n_nodes // n_cols
-        trace_type = nodes[0].figures["pourbaix-diagram"].data[0].type
-        specs = [[{"type": trace_type} for i in range(n_cols)] for _ in range(n_rows)]
+        figures = {}
 
-        fig1 = make_subplots(
-            rows=n_rows,
-            cols=n_cols,
-            shared_xaxes=True,
-            vertical_spacing=0.2,
-            specs=specs,
-            subplot_titles=[f"plot_{i}" for i in range(n_nodes)],
-        )
-
-        # add each trace (or traces) to its specific subplot
-        names = []
-        for i, node in enumerate(nodes):
-            name = node.name
-            names.append(name)
-            for trace in node.figures["pourbaix-diagram"].data:
-                fig1.add_trace(trace, row=i // n_cols + 1, col=i % n_cols + 1)
-        names_map = {f"plot_{i}": names[i] for i in range(n_nodes)}
-        fig1.for_each_annotation(lambda x: x.update(text=names_map[x.text]))
-        fig1.update_xaxes(showticklabels=False)  # Hide x axis ticks
-        fig1.update_yaxes(showticklabels=False)  # Hide y axis ticks
-        fig1.update_layout(title="Pourbaix Diagram Comparison")
-
-        fig2 = go.Figure()
         for node in nodes:
-            name = node.name
-            fig2.add_trace(
-                go.Scatter(
-                    x=node.results["data_id"],
-                    y=node.results["pourbaix_decomposition_energy"],
-                    mode="lines+markers",
-                    name=name,
+            # Extract a unique identifier for the node
+            node_identifier = node.name.replace(f"_{node.__class__.__name__}", "")
+
+            # Update and store the figures directly
+            for key, fig in node.figures.items():
+                fig.update_layout(
+                    title=node_identifier,
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
                 )
-            )
-        fig2.update_layout(
-            title="Pourbaix Decomposition Energy Comparison",
-            xaxis_title="data_id",
-            yaxis_title="poubaix_decomposition_energy",
-        )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                figures[f"{node_identifier}-{key}"] = fig
 
         return {
             "frames": nodes[0].frames,
-            "figures": {
-                "pourbaix-diagram-comparison": fig1,
-                "pourbaix_decomposition-energy-comparison": fig2,
-            },
+            "figures": figures,
         }
 
     @property
