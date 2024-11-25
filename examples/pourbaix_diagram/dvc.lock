@@ -338,7 +338,7 @@ stages:
       md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
       size: 64
   mace_mp_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_mp_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name mace_mp_0_PourbaixDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
@@ -378,7 +378,7 @@ stages:
       md5: aa443b6eb5f6579daa1ec52123d0c603
       size: 99
   sevennet_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name sevennet_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name sevennet_0_PourbaixDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
@@ -418,7 +418,7 @@ stages:
       md5: 0e04b16bd5f23ab03baf05c4b3211bc3
       size: 98
   chgnet_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name chgnet_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name chgnet_0_PourbaixDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
@@ -457,7 +457,7 @@ stages:
       md5: dc09d36992987f6e79968b0a21707b5c
       size: 99
   orb_v2_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name orb_v2_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name orb_v2_0_PourbaixDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5

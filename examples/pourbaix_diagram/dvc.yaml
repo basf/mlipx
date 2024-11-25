@@ -21,7 +21,7 @@ plots:
       nodes/chgnet/0/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
 stages:
   chgnet_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name chgnet_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name chgnet_0_PourbaixDiagram
     deps:
     - nodes/initialize/MPRester/frames.xyz
     metrics:
@@ -43,7 +43,7 @@ stages:
     params:
     - initialize_MPRester
   mace_mp_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name mace_mp_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name mace_mp_0_PourbaixDiagram
     deps:
     - nodes/initialize/MPRester/frames.xyz
     metrics:
@@ -56,7 +56,7 @@ stages:
     params:
     - mace_mp_0_PourbaixDiagram
   orb_v2_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name orb_v2_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name orb_v2_0_PourbaixDiagram
     deps:
     - nodes/initialize/MPRester/frames.xyz
     metrics:
@@ -69,7 +69,7 @@ stages:
     params:
     - orb_v2_0_PourbaixDiagram
   sevennet_0_PourbaixDiagram:
-    cmd: zntrack run mlipx.nodes.phase_diagram.PourbaixDiagram --name sevennet_0_PourbaixDiagram
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name sevennet_0_PourbaixDiagram
     deps:
     - nodes/initialize/MPRester/frames.xyz
     metrics:
