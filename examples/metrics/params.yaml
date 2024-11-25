@@ -1,3 +1,10 @@
+chgnet_ApplyCalculator:
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
 initialize_LoadDataFile:
   start: 0
   step: 1

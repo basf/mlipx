@@ -1,3 +1,14 @@
+chgnet_0_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  n_points: 50
+  start: 0.8
+  stop: 2.0
 initialize_MPRester:
   search_kwargs:
     material_ids:

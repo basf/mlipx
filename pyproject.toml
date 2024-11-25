@@ -26,8 +26,10 @@ platformdirs = "3.10"
 ruff = "^0.7"
 pytest = "^8"
 pre-commit = "^4.0.1"
-mp-api = "^0.42.2"
 rdkit2ase = "^0.1.4"
+mp-api = "^0.42.2"
+# hotfix for https://github.com/materialsproject/api/issues/941
+pydantic = "2.9.2"
 
 
 [tool.poetry.group.docs.dependencies]
@@ -40,10 +42,7 @@ furo = "^2024.8.6"
 jupyter-sphinx = "^0.5.3"
 sphinx-design = "^0.6.1"
 nbsphinx = "^0.9.5"
-
-[tool.poetry.group.hotfix.dependencies]
-rdkit = "2024.3.2"
-
+dvc-s3 = "^3.2.0"
 
 [tool.poetry.scripts]
 mlipx = "mlipx.cli.main:app"

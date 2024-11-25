@@ -25,8 +25,6 @@ MODELS["sevennet"] = mlipx.GenericASECalculator(
 
 
 # https://github.com/orbital-materials/orb-models
-
-
 @dataclasses.dataclass
 class OrbCalc:
     name: str
@@ -50,6 +48,13 @@ class OrbCalc:
 
 
 MODELS["orb_v2"] = OrbCalc(name="orb_v2", device="auto")
+
+
+# https://github.com/CederGroupHub/chgnet
+MODELS["chgnet"] = mlipx.GenericASECalculator(
+    module="chgnet.model",
+    class_name="CHGNetCalculator",
+)
 
 
 # OPTIONAL

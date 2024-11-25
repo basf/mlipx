@@ -59,7 +59,60 @@ plots:
       nodes/orb_v2/EvaluateCalculatorResults/plots.csv: step
     y:
       nodes/orb_v2/EvaluateCalculatorResults/plots.csv: energy
+- chgnet_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: fmax
+- chgnet_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: fnorm
+- chgnet_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/chgnet/EvaluateCalculatorResults/plots.csv: energy
 stages:
+  chgnet_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name chgnet_ApplyCalculator
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/chgnet/ApplyCalculator/node-meta.json:
+        cache: false
+    outs:
+    - nodes/chgnet/ApplyCalculator/frames.h5
+    params:
+    - chgnet_ApplyCalculator
+  chgnet_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      chgnet_CompareCalculatorResults
+    deps:
+    - nodes/chgnet/EvaluateCalculatorResults/node-meta.json
+    - nodes/chgnet/EvaluateCalculatorResults/plots.csv
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
+    metrics:
+    - nodes/chgnet/CompareCalculatorResults/error.json:
+        cache: false
+    - nodes/chgnet/CompareCalculatorResults/node-meta.json:
+        cache: false
+    - nodes/chgnet/CompareCalculatorResults/rmse.json:
+        cache: false
+    outs:
+    - nodes/chgnet/CompareCalculatorResults/plots.csv
+  chgnet_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      chgnet_EvaluateCalculatorResults
+    deps:
+    - nodes/chgnet/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/chgnet/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/chgnet/EvaluateCalculatorResults/plots.csv
   initialize_LoadDataFile:
     cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
     deps:

@@ -1,3 +1,14 @@
+chgnet_NEBs:
+  fmax: 0.05
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
 initialize_LoadDataFile:
   start: 0
   step: 1

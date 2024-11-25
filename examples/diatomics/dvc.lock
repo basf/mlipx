@@ -99,3 +99,140 @@ stages:
       hash: md5
       md5: 41fc0db4ec51889a6007a47b034d3df1
       size: 11847
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    params:
+      params.yaml:
+        initialize_MPRester:
+          search_kwargs:
+            material_ids:
+            - mp-1143
+    outs:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    - path: nodes/initialize/MPRester/node-meta.json
+      hash: md5
+      md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
+      size: 64
+  orb_v2_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name orb_v2_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: e5492061936ed82d534cc2d7c62937ea
+      size: 153
+    params:
+      params.yaml:
+        orb_v2_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: models.OrbCalc
+            device: auto
+            name: orb_v2
+          n_points: 100
+    outs:
+    - path: nodes/orb_v2/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: 3369b313b974791d715288baf1d589df
+      size: 409000
+    - path: nodes/orb_v2/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: c987e349c25f822b1e8f3ca1dc40da22
+      size: 64
+    - path: nodes/orb_v2/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 0f4ac7295fb1c63395b80b481d77db2b
+      size: 7556
+  mace_mp_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_mp_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: e5492061936ed82d534cc2d7c62937ea
+      size: 153
+    params:
+      params.yaml:
+        mace_mp_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          n_points: 100
+    outs:
+    - path: nodes/mace_mp/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: 4c5cf06dc72e8ac9619717f767fd7a9f
+      size: 429800
+    - path: nodes/mace_mp/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: 2a3c2fcaa632d8c1b166e71d62d3a339
+      size: 64
+    - path: nodes/mace_mp/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: e116b11d97ee526f12d51ee9a49b522b
+      size: 7583
+  sevennet_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name sevennet_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: e5492061936ed82d534cc2d7c62937ea
+      size: 153
+    params:
+      params.yaml:
+        sevennet_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          n_points: 100
+    outs:
+    - path: nodes/sevennet/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: 8e0ec47b5e061770ff54008618f3b497
+      size: 422600
+    - path: nodes/sevennet/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: e36eb0b7d2cc366f077a4bb29ce2cd7f
+      size: 64
+    - path: nodes/sevennet/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: d923cd7df64f2a7eca7af1e4535232ac
+      size: 7565
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers:
+          max_attempts: 1000
+          num_confs: 1
+          random_seed: 42
+          smiles: '[Li+].[Cl-]'
+    outs:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: e5492061936ed82d534cc2d7c62937ea
+      size: 153
+    - path: nodes/initialize/Smiles2Conformers/node-meta.json
+      hash: md5
+      md5: f05ba44025dbc070e740fedc0c6d2be2
+      size: 64

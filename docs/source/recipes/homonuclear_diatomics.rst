@@ -2,12 +2,13 @@
 
 Homonuclear Diatomics
 ===========================
-Homonuclear diatomics give a per-element information on the performance of the :term:`mlip`.
+Homonuclear diatomics give a per-element information on the performance of the :term:`MLIP`.
 
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes homonuclear-diatomics
+   (.venv) $ mlipx recipes homonuclear-diatomics --models mace_mp,sevennet,orb_v2 --smiles="[Li+].[Cl-]" --repro
+
 
 .. mermaid::
    :align: center
@@ -38,8 +39,10 @@ In the following we show the results for the :code:`Li-Li` bond for the three se
 .. jupyter-execute::
    :hide-code:
 
-   from mlipx.doc_utils import show
-   show("Li-Li_bond.json")
+   from mlipx.doc_utils import get_plots
+
+   plots = get_plots("*HomonuclearDiatomics", "../examples/diatomics/")
+   plots["Li-Li bond (adjusted)"].show()
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

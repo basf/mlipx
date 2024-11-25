@@ -319,5 +319,102 @@
                 "item": null
             }
         }
+    },
+    "chgnet_ApplyCalculator": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/chgnet/ApplyCalculator"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.h5"
+        }
+    },
+    "chgnet_EvaluateCalculatorResults": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/chgnet/EvaluateCalculatorResults"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.apply_calculator",
+                        "name": "chgnet_ApplyCalculator",
+                        "cls": "ApplyCalculator",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "chgnet_CompareCalculatorResults": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/chgnet/CompareCalculatorResults"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.evaluate_calculator",
+                        "name": "chgnet_EvaluateCalculatorResults",
+                        "cls": "EvaluateCalculatorResults",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": null,
+                "item": null
+            }
+        },
+        "reference": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.evaluate_calculator",
+                        "name": "reference_EvaluateCalculatorResults",
+                        "cls": "EvaluateCalculatorResults",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": null,
+                "item": null
+            }
+        }
     }
 }

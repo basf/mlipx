@@ -14,7 +14,25 @@ plots:
       nodes/orb_v2/NEBs/results.csv: data_id
     y:
       nodes/orb_v2/NEBs/results.csv: potential_energy
+- chgnet_NEBs_results:
+    x:
+      nodes/chgnet/NEBs/results.csv: data_id
+    y:
+      nodes/chgnet/NEBs/results.csv: potential_energy
 stages:
+  chgnet_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name chgnet_NEBs
+    deps:
+    - nodes/initialize/NEBinterpolate/initial_frames.xyz
+    metrics:
+    - nodes/chgnet/NEBs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/chgnet/NEBs/frames.xyz
+    - nodes/chgnet/NEBs/neb_trajectory.traj
+    - nodes/chgnet/NEBs/results.csv
+    params:
+    - chgnet_NEBs
   initialize_LoadDataFile:
     cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
     deps:

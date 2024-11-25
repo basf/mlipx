@@ -8,7 +8,8 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes neb
+   (.venv) $ mlipx recipes neb --models mace_mp,sevennet,orb_v2,chgnet --datapath ../data/neb_end_p.xyz --repro
+
 
 .. mermaid::
    :align: center
@@ -35,15 +36,16 @@ You can run the following command to instantiate a test directory:
 .. code-block:: console
 
    (.venv) $ zntrack list # show available Nodes
-   (.venv) $ mlipx compare --glob '*NEBs'
+   (.venv) $ mlipx compare --glob "*NEBs"
 
 
 .. jupyter-execute::
    :hide-code:
 
-   from mlipx.doc_utils import show
+   from mlipx.doc_utils import get_plots
 
-   show("neb.json")
+   plots = get_plots("*NEBs", "../examples/neb/")
+   plots["adjusted_energy_vs_neb_image"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

@@ -304,3 +304,168 @@ stages:
       hash: md5
       md5: a7b1bac0bac71d0964f049efbcfc4e5e
       size: 2989
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    params:
+      params.yaml:
+        initialize_MPRester:
+          search_kwargs:
+            material_ids:
+            - mp-1143
+    outs:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    - path: nodes/initialize/MPRester/node-meta.json
+      hash: md5
+      md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
+      size: 64
+  orb_v2_0_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name orb_v2_0_PhaseDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        orb_v2_0_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: models.OrbCalc
+            device: auto
+            name: orb_v2
+    outs:
+    - path: nodes/orb_v2/0/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: b16267a10d9704a9c8214dcaab1833ef
+      size: 1662
+    - path: nodes/orb_v2/0/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: f58f49cb429b93ed84d4a1e629b4a08f
+      size: 64
+    - path: nodes/orb_v2/0/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: a06b05dbc53bd25e80974eacea8ee27f
+      size: 1370567
+    - path: nodes/orb_v2/0/PhaseDiagram/results.csv
+      hash: md5
+      md5: c15d0b054db5447491a1c1000c4e5de9
+      size: 85
+  chgnet_0_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name chgnet_0_PhaseDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        chgnet_0_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: CHGNetCalculator
+            device:
+            kwargs:
+            module: chgnet.model
+    outs:
+    - path: nodes/chgnet/0/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 9a6c70e85dfe86f3e86058a75dcd2266
+      size: 1839
+    - path: nodes/chgnet/0/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 00002e186c5ec714b74399a240ede807
+      size: 64
+    - path: nodes/chgnet/0/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 1d5996e56a6d501f9d4f2392e9b409bb
+      size: 1370463
+    - path: nodes/chgnet/0/PhaseDiagram/results.csv
+      hash: md5
+      md5: f75fab36e834f8de89ebdeb43742c05e
+      size: 86
+  mace_mp_0_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_mp_0_PhaseDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mace_mp_0_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+    outs:
+    - path: nodes/mace_mp/0/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 56dfc9b755c62b3f1ae0820e5c8315ce
+      size: 1649
+    - path: nodes/mace_mp/0/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: df8d445a546cdf61e5524c4fc746ea8e
+      size: 64
+    - path: nodes/mace_mp/0/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 4557ad5f9995d6882a7d9f2608a7ffe8
+      size: 1370863
+    - path: nodes/mace_mp/0/PhaseDiagram/results.csv
+      hash: md5
+      md5: d9c62359658883a64cae125435b1bdec
+      size: 85
+  sevennet_0_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name sevennet_0_PhaseDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        sevennet_0_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+    outs:
+    - path: nodes/sevennet/0/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 00a8cad0a48439db74c9282f0381e2e1
+      size: 1837
+    - path: nodes/sevennet/0/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: bd00362fab2a6eff2a3c8cd17fa371aa
+      size: 64
+    - path: nodes/sevennet/0/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: f5331b1c44d1b6d061f809286745c1fb
+      size: 1370579
+    - path: nodes/sevennet/0/PhaseDiagram/results.csv
+      hash: md5
+      md5: dd580b045a5a198503da10a35de8597b
+      size: 85

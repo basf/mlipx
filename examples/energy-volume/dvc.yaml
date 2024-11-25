@@ -14,7 +14,24 @@ plots:
       nodes/orb_v2/0/EnergyVolumeCurve/results.csv: scale
     y:
       nodes/orb_v2/0/EnergyVolumeCurve/results.csv: energy
+- chgnet_0_EnergyVolumeCurve_results:
+    x:
+      nodes/chgnet/0/EnergyVolumeCurve/results.csv: scale
+    y:
+      nodes/chgnet/0/EnergyVolumeCurve/results.csv: energy
 stages:
+  chgnet_0_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name chgnet_0_EnergyVolumeCurve
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/chgnet/0/EnergyVolumeCurve/node-meta.json:
+        cache: false
+    outs:
+    - nodes/chgnet/0/EnergyVolumeCurve/frames.xyz
+    - nodes/chgnet/0/EnergyVolumeCurve/results.csv
+    params:
+    - chgnet_0_EnergyVolumeCurve
   initialize_MPRester:
     cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
     metrics:

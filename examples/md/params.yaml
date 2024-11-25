@@ -1,4 +1,76 @@
-7net_MolecularDynamics:
+chgnet_0_MolecularDynamics:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  modifiers:
+  - _cls: mlipx.nodes.modifier.TemperatureRampModifier
+    end_temperature: 400
+    interval: 1
+    start_temperature: null
+    total_steps: 100
+  observers:
+  - _cls: mlipx.nodes.observer.MaximumForceObserver
+    f_max: 100
+  steps: 1000
+  thermostat:
+    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+    friction: 0.05
+    temperature: 300
+    timestep: 0.5
+initialize_MPRester:
+  search_kwargs:
+    material_ids:
+    - mp-1143
+mace_mp_0_MolecularDynamics:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  modifiers:
+  - _cls: mlipx.nodes.modifier.TemperatureRampModifier
+    end_temperature: 400
+    interval: 1
+    start_temperature: null
+    total_steps: 100
+  observers:
+  - _cls: mlipx.nodes.observer.MaximumForceObserver
+    f_max: 100
+  steps: 1000
+  thermostat:
+    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+    friction: 0.05
+    temperature: 300
+    timestep: 0.5
+orb_v2_0_MolecularDynamics:
+  data_id: -1
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  modifiers:
+  - _cls: mlipx.nodes.modifier.TemperatureRampModifier
+    end_temperature: 400
+    interval: 1
+    start_temperature: null
+    total_steps: 100
+  observers:
+  - _cls: mlipx.nodes.observer.MaximumForceObserver
+    f_max: 100
+  steps: 1000
+  thermostat:
+    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+    friction: 0.05
+    temperature: 300
+    timestep: 0.5
+sevennet_0_MolecularDynamics:
   data_id: -1
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
@@ -7,46 +79,16 @@
     kwargs:
       model: 7net-0
     module: sevenn.sevennet_calculator
-  steps: 100
-  thermostat:
-    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
-    friction: 0.05
-    temperature: 300
-    timestep: 0.5
-initialize_BuildBox:
-  counts:
-  - 10
-  density: 789
-initialize_Smiles2Conformers:
-  max_attempts: 1000
-  num_confs: 10
-  random_seed: 42
-  smiles: CCO
-mace_agne_MolecularDynamics:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  steps: 100
-  thermostat:
-    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
-    friction: 0.05
-    temperature: 300
-    timestep: 0.5
-mace_medm_MolecularDynamics:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
-  steps: 100
+  modifiers:
+  - _cls: mlipx.nodes.modifier.TemperatureRampModifier
+    end_temperature: 400
+    interval: 1
+    start_temperature: null
+    total_steps: 100
+  observers:
+  - _cls: mlipx.nodes.observer.MaximumForceObserver
+    f_max: 100
+  steps: 1000
   thermostat:
     _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
     friction: 0.05

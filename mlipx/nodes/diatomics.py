@@ -101,7 +101,7 @@ class HomonuclearDiatomics(zntrack.Node):
     def figures(self) -> dict:
         # return a plot for each element
         plots = {}
-        for element in self.elements:
+        for element in self.results.columns:
             fig = go.Figure()
             fig.add_trace(
                 go.Scatter(
@@ -111,7 +111,7 @@ class HomonuclearDiatomics(zntrack.Node):
                 )
             )
             offset = 0
-            for prev_element in self.elements:
+            for prev_element in self.results.columns:
                 if prev_element == element:
                     break
                 offset += self.n_points
@@ -138,7 +138,7 @@ class HomonuclearDiatomics(zntrack.Node):
         """
         figures = {}
         for node in nodes:
-            for element in node.elements:
+            for element in node.results.columns:
                 # check if a figure for this element already exists
                 if f"{element}-{element} bond" not in figures:
                     # create a line plot and label it with node.name
@@ -157,6 +157,30 @@ class HomonuclearDiatomics(zntrack.Node):
                         mode="lines",
                         name=node.name.replace(f"_{cls.__name__}", ""),
                     )
+                )
+                offset = 0
+                for prev_element in node.results.columns:
+                    if prev_element == element:
+                        break
+                    offset += node.n_points
+                fig.update_traces(
+                    customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
+                )
+                fig.update_layout(
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
                 )
                 figures[f"{element}-{element} bond"] = fig
 
@@ -187,6 +211,30 @@ class HomonuclearDiatomics(zntrack.Node):
                         mode="lines",
                         name=node.name.replace(f"_{cls.__name__}", ""),
                     )
+                )
+                offset = 0
+                for prev_element in node.results.columns:
+                    if prev_element == element:
+                        break
+                    offset += node.n_points
+                fig.update_traces(
+                    customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
+                )
+                fig.update_layout(
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
                 )
                 figures[f"{element}-{element} bond (adjusted)"] = fig
 

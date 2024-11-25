@@ -3,12 +3,12 @@
 Structure Relaxation
 ====================
 
-:code:`mlipx` provides a command line interface to perform structural relaxations.
-You can run the following command to instantiate a test directory:
+This recipe is used to test the performance of different models in performing structure relaxation.
+
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes relax
+   (.venv) $ mlipx recipes relax --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
 
 .. mermaid::
    :align: center
@@ -30,22 +30,22 @@ You can run the following command to instantiate a test directory:
       setup --> mg2
       setup --> mgn
 
-With this recipe we can compare the structure relaxation for three different models on the same starting configuration.
 
 .. code:: console
 
-   mlipx compare --glob '*StructureOptimization'
+   (.venv) $ mlipx compare --glob "*StructureOptimization"
 
 .. note::
 
-   If you relax a non-periodic system and your model yields a stress tensor of :code:`[inf, inf, inf, inf, inf, inf]` you have to add the :code:`--convert-nan` flag to the :code:`mlipx` or :code:`zndraw` command to convert them to :code:`None`.
+   If you relax a non-periodic system and your model yields a stress tensor of :code:`[inf, inf, inf, inf, inf, inf]` you have to add the :code:`--convert-nan` flag to the :code:`mlipx compare` or :code:`zndraw` command to convert them to :code:`None`.
 
 .. jupyter-execute::
    :hide-code:
 
-   from mlipx.doc_utils import show
+   from mlipx.doc_utils import get_plots
 
-   show("geomopt.json")
+   plots = get_plots("*StructureOptimization", "../examples/relax/")
+   plots["adjusted_energy_vs_steps"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

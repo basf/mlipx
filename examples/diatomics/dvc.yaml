@@ -1,31 +1,46 @@
 stages:
-  7net_HomonuclearDiatomics:
-    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name 7net_HomonuclearDiatomics
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
     metrics:
-    - nodes/7net/HomonuclearDiatomics/node-meta.json:
+    - nodes/initialize/Smiles2Conformers/node-meta.json:
         cache: false
     outs:
-    - nodes/7net/HomonuclearDiatomics/frames.json
-    - nodes/7net/HomonuclearDiatomics/results.csv
+    - nodes/initialize/Smiles2Conformers/frames.xyz
     params:
-    - 7net_HomonuclearDiatomics
-  mace_agne_HomonuclearDiatomics:
-    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_agne_HomonuclearDiatomics
+    - initialize_Smiles2Conformers
+  mace_mp_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_mp_HomonuclearDiatomics
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
     metrics:
-    - nodes/mace_agne/HomonuclearDiatomics/node-meta.json:
+    - nodes/mace_mp/HomonuclearDiatomics/node-meta.json:
         cache: false
     outs:
-    - nodes/mace_agne/HomonuclearDiatomics/frames.json
-    - nodes/mace_agne/HomonuclearDiatomics/results.csv
+    - nodes/mace_mp/HomonuclearDiatomics/frames.json
+    - nodes/mace_mp/HomonuclearDiatomics/results.csv
     params:
-    - mace_agne_HomonuclearDiatomics
-  mace_medm_HomonuclearDiatomics:
-    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_medm_HomonuclearDiatomics
+    - mace_mp_HomonuclearDiatomics
+  orb_v2_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name orb_v2_HomonuclearDiatomics
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
     metrics:
-    - nodes/mace_medm/HomonuclearDiatomics/node-meta.json:
+    - nodes/orb_v2/HomonuclearDiatomics/node-meta.json:
         cache: false
     outs:
-    - nodes/mace_medm/HomonuclearDiatomics/frames.json
-    - nodes/mace_medm/HomonuclearDiatomics/results.csv
+    - nodes/orb_v2/HomonuclearDiatomics/frames.json
+    - nodes/orb_v2/HomonuclearDiatomics/results.csv
     params:
-    - mace_medm_HomonuclearDiatomics
+    - orb_v2_HomonuclearDiatomics
+  sevennet_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name sevennet_HomonuclearDiatomics
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/sevennet/HomonuclearDiatomics/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/HomonuclearDiatomics/frames.json
+    - nodes/sevennet/HomonuclearDiatomics/results.csv
+    params:
+    - sevennet_HomonuclearDiatomics

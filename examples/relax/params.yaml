@@ -1,26 +1,22 @@
-initialize_Smiles2Conformers:
-  max_attempts: 1000
-  num_confs: 1
-  random_seed: 42
-  smiles: CCO
-initialize_Smiles2Conformers_1:
-  max_attempts: 1000
-  num_confs: 1
-  random_seed: 42
-  smiles: C1=CC2=C(C=C1O)C(=CN2)CCN
-mace_mp_0_StructureOptimization:
+chgnet_0_StructureOptimization:
   data_id: -1
   fmax: 0.1
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: mace_mp
-    device: auto
-    kwargs:
-      model: medium
-    module: mace.calculators
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
   optimizer: LBFGS
   steps: 100000000
-mace_mp_1_StructureOptimization:
+initialize_MPRester:
+  search_kwargs:
+    material_ids:
+    - mp-1143
+initialize_Rattle:
+  seed: 42
+  stdev: 0.1
+mace_mp_0_StructureOptimization:
   data_id: -1
   fmax: 0.1
   model:
@@ -41,28 +37,7 @@ orb_v2_0_StructureOptimization:
     name: orb_v2
   optimizer: LBFGS
   steps: 100000000
-orb_v2_1_StructureOptimization:
-  data_id: -1
-  fmax: 0.1
-  model:
-    _cls: models.OrbCalc
-    device: auto
-    name: orb_v2
-  optimizer: LBFGS
-  steps: 100000000
 sevennet_0_StructureOptimization:
-  data_id: -1
-  fmax: 0.1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: SevenNetCalculator
-    device: auto
-    kwargs:
-      model: 7net-0
-    module: sevenn.sevennet_calculator
-  optimizer: LBFGS
-  steps: 100000000
-sevennet_1_StructureOptimization:
   data_id: -1
   fmax: 0.1
   model:

@@ -1,4 +1,86 @@
-7net_PermutationInvariance:
+chgnet_0_PermutationInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  n_points: 100
+chgnet_0_RotationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  n_points: 100
+chgnet_0_TranslationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  n_points: 100
+initialize_MPRester:
+  search_kwargs:
+    material_ids:
+    - mp-1143
+mace_mp_0_PermutationInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 100
+mace_mp_0_RotationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 100
+mace_mp_0_TranslationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  n_points: 100
+orb_v2_0_PermutationInvariance:
+  data_id: -1
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  n_points: 100
+orb_v2_0_RotationalInvariance:
+  data_id: -1
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  n_points: 100
+orb_v2_0_TranslationalInvariance:
+  data_id: -1
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  n_points: 100
+sevennet_0_PermutationInvariance:
   data_id: -1
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
@@ -8,7 +90,7 @@
       model: 7net-0
     module: sevenn.sevennet_calculator
   n_points: 100
-7net_RotationalInvariance:
+sevennet_0_RotationalInvariance:
   data_id: -1
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
@@ -18,7 +100,7 @@
       model: 7net-0
     module: sevenn.sevennet_calculator
   n_points: 100
-7net_TranslationalInvariance:
+sevennet_0_TranslationalInvariance:
   data_id: -1
   model:
     _cls: mlipx.nodes.generic_ase.GenericASECalculator
@@ -27,68 +109,4 @@
     kwargs:
       model: 7net-0
     module: sevenn.sevennet_calculator
-  n_points: 100
-initialize_LoadDataFile:
-  start: 0
-  step: 1
-  stop: null
-mace_agne_PermutationInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  n_points: 100
-mace_agne_RotationalInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  n_points: 100
-mace_agne_TranslationalInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  n_points: 100
-mace_medm_PermutationInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
-  n_points: 100
-mace_medm_RotationalInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
-  n_points: 100
-mace_medm_TranslationalInvariance:
-  data_id: -1
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: auto
-    kwargs:
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
   n_points: 100

@@ -23,7 +23,7 @@ From Source
 -----------
 
 To install and develop :code:`mlipx` from source we recommend using :code:`poetry`.
-More information and installation instructions can be found at https://python-poetry.org/ .
+More information and installation instructions can be found at https://python-poetry.org .
 
 .. code:: console
 

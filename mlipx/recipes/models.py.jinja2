@@ -1,4 +1,7 @@
+import dataclasses
+
 import mlipx
+from mlipx.nodes.generic_ase import Device
 
 MODELS = {}
 
@@ -21,9 +24,6 @@ MODELS["sevennet"] = mlipx.GenericASECalculator(
 )
 {% elif model == "orb_v2" %}
 # https://github.com/orbital-materials/orb-models
-import dataclasses
-from mlipx.nodes.generic_ase import Device
-
 @dataclasses.dataclass
 class OrbCalc:
     name: str
@@ -48,6 +48,12 @@ class OrbCalc:
 MODELS["orb_v2"] = OrbCalc(
     name="orb_v2",
     device="auto"
+)
+{% elif model == "chgnet" %}
+# https://github.com/CederGroupHub/chgnet
+MODELS["chgnet"] = mlipx.GenericASECalculator(
+    module="chgnet.model",
+    class_name="CHGNetCalculator",
 )
 {% endif %}
 {% endfor %}

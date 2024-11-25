@@ -1,18 +1,35 @@
 {
-    "initialize_Smiles2Conformers": {
+    "initialize_MPRester": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/initialize/Smiles2Conformers"
+            "value": "nodes/initialize/MPRester"
         },
         "frames_path": {
             "_type": "pathlib.Path",
             "value": "$nwd$/frames.xyz"
         }
     },
-    "initialize_Smiles2Conformers_1": {
+    "initialize_Rattle": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/initialize/Smiles2Conformers_1"
+            "value": "nodes/initialize/Rattle"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.mp_api",
+                        "name": "initialize_MPRester",
+                        "cls": "MPRester",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
         },
         "frames_path": {
             "_type": "pathlib.Path",
@@ -30,43 +47,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
-            }
-        },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.traj"
-        }
-    },
-    "mace_mp_1_StructureOptimization": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/mace_mp/1/StructureOptimization"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers_1",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.rattle",
+                        "name": "initialize_Rattle",
+                        "cls": "Rattle",
                         "remote": null,
                         "rev": null
                     }
@@ -98,43 +81,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
-                        "remote": null,
-                        "rev": null
-                    }
-                },
-                "attribute": "frames",
-                "item": null
-            }
-        },
-        "model": {
-            "_type": "@dataclasses.dataclass",
-            "value": {
-                "module": "mlipx.nodes.generic_ase",
-                "cls": "GenericASECalculator"
-            }
-        },
-        "frames_path": {
-            "_type": "pathlib.Path",
-            "value": "$nwd$/frames.traj"
-        }
-    },
-    "sevennet_1_StructureOptimization": {
-        "nwd": {
-            "_type": "pathlib.Path",
-            "value": "nodes/sevennet/1/StructureOptimization"
-        },
-        "data": {
-            "_type": "znflow.Connection",
-            "value": {
-                "instance": {
-                    "_type": "zntrack.Node",
-                    "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers_1",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.rattle",
+                        "name": "initialize_Rattle",
+                        "cls": "Rattle",
                         "remote": null,
                         "rev": null
                     }
@@ -166,9 +115,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.rattle",
+                        "name": "initialize_Rattle",
+                        "cls": "Rattle",
                         "remote": null,
                         "rev": null
                     }
@@ -189,10 +138,10 @@
             "value": "$nwd$/frames.traj"
         }
     },
-    "orb_v2_1_StructureOptimization": {
+    "chgnet_0_StructureOptimization": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/orb_v2/1/StructureOptimization"
+            "value": "nodes/chgnet/0/StructureOptimization"
         },
         "data": {
             "_type": "znflow.Connection",
@@ -200,9 +149,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.smiles",
-                        "name": "initialize_Smiles2Conformers_1",
-                        "cls": "Smiles2Conformers",
+                        "module": "mlipx.nodes.rattle",
+                        "name": "initialize_Rattle",
+                        "cls": "Rattle",
                         "remote": null,
                         "rev": null
                     }
@@ -214,8 +163,8 @@
         "model": {
             "_type": "@dataclasses.dataclass",
             "value": {
-                "module": "models",
-                "cls": "OrbCalc"
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
             }
         },
         "frames_path": {

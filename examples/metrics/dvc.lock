@@ -18,549 +18,6 @@ stages:
       hash: md5
       md5: d9b685b4f8110469c644ea0895f27fcb
       size: 64
-  mace_agne_ApplyCalculator:
-    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_agne_ApplyCalculator
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: 3577f89e438801c984268677bd3713c6
-      size: 64
-    params:
-      params.yaml:
-        mace_agne_ApplyCalculator:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: MACECalculator
-            device: auto
-            kwargs:
-              model_paths: ../models/mace_agnesi.model
-            module: mace.calculators
-    outs:
-    - path: nodes/mace_agne/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 08caa2a01f21e0f1c2c03f80bb476d55
-      size: 11836321
-    - path: nodes/mace_agne/ApplyCalculator/node-meta.json
-      hash: md5
-      md5: 8d3e669dd361835a2ebc127d69eb809f
-      size: 64
-  mace_agne_EvaluateCalculatorResults:
-    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
-      mace_agne_EvaluateCalculatorResults
-    deps:
-    - path: nodes/mace_agne/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 08caa2a01f21e0f1c2c03f80bb476d55
-      size: 11836321
-    outs:
-    - path: nodes/mace_agne/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 0723b466d1fc6b6a37893e9d96aef3f4
-      size: 64
-    - path: nodes/mace_agne/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: d5da582629a8cb28a350f9c7ef3c21f4
-      size: 48526
-  mace_medm_ApplyCalculator:
-    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_medm_ApplyCalculator
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: 3577f89e438801c984268677bd3713c6
-      size: 64
-    params:
-      params.yaml:
-        mace_medm_ApplyCalculator:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: MACECalculator
-            device: auto
-            kwargs:
-              model_paths: ../models/mace_medium.model
-            module: mace.calculators
-    outs:
-    - path: nodes/mace_medm/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4c2526bff2892324b4a0751e69b5a29b
-      size: 11850674
-    - path: nodes/mace_medm/ApplyCalculator/node-meta.json
-      hash: md5
-      md5: 99fa517d9bdda3294da4e9d3ebe15edd
-      size: 64
-  7net_ApplyCalculator:
-    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name 7net_ApplyCalculator
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: 3577f89e438801c984268677bd3713c6
-      size: 64
-    params:
-      params.yaml:
-        7net_ApplyCalculator:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: SevenNetCalculator
-            device: auto
-            kwargs:
-              model: 7net-0
-            module: sevenn.sevennet_calculator
-    outs:
-    - path: nodes/7net/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4ea7b372941610781d54ae7764198268
-      size: 10594463
-    - path: nodes/7net/ApplyCalculator/node-meta.json
-      hash: md5
-      md5: bd916dbd696f615019adb5de1a882885
-      size: 64
-  7net_EvaluateCalculatorResults:
-    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
-      7net_EvaluateCalculatorResults
-    deps:
-    - path: nodes/7net/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4ea7b372941610781d54ae7764198268
-      size: 10594463
-    outs:
-    - path: nodes/7net/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: aab851ce95c72b13df9880137b8b34e6
-      size: 64
-    - path: nodes/7net/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: d6a1c9509fc69adcbae28575dd0ef15e
-      size: 48148
-  reference_EvaluateCalculatorResults:
-    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
-      reference_EvaluateCalculatorResults
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: d9b685b4f8110469c644ea0895f27fcb
-      size: 64
-    outs:
-    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 71045eb1ce7912d8cb6123680a38ccfd
-      size: 64
-    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: bc55b5864767c6abeec9a3d0d19b2512
-      size: 7210
-  7net_CompareCalculatorResults:
-    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
-      7net_CompareCalculatorResults
-    deps:
-    - path: nodes/7net/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: aab851ce95c72b13df9880137b8b34e6
-      size: 64
-    - path: nodes/7net/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: d6a1c9509fc69adcbae28575dd0ef15e
-      size: 48148
-    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 99d88483053dbac96fa90302855ab44e
-      size: 64
-    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: 75ca530f04d7904769ea0e339c108346
-      size: 46841
-    outs:
-    - path: nodes/7net/CompareCalculatorResults/error.json
-      hash: md5
-      md5: aabd0efcefcd5c6ba8b881bc707aa21f
-      size: 328
-    - path: nodes/7net/CompareCalculatorResults/node-meta.json
-      hash: md5
-      md5: 9b2364655f10c1ff345c7dc23f9b1622
-      size: 64
-    - path: nodes/7net/CompareCalculatorResults/plots.csv
-      hash: md5
-      md5: 4e8f948c1e918420e4a07656990d0c4f
-      size: 59961
-    - path: nodes/7net/CompareCalculatorResults/rmse.json
-      hash: md5
-      md5: dbe9c7c696826e43e7bf370ce1a42f06
-      size: 127
-  mace_medm_CalculateFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
-      mace_medm_CalculateFormationEnergy
-    deps:
-    - path: nodes/mace_medm/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4c2526bff2892324b4a0751e69b5a29b
-      size: 11850674
-    params:
-      params.yaml:
-        mace_medm_CalculateFormationEnergy:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: MACECalculator
-            device: auto
-            kwargs:
-              model_paths: ../models/mace_medium.model
-            module: mace.calculators
-    outs:
-    - path: nodes/mace_medm/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 5b12e4f33123028829ea0a9bd4dd3f45
-      size: 11597
-    - path: nodes/mace_medm/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: e0c5f05484e1cdded8133b8d7a68bab5
-      size: 211
-    - path: nodes/mace_medm/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: b8ffe32c472f16d8dfdfc077dbde64e0
-      size: 64
-    - path: nodes/mace_medm/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 3b6f1b63cb2bca5c299fe9b14021dbba
-      size: 15590
-  reference_CalculateFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
-      reference_CalculateFormationEnergy
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: 3577f89e438801c984268677bd3713c6
-      size: 64
-    outs:
-    - path: nodes/reference/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 44aedb4745efc37d540f05786579c5e0
-      size: 10398
-    - path: nodes/reference/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 8b1ce75a444ab4361b16e18865118458
-      size: 150
-    - path: nodes/reference/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 9d5bbbe9ce396946da74caa06abe5691
-      size: 64
-    - path: nodes/reference/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 482657f285d3feccbe92590e43772afd
-      size: 14391
-  mace_medm_CompareFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name mace_medm_CompareFormationEnergy
-    deps:
-    - path: nodes/mace_medm/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 5b12e4f33123028829ea0a9bd4dd3f45
-      size: 11597
-    - path: nodes/mace_medm/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: e0c5f05484e1cdded8133b8d7a68bab5
-      size: 211
-    - path: nodes/mace_medm/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: b8ffe32c472f16d8dfdfc077dbde64e0
-      size: 64
-    - path: nodes/mace_medm/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 3b6f1b63cb2bca5c299fe9b14021dbba
-      size: 15590
-    - path: nodes/reference/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 44aedb4745efc37d540f05786579c5e0
-      size: 10398
-    - path: nodes/reference/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 8b1ce75a444ab4361b16e18865118458
-      size: 150
-    - path: nodes/reference/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 9d5bbbe9ce396946da74caa06abe5691
-      size: 64
-    - path: nodes/reference/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 482657f285d3feccbe92590e43772afd
-      size: 14391
-    outs:
-    - path: nodes/mace_medm/CompareFormationEnergy/error.json
-      hash: md5
-      md5: aedeed7fb675e412a13a15b6d78caa5c
-      size: 190
-    - path: nodes/mace_medm/CompareFormationEnergy/node-meta.json
-      hash: md5
-      md5: 148648cbb013ad0be8959baa54b3bc66
-      size: 64
-    - path: nodes/mace_medm/CompareFormationEnergy/plots.csv
-      hash: md5
-      md5: 524166d34662740479ba492cd18f30e4
-      size: 36417
-    - path: nodes/mace_medm/CompareFormationEnergy/rmse.json
-      hash: md5
-      md5: dbc8788e2ebdc73230c49198f8f3ee5b
-      size: 66
-  7net_CalculateFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
-      7net_CalculateFormationEnergy
-    deps:
-    - path: nodes/7net/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4ea7b372941610781d54ae7764198268
-      size: 10594463
-    params:
-      params.yaml:
-        7net_CalculateFormationEnergy:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: SevenNetCalculator
-            device: auto
-            kwargs:
-              model: 7net-0
-            module: sevenn.sevennet_calculator
-    outs:
-    - path: nodes/7net/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: c8fe823f0f78479b757f73f7bdc8b42c
-      size: 11680
-    - path: nodes/7net/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 81c4a9567ff5aaa831fec850ee532d88
-      size: 210
-    - path: nodes/7net/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 360edd98452611a48201204cc7f11656
-      size: 64
-    - path: nodes/7net/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 1b5c074beb93a24e77ba9ab90548491e
-      size: 15673
-  mace_agne_CompareCalculatorResults:
-    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
-      mace_agne_CompareCalculatorResults
-    deps:
-    - path: nodes/mace_agne/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 0723b466d1fc6b6a37893e9d96aef3f4
-      size: 64
-    - path: nodes/mace_agne/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: d5da582629a8cb28a350f9c7ef3c21f4
-      size: 48526
-    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 99d88483053dbac96fa90302855ab44e
-      size: 64
-    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: 75ca530f04d7904769ea0e339c108346
-      size: 46841
-    outs:
-    - path: nodes/mace_agne/CompareCalculatorResults/error.json
-      hash: md5
-      md5: 921f2aa3606ad73c4c09eb51465c6593
-      size: 324
-    - path: nodes/mace_agne/CompareCalculatorResults/node-meta.json
-      hash: md5
-      md5: dcaf2f92bdd0791efd34587f8016dbdc
-      size: 64
-    - path: nodes/mace_agne/CompareCalculatorResults/plots.csv
-      hash: md5
-      md5: 8cd9f7aa177c0d8738a3b1dc55985879
-      size: 60609
-    - path: nodes/mace_agne/CompareCalculatorResults/rmse.json
-      hash: md5
-      md5: e197924c78fc33dcebf18d33f45ecce8
-      size: 128
-  mace_medm_EvaluateCalculatorResults:
-    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
-      mace_medm_EvaluateCalculatorResults
-    deps:
-    - path: nodes/mace_medm/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 4c2526bff2892324b4a0751e69b5a29b
-      size: 11850674
-    outs:
-    - path: nodes/mace_medm/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 6b0cbe8babebfa7edc81590447c106e8
-      size: 64
-    - path: nodes/mace_medm/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: 5e2b8979d1432a48afb4ce8868bae89c
-      size: 48538
-  mace_agne_CalculateFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CalculateFormationEnergy --name
-      mace_agne_CalculateFormationEnergy
-    deps:
-    - path: nodes/mace_agne/ApplyCalculator/frames.h5
-      hash: md5
-      md5: 08caa2a01f21e0f1c2c03f80bb476d55
-      size: 11836321
-    params:
-      params.yaml:
-        mace_agne_CalculateFormationEnergy:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: MACECalculator
-            device: auto
-            kwargs:
-              model_paths: ../models/mace_agnesi.model
-            module: mace.calculators
-    outs:
-    - path: nodes/mace_agne/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 9c13e08333bb254bbbe3d6ff48d0f47a
-      size: 11605
-    - path: nodes/mace_agne/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 341b99b0f64ff58b3a03f482d1be1b61
-      size: 149
-    - path: nodes/mace_agne/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: cd2817cf39c0685f4aac1dd7f7666984
-      size: 64
-    - path: nodes/mace_agne/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 7501721535a5924943fe8264d0b1e3c3
-      size: 15598
-  mace_agne_CompareFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name mace_agne_CompareFormationEnergy
-    deps:
-    - path: nodes/mace_agne/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 9c13e08333bb254bbbe3d6ff48d0f47a
-      size: 11605
-    - path: nodes/mace_agne/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 341b99b0f64ff58b3a03f482d1be1b61
-      size: 149
-    - path: nodes/mace_agne/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: cd2817cf39c0685f4aac1dd7f7666984
-      size: 64
-    - path: nodes/mace_agne/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 7501721535a5924943fe8264d0b1e3c3
-      size: 15598
-    - path: nodes/reference/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 44aedb4745efc37d540f05786579c5e0
-      size: 10398
-    - path: nodes/reference/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 8b1ce75a444ab4361b16e18865118458
-      size: 150
-    - path: nodes/reference/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 9d5bbbe9ce396946da74caa06abe5691
-      size: 64
-    - path: nodes/reference/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 482657f285d3feccbe92590e43772afd
-      size: 14391
-    outs:
-    - path: nodes/mace_agne/CompareFormationEnergy/error.json
-      hash: md5
-      md5: d077854a337393d1d1aae5e3f617e340
-      size: 191
-    - path: nodes/mace_agne/CompareFormationEnergy/node-meta.json
-      hash: md5
-      md5: 5f3faf5d560469033c50ccdccf411a0b
-      size: 64
-    - path: nodes/mace_agne/CompareFormationEnergy/plots.csv
-      hash: md5
-      md5: 771c79be433dae2165d8c0ce01e94f7a
-      size: 37367
-    - path: nodes/mace_agne/CompareFormationEnergy/rmse.json
-      hash: md5
-      md5: bfa287a99c197c149945f3e805c20f1f
-      size: 68
-  mace_medm_CompareCalculatorResults:
-    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
-      mace_medm_CompareCalculatorResults
-    deps:
-    - path: nodes/mace_medm/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 6b0cbe8babebfa7edc81590447c106e8
-      size: 64
-    - path: nodes/mace_medm/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: 5e2b8979d1432a48afb4ce8868bae89c
-      size: 48538
-    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 99d88483053dbac96fa90302855ab44e
-      size: 64
-    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: 75ca530f04d7904769ea0e339c108346
-      size: 46841
-    outs:
-    - path: nodes/mace_medm/CompareCalculatorResults/error.json
-      hash: md5
-      md5: 50d7dacbff9dd794d954a462be5a3230
-      size: 327
-    - path: nodes/mace_medm/CompareCalculatorResults/node-meta.json
-      hash: md5
-      md5: 3b6987efe5682fb75467e2873ca85563
-      size: 64
-    - path: nodes/mace_medm/CompareCalculatorResults/plots.csv
-      hash: md5
-      md5: 030db89664e5b4e2f7864652c7b2e071
-      size: 60200
-    - path: nodes/mace_medm/CompareCalculatorResults/rmse.json
-      hash: md5
-      md5: faf2e68b10937322367169f8233d95b7
-      size: 127
-  7net_CompareFormationEnergy:
-    cmd: zntrack run mlipx.nodes.formation_energy.CompareFormationEnergy --name 7net_CompareFormationEnergy
-    deps:
-    - path: nodes/7net/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: c8fe823f0f78479b757f73f7bdc8b42c
-      size: 11680
-    - path: nodes/7net/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 81c4a9567ff5aaa831fec850ee532d88
-      size: 210
-    - path: nodes/7net/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 360edd98452611a48201204cc7f11656
-      size: 64
-    - path: nodes/7net/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 1b5c074beb93a24e77ba9ab90548491e
-      size: 15673
-    - path: nodes/reference/CalculateFormationEnergy/formation_energy.json
-      hash: md5
-      md5: 44aedb4745efc37d540f05786579c5e0
-      size: 10398
-    - path: nodes/reference/CalculateFormationEnergy/isolated_energies.json
-      hash: md5
-      md5: 8b1ce75a444ab4361b16e18865118458
-      size: 150
-    - path: nodes/reference/CalculateFormationEnergy/node-meta.json
-      hash: md5
-      md5: 9d5bbbe9ce396946da74caa06abe5691
-      size: 64
-    - path: nodes/reference/CalculateFormationEnergy/plots.csv
-      hash: md5
-      md5: 482657f285d3feccbe92590e43772afd
-      size: 14391
-    outs:
-    - path: nodes/7net/CompareFormationEnergy/error.json
-      hash: md5
-      md5: 844456d426e5a3aca1cdf99080df8241
-      size: 190
-    - path: nodes/7net/CompareFormationEnergy/node-meta.json
-      hash: md5
-      md5: 8f42fd7453da583a4057b5d3958c0d2f
-      size: 64
-    - path: nodes/7net/CompareFormationEnergy/plots.csv
-      hash: md5
-      md5: fdefe74413fcd18e065ee35f1c567b49
-      size: 36494
-    - path: nodes/7net/CompareFormationEnergy/rmse.json
-      hash: md5
-      md5: 85f769960a7633d0cf4863b1b2cdf91c
-      size: 67
   sevennet_ApplyCalculator:
     cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name sevennet_ApplyCalculator
     deps:
@@ -604,32 +61,6 @@ stages:
       hash: md5
       md5: b203a5e8d315cacc763de4c1eb5422c8
       size: 7154
-  mace_mp_ApplyCalculator:
-    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_mp_ApplyCalculator
-    deps:
-    - path: nodes/initialize/LoadDataFile/node-meta.json
-      hash: md5
-      md5: d9b685b4f8110469c644ea0895f27fcb
-      size: 64
-    params:
-      params.yaml:
-        mace_mp_ApplyCalculator:
-          model:
-            _cls: mlipx.nodes.generic_ase.GenericASECalculator
-            class_name: mace_mp
-            device: auto
-            kwargs:
-              model: medium
-            module: mace.calculators
-    outs:
-    - path: nodes/mace_mp/ApplyCalculator/frames.h5
-      hash: md5
-      md5: f389825c303ae8e53ea5514848c7e0a2
-      size: 477345
-    - path: nodes/mace_mp/ApplyCalculator/node-meta.json
-      hash: md5
-      md5: b3eab004e1227b5abe9a5812331e0342
-      size: 64
   orb_v2_ApplyCalculator:
     cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name orb_v2_ApplyCalculator
     deps:
@@ -670,6 +101,23 @@ stages:
       hash: md5
       md5: 1e6d85a2047b39db0fa51145202576da
       size: 7178
+  reference_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      reference_EvaluateCalculatorResults
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: d9b685b4f8110469c644ea0895f27fcb
+      size: 64
+    outs:
+    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: 71045eb1ce7912d8cb6123680a38ccfd
+      size: 64
+    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: bc55b5864767c6abeec9a3d0d19b2512
+      size: 7210
   orb_v2_CompareCalculatorResults:
     cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
       orb_v2_CompareCalculatorResults
@@ -707,6 +155,148 @@ stages:
       hash: md5
       md5: 539c4783807c8a936228777ebca80967
       size: 127
+  chgnet_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name chgnet_ApplyCalculator
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: d9b685b4f8110469c644ea0895f27fcb
+      size: 64
+    params:
+      params.yaml:
+        chgnet_ApplyCalculator:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: CHGNetCalculator
+            device:
+            kwargs:
+            module: chgnet.model
+    outs:
+    - path: nodes/chgnet/ApplyCalculator/frames.h5
+      hash: md5
+      md5: 8a0fe02ca317e682d27fbc6d7ff54f7d
+      size: 501784
+    - path: nodes/chgnet/ApplyCalculator/node-meta.json
+      hash: md5
+      md5: 40ad3021999cf190f55453bd1a6627bc
+      size: 64
+  chgnet_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      chgnet_EvaluateCalculatorResults
+    deps:
+    - path: nodes/chgnet/ApplyCalculator/frames.h5
+      hash: md5
+      md5: 8a0fe02ca317e682d27fbc6d7ff54f7d
+      size: 501784
+    outs:
+    - path: nodes/chgnet/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: b792744d347735290775ea7752955229
+      size: 64
+    - path: nodes/chgnet/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: 0593e1b4af164f991c032da65e20fd49
+      size: 7174
+  chgnet_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      chgnet_CompareCalculatorResults
+    deps:
+    - path: nodes/chgnet/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: b792744d347735290775ea7752955229
+      size: 64
+    - path: nodes/chgnet/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: 0593e1b4af164f991c032da65e20fd49
+      size: 7174
+    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: 71045eb1ce7912d8cb6123680a38ccfd
+      size: 64
+    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: bc55b5864767c6abeec9a3d0d19b2512
+      size: 7210
+    outs:
+    - path: nodes/chgnet/CompareCalculatorResults/error.json
+      hash: md5
+      md5: 08c2eeeadb5edc13573db138817144cd
+      size: 330
+    - path: nodes/chgnet/CompareCalculatorResults/node-meta.json
+      hash: md5
+      md5: 63ed7eb45ac0e262ec41c17ec7b649ee
+      size: 64
+    - path: nodes/chgnet/CompareCalculatorResults/plots.csv
+      hash: md5
+      md5: 2804714ce393a9c184a6c5fc5f53a13f
+      size: 9079
+    - path: nodes/chgnet/CompareCalculatorResults/rmse.json
+      hash: md5
+      md5: 0bb872f7f725c5b27ce6c2d237433c08
+      size: 126
+  mace_mp_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mace_mp_ApplyCalculator
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: d9b685b4f8110469c644ea0895f27fcb
+      size: 64
+    params:
+      params.yaml:
+        mace_mp_ApplyCalculator:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+    outs:
+    - path: nodes/mace_mp/ApplyCalculator/frames.h5
+      hash: md5
+      md5: f389825c303ae8e53ea5514848c7e0a2
+      size: 477345
+    - path: nodes/mace_mp/ApplyCalculator/node-meta.json
+      hash: md5
+      md5: b3eab004e1227b5abe9a5812331e0342
+      size: 64
+  sevennet_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      sevennet_CompareCalculatorResults
+    deps:
+    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: 71045eb1ce7912d8cb6123680a38ccfd
+      size: 64
+    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: bc55b5864767c6abeec9a3d0d19b2512
+      size: 7210
+    - path: nodes/sevennet/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: a6aaf3734ef44a2070f5b78f1b2bd846
+      size: 64
+    - path: nodes/sevennet/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: b203a5e8d315cacc763de4c1eb5422c8
+      size: 7154
+    outs:
+    - path: nodes/sevennet/CompareCalculatorResults/error.json
+      hash: md5
+      md5: 3cd1db5be3b0a5fad1d011139c1d3e8f
+      size: 326
+    - path: nodes/sevennet/CompareCalculatorResults/node-meta.json
+      hash: md5
+      md5: 0463295f70122e95773c09c00d1fa26e
+      size: 64
+    - path: nodes/sevennet/CompareCalculatorResults/plots.csv
+      hash: md5
+      md5: 829706b84355897db49ebc2ad0603616
+      size: 9057
+    - path: nodes/sevennet/CompareCalculatorResults/rmse.json
+      hash: md5
+      md5: 2365014e88b1a4eaf27fa4636cce4b2e
+      size: 125
   mace_mp_EvaluateCalculatorResults:
     cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
       mace_mp_EvaluateCalculatorResults
@@ -760,41 +350,4 @@ stages:
     - path: nodes/mace_mp/CompareCalculatorResults/rmse.json
       hash: md5
       md5: 12350a2e6e20341a2a1d40a89dfe9a27
-      size: 125
-  sevennet_CompareCalculatorResults:
-    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
-      sevennet_CompareCalculatorResults
-    deps:
-    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: 71045eb1ce7912d8cb6123680a38ccfd
-      size: 64
-    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: bc55b5864767c6abeec9a3d0d19b2512
-      size: 7210
-    - path: nodes/sevennet/EvaluateCalculatorResults/node-meta.json
-      hash: md5
-      md5: a6aaf3734ef44a2070f5b78f1b2bd846
-      size: 64
-    - path: nodes/sevennet/EvaluateCalculatorResults/plots.csv
-      hash: md5
-      md5: b203a5e8d315cacc763de4c1eb5422c8
-      size: 7154
-    outs:
-    - path: nodes/sevennet/CompareCalculatorResults/error.json
-      hash: md5
-      md5: 3cd1db5be3b0a5fad1d011139c1d3e8f
-      size: 326
-    - path: nodes/sevennet/CompareCalculatorResults/node-meta.json
-      hash: md5
-      md5: 0463295f70122e95773c09c00d1fa26e
-      size: 64
-    - path: nodes/sevennet/CompareCalculatorResults/plots.csv
-      hash: md5
-      md5: 829706b84355897db49ebc2ad0603616
-      size: 9057
-    - path: nodes/sevennet/CompareCalculatorResults/rmse.json
-      hash: md5
-      md5: 2365014e88b1a4eaf27fa4636cce4b2e
       size: 125

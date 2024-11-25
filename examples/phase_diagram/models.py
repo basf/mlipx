@@ -1,72 +1,68 @@
 import dataclasses
 
-from ase.calculators.calculator import Calculator
-
 import mlipx
+from mlipx.nodes.generic_ase import Device
 
-# Example MLIP
-mace_medium = mlipx.GenericASECalculator(
+MODELS = {}
+
+
+# https://github.com/ACEsuit/mace
+MODELS["mace_mp"] = mlipx.GenericASECalculator(
     module="mace.calculators",
-    class_name="MACECalculator",
-    device="cpu",
-    kwargs={"model_paths": "../models/mace_medium.model", "dtype": "float64"},
+    class_name="mace_mp",
+    device="auto",
+    kwargs={"model": "medium"},
 )
 
-mace_agnesi = mlipx.GenericASECalculator(
-    module="mace.calculators",
-    class_name="MACECalculator",
-    device="cpu",
-    kwargs={"model_paths": "../models/mace_agnesi.model", "dtype": "float64"},
-)
 
-sevennet = mlipx.GenericASECalculator(
+# https://github.com/MDIL-SNU/SevenNet
+MODELS["sevennet"] = mlipx.GenericASECalculator(
     module="sevenn.sevennet_calculator",
     class_name="SevenNetCalculator",
     device="auto",
-    kwargs={
-        "model": "7net-0",
-    },
+    kwargs={"model": "7net-0"},
 )
 
 
+# https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
 class OrbCalc:
-    name: "orb_v2"
+    name: str
+    device: Device | None = None
 
-    def get_calculator(self) -> Calculator:
+    def get_calculator(self, **kwargs):
         from orb_models.forcefield import pretrained
         from orb_models.forcefield.calculator import ORBCalculator
 
         method = getattr(pretrained, self.name)
-        orbff = method(device="cpu")
-        orb_calc = ORBCalculator(orbff, device="cpu")
-        return orb_calc
+        if self.device is None:
+            orbff = method(**kwargs)
+            calc = ORBCalculator(orbff, **kwargs)
+        elif self.device == Device.AUTO:
+            orbff = method(device=Device.resolve_auto(), **kwargs)
+            calc = ORBCalculator(orbff, device=Device.resolve_auto(), **kwargs)
+        else:
+            orbff = method(device=self.device, **kwargs)
+            calc = ORBCalculator(orbff, device=self.device, **kwargs)
+        return calc
 
 
-orb_v2_mptraj = OrbCalc(name="orb_mptraj_only_v2")
-orb_v2 = OrbCalc(name="orb_v2")
-orb_d3_v2 = OrbCalc(name="orb_d3_v2")
-orb_d3_sm_v2 = OrbCalc(name="orb_d3_sm_v2")
-orb_d3_xs_v2 = OrbCalc(name="orb_d3_xs_v2")
+MODELS["orb_v2"] = OrbCalc(name="orb_v2", device="auto")
 
 
-# List all MLIPs to test in this dictionary
-MODELS = {
-    "mace_medium": mace_medium,
-    "mace_agnesi": mace_agnesi,
-    "7net": sevennet,
-    "Orb_v2": orb_v2,
-    "Orb_d3_v2": orb_d3_v2,
-    "Orb_d3_sm_v2": orb_d3_sm_v2,
-    "Orb_d3_xs_v2": orb_d3_xs_v2,
-    "Orb_mptraj_v2": orb_v2_mptraj,
-}
+# https://github.com/CederGroupHub/chgnet
+MODELS["chgnet"] = mlipx.GenericASECalculator(
+    module="chgnet.model",
+    class_name="CHGNetCalculator",
+)
+
 
 # OPTIONAL
 # ========
 # If you have custom property names you can use the UpdatedFramesCalc
 # to set the energy, force and isolated_energies keys mlipx expects.
-REFERENCE = mlipx.UpdateFramesCalc(
-    results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
-    info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
-)
+
+# REFERENCE = mlipx.UpdateFramesCalc(
+#     results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
+#     info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
+# )

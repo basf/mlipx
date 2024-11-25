@@ -8,8 +8,9 @@ project = zntrack.Project()
 frames = []
 
 with project.group("initialize"):
-    for smiles in ["CCO", "C1=CC2=C(C=C1O)C(=CN2)CCN"]:
-        frames.append(mlipx.Smiles2Conformers(smiles=smiles, num_confs=1))
+    for material_id in ["mp-1143"]:
+        data = mlipx.MPRester(search_kwargs={"material_ids": [material_id]})
+        frames.append(mlipx.Rattle(data=data.frames, stdev=0.1))
 
 
 for model_name, model in MODELS.items():

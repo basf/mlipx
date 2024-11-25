@@ -6,7 +6,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes phase-diagram
+   (.venv) $ mlipx recipes phase-diagram  --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
 
 .. mermaid::
    :align: center
@@ -28,14 +28,19 @@ You can run the following command to instantiate a test directory:
       setup --> mg2
       setup --> mgn
 
+.. code-block:: console
+
+   (.venv) $ mlipx compare --glob "*PhaseDiagram"
+
 
 .. jupyter-execute::
    :hide-code:
 
-   from mlipx.doc_utils import show
+   from mlipx.doc_utils import get_plots
 
-   show("formation-energy-comparison.json")
-   show("mace_agnesiphase-diagram.json")
+   plots = get_plots("*PhaseDiagram", "../examples/phase_diagram/")
+   plots["phase-diagram-comparison"].show()
+   plots["formation-energy-comparison"].show()
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

@@ -15,7 +15,7 @@ Glossary
 
     mlflow
         Mlflow is an open-source platform that helps manage the machine learning lifecycle, including experimentation, reproducibility, and deployment. It keeps track of the parameters used in the model as well as the metrics obtained from the model.
-        More information can be found at https://mlflow.org/ ..
+        More information can be found at https://mlflow.org/ .
 
     ZnTrack
         ZnTrack :footcite:t:`zillsZnTrackDataCode2024` is a Python package that provides a framework for defining and executing workflows. It allows users to define a sequence of tasks, each represented by a Node, and manage their execution and dependencies.

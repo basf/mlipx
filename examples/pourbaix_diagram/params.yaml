@@ -1,4 +1,46 @@
-7net_PourbaixDiagram:
+chgnet_0_PourbaixDiagram:
+  V: 1.8
+  data_ids: null
+  fmax: 0.05
+  geo_opt: false
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: CHGNetCalculator
+    device: null
+    kwargs: null
+    module: chgnet.model
+  pH: 1.0
+  use_gibbs: false
+initialize_MPRester:
+  search_kwargs:
+    material_ids:
+    - mp-1143
+mace_mp_0_PourbaixDiagram:
+  V: 1.8
+  data_ids: null
+  fmax: 0.05
+  geo_opt: false
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  pH: 1.0
+  use_gibbs: false
+orb_v2_0_PourbaixDiagram:
+  V: 1.8
+  data_ids: null
+  fmax: 0.05
+  geo_opt: false
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  pH: 1.0
+  use_gibbs: false
+sevennet_0_PourbaixDiagram:
   V: 1.8
   data_ids: null
   fmax: 0.05
@@ -10,89 +52,5 @@
     kwargs:
       model: 7net-0
     module: sevenn.sevennet_calculator
-  pH: 1.0
-  use_gibbs: false
-Orb_d3_sm_v2_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: models.OrbCalc
-    name: orb_d3_sm_v2
-  pH: 1.0
-  use_gibbs: false
-Orb_d3_v2_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: models.OrbCalc
-    name: orb_d3_v2
-  pH: 1.0
-  use_gibbs: false
-Orb_d3_xs_v2_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: models.OrbCalc
-    name: orb_d3_xs_v2
-  pH: 1.0
-  use_gibbs: false
-Orb_mptraj_v2_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: models.OrbCalc
-    name: orb_mptraj_only_v2
-  pH: 1.0
-  use_gibbs: false
-Orb_v2_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: models.OrbCalc
-    name: orb_v2
-  pH: 1.0
-  use_gibbs: false
-initialize_LoadDataFile:
-  start: 0
-  step: 1
-  stop: null
-mace_agnesi_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: cpu
-    kwargs:
-      dtype: float64
-      model_paths: ../models/mace_agnesi.model
-    module: mace.calculators
-  pH: 1.0
-  use_gibbs: false
-mace_medium_PourbaixDiagram:
-  V: 1.8
-  data_ids: null
-  fmax: 0.05
-  geo_opt: false
-  model:
-    _cls: mlipx.nodes.generic_ase.GenericASECalculator
-    class_name: MACECalculator
-    device: cpu
-    kwargs:
-      dtype: float64
-      model_paths: ../models/mace_medium.model
-    module: mace.calculators
   pH: 1.0
   use_gibbs: false
