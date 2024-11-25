@@ -8,7 +8,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes relax
+   (.venv) $ mlipx recipes relax --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
 
 .. mermaid::
    :align: center
@@ -34,7 +34,7 @@ With this recipe we can compare the structure relaxation for three different mod
 
 .. code:: console
 
-   mlipx compare --glob '*StructureOptimization'
+   (.venv) $ mlipx compare --glob "*StructureOptimization"
 
 .. note::
 
@@ -43,9 +43,10 @@ With this recipe we can compare the structure relaxation for three different mod
 .. jupyter-execute::
    :hide-code:
 
-   from mlipx.doc_utils import show
+   from mlipx.doc_utils import get_plots
 
-   show("geomopt.json")
+   plots = get_plots("*StructureOptimization", "../examples/relax/")
+   plots["adjusted_energy_vs_steps"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

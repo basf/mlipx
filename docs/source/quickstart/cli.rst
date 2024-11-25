@@ -7,7 +7,7 @@ This guide will help you get started with ``mlipx`` by creating a new project in
 
 First, create a new project directory and initialize it with Git and DVC:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ mkdir my_project
     (.venv) $ cd my_project
@@ -27,7 +27,7 @@ Next, add a reference DFT dataset to the project. For this example, we use a sli
         (.venv) $ cp /path/to/your/data.xyz data.xyz
         (.venv) $ dvc add data.xyz
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ dvc import-url https://github.com/zincware/ips-mace/releases/download/v0.1.0/mptraj_slice.xyz data.xyz
 
@@ -35,7 +35,7 @@ Adding the Recipe
 -----------------
 With the reference data in place, add a ``mlipx`` recipe to compute metrics:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ mlipx recipes metrics --datapath data.xyz
 
@@ -80,7 +80,7 @@ Running the Workflow
 ---------------------
 Now, run the workflow using the following commands:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ python main.py
     (.venv) $ dvc repro
@@ -89,7 +89,7 @@ Listing Steps and Visualizing Results
 -------------------------------------
 To explore the available steps and visualize results, use the commands below:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ zntrack list
     (.venv) $ mlipx compare mace_mp_CompareCalculatorResults

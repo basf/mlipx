@@ -187,7 +187,7 @@ class NEBs(zntrack.Node):
                 )
             )
         figure.update_layout(
-            title="Energy vs. iteration",
+            title="Energy vs. NEB image",
             xaxis_title="image number",
             yaxis_title="Energy",
         )
@@ -212,7 +212,7 @@ class NEBs(zntrack.Node):
             offset += len(energies)
 
         fig.update_layout(
-            title="Energy vs. iteration",
+            title="Energy vs. NEB image",
             xaxis_title="image number",
             yaxis_title="Energy",
             plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -250,7 +250,7 @@ class NEBs(zntrack.Node):
             offset += len(energies)
 
         fig_adjusted.update_layout(
-            title="Adjusted energy vs. iteration",
+            title="Adjusted energy vs. NEB image",
             xaxis_title="Image number",
             yaxis_title="Adjusted energy",
             plot_bgcolor="rgba(0, 0, 0, 0)",

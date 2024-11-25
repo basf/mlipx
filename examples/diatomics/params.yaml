@@ -1,7 +1,8 @@
-initialize_MPRester:
-  search_kwargs:
-    material_ids:
-    - mp-1143
+initialize_Smiles2Conformers:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: '[Li+].[Cl-]'
 mace_mp_HomonuclearDiatomics:
   elements: []
   eq_distance: covalent-radiuis

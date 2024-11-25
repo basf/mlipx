@@ -166,6 +166,22 @@ class HomonuclearDiatomics(zntrack.Node):
                 fig.update_traces(
                     customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
                 )
+                fig.update_layout(
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
                 figures[f"{element}-{element} bond"] = fig
 
                 # Now with adjusted
@@ -203,6 +219,22 @@ class HomonuclearDiatomics(zntrack.Node):
                     offset += node.n_points
                 fig.update_traces(
                     customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
+                )
+                fig.update_layout(
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
                 )
                 figures[f"{element}-{element} bond (adjusted)"] = fig
 

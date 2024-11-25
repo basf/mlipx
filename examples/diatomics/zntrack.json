@@ -1,8 +1,8 @@
 {
-    "initialize_MPRester": {
+    "initialize_Smiles2Conformers": {
         "nwd": {
             "_type": "pathlib.Path",
-            "value": "nodes/initialize/MPRester"
+            "value": "nodes/initialize/Smiles2Conformers"
         },
         "frames_path": {
             "_type": "pathlib.Path",
@@ -27,9 +27,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.mp_api",
-                        "name": "initialize_MPRester",
-                        "cls": "MPRester",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -57,9 +57,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.mp_api",
-                        "name": "initialize_MPRester",
-                        "cls": "MPRester",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }
@@ -87,9 +87,9 @@
                 "instance": {
                     "_type": "zntrack.Node",
                     "value": {
-                        "module": "mlipx.nodes.mp_api",
-                        "name": "initialize_MPRester",
-                        "cls": "MPRester",
+                        "module": "mlipx.nodes.smiles",
+                        "name": "initialize_Smiles2Conformers",
+                        "cls": "Smiles2Conformers",
                         "remote": null,
                         "rev": null
                     }

@@ -4,7 +4,7 @@ TBA
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes metrics
+   (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2,chgnet --datapath ../data/DODH_adsorption_dft.xyz --repro
 
 .. mermaid::
    :align: center
@@ -38,26 +38,19 @@ TBA
          end
 
 
-.. jupyter-execute::
-   :hide-code:
+.. code-block:: console
 
-   from mlipx.doc_utils import show
-   show("eform_per_atom.json")
+   (.venv) $ mlipx compare --glob "*CompareCalculatorResults"
 
 .. jupyter-execute::
    :hide-code:
 
-   show("fmax.json")
+   from mlipx.doc_utils import get_plots
 
-.. jupyter-execute::
-   :hide-code:
-
-   show("adjusted_eform_error_per_atom.json")
-
-.. jupyter-execute::
-   :hide-code:
-
-   show("fmax_error.json")
+   plots = get_plots("*CompareCalculatorResults", "../examples/metrics/")
+   # raise ValueError(plots.keys())
+   plots["fmax_error"].show()
+   plots["adjusted_energy_error_per_atom"].show()
 
 
 .. dropdown:: Content of :code:`main.py`

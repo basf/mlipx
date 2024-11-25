@@ -8,10 +8,8 @@ project = zntrack.Project()
 frames = []
 
 with project.group("initialize"):
-    for material_id in ["mp-1143"]:
-        frames.append(
-            mlipx.MPRester(search_kwargs={"material_ids": [material_id]}).frames
-        )
+    for smiles in ["[Li+].[Cl-]"]:
+        frames.append(mlipx.Smiles2Conformers(smiles=smiles, num_confs=1).frames)
 
 
 for model_name, model in MODELS.items():

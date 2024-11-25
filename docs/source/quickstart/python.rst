@@ -11,7 +11,7 @@ Getting Started
 
 First, create a new project directory and initialize it with Git and DVC, as shown below:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ mkdir my_project
     (.venv) $ cd my_project
