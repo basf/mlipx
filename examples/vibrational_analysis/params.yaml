@@ -1,0 +1,62 @@
+initialize_Smiles2Conformers:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: CO
+initialize_Smiles2Conformers_1:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: CCO
+initialize_Smiles2Conformers_2:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: CCCO
+initialize_Smiles2Conformers_3:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: CCCCO
+mace_mp_VibrationalAnalysis:
+  calc_type: null
+  displacement: 0.015
+  free_indices: null
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: mace_mp
+    device: auto
+    kwargs:
+      model: medium
+    module: mace.calculators
+  nfree: 4
+  system: molecule
+  temperature: 298.15
+orb_v2_VibrationalAnalysis:
+  calc_type: null
+  displacement: 0.015
+  free_indices: null
+  lower_freq_threshold: 12
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  nfree: 4
+  system: molecule
+  temperature: 298.15
+sevennet_VibrationalAnalysis:
+  calc_type: null
+  displacement: 0.015
+  free_indices: null
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  nfree: 4
+  system: molecule
+  temperature: 298.15

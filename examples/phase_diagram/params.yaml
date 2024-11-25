@@ -12,7 +12,7 @@ chgnet_0_PhaseDiagram:
 initialize_MPRester:
   search_kwargs:
     material_ids:
-    - mp-1143
+    - mp-30084
 mace_mp_0_PhaseDiagram:
   chemsys: null
   data_ids: null

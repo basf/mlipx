@@ -8,7 +8,7 @@ project = zntrack.Project()
 frames = []
 
 with project.group("initialize"):
-    for material_id in ["mp-1143"]:
+    for material_id in ["mp-30084"]:
         frames.append(mlipx.MPRester(search_kwargs={"material_ids": [material_id]}))
 
 

@@ -311,23 +311,23 @@ stages:
         initialize_MPRester:
           search_kwargs:
             material_ids:
-            - mp-1143
+            - mp-30084
     outs:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
-      md5: b2aa0fb43e0b26ef88bedc082a0a2325
-      size: 866
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
     - path: nodes/initialize/MPRester/node-meta.json
       hash: md5
-      md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
+      md5: 4ae32c56db29c865aad94ddba70c4c88
       size: 64
   orb_v2_0_PhaseDiagram:
     cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name orb_v2_0_PhaseDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
-      md5: b2aa0fb43e0b26ef88bedc082a0a2325
-      size: 866
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
     params:
       params.yaml:
         orb_v2_0_PhaseDiagram:
@@ -342,27 +342,27 @@ stages:
     outs:
     - path: nodes/orb_v2/0/PhaseDiagram/frames.xyz
       hash: md5
-      md5: b16267a10d9704a9c8214dcaab1833ef
-      size: 1662
+      md5: f87b7ab933027cdc5605d739df8938bf
+      size: 2153
     - path: nodes/orb_v2/0/PhaseDiagram/node-meta.json
       hash: md5
-      md5: f58f49cb429b93ed84d4a1e629b4a08f
+      md5: 758092e86dc7eea0d73c662c8cd552fe
       size: 64
     - path: nodes/orb_v2/0/PhaseDiagram/phase_diagram.json
       hash: md5
-      md5: a06b05dbc53bd25e80974eacea8ee27f
-      size: 1370567
+      md5: 7311ed58e7253283545e0bd0c8975396
+      size: 2640539
     - path: nodes/orb_v2/0/PhaseDiagram/results.csv
       hash: md5
-      md5: c15d0b054db5447491a1c1000c4e5de9
-      size: 85
+      md5: 388c11729e04db0b4cc4915625da5f6c
+      size: 86
   chgnet_0_PhaseDiagram:
     cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name chgnet_0_PhaseDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
-      md5: b2aa0fb43e0b26ef88bedc082a0a2325
-      size: 866
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
     params:
       params.yaml:
         chgnet_0_PhaseDiagram:
@@ -379,27 +379,27 @@ stages:
     outs:
     - path: nodes/chgnet/0/PhaseDiagram/frames.xyz
       hash: md5
-      md5: 9a6c70e85dfe86f3e86058a75dcd2266
-      size: 1839
+      md5: 063b14cc0c2f0cf0f85add933f954db7
+      size: 2401
     - path: nodes/chgnet/0/PhaseDiagram/node-meta.json
       hash: md5
-      md5: 00002e186c5ec714b74399a240ede807
+      md5: 610953d36b05d6cf4c0e1c78a91bc465
       size: 64
     - path: nodes/chgnet/0/PhaseDiagram/phase_diagram.json
       hash: md5
-      md5: 1d5996e56a6d501f9d4f2392e9b409bb
-      size: 1370463
+      md5: cd445ba3d2a5ad393c7bc92254a377fa
+      size: 2640555
     - path: nodes/chgnet/0/PhaseDiagram/results.csv
       hash: md5
-      md5: f75fab36e834f8de89ebdeb43742c05e
-      size: 86
+      md5: 03904d6a2f6a612e8b71d36a0374c466
+      size: 87
   mace_mp_0_PhaseDiagram:
     cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mace_mp_0_PhaseDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
-      md5: b2aa0fb43e0b26ef88bedc082a0a2325
-      size: 866
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
     params:
       params.yaml:
         mace_mp_0_PhaseDiagram:
@@ -417,27 +417,27 @@ stages:
     outs:
     - path: nodes/mace_mp/0/PhaseDiagram/frames.xyz
       hash: md5
-      md5: 56dfc9b755c62b3f1ae0820e5c8315ce
-      size: 1649
+      md5: b0bb52b56342bff3de8cfdeba21dae59
+      size: 2147
     - path: nodes/mace_mp/0/PhaseDiagram/node-meta.json
       hash: md5
-      md5: df8d445a546cdf61e5524c4fc746ea8e
+      md5: 3f2a2f75dc75e0e718488d51b7959fdf
       size: 64
     - path: nodes/mace_mp/0/PhaseDiagram/phase_diagram.json
       hash: md5
-      md5: 4557ad5f9995d6882a7d9f2608a7ffe8
-      size: 1370863
+      md5: 04fa4562a7d141d897ff6ad33613c65b
+      size: 2640255
     - path: nodes/mace_mp/0/PhaseDiagram/results.csv
       hash: md5
-      md5: d9c62359658883a64cae125435b1bdec
-      size: 85
+      md5: ce0e7bad2418ac9c17f76d8dfaaf9746
+      size: 84
   sevennet_0_PhaseDiagram:
     cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name sevennet_0_PhaseDiagram
     deps:
     - path: nodes/initialize/MPRester/frames.xyz
       hash: md5
-      md5: b2aa0fb43e0b26ef88bedc082a0a2325
-      size: 866
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
     params:
       params.yaml:
         sevennet_0_PhaseDiagram:
@@ -455,17 +455,17 @@ stages:
     outs:
     - path: nodes/sevennet/0/PhaseDiagram/frames.xyz
       hash: md5
-      md5: 00a8cad0a48439db74c9282f0381e2e1
-      size: 1837
+      md5: c795f2686778a1020ba55e7cc1bff178
+      size: 2393
     - path: nodes/sevennet/0/PhaseDiagram/node-meta.json
       hash: md5
-      md5: bd00362fab2a6eff2a3c8cd17fa371aa
+      md5: fb20f2609b6362a7849c975751b4e0a8
       size: 64
     - path: nodes/sevennet/0/PhaseDiagram/phase_diagram.json
       hash: md5
-      md5: f5331b1c44d1b6d061f809286745c1fb
-      size: 1370579
+      md5: 0aac81a9620d27b547c99bcc5a22aeda
+      size: 2640539
     - path: nodes/sevennet/0/PhaseDiagram/results.csv
       hash: md5
-      md5: dd580b045a5a198503da10a35de8597b
-      size: 85
+      md5: f2bd94bb6158efc7a4f22533448c4ca7
+      size: 86

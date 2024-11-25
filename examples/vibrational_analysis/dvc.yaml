@@ -1,0 +1,107 @@
+plots:
+- mace_mp_VibrationalAnalysis_results:
+    x:
+      nodes/mace_mp/VibrationalAnalysis/results.csv: Frame
+    y:
+      nodes/mace_mp/VibrationalAnalysis/results.csv: ddG
+- sevennet_VibrationalAnalysis_results:
+    x:
+      nodes/sevennet/VibrationalAnalysis/results.csv: Frame
+    y:
+      nodes/sevennet/VibrationalAnalysis/results.csv: ddG
+- orb_v2_VibrationalAnalysis_results:
+    x:
+      nodes/orb_v2/VibrationalAnalysis/results.csv: Frame
+    y:
+      nodes/orb_v2/VibrationalAnalysis/results.csv: ddG
+stages:
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    metrics:
+    - nodes/initialize/Smiles2Conformers/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    params:
+    - initialize_Smiles2Conformers
+  initialize_Smiles2Conformers_1:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers_1
+    metrics:
+    - nodes/initialize/Smiles2Conformers_1/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers_1/frames.xyz
+    params:
+    - initialize_Smiles2Conformers_1
+  initialize_Smiles2Conformers_2:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers_2
+    metrics:
+    - nodes/initialize/Smiles2Conformers_2/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers_2/frames.xyz
+    params:
+    - initialize_Smiles2Conformers_2
+  initialize_Smiles2Conformers_3:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers_3
+    metrics:
+    - nodes/initialize/Smiles2Conformers_3/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers_3/frames.xyz
+    params:
+    - initialize_Smiles2Conformers_3
+  mace_mp_VibrationalAnalysis:
+    cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name mace_mp_VibrationalAnalysis
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - nodes/initialize/Smiles2Conformers_2/frames.xyz
+    - nodes/initialize/Smiles2Conformers_3/frames.xyz
+    metrics:
+    - nodes/mace_mp/VibrationalAnalysis/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_mp/VibrationalAnalysis/frames.xyz
+    - nodes/mace_mp/VibrationalAnalysis/modes
+    - nodes/mace_mp/VibrationalAnalysis/modes.xyz
+    - nodes/mace_mp/VibrationalAnalysis/results.csv
+    - nodes/mace_mp/VibrationalAnalysis/vib
+    params:
+    - mace_mp_VibrationalAnalysis
+  orb_v2_VibrationalAnalysis:
+    cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name orb_v2_VibrationalAnalysis
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - nodes/initialize/Smiles2Conformers_2/frames.xyz
+    - nodes/initialize/Smiles2Conformers_3/frames.xyz
+    metrics:
+    - nodes/orb_v2/VibrationalAnalysis/node-meta.json:
+        cache: false
+    outs:
+    - nodes/orb_v2/VibrationalAnalysis/frames.xyz
+    - nodes/orb_v2/VibrationalAnalysis/modes
+    - nodes/orb_v2/VibrationalAnalysis/modes.xyz
+    - nodes/orb_v2/VibrationalAnalysis/results.csv
+    - nodes/orb_v2/VibrationalAnalysis/vib
+    params:
+    - orb_v2_VibrationalAnalysis
+  sevennet_VibrationalAnalysis:
+    cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name sevennet_VibrationalAnalysis
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - nodes/initialize/Smiles2Conformers_2/frames.xyz
+    - nodes/initialize/Smiles2Conformers_3/frames.xyz
+    metrics:
+    - nodes/sevennet/VibrationalAnalysis/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/VibrationalAnalysis/frames.xyz
+    - nodes/sevennet/VibrationalAnalysis/modes
+    - nodes/sevennet/VibrationalAnalysis/modes.xyz
+    - nodes/sevennet/VibrationalAnalysis/results.csv
+    - nodes/sevennet/VibrationalAnalysis/vib
+    params:
+    - sevennet_VibrationalAnalysis
