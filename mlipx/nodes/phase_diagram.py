@@ -175,10 +175,29 @@ class PhaseDiagram(zntrack.Node):
         figures = {}
 
         for node in nodes:
+            # Extract a unique identifier for the node
             node_identifier = node.name.replace(f"_{node.__class__.__name__}", "")
-            figures.update(
-                {f"{node_identifier}-{k}": v for k, v in node.figures.items()}
-            )
+
+            # Update and store the figures directly
+            for key, fig in node.figures.items():
+                fig.update_layout(
+                    title=node_identifier,
+                    plot_bgcolor="rgba(0, 0, 0, 0)",
+                    paper_bgcolor="rgba(0, 0, 0, 0)",
+                )
+                fig.update_xaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                fig.update_yaxes(
+                    showgrid=True,
+                    gridwidth=1,
+                    gridcolor="rgba(120, 120, 120, 0.3)",
+                    zeroline=False,
+                )
+                figures[f"{node_identifier}-{key}"] = fig
 
         return {
             "frames": nodes[0].frames,

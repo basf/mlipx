@@ -39,8 +39,10 @@ You can run the following command to instantiate a test directory:
    from mlipx.doc_utils import get_plots
 
    plots = get_plots("*PhaseDiagram", "../examples/phase_diagram/")
-   plots["phase-diagram-comparison"].show()
-   plots["formation-energy-comparison"].show()
+   plots["mace_mp_0-phase-diagram"].show()
+   plots["orb_v2_0-phase-diagram"].show()
+   plots["sevennet_0-phase-diagram"].show()
+   plots["chgnet_0-phase-diagram"].show()
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
