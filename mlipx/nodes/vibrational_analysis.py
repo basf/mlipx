@@ -68,6 +68,7 @@ class VibrationalAnalysis(zntrack.Node):
 
     free_indices: list[int] = zntrack.params(None)
     # by default freeze no index
+
     system: (
         t.Literal["molecule"]
         | t.Literal["other"]
@@ -93,15 +94,33 @@ class VibrationalAnalysis(zntrack.Node):
 
             print(system)
 
-            # same for the other
+            if self.free_indices is None:
+                if 'free_indices' in atoms.info:
+                    free_indices = atoms.info["free_indices"]
+                else:
+                    free_indices = [i for i in range(len(atoms))]
+            else:
+                free_indices = self.free_indices
 
-            if (
-                "type" not in atoms.info
-                or "calc_type" not in atoms.info
-                or "free_indices" not in atoms.info
-                # or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
-            ):
-                continue
+            print(free_indices)
+
+            if self.calc_type is None:
+                if 'calc_type' in atoms.info:
+                    calc_type = atoms.info["calc_type"]
+                else:
+                    calc_type = 'relax'
+            else:
+                calc_type = self.calc_type
+            
+            print(calc_type)
+
+            #if (
+            #    "type" not in atoms.info
+            #    or "calc_type" not in atoms.info
+            #    or "free_indices" not in atoms.info
+            #    # or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
+            #):
+            #    continue
 
             cache = self.vib_cache / f"{current_frame}"
             cache.mkdir(parents=True, exist_ok=True)
@@ -110,7 +129,7 @@ class VibrationalAnalysis(zntrack.Node):
             modes_cache.mkdir(parents=True, exist_ok=True)
 
             constraints = [
-                i for i, j in enumerate(atoms) if i not in atoms.info["free_indices"]
+                i for i, j in enumerate(atoms) if i not in free_indices
             ]
             c = FixAtoms(constraints)
             atoms.constraints = c
@@ -125,7 +144,7 @@ class VibrationalAnalysis(zntrack.Node):
                 nfree=self.nfree,
                 name=cache,
                 delta=self.displacement,
-                indices=atoms.info["free_indices"],
+                indices=free_indices,
             )
             vib.run()
             _freq = vib.get_frequencies()
@@ -137,20 +156,18 @@ class VibrationalAnalysis(zntrack.Node):
                 for i in _freq
             ]
 
-            if atoms.info["calc_type"] == "relax":
-                pass
-
-            elif atoms.info["calc_type"] == "ts":
+            if calc_type.lower() == "ts":
                 freq = freq[1:]
-                # freq[0] = _freq[0]
 
-            if atoms.info["type"].lower() in ["mol", "molecule"]:
-                if (
-                    "molecule_geometry" in atoms.info
-                    and atoms.info["molecule_geometry"].lower() == "linear"
-                ):
+            if system.lower() in ["mol", "molecule", "linear-molecule", "isolated-atom"]:
+                if system.lower() == "linear-molecule":
                     freq = freq[5:]
                     geometry = "linear"
+
+                elif system.lower() == 'isolated-atom':
+                    freq = []
+                    geometry = 'monatomic'
+
                 else:
                     freq = freq[6:]
                     geometry = "nonlinear"
@@ -193,7 +210,7 @@ class VibrationalAnalysis(zntrack.Node):
             results.append({"Frame": current_frame, "ddG": dg_Tk})
 
             for temp in np.linspace(10, 1000, 10):
-                if atoms.info["type"].lower() in ["mol", "molecule"]:
+                if system.lower() in ["mol", "molecule", "linear-molecule", "isolated-atom"]:
                     dg = thermo.get_gibbs_energy(temp, p_pascal, verbose=True)
                 else:
                     dg = thermo.get_helmholtz_energy(temp, verbose=True)
@@ -214,7 +231,7 @@ class VibrationalAnalysis(zntrack.Node):
             # frames += [atoms]
             ase.io.write(self.frames_path, atoms, append=True)
 
-            for mode in range(len(atoms.info["free_indices"]) * 3):
+            for mode in range(len(free_indices) * 3):
                 mode_cache = modes_cache / f"mode_{mode}.traj"
                 kT = units.kB * self.temperature
                 with ase.io.Trajectory(mode_cache, "w") as traj:
