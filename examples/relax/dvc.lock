@@ -356,24 +356,24 @@ stages:
           max_attempts: 1000
           num_confs: 1
           random_seed: 42
-          smiles: CCO
+          smiles: C1=CC2=C(C=C1O)C(=CN2)CCN
     outs:
     - path: nodes/initialize/Smiles2Conformers/frames.xyz
       hash: md5
-      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
-      size: 531
+      md5: 0f763baa30d3347172feded92fbe22ef
+      size: 1396
     - path: nodes/initialize/Smiles2Conformers/node-meta.json
       hash: md5
-      md5: 4e1cf2faa54ff25431034f669a84e4c5
+      md5: 4f5d01ead52406d6b46bfeafad6d9a4b
       size: 64
   sevennet_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       sevennet_0_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+    - path: nodes/initialize/Rattle/frames.xyz
       hash: md5
-      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
-      size: 531
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         sevennet_0_StructureOptimization:
@@ -391,16 +391,16 @@ stages:
     outs:
     - path: nodes/sevennet/0/StructureOptimization/frames.traj
       hash: md5
-      md5: c1de12b7801d6991b1938ee6ebd2d40e
-      size: 7496
+      md5: 0e1c86ad891a55dbb3df7c8f04dac29a
+      size: 11537
     - path: nodes/sevennet/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: 01789529d77203957c3a4d724b0e3ba4
+      md5: bfa2b21bb130b73ec5bfe985ea4bd3a0
       size: 64
     - path: nodes/sevennet/0/StructureOptimization/plots.csv
       hash: md5
-      md5: b0be78b5140d70e25c69f985af2f7519
-      size: 272
+      md5: 4c15aa40311f23adc81008ce90228e9c
+      size: 330
   initialize_Smiles2Conformers_1:
     cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers_1
     params:
@@ -423,10 +423,10 @@ stages:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_mp_1_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - path: nodes/initialize/Rattle_1/frames.xyz
       hash: md5
-      md5: 0f763baa30d3347172feded92fbe22ef
-      size: 1396
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         mace_mp_1_StructureOptimization:
@@ -444,24 +444,24 @@ stages:
     outs:
     - path: nodes/mace_mp/1/StructureOptimization/frames.traj
       hash: md5
-      md5: 5c953c215003ee8cdae31427a0388b85
-      size: 38975
+      md5: 6057fe160efb0e2748420334149454a7
+      size: 10577
     - path: nodes/mace_mp/1/StructureOptimization/node-meta.json
       hash: md5
-      md5: 538316d58600a6204b2a13dcfb7b3e81
+      md5: 2b49cc241b90e684c9704b442c770b95
       size: 64
     - path: nodes/mace_mp/1/StructureOptimization/plots.csv
       hash: md5
-      md5: 6060d806ae24a43bbaa2d4e835523681
-      size: 934
+      md5: 249ef7081c2813494a29dad5321d500f
+      size: 330
   mace_mp_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       mace_mp_0_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+    - path: nodes/initialize/Rattle/frames.xyz
       hash: md5
-      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
-      size: 531
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         mace_mp_0_StructureOptimization:
@@ -479,24 +479,24 @@ stages:
     outs:
     - path: nodes/mace_mp/0/StructureOptimization/frames.traj
       hash: md5
-      md5: 8680c714d0052fc0dd00758bd2f31489
-      size: 32784
+      md5: fe61d679e4b4f02614194c73ce42feb9
+      size: 10569
     - path: nodes/mace_mp/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: 875837d4f8abbb500d458a3f96552ba6
+      md5: fd9f26895ac765ff364e1b5c2e968dee
       size: 64
     - path: nodes/mace_mp/0/StructureOptimization/plots.csv
       hash: md5
-      md5: 48c7694387cacad11c97d7161b65c90e
-      size: 1350
+      md5: f3b59f049226499f92501f3a5a5819e7
+      size: 330
   sevennet_1_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       sevennet_1_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - path: nodes/initialize/Rattle_1/frames.xyz
       hash: md5
-      md5: 0f763baa30d3347172feded92fbe22ef
-      size: 1396
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         sevennet_1_StructureOptimization:
@@ -514,24 +514,24 @@ stages:
     outs:
     - path: nodes/sevennet/1/StructureOptimization/frames.traj
       hash: md5
-      md5: a540361fa2e892421840f30b4442d9a9
-      size: 41310
+      md5: 082c9b3feac5fd42597325e670409e1e
+      size: 11539
     - path: nodes/sevennet/1/StructureOptimization/node-meta.json
       hash: md5
-      md5: cfb660ca15486f2638b3229cb84b4281
+      md5: 437c3c58de626581adcc9608c9cef5f5
       size: 64
     - path: nodes/sevennet/1/StructureOptimization/plots.csv
       hash: md5
-      md5: 35ed64606cdb0714960bba869aeb9bd9
-      size: 893
+      md5: 0acc0c1cef45c913e0175adca6038ae4
+      size: 332
   orb_v2_1_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       orb_v2_1_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - path: nodes/initialize/Rattle_1/frames.xyz
       hash: md5
-      md5: 0f763baa30d3347172feded92fbe22ef
-      size: 1396
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         orb_v2_1_StructureOptimization:
@@ -546,24 +546,24 @@ stages:
     outs:
     - path: nodes/orb_v2/1/StructureOptimization/frames.traj
       hash: md5
-      md5: 3400fc2a5f6349725f6c9250e3159493
-      size: 32127
+      md5: 1ab42afa8b1b9afb6bfa2a12148e9f06
+      size: 9601
     - path: nodes/orb_v2/1/StructureOptimization/node-meta.json
       hash: md5
-      md5: 21cad0243a40e1a5e1ab59c44edfb937
+      md5: a3c1270f1fb526ea8bb97234c30ad11f
       size: 64
     - path: nodes/orb_v2/1/StructureOptimization/plots.csv
       hash: md5
-      md5: 9f617e55e51091f50295e30287721f22
-      size: 772
+      md5: 053c1a8c93c5ea51740915d3dc56710c
+      size: 300
   orb_v2_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       orb_v2_0_StructureOptimization
     deps:
-    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+    - path: nodes/initialize/Rattle/frames.xyz
       hash: md5
-      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
-      size: 531
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
     params:
       params.yaml:
         orb_v2_0_StructureOptimization:
@@ -578,13 +578,157 @@ stages:
     outs:
     - path: nodes/orb_v2/0/StructureOptimization/frames.traj
       hash: md5
-      md5: 8fc9927af6d55d3076b456dbd3704563
-      size: 6140
+      md5: 1ab42afa8b1b9afb6bfa2a12148e9f06
+      size: 9601
     - path: nodes/orb_v2/0/StructureOptimization/node-meta.json
       hash: md5
-      md5: 24b0d92a76ad6e48b19a88c2d73ac262
+      md5: 2004a9d07f67e66cf986cbc74155a451
       size: 64
     - path: nodes/orb_v2/0/StructureOptimization/plots.csv
       hash: md5
-      md5: dd5a400b203e8be70e256a13969a7fdc
-      size: 243
+      md5: 053c1a8c93c5ea51740915d3dc56710c
+      size: 300
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    params:
+      params.yaml:
+        initialize_MPRester:
+          search_kwargs:
+            material_ids:
+            - mp-1143
+    outs:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    - path: nodes/initialize/MPRester/node-meta.json
+      hash: md5
+      md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
+      size: 64
+  chgnet_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      chgnet_0_StructureOptimization
+    deps:
+    - path: nodes/initialize/Rattle/frames.xyz
+      hash: md5
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
+    params:
+      params.yaml:
+        chgnet_0_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: CHGNetCalculator
+            device:
+            kwargs:
+            module: chgnet.model
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/chgnet/0/StructureOptimization/frames.traj
+      hash: md5
+      md5: a500b9afec878e4e17006ab76b81a265
+      size: 11908
+    - path: nodes/chgnet/0/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 21f7a129083ff98422c4951234b5dc3a
+      size: 64
+    - path: nodes/chgnet/0/StructureOptimization/plots.csv
+      hash: md5
+      md5: 605934c92e861e4c0fadd823b927e0c8
+      size: 329
+  initialize_Rattle:
+    cmd: zntrack run mlipx.nodes.rattle.Rattle --name initialize_Rattle
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        initialize_Rattle:
+          seed: 42
+          stdev: 0.1
+    outs:
+    - path: nodes/initialize/Rattle/frames.xyz
+      hash: md5
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
+    - path: nodes/initialize/Rattle/node-meta.json
+      hash: md5
+      md5: 0c612c99af6841d2f5083825362fbad1
+      size: 64
+  initialize_MPRester_1:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester_1
+    params:
+      params.yaml:
+        initialize_MPRester_1:
+          search_kwargs:
+            material_ids:
+            - mp-1143
+    outs:
+    - path: nodes/initialize/MPRester_1/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    - path: nodes/initialize/MPRester_1/node-meta.json
+      hash: md5
+      md5: ae74512417ac92e8d47b7af82f6a438c
+      size: 64
+  initialize_Rattle_1:
+    cmd: zntrack run mlipx.nodes.rattle.Rattle --name initialize_Rattle_1
+    deps:
+    - path: nodes/initialize/MPRester_1/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        initialize_Rattle_1:
+          seed: 42
+          stdev: 0.1
+    outs:
+    - path: nodes/initialize/Rattle_1/frames.xyz
+      hash: md5
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
+    - path: nodes/initialize/Rattle_1/node-meta.json
+      hash: md5
+      md5: 3dd6705cddabcdec62ef9c9b425558d3
+      size: 64
+  chgnet_1_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      chgnet_1_StructureOptimization
+    deps:
+    - path: nodes/initialize/Rattle_1/frames.xyz
+      hash: md5
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
+    params:
+      params.yaml:
+        chgnet_1_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: CHGNetCalculator
+            device:
+            kwargs:
+            module: chgnet.model
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/chgnet/1/StructureOptimization/frames.traj
+      hash: md5
+      md5: cb0211830ec330b48643f5ecd62d6c7b
+      size: 11911
+    - path: nodes/chgnet/1/StructureOptimization/node-meta.json
+      hash: md5
+      md5: c296a466a0c5745a7f724198b8f421e0
+      size: 64
+    - path: nodes/chgnet/1/StructureOptimization/plots.csv
+      hash: md5
+      md5: 976e34601d5dc7794c6ba62f59a7df1a
+      size: 332

@@ -414,3 +414,40 @@ stages:
       hash: md5
       md5: aa1c5e126f5d67566028dda263235a64
       size: 234
+  chgnet_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name chgnet_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: 996f25f229bef36ad93f486d4e662126
+      size: 46938
+    params:
+      params.yaml:
+        chgnet_NEBs:
+          fmax: 0.05
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: CHGNetCalculator
+            device:
+            kwargs:
+            module: chgnet.model
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/chgnet/NEBs/frames.xyz
+      hash: md5
+      md5: 48e4b05cd5346179d0695f1118d2ce84
+      size: 70865
+    - path: nodes/chgnet/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: d9eaf17947083eb9b7d60c09fab5d38e
+      size: 11071272
+    - path: nodes/chgnet/NEBs/node-meta.json
+      hash: md5
+      md5: eea1395134a53cbd5defb7768bef3789
+      size: 64
+    - path: nodes/chgnet/NEBs/results.csv
+      hash: md5
+      md5: 876aa90353f568e270639083ecc8368d
+      size: 241

@@ -31,6 +31,12 @@ def repro_if_requested(repro: bool):
         subprocess.run(["dvc", "repro"], check=True)
 
 
+def render_models(models: str | None):
+    """Render the models.py file if models are specified."""
+    if models:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+
+
 def parse_inputs(datapath: str | None, material_ids: str | None, smiles: str | None):
     """Parse and validate input arguments."""
     if not any([datapath, material_ids, smiles]):

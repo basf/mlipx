@@ -13,7 +13,8 @@ with project.group("initialize"):
 {% endif %}{% if material_ids %}
 with project.group("initialize"):
     for material_id in {{ material_ids }}:
-        frames.append(mlipx.MPRester(search_kwargs={"material_ids": [material_id]}))
+        data = mlipx.MPRester(search_kwargs={"material_ids": [material_id]})
+        frames.append(mlipx.Rattle(data=data.frames, stdev=0.1))
 {% endif %}{% if smiles %}
 with project.group("initialize"):
     for smiles in {{ smiles }}:

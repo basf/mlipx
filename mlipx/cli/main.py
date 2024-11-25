@@ -1,9 +1,11 @@
 import fnmatch
 import json
+import pathlib
 import uuid
 import webbrowser
 
 import dvc.api
+import plotly.io as pio
 import typer
 import zntrack
 from tqdm import tqdm
@@ -44,6 +46,13 @@ def compare(  # noqa C901
             help="""Whether to open the ZnDraw GUI in the default web browser."""
         ),
     ] = True,
+    figures_path: Annotated[
+        str | None,
+        typer.Option(
+            help="Provide a path to save the figures to."
+            "No figures will be saved by default."
+        ),
+    ] = None,
 ):
     """Compare mlipx nodes and visualize the results using ZnDraw."""
     # TODO: allow for glob patterns
@@ -103,4 +112,8 @@ def compare(  # noqa C901
     vis.figures = result["figures"]
     if browser:
         webbrowser.open(f"{zndraw_url}/token/{token}")
+    if figures_path:
+        for desc, fig in result["figures"].items():
+            pio.write_json(fig, pathlib.Path(figures_path) / f"{desc}.json")
+
     vis.socket.sleep(5)

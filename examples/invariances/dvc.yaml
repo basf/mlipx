@@ -1,109 +1,178 @@
 stages:
-  7net_PermutationInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name 7net_PermutationInvariance
+  chgnet_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name chgnet_0_PermutationInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/7net/PermutationInvariance/metrics.json:
+    - nodes/chgnet/0/PermutationInvariance/metrics.json:
         cache: false
-    - nodes/7net/PermutationInvariance/node-meta.json:
+    - nodes/chgnet/0/PermutationInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/chgnet/0/PermutationInvariance/frames.xyz
+    - nodes/chgnet/0/PermutationInvariance/plots.csv
     params:
-    - 7net_PermutationInvariance
-  7net_RotationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name 7net_RotationalInvariance
+    - chgnet_0_PermutationInvariance
+  chgnet_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name chgnet_0_RotationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/7net/RotationalInvariance/metrics.json:
+    - nodes/chgnet/0/RotationalInvariance/metrics.json:
         cache: false
-    - nodes/7net/RotationalInvariance/node-meta.json:
+    - nodes/chgnet/0/RotationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/chgnet/0/RotationalInvariance/frames.xyz
+    - nodes/chgnet/0/RotationalInvariance/plots.csv
     params:
-    - 7net_RotationalInvariance
-  7net_TranslationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name 7net_TranslationalInvariance
+    - chgnet_0_RotationalInvariance
+  chgnet_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name chgnet_0_TranslationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/7net/TranslationalInvariance/metrics.json:
+    - nodes/chgnet/0/TranslationalInvariance/metrics.json:
         cache: false
-    - nodes/7net/TranslationalInvariance/node-meta.json:
+    - nodes/chgnet/0/TranslationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/chgnet/0/TranslationalInvariance/frames.xyz
+    - nodes/chgnet/0/TranslationalInvariance/plots.csv
     params:
-    - 7net_TranslationalInvariance
-  initialize_LoadDataFile:
-    cmd: zntrack run mlipx.nodes.io.LoadDataFile --name initialize_LoadDataFile
+    - chgnet_0_TranslationalInvariance
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    metrics:
+    - nodes/initialize/MPRester/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/MPRester/frames.xyz
+    params:
+    - initialize_MPRester
+  mace_mp_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mace_mp_0_PermutationInvariance
     deps:
-    - ../data/CoCuFeIrNiHOCl_slab_dft.xyz
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/initialize/LoadDataFile/node-meta.json:
+    - nodes/mace_mp/0/PermutationInvariance/metrics.json:
         cache: false
+    - nodes/mace_mp/0/PermutationInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace_mp/0/PermutationInvariance/frames.xyz
+    - nodes/mace_mp/0/PermutationInvariance/plots.csv
     params:
-    - initialize_LoadDataFile
-  mace_agne_PermutationInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mace_agne_PermutationInvariance
+    - mace_mp_0_PermutationInvariance
+  mace_mp_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mace_mp_0_RotationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_agne/PermutationInvariance/metrics.json:
+    - nodes/mace_mp/0/RotationalInvariance/metrics.json:
         cache: false
-    - nodes/mace_agne/PermutationInvariance/node-meta.json:
+    - nodes/mace_mp/0/RotationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/mace_mp/0/RotationalInvariance/frames.xyz
+    - nodes/mace_mp/0/RotationalInvariance/plots.csv
     params:
-    - mace_agne_PermutationInvariance
-  mace_agne_RotationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mace_agne_RotationalInvariance
+    - mace_mp_0_RotationalInvariance
+  mace_mp_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mace_mp_0_TranslationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_agne/RotationalInvariance/metrics.json:
+    - nodes/mace_mp/0/TranslationalInvariance/metrics.json:
         cache: false
-    - nodes/mace_agne/RotationalInvariance/node-meta.json:
+    - nodes/mace_mp/0/TranslationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/mace_mp/0/TranslationalInvariance/frames.xyz
+    - nodes/mace_mp/0/TranslationalInvariance/plots.csv
     params:
-    - mace_agne_RotationalInvariance
-  mace_agne_TranslationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mace_agne_TranslationalInvariance
+    - mace_mp_0_TranslationalInvariance
+  orb_v2_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name orb_v2_0_PermutationInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_agne/TranslationalInvariance/metrics.json:
+    - nodes/orb_v2/0/PermutationInvariance/metrics.json:
         cache: false
-    - nodes/mace_agne/TranslationalInvariance/node-meta.json:
+    - nodes/orb_v2/0/PermutationInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/orb_v2/0/PermutationInvariance/frames.xyz
+    - nodes/orb_v2/0/PermutationInvariance/plots.csv
     params:
-    - mace_agne_TranslationalInvariance
-  mace_medm_PermutationInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mace_medm_PermutationInvariance
+    - orb_v2_0_PermutationInvariance
+  orb_v2_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name orb_v2_0_RotationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_medm/PermutationInvariance/metrics.json:
+    - nodes/orb_v2/0/RotationalInvariance/metrics.json:
         cache: false
-    - nodes/mace_medm/PermutationInvariance/node-meta.json:
+    - nodes/orb_v2/0/RotationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/orb_v2/0/RotationalInvariance/frames.xyz
+    - nodes/orb_v2/0/RotationalInvariance/plots.csv
     params:
-    - mace_medm_PermutationInvariance
-  mace_medm_RotationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mace_medm_RotationalInvariance
+    - orb_v2_0_RotationalInvariance
+  orb_v2_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name orb_v2_0_TranslationalInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_medm/RotationalInvariance/metrics.json:
+    - nodes/orb_v2/0/TranslationalInvariance/metrics.json:
         cache: false
-    - nodes/mace_medm/RotationalInvariance/node-meta.json:
+    - nodes/orb_v2/0/TranslationalInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/orb_v2/0/TranslationalInvariance/frames.xyz
+    - nodes/orb_v2/0/TranslationalInvariance/plots.csv
     params:
-    - mace_medm_RotationalInvariance
-  mace_medm_TranslationalInvariance:
-    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mace_medm_TranslationalInvariance
+    - orb_v2_0_TranslationalInvariance
+  sevennet_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name sevennet_0_PermutationInvariance
     deps:
-    - nodes/initialize/LoadDataFile/node-meta.json
+    - nodes/initialize/MPRester/frames.xyz
     metrics:
-    - nodes/mace_medm/TranslationalInvariance/metrics.json:
+    - nodes/sevennet/0/PermutationInvariance/metrics.json:
         cache: false
-    - nodes/mace_medm/TranslationalInvariance/node-meta.json:
+    - nodes/sevennet/0/PermutationInvariance/node-meta.json:
         cache: false
+    outs:
+    - nodes/sevennet/0/PermutationInvariance/frames.xyz
+    - nodes/sevennet/0/PermutationInvariance/plots.csv
     params:
-    - mace_medm_TranslationalInvariance
+    - sevennet_0_PermutationInvariance
+  sevennet_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name sevennet_0_RotationalInvariance
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/sevennet/0/RotationalInvariance/metrics.json:
+        cache: false
+    - nodes/sevennet/0/RotationalInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/0/RotationalInvariance/frames.xyz
+    - nodes/sevennet/0/RotationalInvariance/plots.csv
+    params:
+    - sevennet_0_RotationalInvariance
+  sevennet_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name sevennet_0_TranslationalInvariance
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/sevennet/0/TranslationalInvariance/metrics.json:
+        cache: false
+    - nodes/sevennet/0/TranslationalInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevennet/0/TranslationalInvariance/frames.xyz
+    - nodes/sevennet/0/TranslationalInvariance/plots.csv
+    params:
+    - sevennet_0_TranslationalInvariance

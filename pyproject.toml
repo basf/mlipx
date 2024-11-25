@@ -21,6 +21,8 @@ zndraw = "^0.5.2"
 znh5md = "^0.3.6"
 lazy-loader = "^0.4"
 platformdirs = "3.10"
+# hotfix for https://github.com/materialsproject/api/issues/941
+pydantic = "2.9.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.7"
