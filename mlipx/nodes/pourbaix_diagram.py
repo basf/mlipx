@@ -12,11 +12,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 import zntrack
 from ase.optimize import BFGS
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from mp_api.client import MPRester
 from pymatgen.analysis.phase_diagram import PhaseDiagram as pmg_PhaseDiagram
 from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram as pmg_PourbaixDiagram
-from pymatgen.analysis.pourbaix_diagram import PourbaixEntry, PourbaixPlotter
+from pymatgen.analysis.pourbaix_diagram import (
+    PourbaixEntry,
+    PourbaixPlotter,
+    generate_entry_label,
+)
 from pymatgen.core import Element
 from pymatgen.core.ion import Ion
 from pymatgen.entries.compatibility import (
@@ -29,6 +32,116 @@ from pymatgen.entries.computed_entries import (
 )
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
+
+
+def create_pourbaix_plot(
+    self,
+    limits=None,
+    title="Pourbaix Diagram",
+    label_domains=True,
+    label_fontsize=12,
+    show_water_lines=True,
+    show_neutral_axes=True,
+) -> go.Figure:
+    PREFAC = 0.0591  # Prefactor for water stability lines
+
+    # Set default limits if not provided
+    if limits is None:
+        limits = [[-2, 16], [-3, 3]]
+    xlim, ylim = limits
+
+    # Initialize Plotly figure
+    fig = go.Figure()
+
+    # Add water stability lines
+    if show_water_lines:
+        h_line_x = np.linspace(xlim[0], xlim[1], 100)
+        h_line_y = -h_line_x * PREFAC
+        o_line_y = -h_line_x * PREFAC + 1.23
+        fig.add_trace(
+            go.Scatter(
+                x=h_line_x,
+                y=h_line_y,
+                mode="lines",
+                line={"color": "red", "dash": "dash"},
+                name="H2O Reduction",
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=h_line_x,
+                y=o_line_y,
+                mode="lines",
+                line={"color": "red", "dash": "dash"},
+                name="H2O Oxidation",
+            )
+        )
+
+    # Add neutral axes
+    if show_neutral_axes:
+        fig.add_trace(
+            go.Scatter(
+                x=[7, 7],
+                y=ylim,
+                mode="lines",
+                line={"color": "black", "dash": "dot"},
+                name="Neutral Axis",
+            )
+        )
+        fig.add_trace(
+            go.Scatter(
+                x=xlim,
+                y=[0, 0],
+                mode="lines",
+                line={"color": "black", "dash": "dot"},
+                name="V=0 Line",
+            )
+        )
+
+    # Add stable domain polygons
+    for entry, vertices in self._pbx._stable_domain_vertices.items():
+        # Close the polygon by repeating the first vertex
+        vertices = np.vstack([vertices, vertices[0]])
+        x, y = vertices[:, 0], vertices[:, 1]
+        center = np.mean(vertices, axis=0)
+
+        # Add the domain polygon
+        fig.add_trace(
+            go.Scatter(
+                x=x,
+                y=y,
+                mode="lines",
+                line={"color": "black"},
+                name=f"Domain {entry.name}",
+            )
+        )
+
+        # Optionally add labels to domains
+        if label_domains:
+            fig.add_trace(
+                go.Scatter(
+                    x=[center[0]],
+                    y=[center[1]],
+                    mode="text",
+                    text=[generate_entry_label(entry)],
+                    textfont={"size": label_fontsize, "color": "blue"},
+                    name="Domain Label",
+                )
+            )
+
+    # Update layout for the figure
+    fig.update_layout(
+        title={
+            "text": title,
+            "font": {"size": 20, "family": "Arial", "weight": "bold"},
+        },
+        xaxis={"title": "pH", "range": xlim},
+        yaxis={"title": "E (V)", "range": ylim},
+        plot_bgcolor="rgba(0, 0, 0, 0)",
+        paper_bgcolor="rgba(0, 0, 0, 0)",
+    )
+
+    return fig
 
 
 class PourbaixDiagram(zntrack.Node):
@@ -258,29 +371,12 @@ class PourbaixDiagram(zntrack.Node):
     def figures(self) -> dict[str, go.Figure]:
         # Create the Pourbaix diagram plot using Matplotlib
         plotter = PourbaixPlotter(self.pourbaix_diagram)
-        mpl_fig = plotter.get_pourbaix_plot().get_figure()
-
-        # Ensure the figure has a consistent size
-        mpl_fig.set_size_inches(16, 9)  # Adjust dimensions if needed
-        mpl_canvas = FigureCanvas(mpl_fig)
-        mpl_canvas.draw()
-
-        # Convert Matplotlib figure to an image array
-        width, height = mpl_canvas.get_width_height()
-        mpl_data = np.frombuffer(mpl_canvas.tostring_rgb(), dtype=np.uint8)
-        mpl_data = mpl_data.reshape((height, width, 3))  # Use actual dimensions
-
-        # Convert the Matplotlib image to a Plotly figure
-        fig1 = px.imshow(mpl_data)
-        fig1.update_layout(title="Pourbaix Diagram")
-
-        # Create an additional Plotly figure for decomposition energy
-        fig2 = px.line(self.results, x="data_id", y="pourbaix_decomposition_energy")
-        fig2.update_layout(title="Pourbaix Decomposition Energy Plot")
 
         return {
-            "pourbaix-diagram": fig1,
-            "pourbaix-decomposition-energy-plot": fig2,
+            "pourbaix-diagram": create_pourbaix_plot(plotter),
+            "pourbaix-decomposition-energy-plot": px.line(
+                self.results, x="data_id", y="pourbaix_decomposition_energy"
+            ),
         }
 
     @staticmethod
