@@ -99,3 +99,122 @@ stages:
       hash: md5
       md5: 41fc0db4ec51889a6007a47b034d3df1
       size: 11847
+  initialize_MPRester:
+    cmd: zntrack run mlipx.nodes.mp_api.MPRester --name initialize_MPRester
+    params:
+      params.yaml:
+        initialize_MPRester:
+          search_kwargs:
+            material_ids:
+            - mp-1143
+    outs:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    - path: nodes/initialize/MPRester/node-meta.json
+      hash: md5
+      md5: 4f6d9dc7b6e2c7a9e178509f8c6d81d6
+      size: 64
+  orb_v2_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name orb_v2_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        orb_v2_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: models.OrbCalc
+            device: auto
+            name: orb_v2
+          n_points: 100
+    outs:
+    - path: nodes/orb_v2/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: 48d0e9ddedb2ca036226c00b1f195c6b
+      size: 409000
+    - path: nodes/orb_v2/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: 58bfeb6ca2ffcef23ceecedf0f001dfa
+      size: 64
+    - path: nodes/orb_v2/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 63c32833366ff36e83a52e196a9b419c
+      size: 6268
+  mace_mp_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mace_mp_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mace_mp_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          n_points: 100
+    outs:
+    - path: nodes/mace_mp/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: c6c71cd707c50e32a927f9a6f30c2bea
+      size: 429800
+    - path: nodes/mace_mp/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: b64d0243eb597295727ddd88a7d6b15c
+      size: 64
+    - path: nodes/mace_mp/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 522f4a650d59266e1a23c1167c3f9419
+      size: 6284
+  sevennet_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name sevennet_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        sevennet_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          n_points: 100
+    outs:
+    - path: nodes/sevennet/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: ee9af4e5961b096e76e2745932dd8285
+      size: 422600
+    - path: nodes/sevennet/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: 625e64f82d595e8bc34933a67463b76e
+      size: 64
+    - path: nodes/sevennet/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: 53fa3df95ff0aad11676588002da695d
+      size: 6282

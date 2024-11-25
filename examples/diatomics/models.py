@@ -50,13 +50,6 @@ class OrbCalc:
 MODELS["orb_v2"] = OrbCalc(name="orb_v2", device="auto")
 
 
-# https://github.com/CederGroupHub/chgnet
-MODELS["chgnet"] = mlipx.GenericASECalculator(
-    module="chgnet.model",
-    class_name="CHGNetCalculator",
-)
-
-
 # OPTIONAL
 # ========
 # If you have custom property names you can use the UpdatedFramesCalc
