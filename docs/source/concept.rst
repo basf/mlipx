@@ -1,7 +1,7 @@
 Concept
 =======
 
-``mlipx`` is a tool designed to evaluate the performance of various **Machine Learning Interatomic Potentials (MLIPs)**.
+``mlipx`` is a tool designed to evaluate the performance of various **Machine-Learned Interatomic Potentials (MLIPs)**.
 It offers both static and dynamic test recipes, helping you identify the most suitable MLIP for your specific problem.
 
 The ``mlipx`` package is modular and highly extensible, achieved by leveraging the capabilities of :term:`ZnTrack` and community support to provide a wide range of different test cases and :term:`MLIP` interfaces.
@@ -26,16 +26,12 @@ This dynamic approach enables a more focused evaluation of :term:`MLIP` models, 
 Comparison
 ----------
 
-To efficiently compare different models, ``mlipx`` integrates with :ref:`ZnDraw <zndraw>`, enabling interactive evaluation of generated figures alongside atomistic structures.
+A comprehensive comparison of different :term:`MLIP` models is crucial to identifying the best model for a specific problem.
+To facilitate this, ``mlipx`` integrates with :ref:`ZnDraw <zndraw>` for visualizing trajectories and creating interactive plots of the generated data.
 
-.. image:: _static/zndraw_compare.png
-   :width: 80%
+Additionally, ``mlipx`` interfaces with :term:`DVC` for data versioning and can log metrics to :term:`mlflow`,
+providing a quick overview of all past evaluations.
 
-Additionally, metrics can be logged to :term:`mlflow`, providing users with a quick overview of all past evaluations.
-This facilitates the comparison of different model metrics.
-
-.. image:: _static/mlflow_compare.png
-   :width: 80%
 
 .. toctree::
    :hidden:

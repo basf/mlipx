@@ -11,6 +11,9 @@ Ultimately, you should be able to determine the applicability of a given MLIP fo
    This project is under active development.
 
 
+Example
+-------
+
 Create a ``mlipx`` :ref:`recipe <recipes>` to compute :ref:`ev` for the `mp-1143 <https://next-gen.materialsproject.org/materials/mp-1143>`_ structure using different :term:`MLIP` models
 
 .. code-block:: console

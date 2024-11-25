@@ -3,7 +3,7 @@
 Command Line Interface
 ======================
 
-This guide will help you get started with ``mlipx`` by creating a new project in an empty directory and computing metrics for a machine-learned interatomic potential (MLIP) against reference DFT data.
+This guide will help you get started with ``mlipx`` by creating a new project in an empty directory and computing metrics for a machine-learned interatomic potential (:term:`MLIP`) against reference DFT data.
 
 First, create a new project directory and initialize it with Git and DVC:
 
@@ -50,7 +50,7 @@ Create a file named ``models.py`` in the current directory with the following co
 
 .. note::
 
-    If you already have the data you can use two different data files or one file and update the keys.
+    If you already have computed energies and forces you can use two different data files or one file and update the keys.
     For more information, see the section on :ref:`update-frames-calc`.
 
 .. code-block:: python
@@ -99,5 +99,21 @@ To explore the available steps and visualize results, use the commands below:
     To use ``mlipx compare``, you must have an active ZnDraw server running. Provide the server URL via the ``--zndraw-url`` argument or the ``ZNDRAW_URL`` environment variable.
 
     You can start a server locally with the command ``zndraw`` in a separate terminal or use the public server at https://zndraw.icp.uni-stuttgart.de.
+
+
+More CLI Options
+----------------
+
+The ``mlipx`` CLI can create the :term:`models.py` for some models.
+To evaluate ``data.xyz`` with multiple models, you can also run
+
+.. code-block:: console
+
+    (.venv) $ mlipx recipes metrics --datapath data.xyz --models mace_mp,sevennet,orb_v2,chgnet --repro
+
+.. note::
+
+    Want to see your model here? Open an issue or submit a pull request to the `mlipx repository <https://github.com/basf/mlipx>`_.
+
 
 .. footbibliography::

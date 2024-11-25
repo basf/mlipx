@@ -12,13 +12,13 @@ The CLI provides the most convenient way to get started, while the Python librar
    :width: 80%
    :class: only-dark
 
+Use the :ref:`command-line tool <cli-quickstart>` to evaluate different :term:`MLIP` models on the ``DODH_adsorption_dft.xyz`` file and
+visualize the trajectory together with the maximum force error in :ref:`ZnDraw <zndraw>`.
 
 .. code:: console
 
    (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2 --datapath ../data DODH_adsorption_dft.xyz --repro
    (.venv) $ mlipx compare --glob "*CompareCalculatorResults"
-
-The trajectory together with the maximum force error in :ref:`ZnDraw <zndraw>`.
 
 .. toctree::
    :maxdepth: 2

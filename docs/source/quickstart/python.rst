@@ -76,7 +76,7 @@ Running the Workflow
 
 Finally, run the workflow by executing the ``main.py`` file:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ python main.py
 
@@ -91,7 +91,7 @@ Listing Steps and Visualizing Results
 
 As with the CLI approach, you can list the available steps and visualize results using the following commands:
 
-.. code-block:: bash
+.. code-block:: console
 
     (.venv) $ zntrack list
     (.venv) $ mlipx compare mace_mp_CompareCalculatorResults
