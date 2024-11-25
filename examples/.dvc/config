@@ -1,0 +1,5 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = s3://public/dvc/mlipx
+    allow_anonymous_login = true

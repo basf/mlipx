@@ -9,6 +9,9 @@ pages:
     - apt install -y git pandoc
     - pip install poetry
     - poetry install
+    - cd examples
+    - dvc remote modify origin endpointurl $AWS_ENDPOINT_URL
+    - dvc pull --allow-missing
     - cd docs
     - poetry run sphinx-build -M html source build/
     - cd ..
