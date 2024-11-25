@@ -18,7 +18,8 @@ from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
 from .nodes.mp_api import MPRester
 from .nodes.nebs import NEBinterpolate, NEBs
 from .nodes.observer import MaximumForceObserver
-from .nodes.phase_diagram import PhaseDiagram, PourbaixDiagram
+from .nodes.phase_diagram import PhaseDiagram
+from .nodes.pourbaix_diagram import PourbaixDiagram
 from .nodes.rattle import Rattle
 from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
