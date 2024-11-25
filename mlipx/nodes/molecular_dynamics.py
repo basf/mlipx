@@ -161,6 +161,23 @@ class MolecularDynamics(zntrack.Node):
             yaxis_title="Energy",
         )
 
+        fig.update_layout(
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+
         # Now we set the first energy to zero for better compareability.
 
         offset = 0
@@ -183,6 +200,23 @@ class MolecularDynamics(zntrack.Node):
             title="Adjusted energy vs. step",
             xaxis_title="Step",
             yaxis_title="Adjusted energy",
+        )
+
+        fig_adjusted.update_layout(
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig_adjusted.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig_adjusted.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
         )
 
         return ComparisonResults(

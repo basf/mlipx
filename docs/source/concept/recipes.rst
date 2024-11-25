@@ -3,8 +3,6 @@
 Recipes
 =======
 
-Setup
------
 One of :code:`mlipx` core functionality is providing you with pre-designed recipes.
 These define workflows for evaluating :term:`MLIP` on specific tasks.
 You can get an overview of all available recipes using

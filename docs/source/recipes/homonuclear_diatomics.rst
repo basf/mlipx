@@ -2,7 +2,7 @@
 
 Homonuclear Diatomics
 ===========================
-Homonuclear diatomics give a per-element information on the performance of the :term:`mlip`.
+Homonuclear diatomics give a per-element information on the performance of the :term:`MLIP`.
 
 
 .. code-block:: console

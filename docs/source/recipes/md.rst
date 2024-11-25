@@ -2,9 +2,7 @@
 
 Molecular Dynamics
 ==================
-
-:code:`mlipx` provides a command line interface to create a molecular dynamics test.
-You can run the following command to instantiate a test directory:
+This recipe is used to test the performance of different models in molecular dynamics simulations.
 
 .. code-block:: console
 

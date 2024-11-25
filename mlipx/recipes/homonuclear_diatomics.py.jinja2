@@ -24,7 +24,7 @@ for model_name, model in MODELS.items():
     with project.group(model_name):
         neb = mlipx.HomonuclearDiatomics(
             elements=[],
-            data=sum(frames, []),
+            data=sum(frames, []),  # Use all elements from all frames
             model=model,
             n_points=100,
             min_distance=0.5,

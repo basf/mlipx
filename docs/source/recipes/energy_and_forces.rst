@@ -1,6 +1,7 @@
 Energy and Force Evaluation
 ===========================
-TBA
+
+This recipe is used to test the performance of different models in predicting the energy and forces for a given dataset.
 
 .. code-block:: console
 

@@ -2,19 +2,21 @@
 
 Datasets
 ========
+
 Data within ``mlipx`` is always represented as a list of :term:`ASE` atoms objects.
-Nevertheless, there are different ways to provide this data to the workflow.
+There are various ways to provide this data to the workflow, depending on your requirements.
 
 Local Data Files
 ----------------
-You can simply provide a local data file, e.g. a trajectory file to the workflow.
+
+The simplest way to use data in the workflow is by providing a local data file, such as a trajectory file.
 
 .. code:: console
 
    (.venv) $ cp /path/to/data.xyz .
    (.venv) $ dvc add data.xyz
 
-.. dropdown::  Local data file (:code:`main.py`)
+.. dropdown:: Local data file (:code:`main.py`)
    :open:
 
    .. code:: python
@@ -24,25 +26,24 @@ You can simply provide a local data file, e.g. a trajectory file to the workflow
 
       DATAPATH = "data.xyz"
 
-      project = zntrack.Project()
+      project = mlipx.Project()
 
       with project.group("initialize"):
          data = mlipx.LoadDataFile(path=DATAPATH)
 
 Remote Data Files
 -----------------
-As ``mlipx`` uses :term:`DVC` we can easily import data from a remote location.
-You can do so by importing the file manually:
+
+Since ``mlipx`` integrates with :term:`DVC`, it can easily handle data from remote locations.
+You can manually import a remote file:
 
 .. code:: console
 
    (.venv) $ dvc import-url https://url/to/your/data.xyz data.xyz
 
-or by using the :code:`zntrack` interface:
-
-We can replace this local datafile with a remote dataset, allowing us for example to evaluate the :code:`mptraj` dataset.
-Often, this is combined with a filtering step, to select only relevant configurations.
-Here we select all structures containing :code:`F` and :code:`B` atoms.
+Alternatively, you can use the ``zntrack`` interface for automated management.
+This allows evaluation of datasets such as :code:`mptraj` and supports filtering to select relevant configurations.
+For example, the following code selects all structures containing :code:`F` and :code:`B` atoms.
 
 .. dropdown:: Importing online resources (:code:`main.py`)
    :open:
@@ -57,52 +58,52 @@ Here we select all structures containing :code:`F` and :code:`B` atoms.
          path="mptraj.xyz",
       )
 
+      project = mlipx.Project()
+
       with project:
          raw_data = mlipx.LoadDataFile(path=mptraj)
-         data = mlipx.FilterAtoms(data=data.frames, elements=["B", "F"])
-
+         data = mlipx.FilterAtoms(data=raw_data.frames, elements=["B", "F"])
 
 Materials Project
 -----------------
-We can also search the ``Materials Project`` for structures.
 
-.. code:: python
+You can also search and retrieve structures from the `Materials Project`.
 
-   import mlipx
+.. dropdown:: Querying Materials Project (:code:`main.py`)
+   :open:
 
-   project = mlipx.Project()
+   .. code:: python
 
-   with project.group("initialize"):
-        data = mlipx.MPRester(search_kwargs={"material_ids": ["mp-1143"]})
+      import mlipx
+
+      project = mlipx.Project()
+
+      with project.group("initialize"):
+         data = mlipx.MPRester(search_kwargs={"material_ids": ["mp-1143"]})
 
 .. note::
-   This requires an API key from the Materials Project.
-   You need to set the environment variable :code:`MP_API_KEY` to your API key.
-
+   To use the Materials Project, you need an API key. Set the environment variable
+   :code:`MP_API_KEY` to your API key.
 
 Generating Data
---------------
+---------------
 
-Another approach is generating data on the fly.
-Within :code:`mlipx` this can be used to build molecules or simulation boxes from smiles.
-Here we generate a simulation box consisting of 10 ethanol molecules.
+Another approach is generating data dynamically. In ``mlipx``, you can build molecules or simulation boxes from SMILES strings.
+For instance, the following code generates a simulation box containing 10 ethanol molecules:
 
 .. dropdown:: Using SMILES (:code:`main.py`)
    :open:
 
    .. code:: python
 
-      import zntrack
-      from models import MODELS
-
       import mlipx
 
-      project = zntrack.Project()
+      project = mlipx.Project()
 
       with project.group("initialize"):
          confs = mlipx.Smiles2Conformers(smiles="CCO", num_confs=10)
          data = mlipx.BuildBox(data=[confs.frames], counts=[10], density=789)
 
 .. note::
-   The :code:`BuildBox` node requires :term:`Packmol` and :term:`rdkit2ase` to be installed.
-   If you do not need a simulation box, you can also use :code:`confs.frames` directly.
+   The :code:`BuildBox` node requires :term:`Packmol` and :term:`rdkit2ase`.
+   If you do not need a simulation box, you can use :code:`confs.frames` directly.

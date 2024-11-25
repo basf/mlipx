@@ -65,11 +65,33 @@ class InvarianceNode(zntrack.Node):
                     x=np.arange(node.n_points),
                     y=node.plots["energy"] - node.metrics["mean"],
                     mode="markers",
-                    name=node.name.replace(f"_{node.__class__.__name__}_", ""),
+                    name=node.name.replace(f"_{node.__class__.__name__}", ""),
                 )
             )
 
-        return ComparisonResults(frames=nodes[0].frames, figures={"energy": fig})
+        fig.update_layout(
+            title=f"Energy vs step ({nodes[0].__class__.__name__})",
+            xaxis_title="Steps",
+            yaxis_title="Adjusted energy",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+
+        return ComparisonResults(
+            frames=nodes[0].frames, figures={"energy_vs_steps_adjusted": fig}
+        )
 
 
 class TranslationalInvariance(InvarianceNode):
