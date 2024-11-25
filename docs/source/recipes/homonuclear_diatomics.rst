@@ -10,25 +10,7 @@ Homonuclear diatomics give a per-element information on the performance of the :
    (.venv) $ mlipx recipes homonuclear-diatomics --models mace_mp,sevennet,orb_v2 --smiles="[Li+].[Cl-]" --repro
 
 
-.. mermaid::
-   :align: center
-
-   graph TD
-
-      subgraph mg1["Model 1"]
-         m1["HomonuclearDiatomics"]
-      end
-      subgraph mg2["Model 2"]
-         m2["HomonuclearDiatomics"]
-      end
-      subgraph mgn["Model <i>N</i>"]
-         m3["HomonuclearDiatomics"]
-      end
-
 You can edit the elements in the :term:`main.py` file to include the elements you want to test.
-
-
-
 In the following we show the results for the :code:`Li-Li` bond for the three selected models.
 
 .. code-block:: console

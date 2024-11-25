@@ -15,8 +15,14 @@ Each Node is documented in the following section.
     ApplyCalculator
         .. autofunction:: mlipx.ApplyCalculator
 
+    EvaluateCalculatorResults
+        .. autofunction:: mlipx.EvaluateCalculatorResults
+
     CompareCalculatorResults
         .. autofunction:: mlipx.CompareCalculatorResults
+
+    CompareFormationEnergy
+        .. autofunction:: mlipx.CompareFormationEnergy
 
     CalculateFormationEnergy
         .. autofunction:: mlipx.CalculateFormationEnergy

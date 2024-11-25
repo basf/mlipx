@@ -9,32 +9,6 @@ You can run the following command to instantiate a test directory:
 .. code-block:: console
 
    (.venv) $ mlipx recipes neb --models mace_mp,sevennet,orb_v2,chgnet --datapath ../data/neb_end_p.xyz --repro
-
-
-.. mermaid::
-   :align: center
-
-   graph TD
-      subgraph setup
-         setup1["LoadDataFile"] --> setup2["NEBinterpolate"]
-
-      end
-      subgraph mg1["Model 1"]
-         m1["NEBs"]
-      end
-      subgraph mg2["Model 2"]
-         m2["NEBs"]
-      end
-      subgraph mgn["Model <i>N</i>"]
-         m3["NEBs"]
-      end
-      setup --> mg1
-      setup --> mg2
-      setup --> mgn
-
-
-.. code-block:: console
-
    (.venv) $ zntrack list # show available Nodes
    (.venv) $ mlipx compare --glob "*NEBs"
 
@@ -49,7 +23,6 @@ You can run the following command to instantiate a test directory:
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
-* :term:`LoadDataFile`
 * :term:`NEBinterpolate`
 * :term:`NEBs`
 

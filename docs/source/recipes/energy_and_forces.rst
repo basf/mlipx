@@ -54,6 +54,15 @@ This recipe is used to test the performance of different models in predicting th
    plots["adjusted_energy_error_per_atom"].show()
 
 
+This recipe uses the following Nodes together with your provided model in the :term:`models.py` file:
+
+* :term:`ApplyCalculator`
+* :term:`EvaluateCalculatorResults`
+* :term:`CalculateFormationEnergy`
+* :term:`CompareCalculatorResults`
+* :term:`CompareFormationEnergy`
+
+
 .. dropdown:: Content of :code:`main.py`
 
    .. literalinclude:: ../../../examples/metrics/main.py
