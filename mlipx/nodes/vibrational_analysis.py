@@ -88,38 +88,44 @@ class VibrationalAnalysis(zntrack.Node):
         for current_frame, atoms in tqdm(enumerate(self.data)):
             # these type/molecule checks should go into a separate node.
             if self.system is None:
-                system = atoms.info["type"]  # raises IndexError if neither is set
+                try:
+                    system = atoms.info["type"]  # raises IndexError if neither is set
+                except KeyError:
+                    raise KeyError(
+                        "Unable to determine system type from `atoms.info`."
+                        " Please set the 'system' parameter."
+                    )
             else:
                 system = self.system
 
             print(system)
 
             if self.free_indices is None:
-                if 'free_indices' in atoms.info:
+                if "free_indices" in atoms.info:
                     free_indices = atoms.info["free_indices"]
                 else:
-                    free_indices = [i for i in range(len(atoms))]
+                    free_indices = list(range(len(atoms)))
             else:
                 free_indices = self.free_indices
 
             print(free_indices)
 
             if self.calc_type is None:
-                if 'calc_type' in atoms.info:
+                if "calc_type" in atoms.info:
                     calc_type = atoms.info["calc_type"]
                 else:
-                    calc_type = 'relax'
+                    calc_type = "relax"
             else:
                 calc_type = self.calc_type
-            
+
             print(calc_type)
 
-            #if (
+            # if (
             #    "type" not in atoms.info
             #    or "calc_type" not in atoms.info
             #    or "free_indices" not in atoms.info
             #    # or atoms.info["type"].lower() not in ["slab+adsorbate", "slab+ads"]
-            #):
+            # ):
             #    continue
 
             cache = self.vib_cache / f"{current_frame}"
@@ -128,9 +134,7 @@ class VibrationalAnalysis(zntrack.Node):
             modes_cache = self.modes_cache / f"{current_frame}"
             modes_cache.mkdir(parents=True, exist_ok=True)
 
-            constraints = [
-                i for i, j in enumerate(atoms) if i not in free_indices
-            ]
+            constraints = [i for i, j in enumerate(atoms) if i not in free_indices]
             c = FixAtoms(constraints)
             atoms.constraints = c
 
@@ -159,14 +163,19 @@ class VibrationalAnalysis(zntrack.Node):
             if calc_type.lower() == "ts":
                 freq = freq[1:]
 
-            if system.lower() in ["mol", "molecule", "linear-molecule", "isolated-atom"]:
+            if system.lower() in [
+                "mol",
+                "molecule",
+                "linear-molecule",
+                "isolated-atom",
+            ]:
                 if system.lower() == "linear-molecule":
                     freq = freq[5:]
                     geometry = "linear"
 
-                elif system.lower() == 'isolated-atom':
+                elif system.lower() == "isolated-atom":
                     freq = []
-                    geometry = 'monatomic'
+                    geometry = "monatomic"
 
                 else:
                     freq = freq[6:]
@@ -210,7 +219,12 @@ class VibrationalAnalysis(zntrack.Node):
             results.append({"Frame": current_frame, "ddG": dg_Tk})
 
             for temp in np.linspace(10, 1000, 10):
-                if system.lower() in ["mol", "molecule", "linear-molecule", "isolated-atom"]:
+                if system.lower() in [
+                    "mol",
+                    "molecule",
+                    "linear-molecule",
+                    "isolated-atom",
+                ]:
                     dg = thermo.get_gibbs_energy(temp, p_pascal, verbose=True)
                 else:
                     dg = thermo.get_helmholtz_energy(temp, verbose=True)
@@ -298,6 +312,20 @@ class VibrationalAnalysis(zntrack.Node):
             title=f"Comparison of Gibbs Free Energies at {temperature}K",
             xaxis_title="Frame",
             yaxis_title="ddG (eV)",
+            plot_bgcolor="rgba(0, 0, 0, 0)",
+            paper_bgcolor="rgba(0, 0, 0, 0)",
+        )
+        fig.update_xaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
+        )
+        fig.update_yaxes(
+            showgrid=True,
+            gridwidth=1,
+            gridcolor="rgba(120, 120, 120, 0.3)",
+            zeroline=False,
         )
 
         return ComparisonResults(frames=frames, figures={"Gibbs-Comparison": fig})

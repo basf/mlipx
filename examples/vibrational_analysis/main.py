@@ -1,24 +1,16 @@
-import mlipx
 import zntrack
-
 from models import MODELS
+
+import mlipx
 
 project = zntrack.Project()
 
 frames = []
-{% if datapath %}
+
 with project.group("initialize"):
-    for path in {{ datapath }}:
-        frames.append(mlipx.LoadDataFile(path=path))
-{% endif %}{% if material_ids %}
-with project.group("initialize"):
-    for material_id in {{ material_ids }}:
-        frames.append(mlipx.MPRester(search_kwargs={"material_ids": [material_id]}))
-{% endif %}{% if smiles %}
-with project.group("initialize"):
-    for smiles in {{ smiles }}:
+    for smiles in ["CO", "CCO", "CCCO", "CCCCO"]:
         frames.append(mlipx.Smiles2Conformers(smiles=smiles, num_confs=1))
-{% endif %}
+
 
 for model_name, model in MODELS.items():
     with project.group(model_name):
@@ -29,6 +21,7 @@ for model_name, model in MODELS.items():
             displacement=0.015,
             nfree=4,
             lower_freq_threshold=12,
+            system="molecule",
         )
 
 

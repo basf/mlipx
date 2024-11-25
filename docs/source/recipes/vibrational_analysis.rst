@@ -6,29 +6,28 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes vibrational-analysis
+   (.venv) $ mlipx recipes vibrational-analysis --models mace_mp,sevennet,orb_v2 --smiles=CO,CCO,CCCO,CCCCO
 
-.. mermaid::
-   :align: center
+The vibrational analysis method needs additional information to run.
+Please edit the ``main.py`` file and set the ``system`` parameter on the ``VibrationalAnalysis`` node.
+For the given list of SMILES, you should set it to ``"molecule"``.
+Then run the following commands to reproduce and inspect the results:
 
-   graph TD
-      subgraph setup
-         setup1["LoadDataFile"]
-      end
-      subgraph mg1["Model 1"]
-         m1["VibrationalAnalysis"]
-      end
-      subgraph mg2["Model 2"]
-         m2["VibrationalAnalysis"]
-      end
-      subgraph mgn["Model <i>N</i>"]
-         m3["VibrationalAnalysis"]
-      end
-      setup --> mg1
-      setup --> mg2
-      setup --> mgn
+.. code-block:: console
+
+   (.venv) $ python main.py
+   (.venv) $ dvc repro
+   (.venv) $ mlipx compare --glob "*VibrationalAnalysis"
+
+
+.. jupyter-execute::
+   :hide-code:
+
+   from mlipx.doc_utils import get_plots
+
+   plots = get_plots("*VibrationalAnalysis", "../examples/vibrational_analysis/")
+   plots["Gibbs-Comparison"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
-* :term:`LoadDataFile`
 * :term:`VibrationalAnalysis`
