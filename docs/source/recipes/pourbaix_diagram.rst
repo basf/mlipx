@@ -20,6 +20,9 @@ Pourbaix Diagram
 
    plots = get_plots("*PourbaixDiagram", "../examples/pourbaix_diagram/")
    plots["mace_mp_0-pourbaix-diagram"].show()
+   plots["orb_v2_0-pourbaix-diagram"].show()
+   plots["sevennet_0-pourbaix-diagram"].show()
+   plots["chgnet_0-pourbaix-diagram"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 

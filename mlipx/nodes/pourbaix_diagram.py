@@ -18,7 +18,6 @@ from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram as pmg_PourbaixDi
 from pymatgen.analysis.pourbaix_diagram import (
     PourbaixEntry,
     PourbaixPlotter,
-    generate_entry_label,
 )
 from pymatgen.core import Element
 from pymatgen.core.ion import Ion
@@ -123,7 +122,7 @@ def create_pourbaix_plot(
                     x=[center[0]],
                     y=[center[1]],
                     mode="text",
-                    text=[generate_entry_label(entry)],
+                    text=[entry.to_pretty_string()],
                     textfont={"size": label_fontsize, "color": "blue"},
                     name="Domain Label",
                 )
@@ -389,23 +388,7 @@ class PourbaixDiagram(zntrack.Node):
 
             # Update and store the figures directly
             for key, fig in node.figures.items():
-                fig.update_layout(
-                    title=node_identifier,
-                    plot_bgcolor="rgba(0, 0, 0, 0)",
-                    paper_bgcolor="rgba(0, 0, 0, 0)",
-                )
-                fig.update_xaxes(
-                    showgrid=True,
-                    gridwidth=1,
-                    gridcolor="rgba(120, 120, 120, 0.3)",
-                    zeroline=False,
-                )
-                fig.update_yaxes(
-                    showgrid=True,
-                    gridwidth=1,
-                    gridcolor="rgba(120, 120, 120, 0.3)",
-                    zeroline=False,
-                )
+                fig.update_layout(title=node_identifier)
                 figures[f"{node_identifier}-{key}"] = fig
 
         return {
