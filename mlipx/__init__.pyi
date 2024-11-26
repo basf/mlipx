@@ -26,6 +26,7 @@ from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
 from .project import Project
+from .version import __version__
 
 __all__ = [
     "abc",
@@ -58,4 +59,5 @@ __all__ = [
     "PermutationInvariance",
     "Rattle",
     "Project",
+    "__version__",
 ]
