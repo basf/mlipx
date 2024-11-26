@@ -41,4 +41,5 @@ providing a quick overview of all past evaluations.
    concept/recipes
    concept/zntrack
    concept/zndraw
+   concept/metrics
    concept/distributed
