@@ -30,6 +30,11 @@ MLFlow Integration
 
     pip install mlflow
 
+
+.. note::
+
+    More information on how to setup MLFlow and run the server can be found in the `MLFlow documentation <https://mlflow.org/docs/latest/tracking.html#tracking-ui>`_.
+
 Set the tracking URI to connect to your MLFlow server:
 
 .. code-block:: bash
@@ -79,8 +84,6 @@ Additionally, ``mlipx`` logs plots to MLFlow, enabling comparisons of relaxation
     :alt: MLFlow UI Plots
     :width: 100%
     :class: only-light
-
-For more information on metrics and plots in MLFlow, visit the `MLFlow documentation <https://mlflow.org/docs/latest/tracking.html#tracking-ui>`_.
 
 
 Data Version Control (DVC)
