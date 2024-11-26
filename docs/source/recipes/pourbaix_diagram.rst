@@ -18,7 +18,7 @@ Pourbaix Diagram
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*PourbaixDiagram", "../examples/pourbaix_diagram/")
+   plots = get_plots("*PourbaixDiagram", "../../examples/pourbaix_diagram/")
    plots["mace_mp_0-pourbaix-diagram"].show()
    plots["orb_v2_0-pourbaix-diagram"].show()
    plots["sevennet_0-pourbaix-diagram"].show()

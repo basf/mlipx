@@ -18,7 +18,7 @@ You can run the following command to instantiate a test directory:
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*NEBs", "../examples/neb/")
+   plots = get_plots("*NEBs", "../../examples/neb/")
    plots["adjusted_energy_vs_neb_image"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

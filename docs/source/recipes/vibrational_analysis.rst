@@ -25,7 +25,7 @@ Then run the following commands to reproduce and inspect the results:
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*VibrationalAnalysis", "../examples/vibrational_analysis/")
+   plots = get_plots("*VibrationalAnalysis", "../../examples/vibrational_analysis/")
    plots["Gibbs-Comparison"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

@@ -20,7 +20,7 @@ This recipe is used to test the performance of different models in performing st
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*StructureOptimization", "../examples/relax/")
+   plots = get_plots("*StructureOptimization", "../../examples/relax/")
    plots["adjusted_energy_vs_steps"].show()
 
 This recipe uses the following Nodes together with your provided model in the :term:`models.py` file:
