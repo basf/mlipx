@@ -1,7 +1,7 @@
 <div align="center">
 
-![Logo](./docs/source/_static/mlipx-dark.svg#gh-dark-mode-only)
-![Logo](./docs/source/_static/mlipx-light.svg#gh-light-mode-only)
+![Logo](https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/docs/source/_static/mlipx-light.svg#gh-light-mode-only)
+![Logo](https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/docs/source/_static/mlipx-dark.svg#gh-dark-mode-only)
 
 
 [![PyPI version](https://badge.fury.io/py/mlipx.svg)](https://badge.fury.io/py/mlipx)
