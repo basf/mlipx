@@ -31,3 +31,14 @@ Then run the following commands to reproduce and inspect the results:
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`VibrationalAnalysis`
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/vibrational_analysis/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/vibrational_analysis/models.py
+      :language: Python

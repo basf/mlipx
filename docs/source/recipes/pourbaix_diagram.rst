@@ -27,3 +27,14 @@ Pourbaix Diagram
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`PourbaixDiagram`
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/pourbaix_diagram/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/pourbaix_diagram/models.py
+      :language: Python
