@@ -3,11 +3,9 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import pathlib
-import sys
 import typing as t
 
-sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
+import mlipx
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -15,7 +13,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 project = "mlipx"
 copyright = "2024, Fabian Zills, Sheena Agarwal, Sandip De"
 author = "Fabian Zills, Sheena Agarwal, Sandip De"
-release = "v0.1.0"
+release = mlipx.__version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

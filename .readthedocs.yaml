@@ -17,6 +17,7 @@ build:
       - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
       # Navigate to the examples directory and perform DVC operations
       - cd examples
+      - pwd
       - poetry run dvc remote modify origin endpointurl $AWS_ENDPOINT_URL
       - poetry run dvc pull --allow-missing
       - cd ..
