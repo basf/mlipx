@@ -2,7 +2,7 @@
 name = "mlipx"
 version = "0.1.3"
 description = "Machine-Learned Interatomic Potential eXploration"
-authors = ["Fabian Zills <fabian.zills@web.de>", "Sandip De <sandip.de@basf.com>", "Sheena Agarwal <sheena.a.agarwal@basf.com>"]
+authors = ["Sandip De <sandip.de@basf.com>", "Fabian Zills <fabian.zills@web.de>", "Sheena Agarwal <sheena.a.agarwal@basf.com>"]
 license = "MIT"
 readme = "README.md"
 keywords=["data-version-control", "machine-learning", "reproducibility", "collaboration", "machine-learned interatomic potential", "mlip", "mlff"]
