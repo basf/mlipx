@@ -1,4 +1,5 @@
 import fnmatch
+import importlib.metadata
 import json
 import pathlib
 import uuid
@@ -17,6 +18,12 @@ from mlipx import benchmark, recipes
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
 app.add_typer(benchmark.app, name="benchmark")
+
+# Load plugins
+
+entry_points = importlib.metadata.entry_points(group="mlipx.recipes")
+for entry_point in entry_points:
+    entry_point.load()
 
 
 @app.command()

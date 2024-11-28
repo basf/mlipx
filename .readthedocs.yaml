@@ -16,10 +16,7 @@ build:
       # See https://github.com/readthedocs/readthedocs.org/pull/11152/
       - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
       # Navigate to the examples directory and perform DVC operations
-      - cd examples
-      - poetry run dvc remote modify origin endpointurl $AWS_ENDPOINT_URL
-      - poetry run dvc pull --allow-missing
-      - cd ..
+      - cd examples && poetry run dvc remote modify origin endpointurl $AWS_ENDPOINT_URL && poetry run dvc pull --allow-missing
 
 sphinx:
   configuration: docs/source/conf.py

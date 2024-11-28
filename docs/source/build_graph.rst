@@ -8,5 +8,6 @@ You will learn how to include :term:`MLIP` that can not be interfaced with the :
 With your own custom Nodes you can build more comprehensive test cases or go even beyond :term:`MLIP` testing and build workflows for other scenarios, such as :term:`MLIP` training with :code:`mlipx` and :term:`IPSuite`.
 
 .. toctree::
+    :glob:
 
-    notebooks/structure_relaxation.ipynb
+    notebooks/*
