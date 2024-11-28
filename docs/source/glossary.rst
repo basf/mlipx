@@ -46,7 +46,7 @@ Glossary
             }
 
     packmol
-        Packmol is a software package used for building initial configurations for molecular dynamics or Monte Carlo simulations. It can generate a random collection of molecules using the specified density and composition. TODO add cite
+        Packmol is a software package used for building initial configurations for molecular dynamics or Monte Carlo simulations. It can generate a random collection of molecules using the specified density and composition. More information can be found at https://m3g.github.io/packmol/ .
 
     rdkit2ase
         A package for converting RDKit molecules to ASE atoms.

@@ -48,7 +48,7 @@ This recipe is used to test the performance of different models in predicting th
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*CompareCalculatorResults", "../examples/metrics/")
+   plots = get_plots("*CompareCalculatorResults", "../../examples/metrics/")
    # raise ValueError(plots.keys())
    plots["fmax_error"].show()
    plots["adjusted_energy_error_per_atom"].show()

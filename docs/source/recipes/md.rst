@@ -16,7 +16,7 @@ This recipe is used to test the performance of different models in molecular dyn
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*MolecularDynamics", "../examples/md/")
+   plots = get_plots("*MolecularDynamics", "../../examples/md/")
    plots["energy_vs_steps_adjusted"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

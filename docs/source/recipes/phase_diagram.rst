@@ -15,7 +15,7 @@ You can run the following command to instantiate a test directory:
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*PhaseDiagram", "../examples/phase_diagram/")
+   plots = get_plots("*PhaseDiagram", "../../examples/phase_diagram/")
    plots["mace_mp_0-phase-diagram"].show()
    plots["orb_v2_0-phase-diagram"].show()
    plots["sevennet_0-phase-diagram"].show()
@@ -25,3 +25,14 @@ You can run the following command to instantiate a test directory:
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
 * :term:`PhaseDiagram`
+
+.. dropdown:: Content of :code:`main.py`
+
+   .. literalinclude:: ../../../examples/phase_diagram/main.py
+      :language: Python
+
+
+.. dropdown:: Content of :code:`models.py`
+
+   .. literalinclude:: ../../../examples/phase_diagram/models.py
+      :language: Python
