@@ -84,7 +84,9 @@ class CompareCalculatorResults(zntrack.Node):
             figures[key] = get_figure(key, [self])
         return figures
 
-    def compare(self, *nodes: "CompareCalculatorResults") -> ComparisonResults:
+    def compare(self, *nodes: "CompareCalculatorResults") -> ComparisonResults:  # noqa C901
+        if len(nodes) == 0:
+            raise ValueError("No nodes to compare provided")
         figures = {}
         frames_info = {}
         for key in nodes[0].plots.columns:
@@ -119,6 +121,11 @@ class CompareCalculatorResults(zntrack.Node):
                         node_atoms.get_potential_energy()
                     )
                     atoms.arrays[f"{node.name}_forces"] = node_atoms.get_forces()
+
+        for ref_atoms, atoms in zip(nodes[0].reference.frames, frames):
+            with contextlib.suppress(RuntimeError, PropertyNotImplementedError):
+                atoms.info["ref_energy"] = ref_atoms.get_potential_energy()
+                atoms.arrays["ref_forces"] = ref_atoms.get_forces()
 
         return {
             "frames": frames,
