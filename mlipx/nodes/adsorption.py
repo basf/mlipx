@@ -4,6 +4,9 @@ import ase
 import ase.io as aio
 import zntrack
 
+from mlipx.abc import NodeWithCalculator, ComparisonResults
+import ase.optimize as opt
+
 import typing as t
 ALLOWED_CRYSTAL = t.Literal['fcc111','fcc211','bcc110','bcc111','hcp0001','diamond111']
         
@@ -32,15 +35,15 @@ class BuildASEslab(zntrack.Node):
     """
 
     crystal: ALLOWED_CRYSTAL = zntrack.params()
-    metal: str = zntrack.params()
+    symbol: str = zntrack.params()
     size: tuple = zntrack.params()
-    a: float = zntrack.params()
+    a: float = zntrack.params(None)
     c: float = zntrack.params(False)
     vacuum: float = zntrack.params(10)
     orthogonal: bool = zntrack.params(True)
     periodic: bool  = zntrack.params(True)
 
-    frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
+    frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.traj")
 
     def run(self):
         # from ase.build import add_adsorbate
@@ -48,7 +51,6 @@ class BuildASEslab(zntrack.Node):
         import ase.build
 
         slb = getattr(ase.build, self.crystal)
-
         
         if not self.c:
             slab = slb(
@@ -62,15 +64,17 @@ class BuildASEslab(zntrack.Node):
         # print(mask)
         slab.set_constraint(FixAtoms(mask=mask))
 
-        aio.write(self.frames_path, slabs)
+        aio.write(self.frames_path, slab)
 
     @property
     def frames(self) -> list[ase.Atoms]:
-        with self.state.fs.open(self.frames_path, "r") as f:
-            return list(aio.iread(f, format="extxyz"))
+        with self.state.fs.open(self.frames_path, "rb") as f:
+            return list(aio.iread(f, format="traj"))
 
 
-class AddAdsorbate(zntrack.Node):
+class RelaxAdsorptionConfigs(zntrack.Node):
+# class AddAdsorbate(zntrack.Node):
+
     """Add an adsorbate to a surface.
 
     Parameters
@@ -97,47 +101,104 @@ class AddAdsorbate(zntrack.Node):
         position argument.
 
     """
-    slab: ase.Atoms = zntrack.deps()
-    adsorbate: ase.Atoms = zntrack.deps()
-    height: float = zntrack.deps(1.5)
-    position: str = zntrack.deps('all')
-    mol_index: int = zntrack.deps(0)
+    slabs: list[ase.Atoms] = zntrack.deps()
+    adsorbates: list[ase.Atoms] = zntrack.deps()
+    height: float = zntrack.params(2.1)
+    position: str = zntrack.params('all')
+    mol_index: int = zntrack.params(0)
+    slab_id: int = zntrack.params(-1)
+    adsorbate_id: int = zntrack.params(-1)
+    optimizer: str = zntrack.params('LBFGS')
+    model: NodeWithCalculator = zntrack.deps()
+    steps: int = zntrack.params(300)
+    fmax: float = zntrack.params(0.05)
 
-    frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
+    frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.traj")
+    relax_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "relax")
+
+    def relax_atoms(self, atoms):
+        count = len(list(self.relax_path.glob('*')))
+        optimizer = getattr(opt, self.optimizer)
+        calc = self.model.get_calculator()
+
+        self.relax_path.mkdir(exist_ok=True)
+
+        # energies = []
+        # fmax = []
+
+        # def metrics_callback():
+        #     energies.append(atoms.get_potential_energy())
+        #     fmax.append(np.linalg.norm(atoms.get_forces(), axis=-1).max())
+
+        atoms.calc = calc
+        dyn = optimizer(
+            atoms,
+            trajectory = (self.relax_path / f"{count}.traj").as_posix(),
+        )
+        # dyn.attach(metrics_callback)
+        dyn.run(fmax=self.fmax, steps=self.steps)
+        return atoms
 
     def run(self):
 
         from ase.build import add_adsorbate
         
-        parent = self.slab.copy()
-        parent.info['_id'] = 'parent'
-        parent.info['parent_id'] = None
+        slab = self.slabs[self.slab_id]
+        slab.info['type'] = 'slab'
+        slab = self.relax_atoms(slab)
+        adsorbate = self.adsorbates[self.adsorbate_id]
+        adsorbate.info['type'] = 'adsorbate'
+        adsorbate = self.relax_atoms(adsorbate)
+        
+        # slab.info['_id'] = 'parent'
+        # parent.info['parent_id'] = None
 
         ads_trj = []
-        if self.postions.lower() == 'all':
-            for k, v in self.slab.info['adsorbate_info']['sites'].items():
-                ads_slab = self.slab.copy()
-                parent.info['_id'] = 'ads'
-                parent.info['parent_id'] = 'parent'
-                add_adsorbate(ads_slab, adsorbate=self.adsorbate, height=self.height, positon = v, mol_index=self.mol_index)
-                ads_trj.append(ads_slab)
+        if self.position.lower() == 'all':
+            # for k, v in self.slabs[self.slab_id].info['adsorbate_info']['sites'].items():
+            for k in self.slabs[self.slab_id].info['adsorbate_info']['sites'].keys():
+
+                print(k)
+                ads_slab = slab.copy()
+                ads_slab.info['type'] = 'slab+adsorbate'
+                add_adsorbate(ads_slab, adsorbate=self.adsorbates[self.adsorbate_id], height=self.height, position = k, mol_index=self.mol_index)
+                ads_trj.append(self.relax_atoms(ads_slab))
         else:
-            ads_slab = self.slab.copy()
-            parent.info['_id'] = 'ads'
-            parent.info['parent_id'] = 'parent'
-            add_adsorbate(ads_slab, adsorbate=self.adsorbate, height=self.height, positon = self.position, mol_index=self.mol_index)
+            raise ValueError('not yet, sry :)')
+            # ads_slab = self.slabs[self.slab_id].copy()
+            # add_adsorbate(ads_slab, adsorbate=self.adsorbates, height=self.height, position = self.position, mol_index=self.mol_index)
 
         aio.write(self.frames_path, ads_trj)
 
     @property
     def frames(self) -> list[ase.Atoms]:
-        with self.state.fs.open(self.frames_path, "r") as f:
-            return list(aio.iread(f, format="extxyz"))
+        with self.state.fs.open(self.frames_path, "rb") as f:
+            return list(aio.iread(f, format="traj"))
         
-    
-    # @staticmethod
-    # def compare(*nodes: "StructureOptimization") -> ComparisonResults:
-    #     frames = sum([node.frames for node in nodes], [])
+    @property
+    def relaxations(self) -> dict[str, list[ase.Atoms]]:
+        relax_dict = {}
+        for path in self.relax_path.glob('*'):
+            with self.state.fs.open(path, "rb") as f:
+                relax_dict[path.as_posix()] = list(aio.iread(f, format="traj"))
+        return relax_dict        
+
+    @staticmethod
+    def compare(*nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
+
+        for key in nodes[0].relaxations:
+            for node in nodes:
+                traj = node.relaxations[key]
+
+        # for results in zip(x.relaxations.values() for x in nodes):
+        #     traj = results[0]
+        #     print(type(traj))
+        return {
+            'frames': traj,
+            'figures': {}
+        }
+        
+        # frames = sum([node.frames for node in nodes], [])
     #     offset = 0
     #     fig = go.Figure()
     #     for idx, node in enumerate(nodes):
