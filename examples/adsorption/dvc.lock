@@ -1,0 +1,190 @@
+schema: '2.0'
+stages:
+  initialize_BuildASEslab:
+    cmd: zntrack run mlipx.nodes.adsorption.BuildASEslab --name initialize_BuildASEslab
+    params:
+      params.yaml:
+        initialize_BuildASEslab:
+          a:
+          c: false
+          crystal: fcc111
+          orthogonal: true
+          periodic: true
+          size:
+          - 3
+          - 4
+          - 4
+          symbol: Cu
+          vacuum: 10
+    outs:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    - path: nodes/initialize/BuildASEslab/node-meta.json
+      hash: md5
+      md5: f65bb1810807c96c9393652fded007c6
+      size: 64
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    params:
+      params.yaml:
+        initialize_Smiles2Conformers:
+          max_attempts: 1000
+          num_confs: 1
+          random_seed: 42
+          smiles: CO
+    outs:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      size: 369
+    - path: nodes/initialize/Smiles2Conformers/node-meta.json
+      hash: md5
+      md5: f3565426d7551d4e8164de199b3ce361
+      size: 64
+  initialize_AddAdsorbate:
+    cmd: zntrack run mlipx.nodes.adsorption.AddAdsorbate --name initialize_AddAdsorbate
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      size: 369
+    - path: nodes/initialize/StructureOptimization/frames.traj
+      hash: md5
+      md5: 12df581122155f03897c203413d8e2b9
+      size: 10023
+    - path: nodes/initialize/StructureOptimization/plots.csv
+      hash: md5
+      md5: 745b03ab641a6f85e6f0d9ae3e54da64
+      size: 116
+    params:
+      params.yaml:
+        initialize_AddAdsorbate:
+          adsorbate_id: -1
+          height: 2.1
+          mol_index: 0
+          position: all
+          slab_id: -1
+    outs:
+    - path: nodes/initialize/AddAdsorbate/frames.traj
+      hash: md5
+      md5: 755f65e0e7e851b648c1a45c43618554
+      size: 12323
+    - path: nodes/initialize/AddAdsorbate/node-meta.json
+      hash: md5
+      md5: c847de8aa794f0cc3a2db1291cc9f1af
+      size: 64
+  initialize_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      initialize_StructureOptimization
+    deps:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    params:
+      params.yaml:
+        initialize_StructureOptimization:
+          data_id: -1
+          fmax: 0.05
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/initialize/StructureOptimization/frames.traj
+      hash: md5
+      md5: 12df581122155f03897c203413d8e2b9
+      size: 10023
+    - path: nodes/initialize/StructureOptimization/node-meta.json
+      hash: md5
+      md5: e9b849310fc1167492f85056b8d99e14
+      size: 64
+    - path: nodes/initialize/StructureOptimization/plots.csv
+      hash: md5
+      md5: 745b03ab641a6f85e6f0d9ae3e54da64
+      size: 116
+  initialize_StructureOptimization_1:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      initialize_StructureOptimization_1
+    deps:
+    - path: nodes/initialize/AddAdsorbate/frames.traj
+      hash: md5
+      md5: 755f65e0e7e851b648c1a45c43618554
+      size: 12323
+    params:
+      params.yaml:
+        initialize_StructureOptimization_1:
+          data_id: -1
+          fmax: 0.05
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/initialize/StructureOptimization_1/frames.traj
+      hash: md5
+      md5: d656b22749b85425203d11b3204a1501
+      size: 216353
+    - path: nodes/initialize/StructureOptimization_1/node-meta.json
+      hash: md5
+      md5: 47bb5809294eac5f28f9253ca64d2e44
+      size: 64
+    - path: nodes/initialize/StructureOptimization_1/plots.csv
+      hash: md5
+      md5: 91c048db20aa61b4b6ff71416f92ed56
+      size: 2061
+  initialize_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name initialize_RelaxAdsorptionConfigs
+    deps:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      size: 369
+    params:
+      params.yaml:
+        initialize_RelaxAdsorptionConfigs:
+          adsorbate_id: -1
+          fmax: 0.05
+          height: 2.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          mol_index: 0
+          optimizer: LBFGS
+          position: all
+          slab_id: -1
+          steps: 300
+    outs:
+    - path: nodes/initialize/RelaxAdsorptionConfigs/frames.traj
+      hash: md5
+      md5: 9ac601f833b7c0a3ef090bc2ef6e7cd4
+      size: 16347
+    - path: nodes/initialize/RelaxAdsorptionConfigs/node-meta.json
+      hash: md5
+      md5: 8ce9904830c1c5982e22921f96b38550
+      size: 64
+    - path: nodes/initialize/RelaxAdsorptionConfigs/relax
+      hash: md5
+      md5: 01bda6946e129be648e9efdd1744f294.dir
+      size: 902734
+      nfiles: 6
