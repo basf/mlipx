@@ -25,8 +25,10 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
+from .nodes.adsorption import BuildASEslab, AddAdsorbate
 from .project import Project
 from .version import __version__
+
 
 __all__ = [
     "abc",
@@ -59,5 +61,7 @@ __all__ = [
     "PermutationInvariance",
     "Rattle",
     "Project",
+    "BuildASEslab",
+    "AddAdsorbate",
     "__version__",
 ]
