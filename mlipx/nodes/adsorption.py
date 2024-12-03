@@ -183,18 +183,58 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                 relax_dict[path.as_posix()] = list(aio.iread(f, format="traj"))
         return relax_dict        
 
+
+    # @staticmethod
+    # def get_ref_ens(*nodes: "RelaxAdsorptionConfigs"):
+
+    #     for key in nodes[0].relaxations:
+    #         for node in nodes:
+    #             traj = node.relaxations[key]
+
+    #             if traj[0].info['type'].lower() == 'slab':
+    #                 E_slab = traj[-1].get_potential_energy()
+                
+    #             if traj[0].info['type'].lower() == 'adsorbate':
+    #                 E_adsorbate = traj[-1].get_potential_energy()
+    #     return E_slab, E_adsorbate
+
     @staticmethod
     def compare(*nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
 
+        full_traj = []
         for key in nodes[0].relaxations:
             for node in nodes:
                 traj = node.relaxations[key]
+
+                config_type = traj[0].info['type'].lower()
+
+                if config_type == 'slab':
+                    E_slab = traj[-1].get_potential_energy()
+                    E_ref = E_slab
+                
+                elif config_type == 'adsorbate':
+                    E_adsorbate = traj[-1].get_potential_energy()
+                    E_ref = E_adsorbate
+
+                elif config_type == 'slab+adsorbate':
+                    E_ref = E_adsorbate + E_slab
+                    #this will only work if the slab and adsorbate come in the traj before slab+ads
+                    # - will always be the case
+                
+                else:
+                    raise ValueError(f"type {config_type} not supported...")
+
+                for a in traj:
+                    a.info['E_ads'] = a.get_potential_energy() - E_ref
+                    # a.info['E_ads'] = a.get_potential_energy() - E_ref
+
+                full_traj += traj
 
         # for results in zip(x.relaxations.values() for x in nodes):
         #     traj = results[0]
         #     print(type(traj))
         return {
-            'frames': traj,
+            'frames': full_traj,
             'figures': {}
         }
         
@@ -217,3 +257,4 @@ class RelaxAdsorptionConfigs(zntrack.Node):
     #         frames=frames,
     #         figures={"energy_vs_steps": fig},
     #     )
+
