@@ -183,21 +183,6 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                 relax_dict[path.as_posix()] = list(aio.iread(f, format="traj"))
         return relax_dict        
 
-
-    # @staticmethod
-    # def get_ref_ens(*nodes: "RelaxAdsorptionConfigs"):
-
-    #     for key in nodes[0].relaxations:
-    #         for node in nodes:
-    #             traj = node.relaxations[key]
-
-    #             if traj[0].info['type'].lower() == 'slab':
-    #                 E_slab = traj[-1].get_potential_energy()
-                
-    #             if traj[0].info['type'].lower() == 'adsorbate':
-    #                 E_adsorbate = traj[-1].get_potential_energy()
-    #     return E_slab, E_adsorbate
-
     @staticmethod
     def compare(*nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
 
@@ -230,9 +215,6 @@ class RelaxAdsorptionConfigs(zntrack.Node):
 
                 full_traj += traj
 
-        # for results in zip(x.relaxations.values() for x in nodes):
-        #     traj = results[0]
-        #     print(type(traj))
         return {
             'frames': full_traj,
             'figures': {}
