@@ -83,7 +83,7 @@ def create_pourbaix_plot(
                 x=[7, 7],
                 y=ylim,
                 mode="lines",
-                line={"color": "black", "dash": "dot"},
+                line={"color": "grey", "dash": "dot"},
                 name="Neutral Axis",
             )
         )
@@ -92,7 +92,7 @@ def create_pourbaix_plot(
                 x=xlim,
                 y=[0, 0],
                 mode="lines",
-                line={"color": "black", "dash": "dot"},
+                line={"color": "grey", "dash": "dot"},
                 name="V=0 Line",
             )
         )
@@ -110,7 +110,7 @@ def create_pourbaix_plot(
                 x=x,
                 y=y,
                 mode="lines",
-                line={"color": "black"},
+                line={"color": "grey"},
                 name=f"Domain {entry.name}",
             )
         )
@@ -138,6 +138,13 @@ def create_pourbaix_plot(
         yaxis={"title": "E (V)", "range": ylim},
         plot_bgcolor="rgba(0, 0, 0, 0)",
         paper_bgcolor="rgba(0, 0, 0, 0)",
+    )
+
+    fig.update_xaxes(
+        showgrid=False, zeroline=False
+    )
+    fig.update_yaxes(
+        showgrid=False, zeroline=False
     )
 
     return fig
