@@ -140,12 +140,8 @@ def create_pourbaix_plot(
         paper_bgcolor="rgba(0, 0, 0, 0)",
     )
 
-    fig.update_xaxes(
-        showgrid=False, zeroline=False
-    )
-    fig.update_yaxes(
-        showgrid=False, zeroline=False
-    )
+    fig.update_xaxes(showgrid=False, zeroline=False)
+    fig.update_yaxes(showgrid=False, zeroline=False)
 
     return fig
 
