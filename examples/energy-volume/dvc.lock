@@ -149,3 +149,36 @@ stages:
       hash: md5
       md5: fa8b44ba9924d82a0487acc3e2f55a68
       size: 3509
+  mattersim_0_EnergyVolumeCurve:
+    cmd: zntrack run mlipx.nodes.energy_volume.EnergyVolumeCurve --name mattersim_0_EnergyVolumeCurve
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_EnergyVolumeCurve:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_points: 50
+          start: 0.8
+          stop: 2.0
+    outs:
+    - path: nodes/mattersim/0/EnergyVolumeCurve/frames.xyz
+      hash: md5
+      md5: 0ad32e40ec27684ee853591e273982f2
+      size: 86946
+    - path: nodes/mattersim/0/EnergyVolumeCurve/node-meta.json
+      hash: md5
+      md5: 92019096017c6c38d3633632cb0942fc
+      size: 64
+    - path: nodes/mattersim/0/EnergyVolumeCurve/results.csv
+      hash: md5
+      md5: 1756b0048cae0710eaac8db037e20f6f
+      size: 3057

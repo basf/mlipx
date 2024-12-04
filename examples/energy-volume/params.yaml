@@ -25,6 +25,17 @@ mace_mp_0_EnergyVolumeCurve:
   n_points: 50
   start: 0.8
   stop: 2.0
+mattersim_0_EnergyVolumeCurve:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_points: 50
+  start: 0.8
+  stop: 2.0
 orb_v2_0_EnergyVolumeCurve:
   data_id: -1
   model:
