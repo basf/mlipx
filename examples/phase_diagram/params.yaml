@@ -25,6 +25,17 @@ mace_mp_0_PhaseDiagram:
     kwargs:
       model: medium
     module: mace.calculators
+mattersim_0_PhaseDiagram:
+  chemsys: null
+  data_ids: null
+  fmax: 0.05
+  geo_opt: false
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
 orb_v2_0_PhaseDiagram:
   chemsys: null
   data_ids: null

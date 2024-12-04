@@ -469,3 +469,40 @@ stages:
       hash: md5
       md5: f2bd94bb6158efc7a4f22533448c4ca7
       size: 86
+  mattersim_0_PhaseDiagram:
+    cmd: zntrack run mlipx.nodes.phase_diagram.PhaseDiagram --name mattersim_0_PhaseDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: ba61141c54087769ba8a69da4ea4b82a
+      size: 1156
+    params:
+      params.yaml:
+        mattersim_0_PhaseDiagram:
+          chemsys:
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+    outs:
+    - path: nodes/mattersim/0/PhaseDiagram/frames.xyz
+      hash: md5
+      md5: 679ee7c8b95cdc70abd991c32f09246e
+      size: 2144
+    - path: nodes/mattersim/0/PhaseDiagram/node-meta.json
+      hash: md5
+      md5: 739155364456752974f4e9d9a4308fe6
+      size: 64
+    - path: nodes/mattersim/0/PhaseDiagram/phase_diagram.json
+      hash: md5
+      md5: 6b839d23cadb7cc88959f1b0584ddc80
+      size: 2640583
+    - path: nodes/mattersim/0/PhaseDiagram/results.csv
+      hash: md5
+      md5: 50deb51c59a72deac8c32ec19cd7b66d
+      size: 76
