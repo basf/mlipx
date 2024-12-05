@@ -5,7 +5,7 @@ This recipe is used to test the performance of different models in predicting th
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2,chgnet --datapath ../data/DODH_adsorption_dft.xyz --repro
+   (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2,chgnet,mattersim --datapath ../data/DODH_adsorption_dft.xyz --repro
 
 .. mermaid::
    :align: center

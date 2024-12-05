@@ -6,7 +6,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes phase-diagram  --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-30084 --repro
+   (.venv) $ mlipx recipes phase-diagram  --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-30084 --repro
    (.venv) $ mlipx compare --glob "*PhaseDiagram"
 
 
@@ -20,6 +20,7 @@ You can run the following command to instantiate a test directory:
    plots["orb_v2_0-phase-diagram"].show()
    plots["sevennet_0-phase-diagram"].show()
    plots["chgnet_0-phase-diagram"].show()
+   plots["mattersim_0-phase-diagram"].show()
 
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:

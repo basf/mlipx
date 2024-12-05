@@ -8,7 +8,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes neb --models mace_mp,sevennet,orb_v2,chgnet --datapath ../data/neb_end_p.xyz --repro
+   (.venv) $ mlipx recipes neb --models mace_mp,sevennet,orb_v2,chgnet,mattersim --datapath ../data/neb_end_p.xyz --repro
    (.venv) $ zntrack list # show available Nodes
    (.venv) $ mlipx compare --glob "*NEBs"
 

@@ -6,7 +6,7 @@ You can run the following command to instantiate a test directory:
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes vibrational-analysis --models mace_mp,sevennet,orb_v2 --smiles=CO,CCO,CCCO,CCCCO
+   (.venv) $ mlipx recipes vibrational-analysis --models mace_mp,sevennet,orb_v2,mattersim --smiles=CO,CCO,CCCO,CCCCO
 
 The vibrational analysis method needs additional information to run.
 Please edit the ``main.py`` file and set the ``system`` parameter on the ``VibrationalAnalysis`` node.

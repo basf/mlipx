@@ -9,7 +9,7 @@ Pourbaix Diagram
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes pourbaix-diagram  --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
+   (.venv) $ mlipx recipes pourbaix-diagram  --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-1143 --repro
    (.venv) $ mlipx compare --glob "*PourbaixDiagram"
 
 
@@ -23,6 +23,7 @@ Pourbaix Diagram
    plots["orb_v2_0-pourbaix-diagram"].show()
    plots["sevennet_0-pourbaix-diagram"].show()
    plots["chgnet_0-pourbaix-diagram"].show()
+   plots["mattersim_0-pourbaix-diagram"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
