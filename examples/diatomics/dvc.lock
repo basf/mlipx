@@ -236,3 +236,37 @@ stages:
       hash: md5
       md5: f05ba44025dbc070e740fedc0c6d2be2
       size: 64
+  mattersim_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mattersim_HomonuclearDiatomics
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: e5492061936ed82d534cc2d7c62937ea
+      size: 153
+    params:
+      params.yaml:
+        mattersim_HomonuclearDiatomics:
+          elements: []
+          eq_distance: covalent-radiuis
+          max_distance: 2.0
+          min_distance: 0.5
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_points: 100
+    outs:
+    - path: nodes/mattersim/HomonuclearDiatomics/frames.json
+      hash: md5
+      md5: f27250c6ea623b2a9a38b92717cd97af
+      size: 421800
+    - path: nodes/mattersim/HomonuclearDiatomics/node-meta.json
+      hash: md5
+      md5: bc45e1ec53bd983d26b89c74fc127b40
+      size: 64
+    - path: nodes/mattersim/HomonuclearDiatomics/results.csv
+      hash: md5
+      md5: b70e500ccf4307772b390389fb6e5a1d
+      size: 5843

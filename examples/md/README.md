@@ -1,4 +1,4 @@
 ```bash
-mlipx recipes md --models mace_mp,sevennet,orb_v2,chgnet --material-ids=mp-1143 --repro
+mlipx recipes md --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-1143 --repro
 mlipx compare --glob "*MolecularDynamics"
 ```

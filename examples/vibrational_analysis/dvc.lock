@@ -526,3 +526,65 @@ stages:
       md5: 2efa19253eb1753873361eed731b4d08.dir
       size: 394307
       nfiles: 508
+  mattersim_VibrationalAnalysis:
+    cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name mattersim_VibrationalAnalysis
+    deps:
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      size: 369
+    - path: nodes/initialize/Smiles2Conformers_1/frames.xyz
+      hash: md5
+      md5: f2aa9aaa4c216155e3cbbf82fdbe2f53
+      size: 531
+    - path: nodes/initialize/Smiles2Conformers_2/frames.xyz
+      hash: md5
+      md5: a76929bb06b25f306ced9d308a3aba20
+      size: 694
+    - path: nodes/initialize/Smiles2Conformers_3/frames.xyz
+      hash: md5
+      md5: 915327424112f9b99cb5971c59b20842
+      size: 856
+    params:
+      params.yaml:
+        mattersim_VibrationalAnalysis:
+          calc_type:
+          displacement: 0.015
+          free_indices:
+          lower_freq_threshold: 12
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          nfree: 4
+          system: molecule
+          temperature: 298.15
+    outs:
+    - path: nodes/mattersim/VibrationalAnalysis/frames.xyz
+      hash: md5
+      md5: e3ca9cce4a8de2713d486c1a8d03b4d5
+      size: 7006
+    - path: nodes/mattersim/VibrationalAnalysis/modes
+      hash: md5
+      md5: c56a2a9985472f9205bab5d55f5dd889.dir
+      size: 2512062
+      nfiles: 126
+    - path: nodes/mattersim/VibrationalAnalysis/modes.xyz
+      hash: md5
+      md5: be6dfebc62ddad00f63f17449c997705
+      size: 2534490
+    - path: nodes/mattersim/VibrationalAnalysis/node-meta.json
+      hash: md5
+      md5: 517e70a191de68dff8abea9d546a1f1c
+      size: 64
+    - path: nodes/mattersim/VibrationalAnalysis/results.csv
+      hash: md5
+      md5: 07e28ac51d3e6b3e5ecced93af4af017
+      size: 101
+    - path: nodes/mattersim/VibrationalAnalysis/vib
+      hash: md5
+      md5: 62fc9e777dbbb6e00462944d51fd84ec.dir
+      size: 394158
+      nfiles: 508

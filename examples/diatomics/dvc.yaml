@@ -20,6 +20,18 @@ stages:
     - nodes/mace_mp/HomonuclearDiatomics/results.csv
     params:
     - mace_mp_HomonuclearDiatomics
+  mattersim_HomonuclearDiatomics:
+    cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name mattersim_HomonuclearDiatomics
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/mattersim/HomonuclearDiatomics/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/HomonuclearDiatomics/frames.json
+    - nodes/mattersim/HomonuclearDiatomics/results.csv
+    params:
+    - mattersim_HomonuclearDiatomics
   orb_v2_HomonuclearDiatomics:
     cmd: zntrack run mlipx.nodes.diatomics.HomonuclearDiatomics --name orb_v2_HomonuclearDiatomics
     deps:

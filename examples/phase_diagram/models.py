@@ -56,6 +56,7 @@ MODELS["chgnet"] = mlipx.GenericASECalculator(
     class_name="CHGNetCalculator",
 )
 
+
 # https://github.com/CederGroupHub/chgnet
 MODELS["mattersim"] = mlipx.GenericASECalculator(
     module="mattersim.forcefield",

@@ -19,6 +19,11 @@ plots:
       nodes/chgnet/0/PourbaixDiagram/results.csv: data_id
     y:
       nodes/chgnet/0/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
+- mattersim_0_PourbaixDiagram_results:
+    x:
+      nodes/mattersim/0/PourbaixDiagram/results.csv: data_id
+    y:
+      nodes/mattersim/0/PourbaixDiagram/results.csv: pourbaix_decomposition_energy
 stages:
   chgnet_0_PourbaixDiagram:
     cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name chgnet_0_PourbaixDiagram
@@ -55,6 +60,19 @@ stages:
     - nodes/mace_mp/0/PourbaixDiagram/results.csv
     params:
     - mace_mp_0_PourbaixDiagram
+  mattersim_0_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name mattersim_0_PourbaixDiagram
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mattersim/0/PourbaixDiagram/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/PourbaixDiagram/frames.xyz
+    - nodes/mattersim/0/PourbaixDiagram/pourbaix_diagram.json
+    - nodes/mattersim/0/PourbaixDiagram/results.csv
+    params:
+    - mattersim_0_PourbaixDiagram
   orb_v2_0_PourbaixDiagram:
     cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name orb_v2_0_PourbaixDiagram
     deps:

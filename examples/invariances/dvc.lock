@@ -437,3 +437,108 @@ stages:
       hash: md5
       md5: 9c6a8b5fe9083d3b630a1eeae994bb32
       size: 2174
+  mattersim_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mattersim_0_RotationalInvariance
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_RotationalInvariance:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_points: 100
+    outs:
+    - path: nodes/mattersim/0/RotationalInvariance/frames.xyz
+      hash: md5
+      md5: 707a6dc4eecc8a0a0b02fd95ca83e443
+      size: 174713
+    - path: nodes/mattersim/0/RotationalInvariance/metrics.json
+      hash: md5
+      md5: 77ccde3a333100eb4349487f89f5b6bb
+      size: 59
+    - path: nodes/mattersim/0/RotationalInvariance/node-meta.json
+      hash: md5
+      md5: a85268bf8a3ecc93b11a7147b83ae77d
+      size: 64
+    - path: nodes/mattersim/0/RotationalInvariance/plots.csv
+      hash: md5
+      md5: 2bde6d882f64043daf58e44cf084e23e
+      size: 1333
+  mattersim_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mattersim_0_PermutationInvariance
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_PermutationInvariance:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_points: 100
+    outs:
+    - path: nodes/mattersim/0/PermutationInvariance/frames.xyz
+      hash: md5
+      md5: 1b409395466af84044d0287f895045bf
+      size: 165300
+    - path: nodes/mattersim/0/PermutationInvariance/metrics.json
+      hash: md5
+      md5: 4e4427ee1edb555656e7147e83f02c3f
+      size: 40
+    - path: nodes/mattersim/0/PermutationInvariance/node-meta.json
+      hash: md5
+      md5: e781deaac25d66bceb3516f0d782411b
+      size: 64
+    - path: nodes/mattersim/0/PermutationInvariance/plots.csv
+      hash: md5
+      md5: 1c1c42ccb7cb6a2c7fa26e80401d4b2c
+      size: 1298
+  mattersim_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mattersim_0_TranslationalInvariance
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_TranslationalInvariance:
+          data_id: -1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_points: 100
+    outs:
+    - path: nodes/mattersim/0/TranslationalInvariance/frames.xyz
+      hash: md5
+      md5: 46b9c42ac7326387e45bd50371a4fb84
+      size: 165318
+    - path: nodes/mattersim/0/TranslationalInvariance/metrics.json
+      hash: md5
+      md5: 7d4ad028825f3dc04b1f1dd31af3ad8a
+      size: 58
+    - path: nodes/mattersim/0/TranslationalInvariance/node-meta.json
+      hash: md5
+      md5: 5637f1d232f8039a0a364fd6daa150b4
+      size: 64
+    - path: nodes/mattersim/0/TranslationalInvariance/plots.csv
+      hash: md5
+      md5: f1d21493378826913984aa19aa0dc61b
+      size: 1316

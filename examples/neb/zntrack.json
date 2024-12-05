@@ -184,5 +184,43 @@
             "_type": "pathlib.Path",
             "value": "$nwd$/neb_trajectory.traj"
         }
+    },
+    "mattersim_NEBs": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mattersim/NEBs"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.nebs",
+                        "name": "initialize_NEBinterpolate",
+                        "cls": "NEBinterpolate",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        },
+        "trajectory_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/neb_trajectory.traj"
+        }
     }
 }

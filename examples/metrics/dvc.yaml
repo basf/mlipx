@@ -74,6 +74,21 @@ plots:
       nodes/chgnet/EvaluateCalculatorResults/plots.csv: step
     y:
       nodes/chgnet/EvaluateCalculatorResults/plots.csv: energy
+- mattersim_EvaluateCalculatorResults_plots_0:
+    x:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: fmax
+- mattersim_EvaluateCalculatorResults_plots_1:
+    x:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: fnorm
+- mattersim_EvaluateCalculatorResults_plots_2:
+    x:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: step
+    y:
+      nodes/mattersim/EvaluateCalculatorResults/plots.csv: energy
 stages:
   chgnet_ApplyCalculator:
     cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name chgnet_ApplyCalculator
@@ -160,6 +175,44 @@ stages:
         cache: false
     outs:
     - nodes/mace_mp/EvaluateCalculatorResults/plots.csv
+  mattersim_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mattersim_ApplyCalculator
+    deps:
+    - nodes/initialize/LoadDataFile/node-meta.json
+    metrics:
+    - nodes/mattersim/ApplyCalculator/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/ApplyCalculator/frames.h5
+    params:
+    - mattersim_ApplyCalculator
+  mattersim_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      mattersim_CompareCalculatorResults
+    deps:
+    - nodes/mattersim/EvaluateCalculatorResults/node-meta.json
+    - nodes/mattersim/EvaluateCalculatorResults/plots.csv
+    - nodes/reference/EvaluateCalculatorResults/node-meta.json
+    - nodes/reference/EvaluateCalculatorResults/plots.csv
+    metrics:
+    - nodes/mattersim/CompareCalculatorResults/error.json:
+        cache: false
+    - nodes/mattersim/CompareCalculatorResults/node-meta.json:
+        cache: false
+    - nodes/mattersim/CompareCalculatorResults/rmse.json:
+        cache: false
+    outs:
+    - nodes/mattersim/CompareCalculatorResults/plots.csv
+  mattersim_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      mattersim_EvaluateCalculatorResults
+    deps:
+    - nodes/mattersim/ApplyCalculator/frames.h5
+    metrics:
+    - nodes/mattersim/EvaluateCalculatorResults/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/EvaluateCalculatorResults/plots.csv
   orb_v2_ApplyCalculator:
     cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name orb_v2_ApplyCalculator
     deps:

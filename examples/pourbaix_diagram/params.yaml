@@ -29,6 +29,19 @@ mace_mp_0_PourbaixDiagram:
     module: mace.calculators
   pH: 1.0
   use_gibbs: false
+mattersim_0_PourbaixDiagram:
+  V: 1.8
+  data_ids: null
+  fmax: 0.05
+  geo_opt: false
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  pH: 1.0
+  use_gibbs: false
 orb_v2_0_PourbaixDiagram:
   V: 1.8
   data_ids: null

@@ -49,6 +49,29 @@ mace_mp_0_MolecularDynamics:
     friction: 0.05
     temperature: 300
     timestep: 0.5
+mattersim_0_MolecularDynamics:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  modifiers:
+  - _cls: mlipx.nodes.modifier.TemperatureRampModifier
+    end_temperature: 400
+    interval: 1
+    start_temperature: null
+    total_steps: 100
+  observers:
+  - _cls: mlipx.nodes.observer.MaximumForceObserver
+    f_max: 100
+  steps: 1000
+  thermostat:
+    _cls: mlipx.nodes.molecular_dynamics.LangevinConfig
+    friction: 0.05
+    temperature: 300
+    timestep: 0.5
 orb_v2_0_MolecularDynamics:
   data_id: -1
   model:

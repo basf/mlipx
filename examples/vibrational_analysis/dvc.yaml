@@ -14,6 +14,11 @@ plots:
       nodes/orb_v2/VibrationalAnalysis/results.csv: Frame
     y:
       nodes/orb_v2/VibrationalAnalysis/results.csv: ddG
+- mattersim_VibrationalAnalysis_results:
+    x:
+      nodes/mattersim/VibrationalAnalysis/results.csv: Frame
+    y:
+      nodes/mattersim/VibrationalAnalysis/results.csv: ddG
 stages:
   initialize_Smiles2Conformers:
     cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
@@ -69,6 +74,24 @@ stages:
     - nodes/mace_mp/VibrationalAnalysis/vib
     params:
     - mace_mp_VibrationalAnalysis
+  mattersim_VibrationalAnalysis:
+    cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name mattersim_VibrationalAnalysis
+    deps:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    - nodes/initialize/Smiles2Conformers_1/frames.xyz
+    - nodes/initialize/Smiles2Conformers_2/frames.xyz
+    - nodes/initialize/Smiles2Conformers_3/frames.xyz
+    metrics:
+    - nodes/mattersim/VibrationalAnalysis/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/VibrationalAnalysis/frames.xyz
+    - nodes/mattersim/VibrationalAnalysis/modes
+    - nodes/mattersim/VibrationalAnalysis/modes.xyz
+    - nodes/mattersim/VibrationalAnalysis/results.csv
+    - nodes/mattersim/VibrationalAnalysis/vib
+    params:
+    - mattersim_VibrationalAnalysis
   orb_v2_VibrationalAnalysis:
     cmd: zntrack run mlipx.nodes.vibrational_analysis.VibrationalAnalysis --name orb_v2_VibrationalAnalysis
     deps:

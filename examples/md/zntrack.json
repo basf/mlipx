@@ -244,5 +244,64 @@
             "_type": "pathlib.Path",
             "value": "$nwd$/frames.xyz"
         }
+    },
+    "mattersim_0_MolecularDynamics": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mattersim/0/MolecularDynamics"
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "thermostat": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.molecular_dynamics",
+                "cls": "LangevinConfig"
+            }
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.mp_api",
+                        "name": "initialize_MPRester",
+                        "cls": "MPRester",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "observers": [
+            {
+                "_type": "@dataclasses.dataclass",
+                "value": {
+                    "module": "mlipx.nodes.observer",
+                    "cls": "MaximumForceObserver"
+                }
+            }
+        ],
+        "modifiers": [
+            {
+                "_type": "@dataclasses.dataclass",
+                "value": {
+                    "module": "mlipx.nodes.modifier",
+                    "cls": "TemperatureRampModifier"
+                }
+            }
+        ],
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.xyz"
+        }
     }
 }

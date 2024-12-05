@@ -92,6 +92,48 @@ stages:
     - nodes/mace_mp/0/TranslationalInvariance/plots.csv
     params:
     - mace_mp_0_TranslationalInvariance
+  mattersim_0_PermutationInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name mattersim_0_PermutationInvariance
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mattersim/0/PermutationInvariance/metrics.json:
+        cache: false
+    - nodes/mattersim/0/PermutationInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/PermutationInvariance/frames.xyz
+    - nodes/mattersim/0/PermutationInvariance/plots.csv
+    params:
+    - mattersim_0_PermutationInvariance
+  mattersim_0_RotationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.RotationalInvariance --name mattersim_0_RotationalInvariance
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mattersim/0/RotationalInvariance/metrics.json:
+        cache: false
+    - nodes/mattersim/0/RotationalInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/RotationalInvariance/frames.xyz
+    - nodes/mattersim/0/RotationalInvariance/plots.csv
+    params:
+    - mattersim_0_RotationalInvariance
+  mattersim_0_TranslationalInvariance:
+    cmd: zntrack run mlipx.nodes.invariances.TranslationalInvariance --name mattersim_0_TranslationalInvariance
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mattersim/0/TranslationalInvariance/metrics.json:
+        cache: false
+    - nodes/mattersim/0/TranslationalInvariance/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/TranslationalInvariance/frames.xyz
+    - nodes/mattersim/0/TranslationalInvariance/plots.csv
+    params:
+    - mattersim_0_TranslationalInvariance
   orb_v2_0_PermutationInvariance:
     cmd: zntrack run mlipx.nodes.invariances.PermutationInvariance --name orb_v2_0_PermutationInvariance
     deps:

@@ -33,6 +33,20 @@ mace_mp_VibrationalAnalysis:
   nfree: 4
   system: molecule
   temperature: 298.15
+mattersim_VibrationalAnalysis:
+  calc_type: null
+  displacement: 0.015
+  free_indices: null
+  lower_freq_threshold: 12
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  nfree: 4
+  system: molecule
+  temperature: 298.15
 orb_v2_VibrationalAnalysis:
   calc_type: null
   displacement: 0.015

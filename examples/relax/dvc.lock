@@ -732,3 +732,37 @@ stages:
       hash: md5
       md5: 976e34601d5dc7794c6ba62f59a7df1a
       size: 332
+  mattersim_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mattersim_0_StructureOptimization
+    deps:
+    - path: nodes/initialize/Rattle/frames.xyz
+      hash: md5
+      md5: 873b4763989a868506e5178487bcfb75
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_StructureOptimization:
+          data_id: -1
+          fmax: 0.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          optimizer: LBFGS
+          steps: 100000000
+    outs:
+    - path: nodes/mattersim/0/StructureOptimization/frames.traj
+      hash: md5
+      md5: 9014e0fc0409ffbf453e8404000087bc
+      size: 9622
+    - path: nodes/mattersim/0/StructureOptimization/node-meta.json
+      hash: md5
+      md5: 0142fbddff71276fcbd365f7ab14b6e8
+      size: 64
+    - path: nodes/mattersim/0/StructureOptimization/plots.csv
+      hash: md5
+      md5: caa3d79a9427c22355ced14ea04e1ba0
+      size: 220

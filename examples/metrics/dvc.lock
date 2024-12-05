@@ -351,3 +351,82 @@ stages:
       hash: md5
       md5: 12350a2e6e20341a2a1d40a89dfe9a27
       size: 125
+  mattersim_ApplyCalculator:
+    cmd: zntrack run mlipx.nodes.apply_calculator.ApplyCalculator --name mattersim_ApplyCalculator
+    deps:
+    - path: nodes/initialize/LoadDataFile/node-meta.json
+      hash: md5
+      md5: d9b685b4f8110469c644ea0895f27fcb
+      size: 64
+    params:
+      params.yaml:
+        mattersim_ApplyCalculator:
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+    outs:
+    - path: nodes/mattersim/ApplyCalculator/frames.h5
+      hash: md5
+      md5: 12a77ea49a1c36ad5f250c29b8aa9c59
+      size: 450504
+    - path: nodes/mattersim/ApplyCalculator/node-meta.json
+      hash: md5
+      md5: 236886f3d0f6c9fec498e735410d3241
+      size: 64
+  mattersim_EvaluateCalculatorResults:
+    cmd: zntrack run mlipx.nodes.evaluate_calculator.EvaluateCalculatorResults --name
+      mattersim_EvaluateCalculatorResults
+    deps:
+    - path: nodes/mattersim/ApplyCalculator/frames.h5
+      hash: md5
+      md5: 12a77ea49a1c36ad5f250c29b8aa9c59
+      size: 450504
+    outs:
+    - path: nodes/mattersim/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: c2f4b501267e0a0a759a9903b4d27099
+      size: 64
+    - path: nodes/mattersim/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: b3094a70db87e2d900453b109e67562f
+      size: 6412
+  mattersim_CompareCalculatorResults:
+    cmd: zntrack run mlipx.nodes.compare_calculator.CompareCalculatorResults --name
+      mattersim_CompareCalculatorResults
+    deps:
+    - path: nodes/mattersim/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: c2f4b501267e0a0a759a9903b4d27099
+      size: 64
+    - path: nodes/mattersim/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: b3094a70db87e2d900453b109e67562f
+      size: 6412
+    - path: nodes/reference/EvaluateCalculatorResults/node-meta.json
+      hash: md5
+      md5: 71045eb1ce7912d8cb6123680a38ccfd
+      size: 64
+    - path: nodes/reference/EvaluateCalculatorResults/plots.csv
+      hash: md5
+      md5: bc55b5864767c6abeec9a3d0d19b2512
+      size: 7210
+    outs:
+    - path: nodes/mattersim/CompareCalculatorResults/error.json
+      hash: md5
+      md5: e8d40ba7a7b52de14b219a971010e186
+      size: 331
+    - path: nodes/mattersim/CompareCalculatorResults/node-meta.json
+      hash: md5
+      md5: 05437a36b1c11c9c60c89ebb81c6ba6b
+      size: 64
+    - path: nodes/mattersim/CompareCalculatorResults/plots.csv
+      hash: md5
+      md5: 69f8896a83c425cd72c849a2bfe51b16
+      size: 9084
+    - path: nodes/mattersim/CompareCalculatorResults/rmse.json
+      hash: md5
+      md5: f5f5c89da0566447b53db00b31f01bd3
+      size: 123

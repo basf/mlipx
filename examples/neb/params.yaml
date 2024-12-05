@@ -29,6 +29,17 @@ mace_mp_NEBs:
   n_steps: 500
   optimizer: FIRE
   relax: true
+mattersim_NEBs:
+  fmax: 0.05
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_steps: 500
+  optimizer: FIRE
+  relax: true
 orb_v2_NEBs:
   fmax: 0.05
   model:

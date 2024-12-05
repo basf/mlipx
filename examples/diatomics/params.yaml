@@ -16,6 +16,18 @@ mace_mp_HomonuclearDiatomics:
       model: medium
     module: mace.calculators
   n_points: 100
+mattersim_HomonuclearDiatomics:
+  elements: []
+  eq_distance: covalent-radiuis
+  max_distance: 2.0
+  min_distance: 0.5
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_points: 100
 orb_v2_HomonuclearDiatomics:
   elements: []
   eq_distance: covalent-radiuis

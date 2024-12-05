@@ -493,3 +493,42 @@ stages:
       hash: md5
       md5: 6bf1cb423234b96f9c803f9eae8c0519
       size: 99
+  mattersim_0_PourbaixDiagram:
+    cmd: zntrack run mlipx.nodes.pourbaix_diagram.PourbaixDiagram --name mattersim_0_PourbaixDiagram
+    deps:
+    - path: nodes/initialize/MPRester/frames.xyz
+      hash: md5
+      md5: b2aa0fb43e0b26ef88bedc082a0a2325
+      size: 866
+    params:
+      params.yaml:
+        mattersim_0_PourbaixDiagram:
+          V: 1.8
+          data_ids:
+          fmax: 0.05
+          geo_opt: false
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          pH: 1.0
+          use_gibbs: false
+    outs:
+    - path: nodes/mattersim/0/PourbaixDiagram/frames.xyz
+      hash: md5
+      md5: 1169a9cec040363a981068961f32a688
+      size: 1655
+    - path: nodes/mattersim/0/PourbaixDiagram/node-meta.json
+      hash: md5
+      md5: 82895f3f096fc9390b33518f4c35f3cc
+      size: 64
+    - path: nodes/mattersim/0/PourbaixDiagram/pourbaix_diagram.json
+      hash: md5
+      md5: 5fdfeef6c52abee16982757c6d737ff5
+      size: 49599
+    - path: nodes/mattersim/0/PourbaixDiagram/results.csv
+      hash: md5
+      md5: 5c090275907a414db3b8fc0a65301073
+      size: 89

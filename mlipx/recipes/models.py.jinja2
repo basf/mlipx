@@ -55,6 +55,13 @@ MODELS["chgnet"] = mlipx.GenericASECalculator(
     module="chgnet.model",
     class_name="CHGNetCalculator",
 )
+{% elif model == "mattersim" %}
+# https://github.com/CederGroupHub/chgnet
+MODELS["mattersim"] = mlipx.GenericASECalculator(
+    module="mattersim.forcefield",
+    class_name="MatterSimCalculator",
+    device="auto",
+)
 {% endif %}
 {% endfor %}
 

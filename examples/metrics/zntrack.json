@@ -416,5 +416,102 @@
                 "item": null
             }
         }
+    },
+    "mattersim_ApplyCalculator": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mattersim/ApplyCalculator"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.io",
+                        "name": "initialize_LoadDataFile",
+                        "cls": "LoadDataFile",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        },
+        "model": {
+            "_type": "@dataclasses.dataclass",
+            "value": {
+                "module": "mlipx.nodes.generic_ase",
+                "cls": "GenericASECalculator"
+            }
+        },
+        "frames_path": {
+            "_type": "pathlib.Path",
+            "value": "$nwd$/frames.h5"
+        }
+    },
+    "mattersim_EvaluateCalculatorResults": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mattersim/EvaluateCalculatorResults"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.apply_calculator",
+                        "name": "mattersim_ApplyCalculator",
+                        "cls": "ApplyCalculator",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": "frames",
+                "item": null
+            }
+        }
+    },
+    "mattersim_CompareCalculatorResults": {
+        "nwd": {
+            "_type": "pathlib.Path",
+            "value": "nodes/mattersim/CompareCalculatorResults"
+        },
+        "data": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.evaluate_calculator",
+                        "name": "mattersim_EvaluateCalculatorResults",
+                        "cls": "EvaluateCalculatorResults",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": null,
+                "item": null
+            }
+        },
+        "reference": {
+            "_type": "znflow.Connection",
+            "value": {
+                "instance": {
+                    "_type": "zntrack.Node",
+                    "value": {
+                        "module": "mlipx.nodes.evaluate_calculator",
+                        "name": "reference_EvaluateCalculatorResults",
+                        "cls": "EvaluateCalculatorResults",
+                        "remote": null,
+                        "rev": null
+                    }
+                },
+                "attribute": null,
+                "item": null
+            }
+        }
     }
 }

@@ -451,3 +451,40 @@ stages:
       hash: md5
       md5: 876aa90353f568e270639083ecc8368d
       size: 241
+  mattersim_NEBs:
+    cmd: zntrack run mlipx.nodes.nebs.NEBs --name mattersim_NEBs
+    deps:
+    - path: nodes/initialize/NEBinterpolate/initial_frames.xyz
+      hash: md5
+      md5: 996f25f229bef36ad93f486d4e662126
+      size: 46938
+    params:
+      params.yaml:
+        mattersim_NEBs:
+          fmax: 0.05
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: MatterSimCalculator
+            device: auto
+            kwargs:
+            module: mattersim.forcefield
+          n_steps: 500
+          optimizer: FIRE
+          relax: true
+    outs:
+    - path: nodes/mattersim/NEBs/frames.xyz
+      hash: md5
+      md5: 55e2218c1cf0a4ce9f9034dd0b04e2e2
+      size: 64171
+    - path: nodes/mattersim/NEBs/neb_trajectory.traj
+      hash: md5
+      md5: 55bef32e451b9524213e243c37153e63
+      size: 10660040
+    - path: nodes/mattersim/NEBs/node-meta.json
+      hash: md5
+      md5: 68964251396e3068d2c51182c1027e2b
+      size: 64
+    - path: nodes/mattersim/NEBs/results.csv
+      hash: md5
+      md5: 15f9cfb1007a6f47e986f4a2c7c95ab1
+      size: 163

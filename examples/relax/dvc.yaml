@@ -39,6 +39,16 @@ plots:
       nodes/chgnet/0/StructureOptimization/plots.csv: step
     y:
       nodes/chgnet/0/StructureOptimization/plots.csv: fmax
+- mattersim_0_StructureOptimization_plots_0:
+    x:
+      nodes/mattersim/0/StructureOptimization/plots.csv: step
+    y:
+      nodes/mattersim/0/StructureOptimization/plots.csv: energy
+- mattersim_0_StructureOptimization_plots_1:
+    x:
+      nodes/mattersim/0/StructureOptimization/plots.csv: step
+    y:
+      nodes/mattersim/0/StructureOptimization/plots.csv: fmax
 stages:
   chgnet_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
@@ -86,6 +96,19 @@ stages:
     - nodes/mace_mp/0/StructureOptimization/plots.csv
     params:
     - mace_mp_0_StructureOptimization
+  mattersim_0_StructureOptimization:
+    cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
+      mattersim_0_StructureOptimization
+    deps:
+    - nodes/initialize/Rattle/frames.xyz
+    metrics:
+    - nodes/mattersim/0/StructureOptimization/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/StructureOptimization/frames.traj
+    - nodes/mattersim/0/StructureOptimization/plots.csv
+    params:
+    - mattersim_0_StructureOptimization
   orb_v2_0_StructureOptimization:
     cmd: zntrack run mlipx.nodes.structure_optimization.StructureOptimization --name
       orb_v2_0_StructureOptimization

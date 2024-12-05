@@ -59,6 +59,33 @@ mace_mp_0_TranslationalInvariance:
       model: medium
     module: mace.calculators
   n_points: 100
+mattersim_0_PermutationInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_points: 100
+mattersim_0_RotationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_points: 100
+mattersim_0_TranslationalInvariance:
+  data_id: -1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  n_points: 100
 orb_v2_0_PermutationInvariance:
   data_id: -1
   model:

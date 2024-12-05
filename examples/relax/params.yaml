@@ -28,6 +28,17 @@ mace_mp_0_StructureOptimization:
     module: mace.calculators
   optimizer: LBFGS
   steps: 100000000
+mattersim_0_StructureOptimization:
+  data_id: -1
+  fmax: 0.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  optimizer: LBFGS
+  steps: 100000000
 orb_v2_0_StructureOptimization:
   data_id: -1
   fmax: 0.1

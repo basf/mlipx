@@ -39,6 +39,16 @@ plots:
       nodes/chgnet/0/MolecularDynamics/plots.csv: step
     y:
       nodes/chgnet/0/MolecularDynamics/plots.csv: fmax
+- mattersim_0_MolecularDynamics_plots_0:
+    x:
+      nodes/mattersim/0/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mattersim/0/MolecularDynamics/plots.csv: energy
+- mattersim_0_MolecularDynamics_plots_1:
+    x:
+      nodes/mattersim/0/MolecularDynamics/plots.csv: step
+    y:
+      nodes/mattersim/0/MolecularDynamics/plots.csv: fmax
 stages:
   chgnet_0_MolecularDynamics:
     cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name chgnet_0_MolecularDynamics
@@ -77,6 +87,20 @@ stages:
     - nodes/mace_mp/0/MolecularDynamics/plots.csv
     params:
     - mace_mp_0_MolecularDynamics
+  mattersim_0_MolecularDynamics:
+    cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name mattersim_0_MolecularDynamics
+    deps:
+    - nodes/initialize/MPRester/frames.xyz
+    metrics:
+    - nodes/mattersim/0/MolecularDynamics/node-meta.json:
+        cache: false
+    - nodes/mattersim/0/MolecularDynamics/observer_metrics.json:
+        cache: false
+    outs:
+    - nodes/mattersim/0/MolecularDynamics/frames.xyz
+    - nodes/mattersim/0/MolecularDynamics/plots.csv
+    params:
+    - mattersim_0_MolecularDynamics
   orb_v2_0_MolecularDynamics:
     cmd: zntrack run mlipx.nodes.molecular_dynamics.MolecularDynamics --name orb_v2_0_MolecularDynamics
     deps:

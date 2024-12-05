@@ -17,6 +17,13 @@ mace_mp_ApplyCalculator:
     kwargs:
       model: medium
     module: mace.calculators
+mattersim_ApplyCalculator:
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
 orb_v2_ApplyCalculator:
   model:
     _cls: models.OrbCalc

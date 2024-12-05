@@ -50,6 +50,14 @@ class OrbCalc:
 MODELS["orb_v2"] = OrbCalc(name="orb_v2", device="auto")
 
 
+# https://github.com/CederGroupHub/chgnet
+MODELS["mattersim"] = mlipx.GenericASECalculator(
+    module="mattersim.forcefield",
+    class_name="MatterSimCalculator",
+    device="auto",
+)
+
+
 # OPTIONAL
 # ========
 # If you have custom property names you can use the UpdatedFramesCalc

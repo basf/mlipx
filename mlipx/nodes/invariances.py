@@ -40,8 +40,8 @@ class InvarianceNode(zntrack.Node):
         self.plots = pd.DataFrame(energies, columns=["energy"])
 
         self.metrics = {
-            "mean": np.mean(energies),
-            "std": np.std(energies),
+            "mean": float(np.mean(energies)),
+            "std": float(np.std(energies)),
         }
 
     @property
