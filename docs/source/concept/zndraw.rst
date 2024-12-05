@@ -26,6 +26,12 @@ You can find more information in the GUI by clicking on :code:`Python Access`.
 The :code:`vis` object behaves like a list of :term:`ASE` atom objects.
 Modifying them in place, will be reflected in real-time on the GUI.
 
+.. tip::
+
+   You can keep a ZnDraw instance running in the background and set the environment variable :code:`ZNDRAW_URL` to the URL of the running instance.
+   This way, you do not have to define a ZnDraw url when running ZnDraw or ``mlipx`` CLI commands.
+   You can also setup a `ZnDraw Docker container  <https://github.com/zincware/ZnDraw?tab=readme-ov-file#self-hosting>`_ to always have a running instance.
+
 .. code:: python
 
     from zndraw import ZnDraw
