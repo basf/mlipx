@@ -1,0 +1,32 @@
+stages:
+  initialize_BuildASEslab:
+    cmd: zntrack run mlipx.nodes.adsorption.BuildASEslab --name initialize_BuildASEslab
+    metrics:
+    - nodes/initialize/BuildASEslab/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/BuildASEslab/frames.traj
+    params:
+    - initialize_BuildASEslab
+  initialize_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name initialize_RelaxAdsorptionConfigs
+    deps:
+    - nodes/initialize/BuildASEslab/frames.traj
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/initialize/RelaxAdsorptionConfigs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/RelaxAdsorptionConfigs/frames.traj
+    - nodes/initialize/RelaxAdsorptionConfigs/relax
+    params:
+    - initialize_RelaxAdsorptionConfigs
+  initialize_Smiles2Conformers:
+    cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
+    metrics:
+    - nodes/initialize/Smiles2Conformers/node-meta.json:
+        cache: false
+    outs:
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    params:
+    - initialize_Smiles2Conformers
