@@ -1,37 +1,46 @@
 import pathlib
+import typing as t
 
 import ase
 import ase.io as aio
+import ase.optimize as opt
 import zntrack
 
-from mlipx.abc import NodeWithCalculator, ComparisonResults
-import ase.optimize as opt
+from mlipx.abc import ComparisonResults, NodeWithCalculator
 
-import typing as t
-ALLOWED_CRYSTAL = t.Literal['fcc111','fcc211','bcc110','bcc111','hcp0001','diamond111']
-        
+ALLOWED_CRYSTAL = t.Literal[
+    "fcc111", "fcc211", "bcc110", "bcc111", "hcp0001", "diamond111"
+]
+
+
 class BuildASEslab(zntrack.Node):
-    """Create slab (ase.Atoms). As implemeneted in ase.build.
+    """Create slab (ase.Atoms). As implemented in ase.build.
     Options are: fcc111, fcc211, bcc110, bcc111, hcp0001, diamond111
 
     Parameters
     ----------
     crystal : str
-        A choice between a few options (fcc111, fcc211, bcc110, bcc111, hcp0001. diamond111)
+        A choice between a few options (fcc111, fcc211, bcc110, bcc111
+        , hcp0001. diamond111)
     symbol : str
         Atoms symbol.
     size : tuple
         A tuple giving the system size in units of the minimal unit cell.
     a : float
-        (optional) The lattice constant. If specified, it overrides the expermental lattice constant of the element. Must be specified if setting up a crystal structure different from the one found in nature.
+        (optional) The lattice constant. If specified, it overrides the experimental
+        lattice constant of the element. Must be specified if setting up a crystal
+          structure different from the one found in nature.
     c : float
-        (optional) Extra HCP lattice constant. If specified, it overrides the expermental lattice constant of the element.
+        (optional) Extra HCP lattice constant. If specified, it overrides
+          the experimental lattice constant of the element.
     vacuum : float
         The thickness of the vacuum layer.
     orthogonal : bool
-        If specified and true, forces the creation of a unit cell with orthogonal basis vectors.
+        If specified and true, forces the creation of a unit cell with orthogonal
+          basis vectors.
     periodic : bool
-         If true, sets boundary conditions and cell constantly with the corresponding bulk structure.
+         If true, sets boundary conditions and cell constantly with the corresponding
+           bulk structure.
     """
 
     crystal: ALLOWED_CRYSTAL = zntrack.params()
@@ -41,25 +50,36 @@ class BuildASEslab(zntrack.Node):
     c: float = zntrack.params(False)
     vacuum: float = zntrack.params(10)
     orthogonal: bool = zntrack.params(True)
-    periodic: bool  = zntrack.params(True)
+    periodic: bool = zntrack.params(True)
 
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.traj")
 
     def run(self):
         # from ase.build import add_adsorbate
-        from ase.constraints import FixAtoms
         import ase.build
+        from ase.constraints import FixAtoms
 
         slb = getattr(ase.build, self.crystal)
-        
+
         if not self.c:
             slab = slb(
-                self.symbol, size=self.size, vacuum=self.vacuum, orthogonal=self.orthogonal, periodic=self.periodic, a=self.a
-                )
+                self.symbol,
+                size=self.size,
+                vacuum=self.vacuum,
+                orthogonal=self.orthogonal,
+                periodic=self.periodic,
+                a=self.a,
+            )
         else:
             slab = slb(
-                self.symbol, size=self.size, vacuum=self.vacuum, orthogonal=self.orthogonal, periodic=self.periodic, a=self.a, c=self.c
-                )
+                self.symbol,
+                size=self.size,
+                vacuum=self.vacuum,
+                orthogonal=self.orthogonal,
+                periodic=self.periodic,
+                a=self.a,
+                c=self.c,
+            )
         mask = [atom.tag > 1 for atom in slab]
         # print(mask)
         slab.set_constraint(FixAtoms(mask=mask))
@@ -73,7 +93,7 @@ class BuildASEslab(zntrack.Node):
 
 
 class RelaxAdsorptionConfigs(zntrack.Node):
-# class AddAdsorbate(zntrack.Node):
+    # class AddAdsorbate(zntrack.Node):
 
     """Add an adsorbate to a surface.
 
@@ -101,14 +121,15 @@ class RelaxAdsorptionConfigs(zntrack.Node):
         position argument.
 
     """
+
     slabs: list[ase.Atoms] = zntrack.deps()
     adsorbates: list[ase.Atoms] = zntrack.deps()
     height: float = zntrack.params(2.1)
-    position: str = zntrack.params('all')
+    position: str = zntrack.params("all")
     mol_index: int = zntrack.params(0)
     slab_id: int = zntrack.params(-1)
     adsorbate_id: int = zntrack.params(-1)
-    optimizer: str = zntrack.params('LBFGS')
+    optimizer: str = zntrack.params("LBFGS")
     model: NodeWithCalculator = zntrack.deps()
     steps: int = zntrack.params(300)
     fmax: float = zntrack.params(0.05)
@@ -117,7 +138,7 @@ class RelaxAdsorptionConfigs(zntrack.Node):
     relax_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "relax")
 
     def relax_atoms(self, atoms):
-        count = len(list(self.relax_path.glob('*')))
+        count = len(list(self.relax_path.glob("*")))
         optimizer = getattr(opt, self.optimizer)
         calc = self.model.get_calculator()
 
@@ -133,40 +154,46 @@ class RelaxAdsorptionConfigs(zntrack.Node):
         atoms.calc = calc
         dyn = optimizer(
             atoms,
-            trajectory = (self.relax_path / f"{count}.traj").as_posix(),
+            trajectory=(self.relax_path / f"{count}.traj").as_posix(),
         )
         # dyn.attach(metrics_callback)
         dyn.run(fmax=self.fmax, steps=self.steps)
         return atoms
 
     def run(self):
-
         from ase.build import add_adsorbate
-        
+
         slab = self.slabs[self.slab_id]
-        slab.info['type'] = 'slab'
+        slab.info["type"] = "slab"
         slab = self.relax_atoms(slab)
         adsorbate = self.adsorbates[self.adsorbate_id]
-        adsorbate.info['type'] = 'adsorbate'
+        adsorbate.info["type"] = "adsorbate"
         adsorbate = self.relax_atoms(adsorbate)
-        
+
         # slab.info['_id'] = 'parent'
         # parent.info['parent_id'] = None
 
         ads_trj = []
-        if self.position.lower() == 'all':
-            # for k, v in self.slabs[self.slab_id].info['adsorbate_info']['sites'].items():
-            for k in self.slabs[self.slab_id].info['adsorbate_info']['sites'].keys():
-
+        if self.position.lower() == "all":
+            # for k, v in
+            #  self.slabs[self.slab_id].info['adsorbate_info']['sites'].items():
+            for k in self.slabs[self.slab_id].info["adsorbate_info"]["sites"].keys():
                 print(k)
                 ads_slab = slab.copy()
-                ads_slab.info['type'] = 'slab+adsorbate'
-                add_adsorbate(ads_slab, adsorbate=self.adsorbates[self.adsorbate_id], height=self.height, position = k, mol_index=self.mol_index)
+                ads_slab.info["type"] = "slab+adsorbate"
+                add_adsorbate(
+                    ads_slab,
+                    adsorbate=self.adsorbates[self.adsorbate_id],
+                    height=self.height,
+                    position=k,
+                    mol_index=self.mol_index,
+                )
                 ads_trj.append(self.relax_atoms(ads_slab))
         else:
-            raise ValueError('not yet, sry :)')
+            raise ValueError("not yet, sry :)")
             # ads_slab = self.slabs[self.slab_id].copy()
-            # add_adsorbate(ads_slab, adsorbate=self.adsorbates, height=self.height, position = self.position, mol_index=self.mol_index)
+            # add_adsorbate(ads_slab, adsorbate=self.adsorbates, height=self.height
+            # , position = self.position, mol_index=self.mol_index)
 
         aio.write(self.frames_path, ads_trj)
 
@@ -174,53 +201,51 @@ class RelaxAdsorptionConfigs(zntrack.Node):
     def frames(self) -> list[ase.Atoms]:
         with self.state.fs.open(self.frames_path, "rb") as f:
             return list(aio.iread(f, format="traj"))
-        
+
     @property
     def relaxations(self) -> dict[str, list[ase.Atoms]]:
         relax_dict = {}
-        for path in self.relax_path.glob('*'):
+        for path in self.relax_path.glob("*"):
             with self.state.fs.open(path, "rb") as f:
                 relax_dict[path.as_posix()] = list(aio.iread(f, format="traj"))
-        return relax_dict        
+        return relax_dict
 
     @staticmethod
     def compare(*nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
-
         full_traj = []
         for key in nodes[0].relaxations:
             for node in nodes:
                 traj = node.relaxations[key]
 
-                config_type = traj[0].info['type'].lower()
+                config_type = traj[0].info["type"].lower()
 
-                if config_type == 'slab':
+                if config_type == "slab":
                     E_slab = traj[-1].get_potential_energy()
                     E_ref = E_slab
-                
-                elif config_type == 'adsorbate':
+
+                elif config_type == "adsorbate":
                     E_adsorbate = traj[-1].get_potential_energy()
                     E_ref = E_adsorbate
 
-                elif config_type == 'slab+adsorbate':
+                elif config_type == "slab+adsorbate":
                     E_ref = E_adsorbate + E_slab
-                    #this will only work if the slab and adsorbate come in the traj before slab+ads
+                    # this will only work if the slab and adsorbate
+                    # come in the traj before slab+ads
                     # - will always be the case
-                
+
                 else:
                     raise ValueError(f"type {config_type} not supported...")
 
                 for a in traj:
-                    a.info['E_ads'] = a.get_potential_energy() - E_ref
+                    a.info["E_ads"] = a.get_potential_energy() - E_ref
                     # a.info['E_ads'] = a.get_potential_energy() - E_ref
 
                 full_traj += traj
 
-        return {
-            'frames': full_traj,
-            'figures': {}
-        }
-        
+        return {"frames": full_traj, "figures": {}}
+
         # frames = sum([node.frames for node in nodes], [])
+
     #     offset = 0
     #     fig = go.Figure()
     #     for idx, node in enumerate(nodes):
@@ -239,4 +264,3 @@ class RelaxAdsorptionConfigs(zntrack.Node):
     #         frames=frames,
     #         figures={"energy_vs_steps": fig},
     #     )
-
