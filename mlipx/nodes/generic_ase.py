@@ -5,10 +5,16 @@ import typing as t
 from ase.calculators.calculator import Calculator
 
 
-def resolve_auto(val) -> t.Literal["cpu", "cuda"]:
-    import torch
+class Device:
+    AUTO = "auto"
+    CPU = "cpu"
+    CUDA = "cuda"
 
-    return "cuda" if torch.cuda.is_available() else "cpu"
+    @staticmethod
+    def resolve_auto() -> t.Literal["cpu", "cuda"]:
+        import torch
+
+        return "cuda" if torch.cuda.is_available() else "cpu"
 
 
 @dataclasses.dataclass
@@ -43,6 +49,6 @@ class GenericASECalculator:
         if self.device is None:
             return cls(**kwargs)
         elif self.device == "auto":
-            return cls(**kwargs, device=resolve_auto(self.device))
+            return cls(**kwargs, device=Device.resolve_auto())
         else:
             return cls(**kwargs, device=self.device)

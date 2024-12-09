@@ -14,8 +14,8 @@ initialize_Smiles2Conformers:
   max_attempts: 1000
   num_confs: 1
   random_seed: 42
-  smiles: CO
-mace_RelaxAdsorptionConfigs:
+  smiles: CCO
+mace_mp_0_RelaxAdsorptionConfigs:
   adsorbate_id: -1
   fmax: 0.05
   height: 2.1
@@ -31,7 +31,35 @@ mace_RelaxAdsorptionConfigs:
   position: all
   slab_id: -1
   steps: 300
-sevenn_RelaxAdsorptionConfigs:
+mattersim_0_RelaxAdsorptionConfigs:
+  adsorbate_id: -1
+  fmax: 0.05
+  height: 2.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: MatterSimCalculator
+    device: auto
+    kwargs: null
+    module: mattersim.forcefield
+  mol_index: 0
+  optimizer: LBFGS
+  position: all
+  slab_id: -1
+  steps: 300
+orb_v2_0_RelaxAdsorptionConfigs:
+  adsorbate_id: -1
+  fmax: 0.05
+  height: 2.1
+  model:
+    _cls: models.OrbCalc
+    device: auto
+    name: orb_v2
+  mol_index: 0
+  optimizer: LBFGS
+  position: all
+  slab_id: -1
+  steps: 300
+sevennet_0_RelaxAdsorptionConfigs:
   adsorbate_id: -1
   fmax: 0.05
   height: 2.1

@@ -183,8 +183,9 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                     mol_index=self.mol_index,
                 )
                 ads_trj.append(self.relax_atoms(ads_slab))
-                self.ads_energies[k] = ads_trj[-1].get_potential_energy() - (
-                    slab.get_potential_energy() + adsorbate.get_potential_energy()
+                self.ads_energies[k] = float(
+                    ads_trj[-1].get_potential_energy()
+                    - (slab.get_potential_energy() + adsorbate.get_potential_energy())
                 )
         else:
             raise ValueError("not yet, sry :)")
@@ -214,7 +215,6 @@ class RelaxAdsorptionConfigs(zntrack.Node):
         relax_figures = {}
 
         for key in nodes[0].relaxations:
-            print(key)
             for node in nodes:
                 traj = node.relaxations[key]
 
