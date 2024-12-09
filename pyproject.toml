@@ -53,7 +53,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.codespell]
 ignore-words-list = "basf"
-skip = "*.svg,*.lock"
+skip = "*.svg,*.lock,*.json"
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]

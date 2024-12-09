@@ -1,3 +1,4 @@
+import json
 import pathlib
 import subprocess
 import typing as t
@@ -292,4 +293,29 @@ def invariances(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+    )
+
+
+@app.command()
+def adsorption(
+    initialize: bool = False,
+    repro: bool = False,
+    slab_config: str | None = None,
+    slab_material_id: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
+):
+    """Test rotational, permutational, and translational invariance."""
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+    if slab_config is not None:
+        slab_config = json.loads(slab_config)
+    handle_recipe(
+        "adsorption.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=None,
+        material_ids=None,
+        smiles=smiles,
+        slab_config=slab_config,
     )

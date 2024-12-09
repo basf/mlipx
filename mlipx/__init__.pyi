@@ -1,4 +1,5 @@
 from . import abc
+from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
 from .nodes.compare_calculator import CompareCalculatorResults
 from .nodes.diatomics import HomonuclearDiatomics
@@ -59,5 +60,7 @@ __all__ = [
     "PermutationInvariance",
     "Rattle",
     "Project",
+    "BuildASEslab",
+    "RelaxAdsorptionConfigs",
     "__version__",
 ]
