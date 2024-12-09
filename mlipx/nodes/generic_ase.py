@@ -1,21 +1,14 @@
 import dataclasses
 import importlib
 import typing as t
-from enum import Enum
 
 from ase.calculators.calculator import Calculator
 
 
-class Device(str, Enum):
-    AUTO = "auto"
-    CPU = "cpu"
-    CUDA = "cuda"
+def resolve_auto(val) -> t.Literal["cpu", "cuda"]:
+    import torch
 
-    @classmethod
-    def resolve_auto(cls):
-        import torch
-
-        return cls.CUDA if torch.cuda.is_available() else cls.CPU
+    return "cuda" if torch.cuda.is_available() else "cpu"
 
 
 @dataclasses.dataclass
@@ -40,7 +33,7 @@ class GenericASECalculator:
     module: str
     class_name: str
     kwargs: dict[str, t.Any] | None = None
-    device: Device | None = None
+    device: t.Literal["auto", "cpu", "cuda"] | None = None
 
     def get_calculator(self, **kwargs) -> Calculator:
         if self.kwargs is not None:
@@ -49,7 +42,7 @@ class GenericASECalculator:
         cls = getattr(module, self.class_name)
         if self.device is None:
             return cls(**kwargs)
-        elif self.device == Device.AUTO:
-            return cls(**kwargs, device=Device.resolve_auto())
+        elif self.device == "auto":
+            return cls(**kwargs, device=resolve_auto(self.device))
         else:
             return cls(**kwargs, device=self.device)

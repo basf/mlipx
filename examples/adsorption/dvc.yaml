@@ -8,19 +8,6 @@ stages:
     - nodes/initialize/BuildASEslab/frames.traj
     params:
     - initialize_BuildASEslab
-  initialize_RelaxAdsorptionConfigs:
-    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name initialize_RelaxAdsorptionConfigs
-    deps:
-    - nodes/initialize/BuildASEslab/frames.traj
-    - nodes/initialize/Smiles2Conformers/frames.xyz
-    metrics:
-    - nodes/initialize/RelaxAdsorptionConfigs/node-meta.json:
-        cache: false
-    outs:
-    - nodes/initialize/RelaxAdsorptionConfigs/frames.traj
-    - nodes/initialize/RelaxAdsorptionConfigs/relax
-    params:
-    - initialize_RelaxAdsorptionConfigs
   initialize_Smiles2Conformers:
     cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
     metrics:
@@ -30,3 +17,33 @@ stages:
     - nodes/initialize/Smiles2Conformers/frames.xyz
     params:
     - initialize_Smiles2Conformers
+  mace_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name mace_RelaxAdsorptionConfigs
+    deps:
+    - nodes/initialize/BuildASEslab/frames.traj
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/mace/RelaxAdsorptionConfigs/ads_energies.json:
+        cache: false
+    - nodes/mace/RelaxAdsorptionConfigs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/mace/RelaxAdsorptionConfigs/frames.traj
+    - nodes/mace/RelaxAdsorptionConfigs/relax
+    params:
+    - mace_RelaxAdsorptionConfigs
+  sevenn_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name sevenn_RelaxAdsorptionConfigs
+    deps:
+    - nodes/initialize/BuildASEslab/frames.traj
+    - nodes/initialize/Smiles2Conformers/frames.xyz
+    metrics:
+    - nodes/sevenn/RelaxAdsorptionConfigs/ads_energies.json:
+        cache: false
+    - nodes/sevenn/RelaxAdsorptionConfigs/node-meta.json:
+        cache: false
+    outs:
+    - nodes/sevenn/RelaxAdsorptionConfigs/frames.traj
+    - nodes/sevenn/RelaxAdsorptionConfigs/relax
+    params:
+    - sevenn_RelaxAdsorptionConfigs

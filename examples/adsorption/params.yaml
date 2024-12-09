@@ -10,7 +10,12 @@ initialize_BuildASEslab:
   - 4
   symbol: Cu
   vacuum: 10
-initialize_RelaxAdsorptionConfigs:
+initialize_Smiles2Conformers:
+  max_attempts: 1000
+  num_confs: 1
+  random_seed: 42
+  smiles: CO
+mace_RelaxAdsorptionConfigs:
   adsorbate_id: -1
   fmax: 0.05
   height: 2.1
@@ -26,8 +31,19 @@ initialize_RelaxAdsorptionConfigs:
   position: all
   slab_id: -1
   steps: 300
-initialize_Smiles2Conformers:
-  max_attempts: 1000
-  num_confs: 1
-  random_seed: 42
-  smiles: CO
+sevenn_RelaxAdsorptionConfigs:
+  adsorbate_id: -1
+  fmax: 0.05
+  height: 2.1
+  model:
+    _cls: mlipx.nodes.generic_ase.GenericASECalculator
+    class_name: SevenNetCalculator
+    device: auto
+    kwargs:
+      model: 7net-0
+    module: sevenn.sevennet_calculator
+  mol_index: 0
+  optimizer: LBFGS
+  position: all
+  slab_id: -1
+  steps: 300

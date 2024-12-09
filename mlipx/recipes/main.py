@@ -293,3 +293,26 @@ def invariances(
         material_ids=material_ids,
         smiles=smiles,
     )
+
+
+@app.command()
+def adsorption(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
+):
+    """Test rotational, permutational, and translational invariance."""
+    raise ValueError("Not implemented yet.")
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+    handle_recipe(
+        "adsorption.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )

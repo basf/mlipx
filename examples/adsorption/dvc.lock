@@ -23,7 +23,7 @@ stages:
       size: 2794
     - path: nodes/initialize/BuildASEslab/node-meta.json
       hash: md5
-      md5: f65bb1810807c96c9393652fded007c6
+      md5: 25f41c083ba8f43acaed4a1f479812c2
       size: 64
   initialize_Smiles2Conformers:
     cmd: zntrack run mlipx.nodes.smiles.Smiles2Conformers --name initialize_Smiles2Conformers
@@ -37,11 +37,11 @@ stages:
     outs:
     - path: nodes/initialize/Smiles2Conformers/frames.xyz
       hash: md5
-      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      md5: 106c9892108d155aaf3f3e0eb456638f
       size: 369
     - path: nodes/initialize/Smiles2Conformers/node-meta.json
       hash: md5
-      md5: f3565426d7551d4e8164de199b3ce361
+      md5: de8d81c87982a44a82f0c362da80de40
       size: 64
   initialize_AddAdsorbate:
     cmd: zntrack run mlipx.nodes.adsorption.AddAdsorbate --name initialize_AddAdsorbate
@@ -154,7 +154,7 @@ stages:
       size: 2794
     - path: nodes/initialize/Smiles2Conformers/frames.xyz
       hash: md5
-      md5: 8aaaf93d21613c36e976fb04fc5dbd58
+      md5: 106c9892108d155aaf3f3e0eb456638f
       size: 369
     params:
       params.yaml:
@@ -175,16 +175,161 @@ stages:
           slab_id: -1
           steps: 300
     outs:
+    - path: nodes/initialize/RelaxAdsorptionConfigs/ads_energies.json
+      hash: md5
+      md5: d37e5b85224f91686f3d52c882b3d1e4
+      size: 117
     - path: nodes/initialize/RelaxAdsorptionConfigs/frames.traj
       hash: md5
-      md5: 9ac601f833b7c0a3ef090bc2ef6e7cd4
-      size: 16347
+      md5: 05982703b455355613d88edec093874c
+      size: 16349
     - path: nodes/initialize/RelaxAdsorptionConfigs/node-meta.json
       hash: md5
-      md5: 8ce9904830c1c5982e22921f96b38550
+      md5: 0ddac73b66ebd2059d89ef30f09d0e92
       size: 64
     - path: nodes/initialize/RelaxAdsorptionConfigs/relax
       hash: md5
-      md5: 01bda6946e129be648e9efdd1744f294.dir
-      size: 902734
+      md5: 8a0ecf7722a7cc64f7f190ebcd112868.dir
+      size: 883049
+      nfiles: 6
+  mace_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name mace_RelaxAdsorptionConfigs
+    deps:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 106c9892108d155aaf3f3e0eb456638f
+      size: 369
+    params:
+      params.yaml:
+        mace_RelaxAdsorptionConfigs:
+          adsorbate_id: -1
+          fmax: 0.05
+          height: 2.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: mace_mp
+            device: auto
+            kwargs:
+              model: medium
+            module: mace.calculators
+          mol_index: 0
+          optimizer: LBFGS
+          position: all
+          slab_id: -1
+          steps: 300
+    outs:
+    - path: nodes/mace/RelaxAdsorptionConfigs/ads_energies.json
+      hash: md5
+      md5: 2a1129e1a6b21b75717e2f59ac980691
+      size: 117
+    - path: nodes/mace/RelaxAdsorptionConfigs/frames.traj
+      hash: md5
+      md5: 5fe112b11469ab56366c6c30c609accf
+      size: 16403
+    - path: nodes/mace/RelaxAdsorptionConfigs/node-meta.json
+      hash: md5
+      md5: 5352e6b940dc7c70f2c67a9ec054e64a
+      size: 64
+    - path: nodes/mace/RelaxAdsorptionConfigs/relax
+      hash: md5
+      md5: 8917a09db598332f755ff57cea17c817.dir
+      size: 900313
+      nfiles: 6
+  mace_RelaxAdsorptionConfigs_1:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name mace_RelaxAdsorptionConfigs_1
+    deps:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 106c9892108d155aaf3f3e0eb456638f
+      size: 369
+    params:
+      params.yaml:
+        mace_RelaxAdsorptionConfigs_1:
+          adsorbate_id: -1
+          fmax: 0.05
+          height: 2.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          mol_index: 0
+          optimizer: LBFGS
+          position: all
+          slab_id: -1
+          steps: 300
+    outs:
+    - path: nodes/mace/RelaxAdsorptionConfigs_1/ads_energies.json
+      hash: md5
+      md5: 5ad831b3a0e7a8a07e2443d374d1fc2c
+      size: 121
+    - path: nodes/mace/RelaxAdsorptionConfigs_1/frames.traj
+      hash: md5
+      md5: 87552d460ebb96cb3e0a5120ca3dc311
+      size: 17434
+    - path: nodes/mace/RelaxAdsorptionConfigs_1/node-meta.json
+      hash: md5
+      md5: 7eff49b5e38cbb1b501ee1c4fbb6feee
+      size: 64
+    - path: nodes/mace/RelaxAdsorptionConfigs_1/relax
+      hash: md5
+      md5: d32a175b89f6efb658120ea4f8efc934.dir
+      size: 616013
+      nfiles: 6
+  sevenn_RelaxAdsorptionConfigs:
+    cmd: zntrack run mlipx.nodes.adsorption.RelaxAdsorptionConfigs --name sevenn_RelaxAdsorptionConfigs
+    deps:
+    - path: nodes/initialize/BuildASEslab/frames.traj
+      hash: md5
+      md5: 360a802673ea32615e6ab8688fdc8c59
+      size: 2794
+    - path: nodes/initialize/Smiles2Conformers/frames.xyz
+      hash: md5
+      md5: 106c9892108d155aaf3f3e0eb456638f
+      size: 369
+    params:
+      params.yaml:
+        sevenn_RelaxAdsorptionConfigs:
+          adsorbate_id: -1
+          fmax: 0.05
+          height: 2.1
+          model:
+            _cls: mlipx.nodes.generic_ase.GenericASECalculator
+            class_name: SevenNetCalculator
+            device: auto
+            kwargs:
+              model: 7net-0
+            module: sevenn.sevennet_calculator
+          mol_index: 0
+          optimizer: LBFGS
+          position: all
+          slab_id: -1
+          steps: 300
+    outs:
+    - path: nodes/sevenn/RelaxAdsorptionConfigs/ads_energies.json
+      hash: md5
+      md5: d9b13b3bdae0730c84738a61f19009bc
+      size: 121
+    - path: nodes/sevenn/RelaxAdsorptionConfigs/frames.traj
+      hash: md5
+      md5: a79ac441690f6985915f691018101d11
+      size: 17507
+    - path: nodes/sevenn/RelaxAdsorptionConfigs/node-meta.json
+      hash: md5
+      md5: 233100acd8403bb387b7d9ff33b9fcdf
+      size: 64
+    - path: nodes/sevenn/RelaxAdsorptionConfigs/relax
+      hash: md5
+      md5: 8cfa778ae75eedefc4935c9a90858509.dir
+      size: 618698
       nfiles: 6

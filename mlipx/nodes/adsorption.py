@@ -4,6 +4,7 @@ import typing as t
 import ase
 import ase.io as aio
 import ase.optimize as opt
+import plotly.graph_objects as go
 import zntrack
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
@@ -137,19 +138,14 @@ class RelaxAdsorptionConfigs(zntrack.Node):
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.traj")
     relax_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "relax")
 
+    ads_energies: dict[str, float] = zntrack.metrics()
+
     def relax_atoms(self, atoms):
         count = len(list(self.relax_path.glob("*")))
         optimizer = getattr(opt, self.optimizer)
         calc = self.model.get_calculator()
 
         self.relax_path.mkdir(exist_ok=True)
-
-        # energies = []
-        # fmax = []
-
-        # def metrics_callback():
-        #     energies.append(atoms.get_potential_energy())
-        #     fmax.append(np.linalg.norm(atoms.get_forces(), axis=-1).max())
 
         atoms.calc = calc
         dyn = optimizer(
@@ -170,17 +166,15 @@ class RelaxAdsorptionConfigs(zntrack.Node):
         adsorbate.info["type"] = "adsorbate"
         adsorbate = self.relax_atoms(adsorbate)
 
-        # slab.info['_id'] = 'parent'
-        # parent.info['parent_id'] = None
+        self.ads_energies = {}
 
         ads_trj = []
         if self.position.lower() == "all":
-            # for k, v in
-            #  self.slabs[self.slab_id].info['adsorbate_info']['sites'].items():
             for k in self.slabs[self.slab_id].info["adsorbate_info"]["sites"].keys():
                 print(k)
                 ads_slab = slab.copy()
                 ads_slab.info["type"] = "slab+adsorbate"
+                ads_slab.info["site"] = k
                 add_adsorbate(
                     ads_slab,
                     adsorbate=self.adsorbates[self.adsorbate_id],
@@ -189,11 +183,11 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                     mol_index=self.mol_index,
                 )
                 ads_trj.append(self.relax_atoms(ads_slab))
+                self.ads_energies[k] = ads_trj[-1].get_potential_energy() - (
+                    slab.get_potential_energy() + adsorbate.get_potential_energy()
+                )
         else:
             raise ValueError("not yet, sry :)")
-            # ads_slab = self.slabs[self.slab_id].copy()
-            # add_adsorbate(ads_slab, adsorbate=self.adsorbates, height=self.height
-            # , position = self.position, mol_index=self.mol_index)
 
         aio.write(self.frames_path, ads_trj)
 
@@ -207,17 +201,25 @@ class RelaxAdsorptionConfigs(zntrack.Node):
         relax_dict = {}
         for path in self.relax_path.glob("*"):
             with self.state.fs.open(path, "rb") as f:
-                relax_dict[path.as_posix()] = list(aio.iread(f, format="traj"))
-        return relax_dict
+                relax_dict[path.stem] = list(aio.iread(f, format="traj"))
 
-    @staticmethod
-    def compare(*nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
+        return dict(sorted(relax_dict.items(), key=lambda item: int(item[0])))
+
+    @classmethod
+    def compare(cls, *nodes: "RelaxAdsorptionConfigs") -> ComparisonResults:
         full_traj = []
+
+        ads_e = {}
+
+        relax_figures = {}
+
         for key in nodes[0].relaxations:
+            print(key)
             for node in nodes:
                 traj = node.relaxations[key]
 
                 config_type = traj[0].info["type"].lower()
+                config_site = traj[0].info.get("site", None)
 
                 if config_type == "slab":
                     E_slab = traj[-1].get_potential_energy()
@@ -236,31 +238,32 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                 else:
                     raise ValueError(f"type {config_type} not supported...")
 
+                energies = []
                 for a in traj:
                     a.info["E_ads"] = a.get_potential_energy() - E_ref
-                    # a.info['E_ads'] = a.get_potential_energy() - E_ref
+                    energies.append(a.info["E_ads"])
 
-                full_traj += traj
+                fig = relax_figures.get(
+                    config_site if config_site else config_type, go.Figure()
+                )
 
-        return {"frames": full_traj, "figures": {}}
+                fig.add_trace(
+                    go.Scatter(
+                        x=list(range(len(energies))),
+                        y=energies,
+                        name=node.name.replace(f"_{cls.__name__}", ""),
+                    )
+                )
 
-        # frames = sum([node.frames for node in nodes], [])
+                relax_figures[config_site if config_site else config_type] = fig
 
-    #     offset = 0
-    #     fig = go.Figure()
-    #     for idx, node in enumerate(nodes):
-    #         energies = [atoms.get_potential_energy() for atoms in node.frames]
-    #         fig.add_trace(
-    #             go.Scatter(
-    #                 x=list(range(len(energies))),
-    #                 y=energies,
-    #                 mode="lines+markers",
-    #                 name=node.name,
-    #                 customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
-    #             )
-    #         )
-    #         offset += len(energies)
-    #     return ComparisonResults(
-    #         frames=frames,
-    #         figures={"energy_vs_steps": fig},
-    #     )
+                full_traj.extend(traj)
+                ads_e[node.name.replace(f"_{cls.__name__}", "")] = node.ads_energies
+
+        fig = go.Figure()
+        for key, val in ads_e.items():
+            fig.add_trace(go.Bar(x=list(val.keys()), y=list(val.values()), name=key))
+
+        relax_figures["adsorption_energies"] = fig
+
+        return {"frames": full_traj, "figures": relax_figures}

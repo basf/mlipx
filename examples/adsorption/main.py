@@ -7,6 +7,13 @@ model = mlipx.GenericASECalculator(
     kwargs={"model": "medium"},
 )
 
+sevnet = mlipx.GenericASECalculator(
+    module="sevenn.sevennet_calculator",
+    class_name="SevenNetCalculator",
+    device="auto",
+    kwargs={"model": "7net-0"},
+)
+
 
 project = mlipx.Project()
 
@@ -20,11 +27,20 @@ with project.group("initialize"):
 
     adsorbates = mlipx.Smiles2Conformers(smiles="CO", num_confs=1)
 
+
+with project.group("mace"):
     ads_slabs = mlipx.RelaxAdsorptionConfigs(
         slabs=slab.frames,
         adsorbates=adsorbates.frames,
         model=model,
     )
 
+
+with project.group("sevenn"):
+    ads_slabs = mlipx.RelaxAdsorptionConfigs(
+        slabs=slab.frames,
+        adsorbates=adsorbates.frames,
+        model=sevnet,
+    )
 
 project.repro()
