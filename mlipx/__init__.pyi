@@ -25,7 +25,7 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
-from .nodes.adsorption import BuildASEslab, AddAdsorbate
+from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .project import Project
 from .version import __version__
 
@@ -62,6 +62,6 @@ __all__ = [
     "Rattle",
     "Project",
     "BuildASEslab",
-    "AddAdsorbate",
+    "RelaxAdsorptionConfigs",
     "__version__",
 ]
