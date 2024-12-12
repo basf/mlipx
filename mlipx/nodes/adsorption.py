@@ -31,7 +31,7 @@ class BuildASEslab(zntrack.Node):
     a : float
         (optional) The lattice constant. If specified, it overrides the experimental
         lattice constant of the element. Must be specified if setting up a crystal
-          structure different from the one found in nature.
+        structure different from the one found in nature.
     c : float
         (optional) Extra HCP lattice constant. If specified, it overrides
           the experimental lattice constant of the element.

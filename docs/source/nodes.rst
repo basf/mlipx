@@ -77,3 +77,9 @@ Each Node is documented in the following section.
 
     PermutationInvariance
         .. autofunction:: mlipx.PermutationInvariance
+
+    RelaxAdsorptionConfigs
+        .. autofunction:: mlipx.RelaxAdsorptionConfigs
+
+    BuildASEslab
+        .. autofunction:: mlipx.BuildASEslab

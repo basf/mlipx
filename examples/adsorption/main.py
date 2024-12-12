@@ -14,9 +14,6 @@ with project.group("initialize"):
         ).frames
     )
 
-
-# TODO: datapath
-
 adsorbates = []
 
 with project.group("initialize"):

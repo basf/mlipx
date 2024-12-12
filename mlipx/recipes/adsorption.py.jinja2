@@ -11,8 +11,6 @@ with project.group("initialize"):
     slabs.append(mlipx.BuildASEslab(**{{ slab_config }}).frames)
 {% endif %}
 
-# TODO: datapath
-
 adsorbates = []
 {% if smiles %}
 with project.group("initialize"):

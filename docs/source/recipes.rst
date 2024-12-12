@@ -13,6 +13,7 @@ The following recipes are currently available within :code:`mlipx`.
    recipes/relax
    recipes/md
    recipes/neb
+   recipes/adsorption
    recipes/phase_diagram
    recipes/pourbaix_diagram
    recipes/vibrational_analysis
