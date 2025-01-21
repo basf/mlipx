@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mlipx"
-version = "0.1.5"
+version = "0.1.4"
 description = "Machine-Learned Interatomic Potential eXploration"
 authors = ["Sandip De <sandip.de@basf.com>", "Fabian Zills <fabian.zills@web.de>", "Sheena Agarwal <sheena.a.agarwal@basf.com>"]
 license = "MIT"
