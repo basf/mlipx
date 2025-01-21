@@ -208,7 +208,18 @@ def homonuclear_diatomics(
 ):
     """Run homonuclear diatomics calculations."""
     if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+        models_lst = models.split(",")
+        orcashell = ""
+        if "orca" in models_lst:
+            orcashell = typer.prompt("Enter the path to the Orca executable")
+
+        render_template(
+            CWD / "models.py.jinja2",
+            "models.py",
+            models=models_lst,
+            orcashell=orcashell,
+        )
+
     handle_recipe(
         "homonuclear_diatomics.py.jinja2",
         initialize=initialize,

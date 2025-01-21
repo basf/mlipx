@@ -62,6 +62,13 @@ MODELS["mattersim"] = mlipx.GenericASECalculator(
     class_name="MatterSimCalculator",
     device="auto",
 )
+{% elif model == "orca" %}
+# https://www.faccts.de/orca/
+MODELS["orca"] = mlipx.OrcaSinglePoint(
+    orcasimpleinput= "PBE def2-TZVP TightSCF EnGrad",
+    orcablocks ="%pal nprocs 8 end",
+    orca_shell="{{ orcashell }}",
+)
 {% endif %}
 {% endfor %}
 
