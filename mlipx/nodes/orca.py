@@ -1,6 +1,7 @@
-from ase.calculators.orca import ORCA, OrcaProfile
 import dataclasses
 from pathlib import Path
+
+from ase.calculators.orca import ORCA, OrcaProfile
 
 
 @dataclasses.dataclass
@@ -10,7 +11,7 @@ class OrcaSinglePoint:
     Parameters
     ----------
     orcasimpleinput : str
-        ORCA input string. 
+        ORCA input string.
         You can use something like "PBE def2-TZVP TightSCF EnGrad".
     orcablocks : str
         ORCA input blocks.

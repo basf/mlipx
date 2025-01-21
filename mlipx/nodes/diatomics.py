@@ -1,4 +1,5 @@
 import functools
+import pathlib
 import typing as t
 
 import ase
@@ -7,7 +8,6 @@ import pandas as pd
 import plotly.graph_objects as go
 import tqdm
 import zntrack
-import pathlib
 from ase.data import atomic_numbers, covalent_radii
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
@@ -61,7 +61,6 @@ class HomonuclearDiatomics(zntrack.Node):
     results: pd.DataFrame = zntrack.plots()
 
     model_outs: pathlib.Path = zntrack.outs_path(zntrack.nwd / "model_outs")
-
 
     def build_molecule(self, element, distance) -> ase.Atoms:
         return ase.Atoms([element, element], positions=[(0, 0, 0), (0, 0, distance)])
