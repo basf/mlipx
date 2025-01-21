@@ -7,7 +7,7 @@ Homonuclear diatomics give a per-element information on the performance of the :
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes homonuclear-diatomics --models mace_mp,sevennet,orb_v2,mattersim --smiles="[Li+].[Cl-]" --repro
+   (.venv) $ mlipx recipes homonuclear-diatomics --models mace_mp,sevennet,orb_v2,mattersim,orca --smiles="[Li+].[Cl-]" --repro
 
 
 You can edit the elements in the :term:`main.py` file to include the elements you want to test.
