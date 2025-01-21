@@ -1,0 +1,3 @@
+[submodule "mlipx-hub"]
+	path = mlipx-hub
+	url = https://github.com/basf/mlipx-hub
