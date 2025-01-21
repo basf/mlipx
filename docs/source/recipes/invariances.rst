@@ -16,7 +16,7 @@ Check the rotational, translational and permutational invariance of an :term:`ml
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*TranslationalInvariance", "../../examples/invariances/")
+   plots = get_plots("*TranslationalInvariance", "../../mlipx-hub/invariances/")
    plots["energy_vs_steps_adjusted"].show()
 
    plots = get_plots("*RotationalInvariance", ".")
@@ -34,11 +34,11 @@ This recipe uses:
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../examples/invariances/main.py
+   .. literalinclude:: ../../../mlipx-hub/invariances/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../examples/invariances/models.py
+   .. literalinclude:: ../../../mlipx-hub/invariances/models.py
       :language: Python

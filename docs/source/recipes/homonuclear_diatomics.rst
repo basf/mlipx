@@ -23,7 +23,7 @@ In the following we show the results for the :code:`Li-Li` bond for the three se
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*HomonuclearDiatomics", "../../examples/diatomics/")
+   plots = get_plots("*HomonuclearDiatomics", "../../mlipx-hub/diatomics/")
    plots["Li-Li bond (adjusted)"].show()
 
 
@@ -33,11 +33,11 @@ This test uses the following Nodes together with your provided model in the :ter
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../examples/diatomics/main.py
+   .. literalinclude:: ../../../mlipx-hub/diatomics/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../examples/diatomics/models.py
+   .. literalinclude:: ../../../mlipx-hub/diatomics/models.py
       :language: Python

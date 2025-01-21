@@ -48,7 +48,7 @@ This recipe is used to test the performance of different models in predicting th
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*CompareCalculatorResults", "../../examples/metrics/")
+   plots = get_plots("*CompareCalculatorResults", "../../mlipx-hub/metrics/")
    # raise ValueError(plots.keys())
    plots["fmax_error"].show()
    plots["adjusted_energy_error_per_atom"].show()
@@ -65,11 +65,11 @@ This recipe uses the following Nodes together with your provided model in the :t
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../examples/metrics/main.py
+   .. literalinclude:: ../../../mlipx-hub/metrics/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../examples/metrics/models.py
+   .. literalinclude:: ../../../mlipx-hub/metrics/models.py
       :language: Python
