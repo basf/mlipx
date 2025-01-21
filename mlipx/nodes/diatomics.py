@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import tqdm
 import zntrack
+import pathlib
 from ase.data import atomic_numbers, covalent_radii
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
@@ -32,6 +33,10 @@ class HomonuclearDiatomics(zntrack.Node):
     data : list[ase.Atoms]|None
         Optional list of ase.Atoms. Diatomics for each element in
         this list will be added to `elements`.
+    model_outs:
+        Path to store the outputs of the model.
+        Some models, like DFT calculators, generate
+        files that will be stored in this path.
 
     Attributes
     ----------
@@ -55,13 +60,18 @@ class HomonuclearDiatomics(zntrack.Node):
     frames: list[ase.Atoms] = zntrack.outs()  # TODO: change to h5md out
     results: pd.DataFrame = zntrack.plots()
 
+    model_outs: pathlib.Path = zntrack.outs_path(zntrack.nwd / "model_outs")
+
+
     def build_molecule(self, element, distance) -> ase.Atoms:
         return ase.Atoms([element, element], positions=[(0, 0, 0), (0, 0, distance)])
 
     def run(self):
         self.frames = []
         self.results = pd.DataFrame()
-        calc = self.model.get_calculator()
+        self.model_outs.mkdir(exist_ok=True, parents=True)
+        (self.model_outs / "mlipx.txt").write_text("Thank you for using MLIPX!")
+        calc = self.model.get_calculator(directory=self.model_outs)
         e_v = {}
 
         elements = set(self.elements)

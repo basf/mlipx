@@ -19,6 +19,7 @@ from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
 from .nodes.mp_api import MPRester
 from .nodes.nebs import NEBinterpolate, NEBs
 from .nodes.observer import MaximumForceObserver
+from .nodes.orca import OrcaSinglePoint
 from .nodes.phase_diagram import PhaseDiagram
 from .nodes.pourbaix_diagram import PourbaixDiagram
 from .nodes.rattle import Rattle
@@ -62,5 +63,6 @@ __all__ = [
     "Project",
     "BuildASEslab",
     "RelaxAdsorptionConfigs",
+    "OrcaSinglePoint",
     "__version__",
 ]
