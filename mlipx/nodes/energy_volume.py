@@ -81,13 +81,17 @@ class EnergyVolumeCurve(zntrack.Node):
         """Plot the energy-volume curve."""
         fig = px.scatter(self.results, x="scale", y="energy", color="scale")
         fig.update_layout(title="Energy-Volume Curve")
-        fig.update_traces(customdata=np.stack([np.arange(self.n_points)], axis=1))
+        fig.update_traces(
+            customdata=np.stack([np.arange(self.n_points)], axis=1).tolist()
+        )
         fig.update_xaxes(title_text="cell vector scale")
         fig.update_yaxes(title_text="Energy / eV")
 
         ffig = px.scatter(self.results, x="scale", y="fmax", color="scale")
         ffig.update_layout(title="Energy-Volume Curve (fmax)")
-        ffig.update_traces(customdata=np.stack([np.arange(self.n_points)], axis=1))
+        ffig.update_traces(
+            customdata=np.stack([np.arange(self.n_points)], axis=1).tolist()
+        )
         ffig.update_xaxes(title_text="cell vector scale")
         ffig.update_yaxes(title_text="Maximum Force / eV/Å")
 
@@ -106,7 +110,9 @@ class EnergyVolumeCurve(zntrack.Node):
                     name=node.name.replace("_EnergyVolumeCurve", ""),
                 )
             )
-            fig.update_traces(customdata=np.stack([np.arange(node.n_points)], axis=1))
+            fig.update_traces(
+                customdata=np.stack([np.arange(node.n_points)], axis=1).tolist()
+            )
 
         # TODO: remove all info from the frames?
         # What about forces / energies? Update the key?
@@ -131,7 +137,7 @@ class EnergyVolumeCurve(zntrack.Node):
                 )
             )
             fig_adjust.update_traces(
-                customdata=np.stack([np.arange(node.n_points)], axis=1)
+                customdata=np.stack([np.arange(node.n_points)], axis=1).tolist()
             )
 
         fig_adjust.update_layout(title="Adjusted Energy-Volume Curve Comparison")

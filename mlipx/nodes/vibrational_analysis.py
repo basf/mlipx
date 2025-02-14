@@ -286,7 +286,9 @@ class VibrationalAnalysis(zntrack.Node):
             xaxis_title="Frame",
             yaxis_title="ddG (eV)",
         )
-        fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=-1))
+        fig.update_traces(
+            customdata=np.stack([np.arange(len(self.results))], axis=-1).tolist()
+        )
         return {"Gibbs": fig}
 
     @staticmethod
@@ -303,7 +305,7 @@ class VibrationalAnalysis(zntrack.Node):
                     name=node.name,
                     customdata=np.stack(
                         [np.arange(len(node.results["ddG"])) + offset], axis=1
-                    ),
+                    ).tolist(),
                 )
             )
             offset += len(node.results["ddG"])

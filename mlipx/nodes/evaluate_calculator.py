@@ -24,7 +24,9 @@ def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
                 name=node.name.replace(f"_{node.__class__.__name__}", ""),
             )
         )
-    fig.update_traces(customdata=np.stack([np.arange(len(node.plots.index))], axis=1))
+    fig.update_traces(
+        customdata=np.stack([np.arange(len(node.plots.index))], axis=1).tolist()
+    )
     fig.update_layout(
         title=key,
         plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -115,7 +117,7 @@ zndraw {self.name}.frames --rev {self.state.rev} --remote {self.state.remote} --
                 title=key,
             )
             fig.update_traces(
-                customdata=np.stack([np.arange(len(self.plots))], axis=1),
+                customdata=np.stack([np.arange(len(self.plots))], axis=1).tolist(),
             )
             plots[key] = fig
         return plots

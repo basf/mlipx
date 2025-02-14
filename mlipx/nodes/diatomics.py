@@ -126,7 +126,9 @@ class HomonuclearDiatomics(zntrack.Node):
                 offset += self.n_points
 
             fig.update_traces(
-                customdata=np.stack([np.arange(self.n_points) + offset], axis=1),
+                customdata=np.stack(
+                    [np.arange(self.n_points) + offset], axis=1
+                ).tolist(),
             )
             plots[f"{element}-{element} bond"] = fig
         return plots
@@ -173,7 +175,9 @@ class HomonuclearDiatomics(zntrack.Node):
                         break
                     offset += node.n_points
                 fig.update_traces(
-                    customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
+                    customdata=np.stack(
+                        [np.arange(node.n_points) + offset], axis=1
+                    ).tolist(),
                 )
                 fig.update_layout(
                     plot_bgcolor="rgba(0, 0, 0, 0)",
@@ -227,7 +231,9 @@ class HomonuclearDiatomics(zntrack.Node):
                         break
                     offset += node.n_points
                 fig.update_traces(
-                    customdata=np.stack([np.arange(node.n_points) + offset], axis=1),
+                    customdata=np.stack(
+                        [np.arange(node.n_points) + offset], axis=1
+                    ).tolist(),
                 )
                 fig.update_layout(
                     plot_bgcolor="rgba(0, 0, 0, 0)",

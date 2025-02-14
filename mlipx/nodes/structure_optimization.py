@@ -86,7 +86,7 @@ class StructureOptimization(zntrack.Node):
                 x=list(range(len(energies))),
                 y=energies,
                 mode="lines+markers",
-                customdata=np.stack([np.arange(len(energies))], axis=1),
+                customdata=np.stack([np.arange(len(energies))], axis=1).tolist(),
             )
         )
 
@@ -102,7 +102,7 @@ class StructureOptimization(zntrack.Node):
                 x=self.plots.index,
                 y=self.plots["fmax"],
                 mode="lines+markers",
-                customdata=np.stack([np.arange(len(energies))], axis=1),
+                customdata=np.stack([np.arange(len(energies))], axis=1).tolist(),
             )
         )
 
@@ -126,7 +126,9 @@ class StructureOptimization(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
+                    customdata=np.stack(
+                        [np.arange(len(energies)) + offset], axis=1
+                    ).tolist(),
                 )
             )
             offset += len(energies)
@@ -164,7 +166,9 @@ class StructureOptimization(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
+                    customdata=np.stack(
+                        [np.arange(len(energies)) + offset], axis=1
+                    ).tolist(),
                 )
             )
             offset += len(energies)
