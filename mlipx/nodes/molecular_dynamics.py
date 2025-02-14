@@ -132,7 +132,7 @@ class MolecularDynamics(zntrack.Node):
                 title=key,
             )
             fig.update_traces(
-                customdata=np.stack([np.arange(len(self.plots))], axis=1).tolist(),
+                customdata=np.stack([np.arange(len(self.plots))], axis=1),
             )
             plots[key] = fig
         return plots
@@ -150,9 +150,7 @@ class MolecularDynamics(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack(
-                        [np.arange(len(energies)) + offset], axis=1
-                    ).tolist(),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
             offset += len(energies)
@@ -193,9 +191,7 @@ class MolecularDynamics(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack(
-                        [np.arange(len(energies)) + offset], axis=1
-                    ).tolist(),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
             offset += len(energies)

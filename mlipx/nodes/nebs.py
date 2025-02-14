@@ -162,9 +162,7 @@ class NEBs(zntrack.Node):
     def figures(self) -> dict[str, go.Figure]:
         fig = px.scatter(self.results, x="data_id", y="potential_energy")
         fig.update_layout(title="NEB_path")
-        fig.update_traces(
-            customdata=np.stack([np.arange(len(self.results))], axis=1).tolist()
-        )
+        fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=1))
         return {"NEB_path": fig}
 
     @property
@@ -185,9 +183,7 @@ class NEBs(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=f"{iteration}",
-                    customdata=np.stack(
-                        [np.arange(len(energies)) + offset], axis=1
-                    ).tolist(),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
         figure.update_layout(
@@ -210,9 +206,7 @@ class NEBs(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack(
-                        [np.arange(len(energies)) + offset], axis=1
-                    ).tolist(),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
             offset += len(energies)
@@ -250,9 +244,7 @@ class NEBs(zntrack.Node):
                     y=energies,
                     mode="lines+markers",
                     name=node.name.replace(f"_{node.__class__.__name__}", ""),
-                    customdata=np.stack(
-                        [np.arange(len(energies)) + offset], axis=1
-                    ).tolist(),
+                    customdata=np.stack([np.arange(len(energies)) + offset], axis=1),
                 )
             )
             offset += len(energies)

@@ -257,7 +257,7 @@ class RelaxAdsorptionConfigs(zntrack.Node):
                         name=node.name.replace(f"_{cls.__name__}", ""),
                         customdata=np.stack(
                             [np.arange(len(energies)) + offset], axis=1
-                        ).tolist(),
+                        ),
                         mode="lines+markers",
                     )
                 )
