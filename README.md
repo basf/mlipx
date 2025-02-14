@@ -3,7 +3,6 @@
 ![Logo](https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/docs/source/_static/mlipx-light.svg#gh-light-mode-only)
 ![Logo](https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/docs/source/_static/mlipx-dark.svg#gh-dark-mode-only)
 
-
 [![PyPI version](https://badge.fury.io/py/mlipx.svg)](https://badge.fury.io/py/mlipx)
 [![ZnTrack](https://img.shields.io/badge/Powered%20by-ZnTrack-%23007CB0)](https://zntrack.readthedocs.io/en/latest/)
 [![ZnDraw](https://img.shields.io/badge/works_with-ZnDraw-orange)](https://github.com/zincware/zndraw)
@@ -14,6 +13,7 @@
 [🛠️Installation](https://mlipx.readthedocs.io/en/latest/installation.html) |
 [📜Recipes](https://mlipx.readthedocs.io/en/latest/recipes.html) |
 [🚀Quickstart](https://mlipx.readthedocs.io/en/latest/quickstart.html)
+
 </div>
 
 <div style="text-align: center;">
@@ -54,7 +54,9 @@ Most recipes support different input formats, such as data file paths, `SMILES` 
 > cd exp
 > git init && dvc init
 > ```
+>
 > If you want to use datafiles, it is recommend to track them with `dvc add <file>` instead of `git add <file>`.
+>
 > ```bash
 > cp /your/data/file.xyz .
 > dvc add file.xyz
@@ -106,7 +108,6 @@ mlipx compare --glob "*NEBs"
 
 ![ZnDraw UI](https://github.com/user-attachments/assets/a2e80caf-dd86-4f14-9101-6d52610b9c34#gh-dark-mode-only "ZnDraw UI")
 ![ZnDraw UI](https://github.com/user-attachments/assets/0c1eb681-a32c-41c2-a15e-2348104239dc#gh-light-mode-only "ZnDraw UI")
-
 
 ## Python API
 
