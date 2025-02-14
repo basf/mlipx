@@ -2,7 +2,7 @@ default_language_version:
   python: python3
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -22,21 +22,20 @@ repos:
       - id: sort-simple-yaml
       - id: trailing-whitespace
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
         additional_dependencies: ["tomli"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
-    rev: v0.7.0
+    rev: v0.9.6
     hooks:
       # Run the linter.
       - id: ruff
         args: [ --fix ]
       # Run the formatter.
       - id: ruff-format
-  # - repo: https://github.com/executablebooks/mdformat
-  #   rev: 0.7.19
-  #   hooks:
-  #   - id: mdformat
-  #     args: ["--wrap=80"]
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.22
+    hooks:
+    - id: mdformat
