@@ -60,11 +60,13 @@ conflicts = [
 [project.optional-dependencies]
 models = [
     "chgnet>=0.4.0",
-    "cmake>=3.31.4",
     "mace-torch>=0.3.10",
+    "sevenn>=0.10.4",
+]
+orb = [
     "orb-models>=0.4.2",
     "pynanoflann",
-    "sevenn>=0.10.4",
+    "cmake>=3.31.4",
 ]
 mattersim = [
     "mattersim>=1.1.1",

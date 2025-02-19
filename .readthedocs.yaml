@@ -16,7 +16,7 @@ build:
     post_install:
       # see https://github.com/astral-sh/uv/issues/10074
       - pip install uv
-      - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv sync --all-extras --link-mode=copy --group=docs
+      - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv sync --link-mode=copy --group=docs
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:

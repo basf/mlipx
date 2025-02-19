@@ -1,41 +1,74 @@
 version = 1
 requires-python = ">=3.10"
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
-    "python_full_version >= '3.12' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
-    "python_full_version >= '3.12' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_full_version < '3.11' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -43,17 +76,30 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -62,22 +108,45 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
-    "python_full_version >= '3.12' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
-    "python_full_version >= '3.12' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -1206,8 +1275,13 @@ name = "dm-tree"
 version = "0.1.8"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'win32'",
-    "python_full_version >= '3.13' and sys_platform != 'win32'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f8/6d/f1997aac42e0f550c1e952a0b920eaa0bfc4d27d0421499881b934b969fc/dm-tree-0.1.8.tar.gz", hash = "sha256:0fcaabbb14e7980377439e7140bd05552739ca5e515ecb3119f234acee4b9430", size = 35384 }
 wheels = [
@@ -1241,18 +1315,33 @@ name = "dm-tree"
 version = "0.1.9"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version == '3.12.*' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform != 'win32'",
-    "python_full_version == '3.11.*' and sys_platform == 'win32'",
-    "python_full_version == '3.11.*' and sys_platform != 'win32'",
-    "python_full_version < '3.11' and sys_platform == 'win32'",
-    "python_full_version < '3.11' and sys_platform != 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version < '3.11' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
 ]
 dependencies = [
-    { name = "absl-py", marker = "python_full_version < '3.13'" },
-    { name = "attrs", marker = "python_full_version < '3.13'" },
-    { name = "numpy", marker = "python_full_version < '3.13'" },
-    { name = "wrapt", marker = "python_full_version < '3.13'" },
+    { name = "absl-py", marker = "python_full_version < '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "attrs", marker = "python_full_version < '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "numpy", marker = "python_full_version < '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "wrapt", marker = "python_full_version < '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a6/83/ce29720ccf934c6cfa9b9c95ebbe96558386e66886626066632b5e44afed/dm_tree-0.1.9.tar.gz", hash = "sha256:a4c7db3d3935a5a2d5e4b383fc26c6b0cd6f78c6d4605d3e7b518800ecd5342b", size = 35623 }
 wheels = [
@@ -1536,9 +1625,12 @@ name = "e3nn"
 version = "0.5.5"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'win32'",
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
-    "python_full_version >= '3.12' and sys_platform != 'linux' and sys_platform != 'win32'",
+    "python_full_version >= '3.13' and sys_platform == 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32'",
     "python_full_version == '3.11.*' and sys_platform == 'win32'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32'",
@@ -2879,11 +2971,13 @@ mattersim = [
 ]
 models = [
     { name = "chgnet" },
-    { name = "cmake" },
     { name = "mace-torch" },
+    { name = "sevenn" },
+]
+orb = [
+    { name = "cmake" },
     { name = "orb-models" },
     { name = "pynanoflann" },
-    { name = "sevenn" },
 ]
 
 [package.dev-dependencies]
@@ -2910,14 +3004,14 @@ docs = [
 requires-dist = [
     { name = "ase", specifier = ">=3.24.0" },
     { name = "chgnet", marker = "extra == 'models'", specifier = ">=0.4.0" },
-    { name = "cmake", marker = "extra == 'models'", specifier = ">=3.31.4" },
+    { name = "cmake", marker = "extra == 'orb'", specifier = ">=3.31.4" },
     { name = "lazy-loader", specifier = ">=0.4" },
     { name = "mace-torch", marker = "extra == 'models'", specifier = ">=0.3.10" },
     { name = "mattersim", marker = "extra == 'mattersim'", specifier = ">=1.1.1" },
     { name = "mp-api", specifier = ">=0.45.2" },
-    { name = "orb-models", marker = "extra == 'models'", specifier = ">=0.4.2" },
+    { name = "orb-models", marker = "extra == 'orb'", specifier = ">=0.4.2" },
     { name = "plotly", specifier = ">=6.0.0" },
-    { name = "pynanoflann", marker = "extra == 'models'", git = "https://github.com/dwastberg/pynanoflann" },
+    { name = "pynanoflann", marker = "extra == 'orb'", git = "https://github.com/dwastberg/pynanoflann" },
     { name = "rdkit2ase", specifier = ">=0.1.4" },
     { name = "sevenn", marker = "extra == 'models'", specifier = ">=0.10.4" },
     { name = "typer", specifier = ">=0.15.1" },
@@ -3289,7 +3383,8 @@ name = "nvidia-cublas-cu12"
 version = "12.1.3.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3319,7 +3414,8 @@ name = "nvidia-cuda-cupti-cu12"
 version = "12.1.105"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3349,7 +3445,8 @@ name = "nvidia-cuda-nvrtc-cu12"
 version = "12.1.105"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3379,7 +3476,8 @@ name = "nvidia-cuda-runtime-cu12"
 version = "12.1.105"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3410,7 +3508,7 @@ version = "9.1.0.70"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nvidia-cublas-cu12", version = "12.1.3.1", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9f/fd/713452cd72343f682b1c7b9321e23829f00b842ceaedcda96e742ea0b0b3/nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl", hash = "sha256:165764f44ef8c61fcdfdfdbe769d687e06374059fbb388b6c89ecb0e28793a6f", size = 664752741 },
@@ -3422,7 +3520,8 @@ name = "nvidia-cufft-cu12"
 version = "11.0.2.54"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3442,7 +3541,7 @@ resolution-markers = [
     "python_full_version < '3.11' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/7a/8a/0e728f749baca3fbeffad762738276e5df60851958be7783af121a7221e7/nvidia_cufft_cu12-11.2.1.3-py3-none-manylinux2014_aarch64.whl", hash = "sha256:5dad8008fc7f92f5ddfa2101430917ce2ffacd86824914c82e28990ad7f00399", size = 211422548 },
@@ -3455,7 +3554,8 @@ name = "nvidia-curand-cu12"
 version = "10.3.2.106"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3485,7 +3585,8 @@ name = "nvidia-cusolver-cu12"
 version = "11.4.5.107"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3510,9 +3611,9 @@ resolution-markers = [
     "python_full_version < '3.11' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cusparse-cu12", version = "12.3.1.170", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cusparse-cu12", version = "12.3.1.170", source = { registry = "https://pypi.org/simple" }, marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/46/6b/a5c33cf16af09166845345275c34ad2190944bcc6026797a39f8e0a282e0/nvidia_cusolver_cu12-11.6.1.9-py3-none-manylinux2014_aarch64.whl", hash = "sha256:d338f155f174f90724bbde3758b7ac375a70ce8e706d70b018dd3375545fc84e", size = 127634111 },
@@ -3525,7 +3626,8 @@ name = "nvidia-cusparse-cu12"
 version = "12.1.0.106"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3548,7 +3650,7 @@ resolution-markers = [
     "python_full_version < '3.11' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/96/a9/c0d2f83a53d40a4a41be14cea6a0bf9e668ffcf8b004bd65633f433050c0/nvidia_cusparse_cu12-12.3.1.170-py3-none-manylinux2014_aarch64.whl", hash = "sha256:9d32f62896231ebe0480efd8a7f702e143c98cfaa0e8a76df3386c1ba2b54df3", size = 207381987 },
@@ -3577,7 +3679,8 @@ name = "nvidia-nccl-cu12"
 version = "2.20.5"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3615,7 +3718,8 @@ name = "nvidia-nvtx-cu12"
 version = "12.1.105"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
@@ -3684,11 +3788,12 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ase" },
     { name = "cached-path" },
-    { name = "dm-tree", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
-    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "dm-tree", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
     { name = "numpy" },
     { name = "scipy" },
-    { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "torch", version = "2.4.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-5-mlipx-mattersim'" },
+    { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
     { name = "tqdm" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b7/aa/0d03f55f8707411d5557896a0cf146cfac2dd24dce5af60ae339f5ff3193/orb_models-0.4.2.tar.gz", hash = "sha256:3edc3a484b536fa45b839858fb0144afd6e92d822271eb91c1b1edab0db653d8", size = 60122 }
@@ -4885,7 +4990,7 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "markdown-it-py" },
     { name = "pygments" },
-    { name = "typing-extensions", marker = "python_full_version < '3.11'" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/ab/3a/0316b28d0761c6734d6bc14e770d85506c986c85ffb239e688eeaab2c2bc/rich-13.9.4.tar.gz", hash = "sha256:439594978a49a09530cff7ebc4b5c7103ef57baf48d5ea3184f21d9a2befa098", size = 223149 }
 wheels = [
@@ -5505,9 +5610,12 @@ name = "sphinx"
 version = "8.2.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.12' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.12' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
@@ -5517,8 +5625,10 @@ resolution-markers = [
     "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version >= '3.12' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.12' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
 ]
@@ -5903,9 +6013,12 @@ name = "torch"
 version = "2.4.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'win32'",
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
-    "python_full_version >= '3.12' and sys_platform != 'linux' and sys_platform != 'win32'",
+    "python_full_version >= '3.13' and sys_platform == 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32'",
     "python_full_version == '3.11.*' and sys_platform == 'win32'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32'",
@@ -5963,27 +6076,27 @@ resolution-markers = [
     "python_full_version < '3.11' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "filelock", marker = "extra == 'extra-5-mlipx-models'" },
-    { name = "fsspec", marker = "extra == 'extra-5-mlipx-models'" },
-    { name = "jinja2", marker = "extra == 'extra-5-mlipx-models'" },
-    { name = "networkx", marker = "extra == 'extra-5-mlipx-models'" },
-    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cuda-cupti-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cuda-nvrtc-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cuda-runtime-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cudnn-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cufft-cu12", version = "11.2.1.3", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-curand-cu12", version = "10.3.5.147", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cusolver-cu12", version = "11.6.1.9", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cusparse-cu12", version = "12.3.1.170", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-cusparselt-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-nccl-cu12", version = "2.21.5", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-nvjitlink-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "nvidia-nvtx-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "setuptools", marker = "(python_full_version >= '3.12' and extra == 'extra-5-mlipx-models') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sympy", marker = "extra == 'extra-5-mlipx-models'" },
-    { name = "triton", version = "3.2.0", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra == 'extra-5-mlipx-models') or (platform_machine != 'x86_64' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "typing-extensions", marker = "extra == 'extra-5-mlipx-models'" },
+    { name = "filelock", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
+    { name = "fsspec", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
+    { name = "jinja2", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
+    { name = "networkx", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
+    { name = "nvidia-cublas-cu12", version = "12.4.5.8", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cuda-cupti-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cuda-nvrtc-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cuda-runtime-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cudnn-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cufft-cu12", version = "11.2.1.3", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-curand-cu12", version = "10.3.5.147", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cusolver-cu12", version = "11.6.1.9", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cusparse-cu12", version = "12.3.1.170", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-cusparselt-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nccl-cu12", version = "2.21.5", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nvjitlink-cu12", marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "nvidia-nvtx-cu12", version = "12.4.127", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "setuptools", marker = "(python_full_version >= '3.12' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sympy", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
+    { name = "triton", version = "3.2.0", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine == 'x86_64' and sys_platform == 'linux' and extra != 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "typing-extensions", marker = "extra == 'extra-5-mlipx-models' or extra != 'extra-5-mlipx-mattersim'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/37/81/aa9ab58ec10264c1abe62c8b73f5086c3c558885d6beecebf699f0dbeaeb/torch-2.6.0-cp310-cp310-manylinux1_x86_64.whl", hash = "sha256:6860df13d9911ac158f4c44031609700e1eba07916fff62e21e6ffa0a9e01961", size = 766685561 },
@@ -6151,7 +6264,7 @@ name = "triton"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.12' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.11.*' and sys_platform == 'linux'",
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
