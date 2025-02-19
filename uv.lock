@@ -2,6 +2,8 @@ version = 1
 requires-python = ">=3.10"
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
@@ -10,7 +12,11 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
@@ -19,8 +25,14 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -33,7 +45,11 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -43,12 +59,18 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -60,12 +82,20 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -79,7 +109,12 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -91,12 +126,20 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -113,7 +156,12 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
@@ -125,8 +173,16 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -138,12 +194,20 @@ resolution-markers = [
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
+    "python_version < '0'",
+    "python_version < '0'",
+    "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
     "python_version < '0'",
@@ -1922,8 +1986,7 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "pygments" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
     { name = "sphinx-basic-ng" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a0/e2/d351d69a9a9e4badb4a5be062c2d0e87bd9e6c23b5e57337fef14bef34c8/furo-2024.8.6.tar.gz", hash = "sha256:b63e4cee8abfc3136d3bc03a3d45a76a850bada4d6374d24c1716b0e01394a01", size = 1661506 }
@@ -2481,8 +2544,7 @@ dependencies = [
     { name = "ipywidgets" },
     { name = "nbconvert" },
     { name = "nbformat" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/1a/b5/40f540cc9e54ee829f79daac43456a8d5ab4b70c8d26f0b9eca0dfcb4ad5/jupyter_sphinx-0.5.3.tar.gz", hash = "sha256:2e23699a3a1cf5db31b10981da5aa32606ee730f6b73a844d1e76d800756af56", size = 17532 }
 wheels = [
@@ -2991,8 +3053,7 @@ docs = [
     { name = "furo" },
     { name = "jupyter-sphinx" },
     { name = "nbsphinx" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
     { name = "sphinx-copybutton" },
     { name = "sphinx-design" },
     { name = "sphinx-hoverxref" },
@@ -3031,7 +3092,7 @@ docs = [
     { name = "furo", specifier = ">=2024.8.6" },
     { name = "jupyter-sphinx", specifier = ">=0.5.3" },
     { name = "nbsphinx", specifier = ">=0.9.6" },
-    { name = "sphinx", specifier = ">=8.1.3" },
+    { name = "sphinx", specifier = ">=8.1.3,!=8.2.0" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
     { name = "sphinx-design", specifier = ">=0.6.1" },
     { name = "sphinx-hoverxref", specifier = ">=1.4.2" },
@@ -3319,8 +3380,7 @@ dependencies = [
     { name = "jinja2" },
     { name = "nbconvert" },
     { name = "nbformat" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
     { name = "traitlets" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/62/38/6f6a0f9115b493af9d69b68335945827dd46e09de8ef525d1f58cd0870dc/nbsphinx-0.9.6.tar.gz", hash = "sha256:c2b28a2d702f1159a95b843831798e86e60a17fc647b9bff9ba1585355de54e3", size = 180213 }
@@ -4998,15 +5058,6 @@ wheels = [
 ]
 
 [[package]]
-name = "roman-numerals-py"
-version = "3.0.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/9e/78/9491ab144c9cb2d97aa74d6f632bd6f4be67957de03f945a23a67415d859/roman_numerals_py-3.0.0.tar.gz", hash = "sha256:91199c4373658c03d87d9fe004f4a5120a20f6cb192be745c2377cce274ef41c", size = 8970 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/27/d0/a3a2fed015e95b9e81619182adc472540f9786183febfaef8b7c5e909418/roman_numerals_py-3.0.0-py3-none-any.whl", hash = "sha256:a1421ce66b3eab7e8735065458de3fa5c4a46263d50f9f4ac8f0e5e7701dd125", size = 4416 },
-]
-
-[[package]]
 name = "rpds-py"
 version = "0.22.3"
 source = { registry = "https://pypi.org/simple" }
@@ -5572,32 +5623,23 @@ wheels = [
 name = "sphinx"
 version = "8.1.3"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.11' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version < '3.11' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-]
 dependencies = [
-    { name = "alabaster", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "babel", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "colorama", marker = "(python_full_version < '3.11' and sys_platform == 'win32') or (python_full_version >= '3.11' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "docutils", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "imagesize", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "jinja2", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "packaging", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "pygments", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "requests", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "snowballstemmer", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-applehelp", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-devhelp", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-jsmath", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-qthelp", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "alabaster" },
+    { name = "babel" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "docutils" },
+    { name = "imagesize" },
+    { name = "jinja2" },
+    { name = "packaging" },
+    { name = "pygments" },
+    { name = "requests" },
+    { name = "snowballstemmer" },
+    { name = "sphinxcontrib-applehelp" },
+    { name = "sphinxcontrib-devhelp" },
+    { name = "sphinxcontrib-htmlhelp" },
+    { name = "sphinxcontrib-jsmath" },
+    { name = "sphinxcontrib-qthelp" },
+    { name = "sphinxcontrib-serializinghtml" },
     { name = "tomli", marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6f/6d/be0b61178fe2cdcb67e2a92fc9ebb488e3c51c4f74a36a7824c0adf23425/sphinx-8.1.3.tar.gz", hash = "sha256:43c1911eecb0d3e161ad78611bc905d1ad0e523e4ddc202a58a821773dc4c927", size = 8184611 }
@@ -5606,63 +5648,11 @@ wheels = [
 ]
 
 [[package]]
-name = "sphinx"
-version = "8.2.0"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform != 'linux' and sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version >= '3.13' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.12.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform == 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-    "python_full_version == '3.11.*' and sys_platform != 'win32' and extra != 'extra-5-mlipx-mattersim' and extra != 'extra-5-mlipx-models'",
-]
-dependencies = [
-    { name = "alabaster", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "babel", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "colorama", marker = "(python_full_version >= '3.11' and sys_platform == 'win32') or (python_full_version < '3.11' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'win32' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "docutils", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "imagesize", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "jinja2", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "packaging", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "pygments", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "requests", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "roman-numerals-py", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "snowballstemmer", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-applehelp", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-devhelp", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-htmlhelp", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-jsmath", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-qthelp", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinxcontrib-serializinghtml", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/81/46/08fe30fc7a6b0e8ff1f502e44133d3a1bd9453d7ab884c2ac7f0ef280920/sphinx-8.2.0.tar.gz", hash = "sha256:5b0067853d6e97f3fa87563e3404ebd008fce03525b55b25da90706764da6215", size = 8321764 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/4d/bbe0250199b9dfa8b25a1949ff13d81e7a6f3bfde37fe373a881bd78a37a/sphinx-8.2.0-py3-none-any.whl", hash = "sha256:3c0a40ff71ace28b316bde7387d93b9249a3688c202181519689b66d5d0aed53", size = 3589193 },
-]
-
-[[package]]
 name = "sphinx-basic-ng"
 version = "1.0.0b2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/98/0b/a866924ded68efec7a1759587a4e478aec7559d8165fac8b2ad1c0e774d6/sphinx_basic_ng-1.0.0b2.tar.gz", hash = "sha256:9ec55a47c90c8c002b5960c57492ec3021f5193cb26cebc2dc4ea226848651c9", size = 20736 }
 wheels = [
@@ -5674,8 +5664,7 @@ name = "sphinx-copybutton"
 version = "0.5.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fc/2b/a964715e7f5295f77509e59309959f4125122d648f86b4fe7d70ca1d882c/sphinx-copybutton-0.5.2.tar.gz", hash = "sha256:4cf17c82fb9646d1bc9ca92ac280813a3b605d8c421225fd9913154103ee1fbd", size = 23039 }
 wheels = [
@@ -5687,8 +5676,7 @@ name = "sphinx-design"
 version = "0.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/2b/69/b34e0cb5336f09c6866d53b4a19d76c227cdec1bbc7ac4de63ca7d58c9c7/sphinx_design-0.6.1.tar.gz", hash = "sha256:b44eea3719386d04d765c1a8257caca2b3e6f8421d7b3a5e742c0fd45f84e632", size = 2193689 }
 wheels = [
@@ -5700,8 +5688,7 @@ name = "sphinx-hoverxref"
 version = "1.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
     { name = "sphinxcontrib-jquery" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/d6/6d/89764d3c719ed172d94778a74661cca647b2475165ae6cde1f73c9524d63/sphinx_hoverxref-1.4.2.tar.gz", hash = "sha256:74fab961b1b8c0e9c2cf22fa195c0e783d635e78686d39dd06ff157c196ca0c9", size = 1715764 }
@@ -5727,8 +5714,7 @@ dependencies = [
     { name = "pybtex" },
     { name = "pybtex-docutils" },
     { name = "setuptools", marker = "python_full_version >= '3.12' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c1/ce/054a8ec04063f9a27772fea7188f796edbfa382e656d3b76428323861f0e/sphinxcontrib_bibtex-2.6.3.tar.gz", hash = "sha256:7c790347ef1cb0edf30de55fc324d9782d085e89c52c2b8faafa082e08e23946", size = 117177 }
 wheels = [
@@ -5758,8 +5744,7 @@ name = "sphinxcontrib-jquery"
 version = "4.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/de/f3/aa67467e051df70a6330fe7770894b3e4f09436dea6881ae0b4f3d87cad8/sphinxcontrib-jquery-4.1.tar.gz", hash = "sha256:1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a", size = 122331 }
 wheels = [
@@ -5781,8 +5766,7 @@ version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyyaml" },
-    { name = "sphinx", version = "8.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
-    { name = "sphinx", version = "8.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "sphinx" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/97/69/bf039237ad260073e8c02f820b3e00dc34f3a2de20aff7861e6b19d2f8c5/sphinxcontrib_mermaid-1.0.0.tar.gz", hash = "sha256:2e8ab67d3e1e2816663f9347d026a8dee4a858acdd4ad32dd1c808893db88146", size = 15153 }
 wheels = [
@@ -6269,7 +6253,7 @@ resolution-markers = [
     "python_full_version < '3.11' and sys_platform == 'linux'",
 ]
 dependencies = [
-    { name = "filelock", marker = "(sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim') or (extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
+    { name = "filelock", marker = "(python_full_version < '3.13' and sys_platform == 'linux' and extra == 'extra-5-mlipx-mattersim') or (python_full_version >= '3.13' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models') or (sys_platform != 'linux' and extra == 'extra-5-mlipx-mattersim' and extra == 'extra-5-mlipx-models')" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/45/27/14cc3101409b9b4b9241d2ba7deaa93535a217a211c86c4cc7151fb12181/triton-3.0.0-1-cp310-cp310-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:e1efef76935b2febc365bfadf74bcb65a6f959a9872e5bddf44cc9e0adce1e1a", size = 209376304 },
