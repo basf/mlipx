@@ -18,7 +18,7 @@ build:
       - pip install uv
       - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv sync --link-mode=copy --group=docs
         # Navigate to the examples directory and perform DVC operations
-      - cd examples && uv run dvc remote modify origin endpointurl $AWS_ENDPOINT_URL && uv run dvc pull --allow-missing
+      - cd mlipx-hub && uv run dvc pull --allow-missing
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
