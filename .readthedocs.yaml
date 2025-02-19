@@ -1,25 +1,23 @@
+# .readthedocs.yaml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
 version: 2
 
 submodules:
   include: all
 
+# Set the version of Python and other tools you might need
 build:
-  os: "ubuntu-22.04"
+  os: ubuntu-lts-latest
   tools:
     python: "3.11"
   jobs:
-    post_create_environment:
-      # Install poetry
-      # https://python-poetry.org/docs/#installing-manually
-      - pip install poetry
     post_install:
-      # Install dependencies with 'docs' dependency group
-      # https://python-poetry.org/docs/managing-dependencies/#dependency-groups
-      # VIRTUAL_ENV needs to be set manually for now.
-      # See https://github.com/readthedocs/readthedocs.org/pull/11152/
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
-      # Navigate to the examples directory and perform DVC operations
-      - cd mlipx-hub && poetry run dvc pull --allow-missing
+      # see https://github.com/astral-sh/uv/issues/10074
+      - pip install uv
+      - UV_PROJECT_ENVIRONMENT=$READTHEDOCS_VIRTUALENV_PATH uv sync --all-extras --link-mode=copy --group=docs
 
+# Build documentation in the docs/ directory with Sphinx
 sphinx:
-  configuration: docs/source/conf.py
+   configuration: docs/source/conf.py
