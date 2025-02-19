@@ -48,6 +48,29 @@ dev = [
 [project.scripts]
 mlipx = "mlipx.cli.main:app"
 
+
+[tool.uv]
+conflicts = [
+    [
+      { extra = "models" },
+      { extra = "mattersim" },
+    ],
+]
+
+[project.optional-dependencies]
+models = [
+    "chgnet>=0.4.0",
+    "cmake>=3.31.4",
+    "mace-torch>=0.3.10",
+    "orb-models>=0.4.2",
+    "pynanoflann",
+    "sevenn>=0.10.4",
+]
+mattersim = [
+    "mattersim>=1.1.1",
+]
+
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -58,3 +81,6 @@ skip = "*.svg,*.lock,*.json"
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]
+
+[tool.uv.sources]
+pynanoflann = { git = "https://github.com/dwastberg/pynanoflann" }
