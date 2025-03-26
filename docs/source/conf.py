@@ -11,7 +11,7 @@ import mlipx
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "mlipx"
-copyright = "2024, Fabian Zills, Sheena Agarwal, Sandip De"
+copyright = "2025, Fabian Zills, Sheena Agarwal, Sandip De"
 author = "Fabian Zills, Sheena Agarwal, Sandip De"
 release = mlipx.__version__
 
