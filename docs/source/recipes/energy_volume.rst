@@ -15,7 +15,7 @@ Compute the energy-volume curve for a given material using multiple models.
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*EnergyVolumeCurve", "../../mlipx-hub/mp-1143/energy-volume/")
+   plots = get_plots("*EnergyVolumeCurve", "../../mlipx-hub/energy-volume/mp-1143/")
    plots["adjusted_energy-volume-curve"].show()
 
 
