@@ -18,7 +18,7 @@ Pourbaix Diagram
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*PourbaixDiagram", "../../mlipx-hub/pourbaix_diagram/")
+   plots = get_plots("*PourbaixDiagram", "../../mlipx-hub/pourbaix_diagram/mp-1143/")
    plots["mace_mp_0-pourbaix-diagram"].show()
    plots["orb_v2_0-pourbaix-diagram"].show()
    plots["sevennet_0-pourbaix-diagram"].show()
@@ -31,11 +31,11 @@ This test uses the following Nodes together with your provided model in the :ter
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../mlipx-hub/pourbaix_diagram/main.py
+   .. literalinclude:: ../../../mlipx-hub/pourbaix_diagram/mp-1143/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../mlipx-hub/pourbaix_diagram/models.py
+   .. literalinclude:: ../../../mlipx-hub/pourbaix_diagram/mp-1143/models.py
       :language: Python

@@ -17,7 +17,7 @@ The following example creates a slab of ``Cu(111)`` and calculates the adsorptio
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*RelaxAdsorptionConfigs", "../../mlipx-hub/adsorption/")
+   plots = get_plots("*RelaxAdsorptionConfigs", "../../mlipx-hub/adsorption/cu_fcc111/")
    plots["adsorption_energies"].show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
@@ -29,11 +29,11 @@ This test uses the following Nodes together with your provided model in the :ter
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../mlipx-hub/adsorption/main.py
+   .. literalinclude:: ../../../mlipx-hub/adsorption/cu_fcc111/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../mlipx-hub/adsorption/models.py
+   .. literalinclude:: ../../../mlipx-hub/adsorption/cu_fcc111/models.py
       :language: Python

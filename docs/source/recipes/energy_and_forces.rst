@@ -48,7 +48,7 @@ This recipe is used to test the performance of different models in predicting th
 
    from mlipx.doc_utils import get_plots
 
-   plots = get_plots("*CompareCalculatorResults", "../../mlipx-hub/metrics/")
+   plots = get_plots("*CompareCalculatorResults", "../../mlipx-hub/metrics/DODH_adsorption/")
    # raise ValueError(plots.keys())
    plots["fmax_error"].show()
    plots["adjusted_energy_error_per_atom"].show()
@@ -65,11 +65,11 @@ This recipe uses the following Nodes together with your provided model in the :t
 
 .. dropdown:: Content of :code:`main.py`
 
-   .. literalinclude:: ../../../mlipx-hub/metrics/main.py
+   .. literalinclude:: ../../../mlipx-hub/metrics/DODH_adsorption/main.py
       :language: Python
 
 
 .. dropdown:: Content of :code:`models.py`
 
-   .. literalinclude:: ../../../mlipx-hub/metrics/models.py
+   .. literalinclude:: ../../../mlipx-hub/metrics/DODH_adsorption/models.py
       :language: Python
