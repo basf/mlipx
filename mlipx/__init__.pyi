@@ -27,6 +27,7 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
+from .nodes.radial_distribution_function import RadialDistributionFunction
 from .project import Project
 from .version import __version__
 
@@ -65,4 +66,5 @@ __all__ = [
     "RelaxAdsorptionConfigs",
     "OrcaSinglePoint",
     "__version__",
+    "RadialDistributionFunction",
 ]
