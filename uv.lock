@@ -3123,7 +3123,7 @@ requires-dist = [
     { name = "lazy-loader", specifier = ">=0.4" },
     { name = "mace-torch", marker = "extra == 'mace'", specifier = ">=0.3.12" },
     { name = "mattersim", marker = "extra == 'mattersim'", specifier = ">=1.1.2" },
-    { name = "mp-api", specifier = ">=0.45.2" },
+    { name = "mp-api", specifier = ">=0.45.3" },
     { name = "orb-models", marker = "extra == 'orb'", specifier = ">=0.5.0" },
     { name = "plotly", specifier = ">=6.0.0" },
     { name = "rdkit2ase", specifier = ">=0.1.4" },
@@ -3183,7 +3183,7 @@ wheels = [
 
 [[package]]
 name = "mp-api"
-version = "0.45.2"
+version = "0.45.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "emmet-core" },
@@ -3196,9 +3196,9 @@ dependencies = [
     { name = "smart-open" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/18/fb/85a2f5a9667e69a7329981d762161031ac582f25535996a5efd3253fddf9/mp_api-0.45.2.tar.gz", hash = "sha256:7ea79020f950c50ef0f4a9893f76dc57b85203e6e8275181cc6e14328d0a8b29", size = 705346 }
+sdist = { url = "https://files.pythonhosted.org/packages/e1/7d/f81318f7f8434a6634c51af16adfc06469c79a93ca4d503f5c56c68c6c00/mp_api-0.45.3.tar.gz", hash = "sha256:fa26a9d81f28717f9f40de59ae6fdb280b3544811e78465fc6b6485bfd08bed8", size = 705244 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/38/62/651d05926d2157589df1d3e2f55dd5b5522b33c581996665feef6fb1cb4b/mp_api-0.45.2-py3-none-any.whl", hash = "sha256:dd85eb8b87da3374f75839a03848d112c4d796e1789ff132bf83943848922ff1", size = 99005 },
+    { url = "https://files.pythonhosted.org/packages/c6/3a/0943b20648631e93a7a973c5898605fe7602180839b1c46b0cbb3bf6e34f/mp_api-0.45.3-py3-none-any.whl", hash = "sha256:3ec77ed84c1b99eaeb222b04ec137697f19326ea63a49e9c7b2e477244e6332b", size = 98922 },
 ]
 
 [[package]]
