@@ -33,7 +33,7 @@ class RadialDistributionFunction(zntrack.Node):
             rmax = self.rmax
         if self.nbins is None:
             # estimate nbins based on the size of the system
-            nbins = int(rmax / 0.1)
+            nbins = int(rmax / 0.01)
         else:
             nbins = self.nbins
         ana = Analysis(self.data)
