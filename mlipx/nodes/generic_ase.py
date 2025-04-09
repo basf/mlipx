@@ -17,6 +17,9 @@ class Device:
         return "cuda" if torch.cuda.is_available() else "cpu"
 
 
+# TODO: add files as dependecies somehow!
+
+
 @dataclasses.dataclass
 class GenericASECalculator:
     """Generic ASE calculator.
@@ -52,3 +55,11 @@ class GenericASECalculator:
             return cls(**kwargs, device=Device.resolve_auto())
         else:
             return cls(**kwargs, device=self.device)
+
+    @property
+    def available(self) -> bool:
+        try:
+            importlib.import_module(self.module)
+            return True
+        except ImportError:
+            return False

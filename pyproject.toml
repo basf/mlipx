@@ -58,11 +58,6 @@ conflicts = [
     [
       { extra = "mace" },
       { extra = "sevenn" },
-    ],
-    [
-      { extra = "fairchem" },
-      { extra = "orb" },
-      { extra = "mace" },
     ]
 ]
 
@@ -84,9 +79,6 @@ mattersim = [
 ]
 grace = [
     "tensorpotential>=0.5.1",
-]
-fairchem = [
-    "fairchem-core>=1.9.0",
 ]
 
 

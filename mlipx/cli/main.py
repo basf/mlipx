@@ -2,6 +2,7 @@ import fnmatch
 import importlib.metadata
 import json
 import pathlib
+import sys
 import uuid
 import webbrowser
 
@@ -9,11 +10,14 @@ import dvc.api
 import plotly.io as pio
 import typer
 import zntrack
+from rich.console import Console
+from rich.table import Table
 from tqdm import tqdm
 from typing_extensions import Annotated
 from zndraw import ZnDraw
 
 from mlipx import benchmark, recipes
+from mlipx.models import AVAILABLE_MODELS
 
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
@@ -29,6 +33,49 @@ for entry_point in entry_points:
 @app.command()
 def main():
     typer.echo("Hello World")
+
+
+@app.command()
+def info():
+    """Print the version of mlipx and the available models."""
+    typer.echo(f"mlipx version: {importlib.metadata.version('mlipx')}")
+    # info about the python environment
+    python_version = sys.version.split()[0]
+    python_executable = sys.executable
+    python_platform = sys.platform
+
+    py_table = Table("Python", "Version", "Executable", "Platform")
+    py_table.add_row(
+        python_version,
+        python_executable,
+        python_platform,
+    )
+    py_table.title = "Python Environment"
+
+    mlip_table = Table("Model", "Available", title="MLIP Codes")
+
+    for model, avail in AVAILABLE_MODELS.items():
+        if avail is True:
+            mlip_table.add_row(model, "[green]Yes[/]")
+        elif avail is False:
+            mlip_table.add_row(model, "[red]No[/]")
+        elif avail is None:
+            mlip_table.add_row(model, "[yellow]Unknown[/]")
+        else:
+            mlip_table.add_row(model, "[red]Error[/]")
+
+    mlipx_table = Table("Code", "Version", title="MLIPX Code")
+    for package in ["mlipx", "zntrack", "zndraw"]:
+        try:
+            version = importlib.metadata.version(package)
+        except importlib.metadata.PackageNotFoundError:
+            version = "Not installed"
+        mlipx_table.add_row(package, version)
+
+    console = Console()
+    console.print(mlip_table)
+    console.print(mlipx_table)
+    console.print(py_table)
 
 
 @app.command()

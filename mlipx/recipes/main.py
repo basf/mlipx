@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 import subprocess
 import typing as t
@@ -211,7 +212,10 @@ def homonuclear_diatomics(
         models_lst = models.split(",")
         orcashell = ""
         if "orca" in models_lst:
-            orcashell = typer.prompt("Enter the path to the Orca executable")
+            if "MLIPX_ORCA" not in os.environ:
+                orcashell = typer.prompt("Enter the path to the Orca executable")
+            else:
+                orcashell = None
 
         render_template(
             CWD / "models.py.jinja2",

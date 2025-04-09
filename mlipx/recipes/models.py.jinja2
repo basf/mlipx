@@ -3,31 +3,36 @@ import dataclasses
 import mlipx
 from mlipx.nodes.generic_ase import Device
 
-MODELS = {}
+ALL_MODELS = {}
 
-{% for model in models %}
-{% if model == "mace_mp" %}
 # https://github.com/ACEsuit/mace
-MODELS["mace_mp"] = mlipx.GenericASECalculator(
+ALL_MODELS["MACE-MPA-0"] = mlipx.GenericASECalculator(
     module="mace.calculators",
     class_name="mace_mp",
     device="auto",
-    kwargs={"model": "medium"}
+    kwargs={"model": "../../models/mace-mpa-0-medium.model"}
+    # MLIPX-hub model path, adjust as needed
 )
-{% elif model == "sevennet" %}
 # https://github.com/MDIL-SNU/SevenNet
-MODELS["sevennet"] = mlipx.GenericASECalculator(
+ALL_MODELS["7net-0"] = mlipx.GenericASECalculator(
     module="sevenn.sevennet_calculator",
     class_name="SevenNetCalculator",
     device="auto",
     kwargs={"model": "7net-0"}
 )
-{% elif model == "orb_v2" %}
+ALL_MODELS["7net-mf-ompa-mpa"] = mlipx.GenericASECalculator(
+    module="sevenn.sevennet_calculator",
+    class_name="SevenNetCalculator",
+    device="auto",
+    kwargs={"model": "7net-mf-ompa", "modal": "mpa"}
+)
+
 # https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
 class OrbCalc:
     name: str
     device: Device | None = None
+    kwargs: dict = dataclasses.field(default_factory=dict)
 
     def get_calculator(self, **kwargs):
         from orb_models.forcefield import pretrained
@@ -35,43 +40,62 @@ class OrbCalc:
 
         method = getattr(pretrained, self.name)
         if self.device is None:
-            orbff = method(**kwargs)
-            calc = ORBCalculator(orbff, **kwargs)
+            orbff = method(**self.kwargs)
+            calc = ORBCalculator(orbff, **self.kwargs)
         elif self.device == Device.AUTO:
-            orbff = method(device=Device.resolve_auto(), **kwargs)
-            calc = ORBCalculator(orbff, device=Device.resolve_auto(), **kwargs)
+            orbff = method(device=Device.resolve_auto(), **self.kwargs)
+            calc = ORBCalculator(orbff, device=Device.resolve_auto(), **self.kwargs)
         else:
-            orbff = method(device=self.device, **kwargs)
-            calc = ORBCalculator(orbff, device=self.device, **kwargs)
+            orbff = method(device=self.device, **self.kwargs)
+            calc = ORBCalculator(orbff, device=self.device, **self.kwargs)
         return calc
+    
+    @property
+    def available(self) -> bool:
+        try:
+            from orb_models.forcefield import pretrained
+            from orb_models.forcefield.calculator import ORBCalculator
+            return True
+        except ImportError:
+            return False
 
-MODELS["orb_v2"] = OrbCalc(
+ALL_MODELS["orb-v2"] = OrbCalc(
     name="orb_v2",
     device="auto"
 )
-{% elif model == "chgnet" %}
+ALL_MODELS["orb-v3"] = OrbCalc(
+    name="orb_v3_conservative_inf_omat",
+    device="auto"
+)
+
 # https://github.com/CederGroupHub/chgnet
-MODELS["chgnet"] = mlipx.GenericASECalculator(
+ALL_MODELS["chgnet"] = mlipx.GenericASECalculator(
     module="chgnet.model",
     class_name="CHGNetCalculator",
 )
-{% elif model == "mattersim" %}
 # https://github.com/microsoft/mattersim
-MODELS["mattersim"] = mlipx.GenericASECalculator(
+ALL_MODELS["mattersim"] = mlipx.GenericASECalculator(
     module="mattersim.forcefield",
     class_name="MatterSimCalculator",
     device="auto",
 )
-{% elif model == "orca" %}
 # https://www.faccts.de/orca/
-MODELS["orca"] = mlipx.OrcaSinglePoint(
+ALL_MODELS["orca"] = mlipx.OrcaSinglePoint(
     orcasimpleinput= "PBE def2-TZVP TightSCF EnGrad",
     orcablocks ="%pal nprocs 8 end",
     orca_shell="{{ orcashell }}",
 )
-{% endif %}
-{% endfor %}
 
+# https://gracemaker.readthedocs.io/en/latest/gracemaker/foundation/
+ALL_MODELS["GRACE-2L-OMAT"] = mlipx.GenericASECalculator(
+    module="tensorpotential.calculator",
+    class_name="TPCalculator",
+    device=None,
+    kwargs={
+        "model": "../../models/GRACE-2L-OMAT",
+    },
+    # MLIPX-hub model path, adjust as needed
+)
 
 # OPTIONAL
 # ========
@@ -82,3 +106,13 @@ MODELS["orca"] = mlipx.OrcaSinglePoint(
 #     results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
 #     info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
 # )
+
+# ============================================================
+# THE SELECTED MODELS!
+# ONLY THESE MODELS WILL BE USED IN THE RECIPE
+# ============================================================
+MODELS = {
+{%- for model in models %}
+    "{{ model }}": ALL_MODELS["{{ model }}"],
+{%- endfor %}
+}
