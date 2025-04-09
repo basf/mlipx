@@ -10,6 +10,7 @@ import dvc.api
 import plotly.io as pio
 import typer
 import zntrack
+from rich import box
 from rich.console import Console
 from rich.table import Table
 from tqdm import tqdm
@@ -35,47 +36,56 @@ def main():
     typer.echo("Hello World")
 
 
+app = typer.Typer()
+
+
 @app.command()
 def info():
     """Print the version of mlipx and the available models."""
-    typer.echo(f"mlipx version: {importlib.metadata.version('mlipx')}")
-    # info about the python environment
+    console = Console()
+    # Get Python environment info
     python_version = sys.version.split()[0]
     python_executable = sys.executable
     python_platform = sys.platform
 
-    py_table = Table("Python", "Version", "Executable", "Platform")
-    py_table.add_row(
-        python_version,
-        python_executable,
-        python_platform,
-    )
-    py_table.title = "Python Environment"
+    py_table = Table(title="🐍 Python Environment", box=box.ROUNDED)
+    py_table.add_column("Version", style="cyan", no_wrap=True)
+    py_table.add_column("Executable", style="magenta")
+    py_table.add_column("Platform", style="green")
+    py_table.add_row(python_version, python_executable, python_platform)
 
-    mlip_table = Table("Model", "Available", title="MLIP Codes")
+    # Get model availability
+    mlip_table = Table(title="🧠 MLIP Codes", box=box.ROUNDED)
+    mlip_table.add_column("Model", style="bold")
+    mlip_table.add_column("Available", style="bold")
 
-    for model, avail in AVAILABLE_MODELS.items():
-        if avail is True:
-            mlip_table.add_row(model, "[green]Yes[/]")
-        elif avail is False:
-            mlip_table.add_row(model, "[red]No[/]")
-        elif avail is None:
-            mlip_table.add_row(model, "[yellow]Unknown[/]")
+    for model in sorted(AVAILABLE_MODELS):
+        status = AVAILABLE_MODELS[model]
+        if status is True:
+            mlip_table.add_row(model, "[green]:heavy_check_mark: Yes[/green]")
+        elif status is False:
+            mlip_table.add_row(model, "[red]:x: No[/red]")
+        elif status is None:
+            mlip_table.add_row(model, "[yellow]:warning: Unknown[/yellow]")
         else:
-            mlip_table.add_row(model, "[red]Error[/]")
+            mlip_table.add_row(model, "[red]:boom: Error[/red]")
 
-    mlipx_table = Table("Code", "Version", title="MLIPX Code")
+    # Get versions of key packages
+    mlipx_table = Table(title="📦 mlipx Ecosystem", box=box.ROUNDED)
+    mlipx_table.add_column("Package", style="bold")
+    mlipx_table.add_column("Version", style="cyan")
+
     for package in ["mlipx", "zntrack", "zndraw"]:
         try:
             version = importlib.metadata.version(package)
         except importlib.metadata.PackageNotFoundError:
-            version = "Not installed"
+            version = "[red]Not installed[/red]"
         mlipx_table.add_row(package, version)
 
-    console = Console()
-    console.print(mlip_table)
+    # Display all
     console.print(mlipx_table)
     console.print(py_table)
+    console.print(mlip_table)
 
 
 @app.command()
