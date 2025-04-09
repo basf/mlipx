@@ -24,6 +24,7 @@ dependencies = [
     "znh5md>=0.4.4",
     "zntrack>=0.8.4",
     "dvc-s3>=3.2.0",
+    "mpcontribs-client>=5.10.2",
 ]
 
 [dependency-groups]
