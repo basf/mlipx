@@ -22,12 +22,12 @@ dependencies = [
     "typer>=0.15.1",
     "zndraw>=0.5.10",
     "znh5md>=0.4.4",
-    "zntrack>=0.8.3",
+    "zntrack>=0.8.4",
+    "dvc-s3>=3.2.0",
 ]
 
 [dependency-groups]
 docs = [
-    "dvc-s3>=3.2.0",
     "furo>=2024.8.6",
     "jupyter-sphinx>=0.5.3",
     "nbsphinx>=0.9.6", # https://github.com/sphinx-doc/sphinx/issues/13352
@@ -52,24 +52,41 @@ mlipx = "mlipx.cli.main:app"
 [tool.uv]
 conflicts = [
     [
-      { extra = "models" },
+      { extra = "mace" },
       { extra = "mattersim" },
     ],
+    [
+      { extra = "mace" },
+      { extra = "sevenn" },
+    ],
+    [
+      { extra = "fairchem" },
+      { extra = "orb" },
+      { extra = "mace" },
+    ]
 ]
 
 [project.optional-dependencies]
-models = [
+chgnet = [
     "chgnet>=0.4.0",
-    "mace-torch>=0.3.10",
-    "sevenn>=0.10.4",
+]
+mace = [
+    "mace-torch>=0.3.12",
+]
+sevenn = [
+    "sevenn>=0.11.0",
 ]
 orb = [
-    "orb-models>=0.4.2",
-    "pynanoflann",
-    "cmake>=3.31.4",
+    "orb-models>=0.5.0"
 ]
 mattersim = [
-    "mattersim>=1.1.1",
+    "mattersim>=1.1.2",
+]
+grace = [
+    "tensorpotential>=0.5.1",
+]
+fairchem = [
+    "fairchem-core>=1.9.0",
 ]
 
 
@@ -84,5 +101,3 @@ skip = "*.svg,*.lock,*.json"
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]
 
-[tool.uv.sources]
-pynanoflann = { git = "https://github.com/dwastberg/pynanoflann" }
