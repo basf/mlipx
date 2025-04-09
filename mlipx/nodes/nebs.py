@@ -11,6 +11,8 @@ import zntrack
 from ase.mep import NEB
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator, Optimizer
+from mlipx.utils import freeze_copy_atoms
+
 
 
 class NEBinterpolate(zntrack.Node):
@@ -122,11 +124,12 @@ class NEBs(zntrack.Node):
         # neb_trajectory = []
         calc = self.model.get_calculator()
         optimizer = getattr(ase.optimize, self.optimizer)
-        for _i in range(len(self.data)):
-            atoms_copy = self.data[_i]
+        for atoms in self.data:
+            atoms_copy = atoms.copy()
             atoms_copy.calc = copy(calc)
             atoms_copy.get_potential_energy()
             frames += [atoms_copy]
+            ase.io.write(self.frames_path, atoms_copy, format="extxyz", append=True)
         if self.relax is True:
             for i in [0, -1]:
                 dyn = optimizer(frames[0])
@@ -134,8 +137,7 @@ class NEBs(zntrack.Node):
         neb = NEB(frames, allow_shared_calculator=False)
         dyn = optimizer(neb, trajectory=self.trajectory_path.as_posix())
         dyn.run(fmax=self.fmax, steps=self.n_steps)
-        ase.io.write(self.frames_path, frames)
-        # neb_trajectory = ase.io.read(self.trajectory_path,format="traj",':')
+
         row_dicts = []
         for i, frame in enumerate(frames):
             row_dicts.append(
