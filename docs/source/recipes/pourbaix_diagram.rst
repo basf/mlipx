@@ -19,11 +19,8 @@ Pourbaix Diagram
    from mlipx.doc_utils import get_plots
 
    plots = get_plots("*PourbaixDiagram", "../../mlipx-hub/pourbaix_diagram/mp-1143/")
-   plots["mace_mp_0-pourbaix-diagram"].show()
-   plots["orb_v2_0-pourbaix-diagram"].show()
-   plots["sevennet_0-pourbaix-diagram"].show()
-   plots["chgnet_0-pourbaix-diagram"].show()
-   plots["mattersim_0-pourbaix-diagram"].show()
+   for plot in plots.values():
+      plot.show()
 
 This test uses the following Nodes together with your provided model in the :term:`models.py` file:
 
