@@ -18,7 +18,6 @@ from typing_extensions import Annotated
 from zndraw import ZnDraw
 
 from mlipx import benchmark, recipes
-from mlipx.models import AVAILABLE_MODELS
 
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
@@ -35,13 +34,11 @@ for entry_point in entry_points:
 def main():
     typer.echo("Hello World")
 
-
-app = typer.Typer()
-
-
 @app.command()
 def info():
     """Print the version of mlipx and the available models."""
+    from mlipx.models import AVAILABLE_MODELS # slow import
+
     console = Console()
     # Get Python environment info
     python_version = sys.version.split()[0]

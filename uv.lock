@@ -3066,7 +3066,6 @@ version = "0.1.4"
 source = { editable = "." }
 dependencies = [
     { name = "ase" },
-    { name = "colorama" },
     { name = "dvc-s3" },
     { name = "lazy-loader" },
     { name = "mp-api" },
@@ -3120,7 +3119,6 @@ docs = [
 requires-dist = [
     { name = "ase", specifier = ">=3.24.0" },
     { name = "chgnet", marker = "extra == 'chgnet'", specifier = ">=0.4.0" },
-    { name = "colorama", specifier = ">=0.4.6" },
     { name = "dvc-s3", specifier = ">=3.2.0" },
     { name = "lazy-loader", specifier = ">=0.4" },
     { name = "mace-torch", marker = "extra == 'mace'", specifier = ">=0.3.12" },
