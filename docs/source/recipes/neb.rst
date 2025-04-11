@@ -6,11 +6,7 @@ Nudged Elastic Band
 :code:`mlipx` provides a command line interface to interpolate and create a NEB path from inital-final or initial-ts-final images and run NEB on the interpolated images.
 You can run the following command to instantiate a test directory:
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes neb --models mace_mp,sevennet,orb_v2,chgnet,mattersim --datapath ../data/neb_end_p.xyz --repro
-   (.venv) $ zntrack list # show available Nodes
-   (.venv) $ mlipx compare --glob "*NEBs"
+.. mdinclude:: ../../../mlipx-hub/neb/ex01/README.md
 
 
 .. jupyter-execute::

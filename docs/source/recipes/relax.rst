@@ -6,10 +6,7 @@ Structure Relaxation
 This recipe is used to test the performance of different models in performing structure relaxation.
 
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes relax --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-1143 --repro
-   (.venv) $ mlipx compare --glob "*StructureOptimization"
+.. mdinclude:: ../../../mlipx-hub/relax/mp-1143/README.md
 
 .. note::
 

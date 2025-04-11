@@ -30,6 +30,7 @@ extensions = [
     "jupyter_sphinx",
     "sphinx_design",
     "nbsphinx",
+    "sphinx_mdinclude",
 ]
 
 templates_path = ["_templates"]

@@ -4,10 +4,7 @@ Energy Volume Curves
 ====================
 Compute the energy-volume curve for a given material using multiple models.
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes ev --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-1143 --repro
-   (.venv) $ mlipx compare --glob "*EnergyVolumeCurve"
+.. mdinclude:: ../../../mlipx-hub/energy-volume/mp-1143/README.md
 
 
 .. jupyter-execute::

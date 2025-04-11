@@ -36,6 +36,7 @@ docs = [
     "sphinx-copybutton>=0.5.2",
     "sphinx-design>=0.6.1",
     "sphinx-hoverxref>=1.4.2",
+    "sphinx-mdinclude>=0.6.2",
     "sphinxcontrib-bibtex>=2.6.3",
     "sphinxcontrib-mermaid>=1.0.0",
 ]

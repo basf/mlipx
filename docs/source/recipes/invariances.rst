@@ -3,12 +3,7 @@ Invariances
 Check the rotational, translational and permutational invariance of an :term:`mlip`.
 
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes invariances --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-1143 --repro
-   (.venv) $ mlipx compare --glob "*TranslationalInvariance"
-   (.venv) $ mlipx compare --glob "*RotationalInvariance"
-   (.venv) $ mlipx compare --glob "*PermutationInvariance"
+.. mdinclude:: ../../../mlipx-hub/invariances/mp-1143/README.md
 
 
 .. jupyter-execute::

@@ -6,10 +6,7 @@ Adsorption Energies
 This recipe calculates the adsorption energies of a molecule on a surface.
 The following example creates a slab of ``Cu(111)`` and calculates the adsorption energy of ethanol ``(CCO)`` on the surface.
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes adsorption --models mace_mp,sevennet,orb_v2,mattersim --slab-config '{"crystal": "fcc111", "symbol": "Cu", "size": [3,4,4]}' --smiles CCO --repro
-   (.venv) $ compare --glob "*RelaxAdsorptionConfigs"
+.. mdinclude:: ../../../mlipx-hub/adsorption/cu_fcc111/README.md
 
 
 .. jupyter-execute::

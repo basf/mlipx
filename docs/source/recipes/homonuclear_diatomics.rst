@@ -5,10 +5,7 @@ Homonuclear Diatomics
 Homonuclear diatomics give a per-element information on the performance of the :term:`MLIP`.
 
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes homonuclear-diatomics --models mace_mp,sevennet,orb_v2,mattersim,orca --smiles="[Li+].[Cl-]" --repro
-
+.. mdinclude:: ../../../mlipx-hub/diatomics/LiCl/README.md
 
 You can edit the elements in the :term:`main.py` file to include the elements you want to test.
 In the following we show the results for the :code:`Li-Li` bond for the three selected models.

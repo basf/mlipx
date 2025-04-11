@@ -4,10 +4,7 @@ Phase Diagram
 :code:`mlipx` provides a command line interface to generate Phase Diagrams.
 You can run the following command to instantiate a test directory:
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes phase-diagram  --models mace_mp,sevennet,orb_v2,chgnet,mattersim --material-ids=mp-30084 --repro
-   (.venv) $ mlipx compare --glob "*PhaseDiagram"
+.. mdinclude:: ../../../mlipx-hub/phase_diagram/mp-30084/README.md
 
 
 .. jupyter-execute::

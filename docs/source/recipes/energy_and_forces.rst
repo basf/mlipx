@@ -3,9 +3,7 @@ Energy and Force Evaluation
 
 This recipe is used to test the performance of different models in predicting the energy and forces for a given dataset.
 
-.. code-block:: console
-
-   (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2,chgnet,mattersim --datapath ../data/DODH_adsorption_dft.xyz --repro
+.. mdinclude:: ../../../mlipx-hub/metrics/DODH_adsorption/README.md
 
 .. mermaid::
    :align: center
