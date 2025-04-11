@@ -11,8 +11,6 @@ import zntrack
 from ase.mep import NEB
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator, Optimizer
-from mlipx.utils import freeze_copy_atoms
-
 
 
 class NEBinterpolate(zntrack.Node):

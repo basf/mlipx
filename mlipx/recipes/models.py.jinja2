@@ -49,7 +49,7 @@ class OrbCalc:
             orbff = method(device=self.device, **self.kwargs)
             calc = ORBCalculator(orbff, device=self.device, **self.kwargs)
         return calc
-    
+
     @property
     def available(self) -> bool:
         try:

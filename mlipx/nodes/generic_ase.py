@@ -17,7 +17,7 @@ class Device:
         return "cuda" if torch.cuda.is_available() else "cpu"
 
 
-# TODO: add files as dependecies somehow!
+# TODO: add files as dependencies somehow!
 
 
 @dataclasses.dataclass

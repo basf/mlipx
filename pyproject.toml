@@ -94,4 +94,3 @@ skip = "*.svg,*.lock,*.json"
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]
-

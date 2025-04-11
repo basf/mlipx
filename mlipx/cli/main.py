@@ -34,10 +34,11 @@ for entry_point in entry_points:
 def main():
     typer.echo("Hello World")
 
+
 @app.command()
 def info():
     """Print the version of mlipx and the available models."""
-    from mlipx.models import AVAILABLE_MODELS # slow import
+    from mlipx.models import AVAILABLE_MODELS  # slow import
 
     console = Console()
     # Get Python environment info
