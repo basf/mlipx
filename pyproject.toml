@@ -22,7 +22,7 @@ dependencies = [
     "typer>=0.15.1",
     "zndraw>=0.5.10",
     "znh5md>=0.4.4",
-    "zntrack>=0.8.4",
+    "zntrack>=0.8.5",
     "dvc-s3>=3.2.0",
     "mpcontribs-client>=5.10.2",
 ]

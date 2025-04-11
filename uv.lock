@@ -3294,7 +3294,7 @@ requires-dist = [
     { name = "typer", specifier = ">=0.15.1" },
     { name = "zndraw", specifier = ">=0.5.10" },
     { name = "znh5md", specifier = ">=0.4.4" },
-    { name = "zntrack", specifier = ">=0.8.4" },
+    { name = "zntrack", specifier = ">=0.8.5" },
 ]
 provides-extras = ["chgnet", "mace", "sevenn", "orb", "mattersim", "grace"]
 
@@ -7113,7 +7113,7 @@ wheels = [
 
 [[package]]
 name = "zntrack"
-version = "0.8.4"
+version = "0.8.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dvc" },
@@ -7125,7 +7125,7 @@ dependencies = [
     { name = "znflow" },
     { name = "znjson" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/49/5c41c7b8487b4df960410ddb18f749a038d31fdfe5d5497eea4aaa4434c7/zntrack-0.8.4.tar.gz", hash = "sha256:d03785dc675db0941e7401c4c3e7ed29d3f1e6af70905e6e5c6817f2a759e2f1", size = 339046 }
+sdist = { url = "https://files.pythonhosted.org/packages/d0/45/e82f034b99f2782b03522ee03be0f356108c7f09156f69c9282b0eafd614/zntrack-0.8.5.tar.gz", hash = "sha256:c118845efaf1e379c3045c6e5de3e3db14e97980a1af025e11babb3fedd97793", size = 341821 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/52/54d3d54cb7bf3b030cca514f7dc5151e4990cae0ac8ee6b943c6e09f8dc8/zntrack-0.8.4-py3-none-any.whl", hash = "sha256:81e1dcd305674b3d3bab1152ad7a039206b1ab1a67020b69d38ca5296da3f0b5", size = 58899 },
+    { url = "https://files.pythonhosted.org/packages/ef/6e/eeb93f3f4f19479e1e1241952f10ab50d8c8f47857becfc95d11b9aff0a2/zntrack-0.8.5-py3-none-any.whl", hash = "sha256:813b4750b8191f15b39941d92f7407c697dbf2cb34c6854266994fbbf34efc57", size = 59377 },
 ]
