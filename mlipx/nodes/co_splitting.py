@@ -130,6 +130,16 @@ def combine_constraints(atoms, index_from_last=0, nats_mol=1, freeze_ratio=0.5):
 
     return atoms
 
+def merge_traj(atoms1, atoms2):
+    atoms     = atoms1.copy()
+    to_attach = atoms2.copy()
+    
+    to_attach.positions += 2*to_attach.cell[1]
+
+    atoms += to_attach
+
+    return atoms
+
 def calculate(traj, generic_calculator, node_path, 
         index_from_last=0, nats_mol=1, freeze_ratio=0.5):
     results = []
@@ -223,7 +233,7 @@ def individual_run(traj, model, generic_calculator, node_path, basename, mol,
 
     return results
 
-def norskov_heatmap(model, Z, x1, x2, el, xrange, yrange):
+def heatmap(model, Z, x1, x2, el, xrange, yrange):
     fig, ax = plt.subplots(figsize=(8, 6))
 
 
@@ -358,11 +368,12 @@ class COSplitting(zntrack.Node):
         heatmap_path.mkdir(parents=True, exist_ok=True)
         cache_relaxations_path.mkdir(parents=True, exist_ok=True)
 
-        norskov_heatmap(heatmap_path / 'RPBE', Zref, x1, x2, el, xrange, yrange)
+        heatmap(heatmap_path / 'RPBE', Zref, x1, x2, el, xrange, yrange)
     
         mols = {}
         surfs = {}
         model_results = {}
+        traj_dict     = {}
 
         surfs[model] = {}
         mols[model] = {}
@@ -402,6 +413,7 @@ class COSplitting(zntrack.Node):
 
 
         model_results[model] = {}
+        traj_dict[model]     = {}
         x1, x2, _formula, y = [], [], [], []
         for formula, surf in surfs[model].items():
             model_results[model][formula] = {}
@@ -452,8 +464,6 @@ class COSplitting(zntrack.Node):
                     nats_mol=3, 
                     freeze_ratio=self.freeze_ratio) 
 
-            ase.io.write(self.frames_path, co_h_bound_surf, append=True)
-
             co_h_en       = co_h_bound_surf.get_potential_energy()
             c_bound_surf  = co_h_bound_surf[:-2]
             c_bound_surf  = relocate_atom(c_bound_surf, idx = len(c_bound_surf)-1)
@@ -484,7 +494,9 @@ class COSplitting(zntrack.Node):
                             cache_relaxations_path / f'{model}_{formula}_C_OH_final',
                             nats_mol=3, freeze_ratio=self.freeze_ratio)
 
-            ase.io.write(self.frames_path, c_oh_bound_surf, append=True)
+            
+            to_append = merge_traj(co_h_bound_surf, c_oh_bound_surf)
+            traj_dict[model][formula] = to_append
 
             c_oh_en          = c_oh_bound_surf.get_potential_energy()
 
@@ -568,7 +580,7 @@ class COSplitting(zntrack.Node):
         Z  = barrier_bep(f(Xgrid, Ygrid))
 
 
-        norskov_heatmap(heatmap_path / model, Z, x1, x2, _formula, xrange, yrange) 
+        heatmap(heatmap_path / model, Z, x1, x2, _formula, xrange, yrange) 
 
         with open(self.node_path / 'full_data.json', 'w') as json_file: 
             json.dump(model_results, json_file, indent=4)
@@ -578,6 +590,7 @@ class COSplitting(zntrack.Node):
         for el in line:
             if el != 'interpolation':
                 results.append({'Formula':el, 'dE':model_results[model][el]['CO*+H*->C*+OH*']})
+                ase.io.write(self.frames_path, traj_dict[model][el], append=True)
 
         self.results = pd.DataFrame(results)
 
@@ -594,29 +607,43 @@ class COSplitting(zntrack.Node):
             xaxis_title="Formula",
             yaxis_title="dE (eV)",
         )
-        fig.update_traces(customdata=np.stack([np.repeat(np.arange(len(self.results)),2)], axis=-1))
+        fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=-1))
         return {"ReactionEnergy": fig}
 
     @staticmethod
     def compare(*nodes: "COSplitting") -> ComparisonResults:
-        frames = sum([node.frames for node in nodes], [])
+        frames = sum([node.frames for node in nodes],[])
         offset = 0
         fig = go.Figure()  # px.scatter()
+        
         for i, node in enumerate(nodes):
             trajectory = node.data.copy()
+
+            fig.add_trace(
+                        go.Bar(
+                            x=node.results["Formula"],
+                            y=node.results["dE"],
+                            name=node.name,
+                        )
+
+                    )
+
             fig.add_trace(
                 go.Scatter(
                     x=node.results["Formula"],
                     y=node.results["dE"],
-                    mode="lines+markers",
+                    mode="markers",
                     name=node.name,
+                    marker=dict(color='red'),
+                    showlegend=False,
                     customdata=np.stack(
-                        [np.repeat(np.arange(len(node.results['dE'])),2) + offset], axis=1
+                        [np.arange(len(node.results['dE'])) + offset], axis=1
                     ),
                 )
             )
+            
             offset += len(node.results["dE"])
-        
+
         results = []
         for atoms in trajectory:
             formula = atoms.get_chemical_formula(empirical=True)
@@ -626,14 +653,10 @@ class COSplitting(zntrack.Node):
         if results:
             results = pd.DataFrame(results)
             fig.add_trace(
-                go.Scatter(
+                go.Bar(
                     x=results["Formula"],
                     y=results["dE"],
-                    mode="lines+markers",
                     name='reference',
-                    customdata=np.stack(
-                        [np.repeat(np.arange(len(node.results['dE'])),2) + offset], axis=1
-                    ),
                 )
             )
 
@@ -641,6 +664,8 @@ class COSplitting(zntrack.Node):
             title=f"Comparison of Reaction Energies for H-assisted CO Splitting",
             xaxis_title="Formula",
             yaxis_title="dE (eV)",
+            barmode='group',
+            scattermode='group',
             plot_bgcolor="rgba(0, 0, 0, 0)",
             paper_bgcolor="rgba(0, 0, 0, 0)",
         )

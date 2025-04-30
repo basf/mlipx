@@ -77,7 +77,7 @@ class CalculateFormationEnergy(zntrack.Node):
     @property
     def frames(self):
         for atom, energy in zip(self.data, self.formation_energy):
-            atom.info[ASEKeys.formation_energy.value] = energy
+            etom.info[ASEKeys.formation_energy.value] = energy
         return self.data
 
 
