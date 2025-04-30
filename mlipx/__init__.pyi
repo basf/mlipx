@@ -27,6 +27,7 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
+from .nodes.co_splitting import COSplitting 
 from .project import Project
 from .version import __version__
 
@@ -48,6 +49,7 @@ __all__ = [
     "PhaseDiagram",
     "PourbaixDiagram",
     "VibrationalAnalysis",
+    "COSplitting",
     "HomonuclearDiatomics",
     "MPRester",
     "GenericASECalculator",
