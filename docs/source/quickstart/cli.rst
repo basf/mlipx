@@ -92,7 +92,7 @@ To explore the available steps and visualize results, use the commands below:
 .. code-block:: console
 
     (.venv) $ zntrack list
-    (.venv) $ mlipx compare mace_mp_CompareCalculatorResults
+    (.venv) $ mlipx compare mace-mp_CompareCalculatorResults
 
 .. note::
 
