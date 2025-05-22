@@ -66,7 +66,7 @@ Create a file named ``models.py`` in the current directory with the following co
         },
     )
 
-    MODELS = {"mace_mp": mace_mp}
+    MODELS = {"mace-mp": mace_mp}
 
 .. note::
 
@@ -109,7 +109,7 @@ To evaluate ``data.xyz`` with multiple models, you can also run
 
 .. code-block:: console
 
-    (.venv) $ mlipx recipes metrics --datapath data.xyz --models mace_mp,sevennet,orb_v2,chgnet --repro
+    (.venv) $ mlipx recipes metrics --datapath data.xyz --models mace_mp,sevennet,orb-v2,chgnet --repro
 
 .. note::
 

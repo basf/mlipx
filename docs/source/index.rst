@@ -24,7 +24,7 @@ Create a ``mlipx`` :ref:`recipe <recipes>` to compute :ref:`ev` for the `mp-1143
 
 .. code-block:: console
 
-   (.venv) $ mlipx recipes ev --models mace_mp,sevennet,orb_v2 --material-ids=mp-1143 --repro
+   (.venv) $ mlipx recipes ev --models mace-mpa-0,sevennet,orb-v2 --material-ids=mp-1143 --repro
    (.venv) $ mlipx compare --glob "*EnergyVolumeCurve"
 
 and use the integration with :ref:`ZnDraw <zndraw>` to visualize the resulting trajectories and compare the energies interactively.

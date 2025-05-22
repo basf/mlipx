@@ -11,7 +11,7 @@ With the ``mlipx compare`` command, you can directly compare results from the sa
 
 .. code-block:: bash
 
-    mlipx compare mace_mp_0_StructureOptimization orb_v2_0_StructureOptimization
+    mlipx compare mace-mpa-0_StructureOptimization orb-v2_0_StructureOptimization
 
 This allows you to study the performance of different models for a single task in great detail.
 Every Node in ``mlipx`` defines its own comparison method for this.
