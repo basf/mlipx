@@ -6,7 +6,7 @@ from mlipx.nodes.generic_ase import Device
 ALL_MODELS = {}
 
 # https://github.com/ACEsuit/mace
-ALL_MODELS["MACE-MPA-0"] = mlipx.GenericASECalculator(
+ALL_MODELS["mace-mpa-0"] = mlipx.GenericASECalculator(
     module="mace.calculators",
     class_name="mace_mp",
     device="auto",
@@ -87,7 +87,7 @@ ALL_MODELS["orca"] = mlipx.OrcaSinglePoint(
 )
 
 # https://gracemaker.readthedocs.io/en/latest/gracemaker/foundation/
-ALL_MODELS["GRACE-2L-OMAT"] = mlipx.GenericASECalculator(
+ALL_MODELS["grace-2l-omat"] = mlipx.GenericASECalculator(
     module="tensorpotential.calculator",
     class_name="TPCalculator",
     device=None,
