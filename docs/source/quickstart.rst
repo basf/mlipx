@@ -17,7 +17,7 @@ visualize the trajectory together with the maximum force error in :ref:`ZnDraw <
 
 .. code:: console
 
-   (.venv) $ mlipx recipes metrics --models mace_mp,sevennet,orb_v2 --datapath ../data DODH_adsorption_dft.xyz --repro
+   (.venv) $ mlipx recipes metrics --models mace-mpa-0,sevennet,orb-v2 --datapath ../data DODH_adsorption_dft.xyz --repro
    (.venv) $ mlipx compare --glob "*CompareCalculatorResults"
 
 .. toctree::

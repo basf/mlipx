@@ -64,10 +64,10 @@ Most recipes support different input formats, such as data file paths, `SMILES` 
 
 ### Energy-Volume Curve
 
-Compute an energy-volume curve using the `mp-1143` structure from the Materials Project and MLIPs such as `mace-mp`, `sevennet`, and `orb_v2`:
+Compute an energy-volume curve using the `mp-1143` structure from the Materials Project and MLIPs such as `mace-mpa-0`, `sevennet`, and `orb-v2`:
 
 ```bash
-mlipx recipes ev --models mace_mp,sevennet,orb_v2 --material-ids=mp-1143 --repro
+mlipx recipes ev --models mace-mpa-0,sevennet,orb-v2 --material-ids=mp-1143 --repro
 mlipx compare --glob "*EnergyVolumeCurve"
 ```
 
@@ -89,7 +89,7 @@ Below is an example of the resulting comparison:
 Compare the performance of different models in optimizing multiple molecular structures from `SMILES` representations:
 
 ```bash
-mlipx recipes relax --models mace_mp,sevennet,orb_v2 --smiles "CCO,C1=CC2=C(C=C1O)C(=CN2)CCN" --repro
+mlipx recipes relax --models mace-mpa-0,sevennet,orb-v2 --smiles "CCO,C1=CC2=C(C=C1O)C(=CN2)CCN" --repro
 mlipx compare --glob "*0_StructureOptimization"
 mlipx compare --glob "*1_StructureOptimization"
 ```
@@ -102,7 +102,7 @@ mlipx compare --glob "*1_StructureOptimization"
 Run and compare nudged elastic band (NEB) calculations for a given start and end structure:
 
 ```bash
-mlipx recipes neb --models mace_mp,sevennet,orb_v2 --datapath ../data/neb_end_p.xyz --repro
+mlipx recipes neb --models mace-mpa-0,sevennet,orb-v2 --datapath ../data/neb_end_p.xyz --repro
 mlipx compare --glob "*NEBs"
 ```
 
