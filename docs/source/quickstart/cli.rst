@@ -109,7 +109,7 @@ To evaluate ``data.xyz`` with multiple models, you can also run
 
 .. code-block:: console
 
-    (.venv) $ mlipx recipes metrics --datapath data.xyz --models mace_mp,sevennet,orb-v2,chgnet --repro
+    (.venv) $ mlipx recipes metrics --datapath data.xyz --models mace-mpa-0,sevennet,orb-v2,chgnet --repro
 
 .. note::
 
