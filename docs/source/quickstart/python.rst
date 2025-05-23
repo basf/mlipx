@@ -94,7 +94,7 @@ As with the CLI approach, you can list the available steps and visualize results
 .. code-block:: console
 
     (.venv) $ zntrack list
-    (.venv) $ mlipx compare mace_mp_CompareCalculatorResults
+    (.venv) $ mlipx compare mace-mp_CompareCalculatorResults
 
 Alternatively, you can load the results for this and any other Node directly into a Python kernel using the following code:
 
@@ -102,6 +102,6 @@ Alternatively, you can load the results for this and any other Node directly int
 
     import zntrack
 
-    node = zntrack.from_rev("mace_mp_CompareCalculatorResults")
+    node = zntrack.from_rev("mace-mp_CompareCalculatorResults")
     print(node.figures)
     >>> {"fmax_error": plotly.graph_objects.Figure(), ...}

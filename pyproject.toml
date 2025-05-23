@@ -41,6 +41,8 @@ docs = [
     "sphinxcontrib-mermaid>=1.0.0",
 ]
 dev = [
+    "ipykernel>=6.29.5",
+    "pre-commit>=4.2.0",
     "pytest>=8.3.4",
     "pytest-cov>=6.0.0",
     "ruff>=0.9.6",
