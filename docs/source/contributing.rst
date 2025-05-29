@@ -55,10 +55,10 @@ New Models
 
 ``mlipx`` provides a streamlined way to incorporate new :term:`MLIP` models for evaluation. All available models are managed in the ``mlipx/recipes/models.py.jinja2`` file.
 
-Models Supported by :class:`mlipx.GenericASECalculator`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Models Supported by :code:`mlipx.GenericASECalculator`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your model is compatible with the :class:`mlipx.GenericASECalculator` interface, you can add it directly:
+If your model is compatible with the :code:`mlipx.GenericASECalculator` interface, you can add it directly:
 
 .. code-block:: python
 
@@ -71,7 +71,7 @@ If your model is compatible with the :class:`mlipx.GenericASECalculator` interfa
 
 Replace ``<model-id>``, ``<your_module>``, and ``<YourCalculatorClass>`` with your model's specific details.
 
-Models Not Supported by :class:`mlipx.GenericASECalculator`
+Models Not Supported by :code:`mlipx.GenericASECalculator`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your model does not fit the :class:`mlipx.GenericASECalculator` interface, you'll need to create a custom node. This new node should implement the :class:`mlipx.abc.NodeWithCalculator` interface and be placed within the ``mlipx/recipes/models.py.jinja2`` file. This ensures ``mlipx`` can properly interact with your model for evaluations.
+If your model does not fit the :code:`mlipx.GenericASECalculator` interface, you'll need to create a custom node. This new node should implement the :class:`mlipx.abc.NodeWithCalculator` interface and be placed within the ``mlipx/recipes/models.py.jinja2`` file. This ensures ``mlipx`` can properly interact with your model for evaluations.
