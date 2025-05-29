@@ -1,58 +1,77 @@
 Contributing
 ============
 
-We aim to make ``mlipx`` easily extensible to provide a comprehensive set of recipes and nodes for the evaluation of :term:`MLIP` models.
+We want to make ``mlipx`` a truly comprehensive tool for evaluating :term:`MLIP` models. That means making it easy for you to extend! Whether you're adding new nodes, recipes, or integrating new :term:`MLIP` models, this guide will walk you through the process.
 
-For all changes to ``mlipx``, we recommend installing the package from source as described in the :ref:`install-from-source` section.
+For any changes to ``mlipx``, we recommend installing the package from source. You can find detailed instructions in the :ref:`install-from-source` section.
 
 New Nodes
 ---------
-Create a new node by subclassing the :class:`zntrack.Node` class and implementing the `run` method. The node should follow the naming conventions and structure of existing nodes in the ``mlipx`` package.
-As an example you can follow along this notebook :doc:`notebooks/structure_relaxation`.
 
-To add the node to ``mlipx``, follow create a new branch.
+Nodes are the building blocks of ``mlipx`` workflows. They represent individual computational steps in your evaluation.
 
-.. code-block:: console
+To create a new node:
 
-    (.venv) $ cd mlipx
-    (.venv) $ git checkout -b <new-branch-name>
+1.  Subclass :class:`zntrack.Node`: Your new node must inherit from the :class:`zntrack.Node` class and specify all required inputs and outputs. For more information have a look at the `ZnTrack documentation <https://zntrack.readthedocs.io/en/latest>`_.
+2.  Implement the ``run`` method: This method will contain the core logic of your node.
 
-If you need any additional dependencies, add them using the `uv`.
+You can follow the :doc:`notebooks/structure_relaxation` for a practical example of writing a new node.
 
-.. code-block:: console
+Once you've developed your node, here's how to integrate it:
 
-    (.venv) $ uv add <dependency>
+1.  Create a New Branch:
 
-.. note::
+    .. code-block:: console
 
-    If you require non-common dependencies, consider adding them as an extra.
+        (.venv) $ cd mlipx
+        (.venv) $ git checkout -b <new-branch-name>
 
-Now amend or create a new file in the ``mlipx/nodes`` directory with your new node implementation.
-Import your new node into `mlipx/__init__.pyi` and include it in the `__all__` list to make it available for import.
+2.  Add Dependencies (if any): If your node requires additional Python packages, use ``uv`` to add them:
 
-Finally, commit your changes and create a pull request.
+    .. code-block:: console
+
+        (.venv) $ uv add <dependency>
+
+    .. note::
+        For less common dependencies, consider adding them as an extra.
+
+3.  Add Your Node File: Create or amend a file in the ``mlipx/nodes`` directory with your new node's implementation.
+4.  Make it Importable: Import your new node into ``mlipx/__init__.pyi`` and add it to the ``__all__`` list. This makes your node directly importable by users (e.g., ``from mlipx import MyNewNode``).
+5.  Commit and Pull Request: Finally, commit your changes and create a pull request on the ``mlipx`` GitHub repository.
 
 New Recipes
 -----------
 
-Recipes are defined as a jinja2 template in the `mlipx/recipes` directory.
-Create a new file with the `.py.jinja2` extension and follow the structure of existing recipes.
-Additionally, extend the ``mlipx`` CLI by including your new recipe in the `mlipx/recipes/main.py` file.
-We utilize the typer (TODO: add link) library for the CLI, so you can follow the existing recipes as examples.
+Recipes are pre-defined workflows that combine multiple nodes to perform a specific evaluation task. They are designed as Jinja2 templates.
+
+To add a new recipe:
+
+1.  **Create a Jinja2 Template**: In the ``mlipx/recipes`` directory, create a new file with the ``.py.jinja2`` extension. Structure your recipe following the examples of existing recipes.
+2.  **Extend the CLI**: Integrate your new recipe into the ``mlipx`` command-line interface by modifying the ``mlipx/recipes/main.py`` file. We use the `Typer <https://typer.tiangolo.com/>`_ library for our CLI, so you can refer to the existing recipes in ``main.py`` for guidance on how to add your new command.
+
 
 New Models
 ----------
 
-``mlipx`` manages all available models in the `mlipx/recipes/models.py.jinja2` file.
-If your model is supported by the :class:`mlipx.GenericASECalculator`, you can add it directly as follows:
+``mlipx`` provides a streamlined way to incorporate new :term:`MLIP` models for evaluation. All available models are managed in the ``mlipx/recipes/models.py.jinja2`` file.
+
+Models Supported by :class:`mlipx.GenericASECalculator`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If your model is compatible with the :class:`mlipx.GenericASECalculator` interface, you can add it directly:
 
 .. code-block:: python
 
     ALL_MODELS["<model-id>"] = mlipx.GenericASECalculator(
-        module="<your_module>",
-        class_name="<YourCalculatorClass>",
-        device="auto", # if using torch and the model calculator has a device argument
-        kwargs={} # additional keyword arguments for the calculator
+        module="<your_module>", # The Python module where your calculator class is located
+        class_name="<YourCalculatorClass>", # The name of your calculator class
+        device="auto", # Set to "auto" if using PyTorch and your calculator supports a 'device' argument
+        kwargs={} # Any additional keyword arguments to pass to your calculator's constructor
     )
 
-If your model is not supported by the :class:`mlipx.GenericASECalculator`, you can create a new node that implements the :class:`mlipx.abc.NodeWithCalculator` interface inside the `mlipx/recipes/models.py.jinja2` file.
+Replace ``<model-id>``, ``<your_module>``, and ``<YourCalculatorClass>`` with your model's specific details.
+
+Models Not Supported by :class:`mlipx.GenericASECalculator`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If your model does not fit the :class:`mlipx.GenericASECalculator` interface, you'll need to create a custom node. This new node should implement the :class:`mlipx.abc.NodeWithCalculator` interface and be placed within the `mlipx/recipes/models.py.jinja2` file. This ensures ``mlipx`` can properly interact with your model for evaluations.
