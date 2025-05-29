@@ -74,4 +74,4 @@ Replace ``<model-id>``, ``<your_module>``, and ``<YourCalculatorClass>`` with yo
 Models Not Supported by :class:`mlipx.GenericASECalculator`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your model does not fit the :class:`mlipx.GenericASECalculator` interface, you'll need to create a custom node. This new node should implement the :class:`mlipx.abc.NodeWithCalculator` interface and be placed within the `mlipx/recipes/models.py.jinja2` file. This ensures ``mlipx`` can properly interact with your model for evaluations.
+If your model does not fit the :class:`mlipx.GenericASECalculator` interface, you'll need to create a custom node. This new node should implement the :class:`mlipx.abc.NodeWithCalculator` interface and be placed within the ``mlipx/recipes/models.py.jinja2`` file. This ensures ``mlipx`` can properly interact with your model for evaluations.
