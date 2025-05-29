@@ -122,6 +122,32 @@ ALL_MODELS["matpes-pbe"] = MatglModel(
     # MLIPX-hub model path, adjust as needed
 )
 
+@dataclasses.dataclass
+class FairchemModel:
+    path: str
+    task_name: str = "oc20"
+    device: str = "auto"
+
+    def get_calculator(self, **kwargs) -> Calculator:
+        from fairchem.core import pretrained_mlip, FAIRChemCalculator
+        from fairchem.core.units.mlip_unit import load_predict_unit
+        device = Device.resolve_auto() if self.device == "auto" else self.device
+        predictor = load_predict_unit(self.path, device=device)
+        return FAIRChemCalculator(predictor, task_name=self.task_name)
+
+    def available(self) -> bool:
+        try:
+            import fairchem
+            from fairchem.core import FAIRChemCalculator
+            return True
+        except ImportError:
+            return False
+
+ALL_MODELS["meta-uma-sm"] = FairchemModel(
+    path="../../models/meta-uam.pt",
+    task_name="oc20"
+    # MLIPX-hub model path, adjust as needed
+)
 # OPTIONAL
 # ========
 # If you have custom property names you can use the UpdatedFramesCalc
