@@ -2,6 +2,7 @@ import dataclasses
 
 import mlipx
 from mlipx.nodes.generic_ase import Device
+from ase.calculators.calculator import Calculator
 
 ALL_MODELS = {}
 
@@ -94,6 +95,30 @@ ALL_MODELS["grace-2l-omat"] = mlipx.GenericASECalculator(
     kwargs={
         "model": "../../models/GRACE-2L-OMAT",
     },
+    # MLIPX-hub model path, adjust as needed
+)
+
+@dataclasses.dataclass
+class MatglModel:
+    path: str
+
+    def get_calculator(self, **kwargs) -> Calculator:
+        import matgl
+        from matgl.ext.ase import PESCalculator
+
+        potential = matgl.load_model(self.path)
+        return PESCalculator(potential)
+    
+    def available(self) -> bool:
+        try:
+            import matgl
+            from matgl.ext.ase import PESCalculator
+            return True
+        except ImportError:
+            return False
+
+ALL_MODELS["matpes-pbe"] = MatglModel(
+    path="../../models/TensorNet-MatPES-PBE-v2025.1-PES"
     # MLIPX-hub model path, adjust as needed
 )
 

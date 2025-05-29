@@ -60,8 +60,32 @@ conflicts = [
       { extra = "mattersim" },
     ],
     [
+      { extra = "fairchem" },
+      { extra = "mace" }, # e3nn
+    ],
+    [
+      { extra = "fairchem" },
+      { extra = "grace" }, # numpy
+    ],
+    [
+      { extra = "fairchem" },
+      { extra = "mattersim" }, # numpy
+    ],
+    [
       { extra = "mace" },
       { extra = "sevenn" },
+    ],
+    [
+      { extra = "matpes" }, # torch
+      { extra = "chgnet" },
+    ],
+    [
+      { extra = "matpes" }, # torch
+      { extra = "orb" },
+    ],
+    [
+      { extra = "matpes" }, # numpy
+      { extra = "fairchem" },
     ]
 ]
 
@@ -83,6 +107,13 @@ mattersim = [
 ]
 grace = [
     "tensorpotential>=0.5.1",
+]
+fairchem = [
+    "fairchem-core>=2.1.0",
+]
+matpes = [
+    "matpes>=0.0.3",
+    "matgl>=1.2.7"
 ]
 
 
