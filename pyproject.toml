@@ -115,7 +115,9 @@ matpes = [
     "matpes>=0.0.3",
     "matgl>=1.2.7"
 ]
-
+pet-mad = [
+    "pet-mad>=1.2.0",
+]
 
 [build-system]
 requires = ["hatchling"]
