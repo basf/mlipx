@@ -423,6 +423,7 @@ class COSplitting(zntrack.Node):
         # LSR obtained in doi.org/10.1007/s11244-013-0169-0
         def reaction(c, o):
             return 0.34 * c + 0.552 * o - 0.40
+
         def barrier_bep(reaction_step):
             return 1.12 * reaction_step + 1.20
 
@@ -757,8 +758,10 @@ class COSplitting(zntrack.Node):
             "r2": r_squared,
             "rmse": rmse,
         }
+
         def f(c, o):
             return m1 * c + m2 * o + b
+
         Z = barrier_bep(f(Xgrid, Ygrid))
 
         heatmap(heatmap_path / model, Z, x1, x2, _formula, xrange, yrange)
