@@ -112,6 +112,28 @@ def neb(
 
 
 @app.command()
+def co_splitting(
+    initialize: bool = False,
+    repro: bool = False,
+    datapath: str | None = None,
+    material_ids: str | None = None,
+    smiles: str | None = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
+):
+    """Run CO splitting analysis."""
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+    handle_recipe(
+        "co_splitting.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=material_ids,
+        smiles=smiles,
+    )
+
+
+@app.command()
 def vibrational_analysis(
     initialize: bool = False,
     repro: bool = False,
