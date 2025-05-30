@@ -1,6 +1,7 @@
 from . import abc
 from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
+from .nodes.co_splitting import COSplitting
 from .nodes.compare_calculator import CompareCalculatorResults
 from .nodes.diatomics import HomonuclearDiatomics
 from .nodes.energy_volume import EnergyVolumeCurve
@@ -27,7 +28,6 @@ from .nodes.smiles import BuildBox, Smiles2Conformers
 from .nodes.structure_optimization import StructureOptimization
 from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
-from .nodes.co_splitting import COSplitting 
 from .project import Project
 from .version import __version__
 
