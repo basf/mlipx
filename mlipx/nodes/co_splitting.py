@@ -24,7 +24,9 @@ from tqdm import tqdm
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator
 
-gas_phase = lambda mol, vacuum=10: molecule(mol, vacuum=vacuum)
+
+def gas_phase(mol, vacuum=10):
+    return molecule(mol, vacuum=vacuum)
 
 
 def gen_surf(atoms, miller=(1, 1, 1), layers=8, vacuum=10, supercell=[2, 2, 1]):
@@ -239,7 +241,7 @@ def property_implemented(atoms, generic_calculator):
         try:
             calc = generic_calculator.get_calculator()
             print("got calculator from get_calculator() method")
-        except:
+        except Exception:
             calc = generic_calculator
             print("got calculator from generic_calculator")
 
@@ -299,7 +301,7 @@ def heatmap(model, Z, x1, x2, el, xrange, yrange):
     )
     # sns.heatmap(Z, cmap='viridis', alpha=0.7, ax=ax)
 
-    sc = ax.scatter(x1, x2, s=100, edgecolor="black")
+    ax.scatter(x1, x2, s=100, edgecolor="black")
     texts = []
 
     for i, label in enumerate(el):
@@ -416,11 +418,13 @@ class COSplitting(zntrack.Node):
 
         x1 = [reference_data[el][0] for el in reference_data]
         x2 = [reference_data[el][1] for el in reference_data]
-        el = [el for el in reference_data]
+        el = list(reference_data)
 
         # LSR obtained in doi.org/10.1007/s11244-013-0169-0
-        reaction = lambda c, o: 0.34 * c + 0.552 * o - 0.40
-        barrier_bep = lambda reaction_step: 1.12 * reaction_step + 1.20
+        def reaction(c, o):
+            return 0.34 * c + 0.552 * o - 0.40
+        def barrier_bep(reaction_step):
+            return 1.12 * reaction_step + 1.20
 
         xrange = [-1.1, 6.1]
         yrange = [-1.1, 6.1]
@@ -515,7 +519,7 @@ class COSplitting(zntrack.Node):
             )
 
             co_energies = [_image.get_potential_energy() for _image in results]
-            co_en = np.min(co_energies)
+            np.min(co_energies)
 
             _co_bound_surf = results[np.argmin(co_energies)]
             _c_bound_surf = _co_bound_surf[:-1]
@@ -534,7 +538,7 @@ class COSplitting(zntrack.Node):
                 freeze_ratio=self.freeze_ratio,
             )
 
-            co_en = co_bound_surf.get_potential_energy()
+            co_bound_surf.get_potential_energy()
 
             _c_temp = co_bound_surf[:-1]
             _c_temp_2 = relocate_atom(_c_temp, idx=len(_c_temp) - 1)
@@ -753,7 +757,8 @@ class COSplitting(zntrack.Node):
             "r2": r_squared,
             "rmse": rmse,
         }
-        f = lambda c, o: m1 * c + m2 * o + b
+        def f(c, o):
+            return m1 * c + m2 * o + b
         Z = barrier_bep(f(Xgrid, Ygrid))
 
         heatmap(heatmap_path / model, Z, x1, x2, _formula, xrange, yrange)
@@ -811,7 +816,7 @@ class COSplitting(zntrack.Node):
                     y=node.results["dE"],
                     mode="markers",
                     name=node.name,
-                    marker=dict(color="red"),
+                    marker={"color": "red"},
                     showlegend=False,
                     customdata=np.stack(
                         [np.arange(len(node.results["dE"])) + offset], axis=1
