@@ -1,4 +1,4 @@
-from . import abc
+from . import abc, spec
 from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
 from .nodes.compare_calculator import CompareCalculatorResults
@@ -29,8 +29,6 @@ from .nodes.updated_frames import UpdateFramesCalc
 from .nodes.vibrational_analysis import VibrationalAnalysis
 from .project import Project
 from .version import __version__
-
-from . import spec
 
 __all__ = [
     "abc",
