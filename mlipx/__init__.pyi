@@ -30,6 +30,8 @@ from .nodes.vibrational_analysis import VibrationalAnalysis
 from .project import Project
 from .version import __version__
 
+from . import spec
+
 __all__ = [
     "abc",
     "StructureOptimization",
@@ -64,5 +66,6 @@ __all__ = [
     "BuildASEslab",
     "RelaxAdsorptionConfigs",
     "OrcaSinglePoint",
+    "spec",
     "__version__",
 ]
