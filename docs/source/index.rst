@@ -48,6 +48,8 @@ and use the integration with :ref:`ZnDraw <zndraw>` to visualize the resulting t
    concept
    recipes
    build_graph
+   contributing
+   hub
    nodes
    glossary
    abc
