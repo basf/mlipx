@@ -147,3 +147,6 @@ if __name__ == "__main__":
     (base_path / "datasets-schema.json").write_text(
         json.dumps(dataset_schema, indent=2)
     )
+
+    # TODO: a function that later resolved the datadsets to the
+    # Ab initio settings and compares them!
