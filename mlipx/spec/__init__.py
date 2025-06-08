@@ -5,13 +5,15 @@ from typing import Annotated, Literal, Union
 import yaml
 from pydantic import BaseModel, Field, PositiveFloat, RootModel
 
+# ====================
+# === Common Types ===
+# ====================
+
 
 class BasisSet(BaseModel):
     """Details of the basis set used."""
 
-    type: Literal["plane-wave", "gaussian", "numeric-atomic-orbital", "mixed"] = Field(
-        description="Type of basis set."
-    )
+    type: Literal["plane-wave", "gaussian"] = Field(description="Type of basis set.")
     plane_wave_cutoff_eV: PositiveFloat | None = Field(
         None, description="Plane-wave kinetic energy cutoff in eV."
     )
@@ -29,18 +31,9 @@ class Pseudopotential(BaseModel):
 class DispersionCorrection(BaseModel):
     """Details of the dispersion correction applied."""
 
-    scheme: Literal[
+    type: Literal[
         "DFT-D2", "DFT-D3", "DFT-D3(BJ)", "DFT-D3(ABC)", "DFT-D4", "TS", "other"
-    ] = Field(description="Dispersion correction scheme.")
-
-
-class DFTCodeInfo(BaseModel):
-    """Information about the DFT software used."""
-
-    name: Literal[
-        "VASP", "ORCA", "CP2K", "QuantumEspresso", "GPAW", "FHI-aims", "other"
-    ] = Field(description="Name of the DFT software package.")
-    version: str | None = Field(None, description="Version string of the DFT software.")
+    ] = Field(description="Dispersion correction type.")
 
 
 class ConvergenceCriteria(BaseModel):
@@ -51,21 +44,28 @@ class ConvergenceCriteria(BaseModel):
     )
 
 
-class MethodBase(BaseModel):
-    """Base class with discriminator."""
-
-    type: str
-
-
 class DFTMethod(BaseModel):
     functional: str = Field(
         description="Name of the DFT exchange-correlation functional."
     )
 
 
-class DFTSettings(MethodBase):
+# ==========================
+# === Method Base Types ===
+# ==========================
+
+
+class MethodBase(BaseModel):
+    type: str
+
+
+class HFSettings(MethodBase):
+    type: Literal["HF"]
+
+
+class DFTSettingsBase(MethodBase):
     type: Literal["DFT"]
-    code: DFTCodeInfo | None = Field(None)
+    code_version: str | None = Field(None, description="Version of the DFT code used.")
     method: DFTMethod | None = Field(None)
     basis_set: BasisSet | None = None
     pseudopotential: Pseudopotential | None = None
@@ -73,14 +73,28 @@ class DFTSettings(MethodBase):
     convergence_criteria: ConvergenceCriteria | None = None
 
 
-class HFSettings(MethodBase):
-    type: Literal["HF"]
+class VASPSettings(DFTSettingsBase):
+    code: Literal["VASP"]
+    # example for the future to add code-specific extensions
+
+
+class GenericDFTSettings(DFTSettingsBase):
+    code: Literal["ORCA", "CP2K", "QuantumEspresso", "GPAW", "FHI-aims", "other"]
+
+
+# Discriminated union by `code`
+DFTSettings = Annotated[
+    Union[VASPSettings, GenericDFTSettings],
+    Field(discriminator="code"),
+]
 
 
 # =============================
 # === Public Dataset Loader ===
 # =============================
-def load_public_dataset_names() -> list:
+
+
+def load_dataset_names() -> list:
     """Load dataset names from datasets.yaml."""
     datasets_path = Path(__file__).parent / "datasets.yaml"
     with datasets_path.open() as f:
@@ -88,16 +102,16 @@ def load_public_dataset_names() -> list:
     return list(data.keys())
 
 
-class PublicDataset(BaseModel):
-    type: Literal["public_dataset"]
+class DatasetInfo(BaseModel):
+    type: Literal["dataset"]
     name: str | list[str] = Field(
-        description="Name of the public dataset.",
+        description="Name of the dataset.",
         json_schema_extra={
             "anyOf": [
-                {"type": "string", "enum": load_public_dataset_names()},
+                {"type": "string", "enum": load_dataset_names()},
                 {
                     "type": "array",
-                    "items": {"type": "string", "enum": load_public_dataset_names()},
+                    "items": {"type": "string", "enum": load_dataset_names()},
                 },
             ]
         },
@@ -108,9 +122,9 @@ class PublicDataset(BaseModel):
 # === MLIP Specification ===
 # ==========================
 
-# Define discriminated union
 MLIPData = Annotated[
-    Union[DFTSettings, HFSettings, PublicDataset], Field(discriminator="type")
+    Union[DFTSettings, HFSettings, DatasetInfo],
+    Field(discriminator="type"),
 ]
 
 
@@ -129,7 +143,7 @@ class MLIPS(RootModel[dict[str, MLIPSpec]]):
     """Root model for MLIP specifications (model registry)."""
 
 
-class Datasets(RootModel[dict[str, Union[DFTSettings, DFTSettings]]]):
+class Datasets(RootModel[dict[str, Union[DFTSettings, HFSettings]]]):
     """Root model for DFT settings of public datasets."""
 
 

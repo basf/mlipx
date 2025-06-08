@@ -7,9 +7,7 @@
           "description": "Type of basis set.",
           "enum": [
             "plane-wave",
-            "gaussian",
-            "numeric-atomic-orbital",
-            "mixed"
+            "gaussian"
           ],
           "title": "Type",
           "type": "string"
@@ -69,43 +67,6 @@
       "title": "ConvergenceCriteria",
       "type": "object"
     },
-    "DFTCodeInfo": {
-      "description": "Information about the DFT software used.",
-      "properties": {
-        "name": {
-          "description": "Name of the DFT software package.",
-          "enum": [
-            "VASP",
-            "ORCA",
-            "CP2K",
-            "QuantumEspresso",
-            "GPAW",
-            "FHI-aims",
-            "other"
-          ],
-          "title": "Name",
-          "type": "string"
-        },
-        "version": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "Version string of the DFT software.",
-          "title": "Version"
-        }
-      },
-      "required": [
-        "name"
-      ],
-      "title": "DFTCodeInfo",
-      "type": "object"
-    },
     "DFTMethod": {
       "properties": {
         "functional": {
@@ -120,23 +81,49 @@
       "title": "DFTMethod",
       "type": "object"
     },
-    "DFTSettings": {
+    "DispersionCorrection": {
+      "description": "Details of the dispersion correction applied.",
+      "properties": {
+        "type": {
+          "description": "Dispersion correction type.",
+          "enum": [
+            "DFT-D2",
+            "DFT-D3",
+            "DFT-D3(BJ)",
+            "DFT-D3(ABC)",
+            "DFT-D4",
+            "TS",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "DispersionCorrection",
+      "type": "object"
+    },
+    "GenericDFTSettings": {
       "properties": {
         "type": {
           "const": "DFT",
           "title": "Type",
           "type": "string"
         },
-        "code": {
+        "code_version": {
           "anyOf": [
             {
-              "$ref": "#/$defs/DFTCodeInfo"
+              "type": "string"
             },
             {
               "type": "null"
             }
           ],
-          "default": null
+          "default": null,
+          "description": "Version of the DFT code used.",
+          "title": "Code Version"
         },
         "method": {
           "anyOf": [
@@ -192,36 +179,39 @@
             }
           ],
           "default": null
+        },
+        "code": {
+          "enum": [
+            "ORCA",
+            "CP2K",
+            "QuantumEspresso",
+            "GPAW",
+            "FHI-aims",
+            "other"
+          ],
+          "title": "Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "code"
+      ],
+      "title": "GenericDFTSettings",
+      "type": "object"
+    },
+    "HFSettings": {
+      "properties": {
+        "type": {
+          "const": "HF",
+          "title": "Type",
+          "type": "string"
         }
       },
       "required": [
         "type"
       ],
-      "title": "DFTSettings",
-      "type": "object"
-    },
-    "DispersionCorrection": {
-      "description": "Details of the dispersion correction applied.",
-      "properties": {
-        "scheme": {
-          "description": "Dispersion correction scheme.",
-          "enum": [
-            "DFT-D2",
-            "DFT-D3",
-            "DFT-D3(BJ)",
-            "DFT-D3(ABC)",
-            "DFT-D4",
-            "TS",
-            "other"
-          ],
-          "title": "Scheme",
-          "type": "string"
-        }
-      },
-      "required": [
-        "scheme"
-      ],
-      "title": "DispersionCorrection",
+      "title": "HFSettings",
       "type": "object"
     },
     "Pseudopotential": {
@@ -243,10 +233,124 @@
       },
       "title": "Pseudopotential",
       "type": "object"
+    },
+    "VASPSettings": {
+      "properties": {
+        "type": {
+          "const": "DFT",
+          "title": "Type",
+          "type": "string"
+        },
+        "code_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Version of the DFT code used.",
+          "title": "Code Version"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DFTMethod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "basis_set": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasisSet"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "pseudopotential": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Pseudopotential"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dispersion_correction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DispersionCorrection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "convergence_criteria": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConvergenceCriteria"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "code": {
+          "const": "VASP",
+          "title": "Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "code"
+      ],
+      "title": "VASPSettings",
+      "type": "object"
     }
   },
   "additionalProperties": {
-    "$ref": "#/$defs/DFTSettings"
+    "anyOf": [
+      {
+        "discriminator": {
+          "mapping": {
+            "CP2K": "#/$defs/GenericDFTSettings",
+            "FHI-aims": "#/$defs/GenericDFTSettings",
+            "GPAW": "#/$defs/GenericDFTSettings",
+            "ORCA": "#/$defs/GenericDFTSettings",
+            "QuantumEspresso": "#/$defs/GenericDFTSettings",
+            "VASP": "#/$defs/VASPSettings",
+            "other": "#/$defs/GenericDFTSettings"
+          },
+          "propertyName": "code"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/VASPSettings"
+          },
+          {
+            "$ref": "#/$defs/GenericDFTSettings"
+          }
+        ]
+      },
+      {
+        "$ref": "#/$defs/HFSettings"
+      }
+    ]
   },
   "description": "Root model for DFT settings of public datasets.",
   "title": "Datasets",

@@ -1,7 +1,6 @@
 MPtrj:
   type: DFT
-  code:
-    name: "VASP"
+  code: VASP
   method:
     functional: PBE+U
   pseudopotential:
@@ -10,8 +9,7 @@ MPtrj:
 
 OMat24:
   type: DFT
-  code:
-    name: "VASP"
+  code: VASP
   method:
     functional: PBE+U
   pseudopotential:
@@ -19,8 +17,7 @@ OMat24:
 
 Alexandria:
   type: DFT
-  code:
-    name: "VASP"
+  code: VASP
   method:
     functional: PBE+U
   pseudopotential:
@@ -28,8 +25,7 @@ Alexandria:
 
 subsampled_Alexandria:
   type: DFT
-  code:
-    name: "VASP"
+  code: VASP
   method:
     functional: PBE+U
   pseudopotential:
@@ -37,8 +33,7 @@ subsampled_Alexandria:
 
 MatterSim:
   type: DFT
-  code:
-    name: VASP
+  code: CP2K
   method:
     functional: PBE+U
   pseudopotential:
