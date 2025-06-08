@@ -179,3 +179,38 @@ def compare(  # noqa C901
             pio.write_json(fig, pathlib.Path(figures_path) / f"{desc}.json")
 
     vis.socket.sleep(5)
+
+
+@app.command()
+def install_vscode_schema():
+    """Configure VS Code to use remote MLIP schema."""
+    vscode_dir = pathlib.Path(".vscode")
+    vscode_dir.mkdir(exist_ok=True)
+
+    settings_path = vscode_dir / "settings.json"
+    schema_url = (
+        "https://raw.githubusercontent.com/basf/mlipx/main/mlipx/spec/mlip-schema.json"
+    )
+    yaml_glob = "**/*.mlips.yaml" # TODO!
+
+    # Load existing settings
+    if settings_path.exists():
+        with settings_path.open("r", encoding="utf-8") as f:
+            try:
+                settings = json.load(f)
+            except json.JSONDecodeError:
+                typer.echo("❌ settings.json is not valid JSON.")
+                raise typer.Exit(code=1)
+    else:
+        settings = {}
+
+    # Update yaml.schemas
+    settings.setdefault("yaml.schemas", {})
+    settings["yaml.schemas"][schema_url] = [yaml_glob]
+
+    with settings_path.open("w", encoding="utf-8") as f:
+        json.dump(settings, f, indent=2)
+
+    typer.echo(
+        f"✅ Installed VS Code YAML schema from {schema_url} for files like {yaml_glob}"
+    )

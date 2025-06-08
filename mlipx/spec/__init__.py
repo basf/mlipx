@@ -1,6 +1,6 @@
 import typing as t
 
-from pydantic import BaseModel, Field, PositiveFloat
+from pydantic import BaseModel, Field, PositiveFloat, RootModel
 
 
 class BasisSet(BaseModel):
@@ -43,7 +43,7 @@ class DFTCodeInfo(BaseModel):
     name: t.Literal[
         "VASP", "ORCA", "CP2K", "QuantumEspresso", "GPAW", "FHI-aims", "other"
     ] = Field(description="Name of the DFT software package.")
-    version: str = Field(description="Version string of the DFT software.")
+    version: str | None = Field(None, description="Version string of the DFT software.")
 
 
 class DFTMethod(BaseModel):
@@ -61,9 +61,13 @@ class ConvergenceCriteria(BaseModel):
 
 
 class DFTSettings(BaseModel):
-    code: DFTCodeInfo = Field(description="Information about the DFT software used.")
-    method: DFTMethod = Field(description="Core DFT method parameters like functional")
-    basis_set: BasisSet = Field(description="Details of the basis set.")
+    code: DFTCodeInfo | None = Field(
+        None, description="Information about the DFT software used."
+    )
+    method: DFTMethod | None = Field(
+        None, description="Core DFT method parameters like functional"
+    )
+    basis_set: BasisSet | None = Field(None, description="Details of the basis set.")
     pseudopotential: Pseudopotential | None = Field(
         None, description="Details of pseudopotentials, if applicable."
     )
@@ -73,3 +77,35 @@ class DFTSettings(BaseModel):
     convergence_criteria: ConvergenceCriteria | None = Field(
         None, description="Convergence criteria for the calculation."
     )
+
+class PublicDataset(BaseModel):
+    name: str = Field(description="Name of the public dataset.")
+    file_hash : str = Field(
+        description="Hash of the dataset file, used for verification."
+    )
+
+class MLIPSpec(BaseModel):
+    """MLIP specification for DFT settings."""
+
+    data: DFTSettings | PublicDataset = Field(description="DFT settings used in the MLIP training.")
+
+class MLIPS(RootModel[dict[str, MLIPSpec]]):
+    """Root model for MLIP specifications."""
+
+# TODO: the public datasets are stored in a file `datasets.yaml` in this directory.
+# The PublicDataset in MLIPS should be written, such that it reads that file
+#  and uses Literal types for the dataset names when generating the schema.
+
+class Datasets(RootModel[dict[str, DFTSettings]]):
+    """Root model for datasets."""
+
+if __name__ == "__main__":
+    # write the json schema to `mlip-schema.json`
+    import json
+    from pathlib import Path
+
+    file = Path(__file__).parent / "mlips-schema.json"
+    file.write_text(json.dumps(MLIPS.model_json_schema(), indent=2))
+
+    file = Path(__file__).parent / "datasets-schema.json"
+    file.write_text(json.dumps(Datasets.model_json_schema(), indent=2))

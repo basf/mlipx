@@ -1,0 +1,35 @@
+MPtrj:
+  code:
+    name: "VASP"
+  functional: PBE+U
+  pseudopotential:
+    name: PBE
+  dispersion_correction: null
+
+OMat24:
+  code:
+    name: "VASP"
+  functional: PBE+U
+  pseudopotential:
+    name: PBE_54
+
+Alexandria:
+  code:
+    name: "VASP"
+  functional: PBE+U
+  pseudopotential:
+    name: PBE
+
+subsampled_Alexandria:
+  code:
+    name: "VASP"
+  functional: PBE+U
+  pseudopotential:
+    name: PBE
+
+MatterSim:
+  code:
+    name: "VASP"
+  functional: PBE+U
+  pseudopotential:
+    name: PBE
