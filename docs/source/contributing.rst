@@ -39,6 +39,33 @@ Once you've developed your node, here's how to integrate it:
 4.  Make it Importable: Import your new node into ``mlipx/__init__.pyi`` and add it to the ``__all__`` list. This makes your node directly importable by users (e.g., ``from mlipx import MyNewNode``).
 5.  Commit and Pull Request: Finally, commit your changes and create a pull request on the ``mlipx`` GitHub repository.
 
+.. tip::
+
+    We encourage you to provide metadata about the training data used for your model.
+    This enables ``mlipx`` to inform users whether models can be compared directly, or if differences in _ab initio_ settings make comparisons unreliable.
+
+    To support this, ``mlipx`` offers a `JSON Schema <https://json-schema.org/>`_-based metadata format, defined at ``mlipx/spec/mlips-schema.json``.
+    You can install schema support in VS Code using the CLI command: ``mlipx install-vscode-schema``.
+
+    We recommend including an ``mlips.yaml`` file in your model package at ``<your_package>/spec/mlips.yaml``.
+    ``mlipx`` will automatically attempt to load this file and use it to inform users about the training data behind your model during comparisons.
+
+    .. dropdown:: Training data definitions for MLIPS included in ``mlipx``
+            
+        These predefined MLIP entries are described in :code:`mlipx/spec/mlips.yaml`.
+
+        .. literalinclude:: ../../mlipx/spec/mlips.yaml
+            :language: YAML
+
+    We also provide built-in abstractions for several public datasets.
+
+    .. dropdown:: Public datasets supported by ``mlipx``
+
+        These datasets are defined in :code:`mlipx/spec/datasets.yaml`.
+
+        .. literalinclude:: ../../mlipx/spec/datasets.yaml
+            :language: YAML
+
 New Recipes
 -----------
 

@@ -191,7 +191,7 @@ def install_vscode_schema():
     schema_url = (
         "https://raw.githubusercontent.com/basf/mlipx/main/mlipx/spec/mlip-schema.json"
     )
-    yaml_glob = "**/*.mlips.yaml" # TODO!
+    yaml_glob = ["**/*.mlips.yaml", "**/mlips.yaml"]
 
     # Load existing settings
     if settings_path.exists():
@@ -206,11 +206,12 @@ def install_vscode_schema():
 
     # Update yaml.schemas
     settings.setdefault("yaml.schemas", {})
-    settings["yaml.schemas"][schema_url] = [yaml_glob]
+    settings["yaml.schemas"][schema_url] = yaml_glob
 
     with settings_path.open("w", encoding="utf-8") as f:
         json.dump(settings, f, indent=2)
 
     typer.echo(
-        f"✅ Installed VS Code YAML schema from {schema_url} for files like {yaml_glob}"
+        f"✅ Installed VS Code YAML schema from {schema_url} for files"
+        f" like {yaml_glob} into {vscode_dir.resolve()}/settings.json"
     )

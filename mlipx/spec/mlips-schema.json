@@ -107,10 +107,9 @@
       "type": "object"
     },
     "DFTMethod": {
-      "description": "Core DFT method parameters.",
       "properties": {
         "functional": {
-          "description": "Name of the exchange-correlation functional.",
+          "description": "Name of the DFT exchange-correlation functional.",
           "title": "Functional",
           "type": "string"
         }
@@ -123,6 +122,11 @@
     },
     "DFTSettings": {
       "properties": {
+        "type": {
+          "const": "DFT",
+          "title": "Type",
+          "type": "string"
+        },
         "code": {
           "anyOf": [
             {
@@ -132,8 +136,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Information about the DFT software used."
+          "default": null
         },
         "method": {
           "anyOf": [
@@ -144,8 +147,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Core DFT method parameters like functional"
+          "default": null
         },
         "basis_set": {
           "anyOf": [
@@ -156,8 +158,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Details of the basis set."
+          "default": null
         },
         "pseudopotential": {
           "anyOf": [
@@ -168,8 +169,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Details of pseudopotentials, if applicable."
+          "default": null
         },
         "dispersion_correction": {
           "anyOf": [
@@ -180,8 +180,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Dispersion correction applied."
+          "default": null
         },
         "convergence_criteria": {
           "anyOf": [
@@ -192,10 +191,12 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Convergence criteria for the calculation."
+          "default": null
         }
       },
+      "required": [
+        "type"
+      ],
       "title": "DFTSettings",
       "type": "object"
     },
@@ -223,19 +224,43 @@
       "title": "DispersionCorrection",
       "type": "object"
     },
+    "HFSettings": {
+      "properties": {
+        "type": {
+          "const": "HF",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "HFSettings",
+      "type": "object"
+    },
     "MLIPSpec": {
-      "description": "MLIP specification for DFT settings.",
+      "description": "MLIP specification for DFT/HF/public dataset settings.",
       "properties": {
         "data": {
-          "anyOf": [
+          "discriminator": {
+            "mapping": {
+              "DFT": "#/$defs/DFTSettings",
+              "HF": "#/$defs/HFSettings",
+              "public_dataset": "#/$defs/PublicDataset"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
             {
               "$ref": "#/$defs/DFTSettings"
+            },
+            {
+              "$ref": "#/$defs/HFSettings"
             },
             {
               "$ref": "#/$defs/PublicDataset"
             }
           ],
-          "description": "DFT settings used in the MLIP training.",
           "title": "Data"
         }
       },
@@ -267,20 +292,27 @@
     },
     "PublicDataset": {
       "properties": {
-        "name": {
-          "description": "Name of the public dataset.",
-          "title": "Name",
+        "type": {
+          "const": "public_dataset",
+          "title": "Type",
           "type": "string"
         },
-        "file_hash": {
-          "description": "Hash of the dataset file, used for verification.",
-          "title": "File Hash",
+        "name": {
+          "description": "Name of the public dataset.",
+          "enum": [
+            "MPtrj",
+            "OMat24",
+            "Alexandria",
+            "subsampled_Alexandria",
+            "MatterSim"
+          ],
+          "title": "Name",
           "type": "string"
         }
       },
       "required": [
-        "name",
-        "file_hash"
+        "type",
+        "name"
       ],
       "title": "PublicDataset",
       "type": "object"
@@ -289,7 +321,7 @@
   "additionalProperties": {
     "$ref": "#/$defs/MLIPSpec"
   },
-  "description": "Root model for MLIP specifications.",
+  "description": "Root model for MLIP specifications (model registry).",
   "title": "MLIPS",
   "type": "object"
 }

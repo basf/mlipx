@@ -107,10 +107,9 @@
       "type": "object"
     },
     "DFTMethod": {
-      "description": "Core DFT method parameters.",
       "properties": {
         "functional": {
-          "description": "Name of the exchange-correlation functional.",
+          "description": "Name of the DFT exchange-correlation functional.",
           "title": "Functional",
           "type": "string"
         }
@@ -123,6 +122,11 @@
     },
     "DFTSettings": {
       "properties": {
+        "type": {
+          "const": "DFT",
+          "title": "Type",
+          "type": "string"
+        },
         "code": {
           "anyOf": [
             {
@@ -132,8 +136,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Information about the DFT software used."
+          "default": null
         },
         "method": {
           "anyOf": [
@@ -144,8 +147,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Core DFT method parameters like functional"
+          "default": null
         },
         "basis_set": {
           "anyOf": [
@@ -156,8 +158,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Details of the basis set."
+          "default": null
         },
         "pseudopotential": {
           "anyOf": [
@@ -168,8 +169,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Details of pseudopotentials, if applicable."
+          "default": null
         },
         "dispersion_correction": {
           "anyOf": [
@@ -180,8 +180,7 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Dispersion correction applied."
+          "default": null
         },
         "convergence_criteria": {
           "anyOf": [
@@ -192,10 +191,12 @@
               "type": "null"
             }
           ],
-          "default": null,
-          "description": "Convergence criteria for the calculation."
+          "default": null
         }
       },
+      "required": [
+        "type"
+      ],
       "title": "DFTSettings",
       "type": "object"
     },
@@ -247,7 +248,7 @@
   "additionalProperties": {
     "$ref": "#/$defs/DFTSettings"
   },
-  "description": "Root model for datasets.",
+  "description": "Root model for DFT settings of public datasets.",
   "title": "Datasets",
   "type": "object"
 }
