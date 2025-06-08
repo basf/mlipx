@@ -298,16 +298,33 @@
           "type": "string"
         },
         "name": {
-          "description": "Name of the public dataset.",
-          "enum": [
-            "MPtrj",
-            "OMat24",
-            "Alexandria",
-            "subsampled_Alexandria",
-            "MatterSim"
+          "anyOf": [
+            {
+              "enum": [
+                "MPtrj",
+                "OMat24",
+                "Alexandria",
+                "subsampled_Alexandria",
+                "MatterSim"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "MPtrj",
+                  "OMat24",
+                  "Alexandria",
+                  "subsampled_Alexandria",
+                  "MatterSim"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
           ],
-          "title": "Name",
-          "type": "string"
+          "description": "Name of the public dataset.",
+          "title": "Name"
         }
       },
       "required": [

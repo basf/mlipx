@@ -51,7 +51,7 @@ Once you've developed your node, here's how to integrate it:
     ``mlipx`` will automatically attempt to load this file and use it to inform users about the training data behind your model during comparisons.
 
     .. dropdown:: Training data definitions for MLIPS included in ``mlipx``
-            
+
         These predefined MLIP entries are described in :code:`mlipx/spec/mlips.yaml`.
 
         .. literalinclude:: ../../mlipx/spec/mlips.yaml

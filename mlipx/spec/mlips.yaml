@@ -1,4 +1,24 @@
-mace-mp-0:
+mace-mpa-0:
+  data:
+    type: public_dataset
+    name:
+    - MPtrj
+    - subsampled_Alexandria
+
+grace-2l-omat:
+  data:
+    type: public_dataset
+    name:
+    - MPtrj
+    - subsampled_Alexandria
+    - OMat24
+
+chgnet:
   data:
     type: public_dataset
     name: MPtrj
+
+mattersim:
+  data:
+    type: public_dataset
+    name: MatterSim
