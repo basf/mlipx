@@ -116,7 +116,7 @@ class MatglModel:
 
         potential = matgl.load_model(self.path)
         return PESCalculator(potential)
-    
+
     def available(self) -> bool:
         try:
             import matgl
