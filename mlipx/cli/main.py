@@ -182,16 +182,27 @@ def compare(  # noqa C901
 
 
 @app.command()
-def install_vscode_schema():
-    """Configure VS Code to use remote MLIP schema."""
-    vscode_dir = pathlib.Path(".vscode")
+def install_vscode_schema(
+    target: Annotated[
+        str, typer.Argument(help="Path to the VS Code settings directory")
+    ] = ".vscode",
+):
+    """Configure VS Code to use MLIP schema."""
+    from mlipx.spec import MLIPS, Datasets
+
+    vscode_dir = pathlib.Path(target)
     vscode_dir.mkdir(exist_ok=True)
 
+    mlips_schema_path = (vscode_dir / "mlipx-mlips.schema.json").resolve()
+    mlips_schema_glob = ["**/*.mlips.yaml", "**/mlips.yaml"]
+    datasets_schema_path = (vscode_dir / "mlipx-datasets.schema.json").resolve()
+    datasets_schema_glob = ["**/*.datasets.yaml", "**/datasets.yaml"]
+
+    # write the schemas to files
+    mlips_schema_path.write_text(json.dumps(MLIPS.model_json_schema(), indent=2))
+    datasets_schema_path.write_text(json.dumps(Datasets.model_json_schema(), indent=2))
+
     settings_path = vscode_dir / "settings.json"
-    schema_url = (
-        "https://raw.githubusercontent.com/basf/mlipx/main/mlipx/spec/mlip-schema.json"
-    )
-    yaml_glob = ["**/*.mlips.yaml", "**/mlips.yaml"]
 
     # Load existing settings
     if settings_path.exists():
@@ -204,14 +215,15 @@ def install_vscode_schema():
     else:
         settings = {}
 
-    # Update yaml.schemas
+    # # Update yaml.schemas
     settings.setdefault("yaml.schemas", {})
-    settings["yaml.schemas"][schema_url] = yaml_glob
+    settings["yaml.schemas"][mlips_schema_path.as_posix()] = mlips_schema_glob
+    settings["yaml.schemas"][datasets_schema_path.as_posix()] = datasets_schema_glob
 
     with settings_path.open("w", encoding="utf-8") as f:
         json.dump(settings, f, indent=2)
 
     typer.echo(
-        f"✅ Installed VS Code YAML schema from {schema_url} for files"
-        f" like {yaml_glob} into {vscode_dir.resolve()}/settings.json"
+        "✅ VS Code schemas from mlipx have been"
+        f" configured in {vscode_dir.resolve()}/settings.json"
     )
