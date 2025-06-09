@@ -13,7 +13,7 @@ OMat24:
   method:
     functional: PBE+U
   pseudopotential:
-    name: PBE_54
+    name: PBE
 
 Alexandria:
   type: DFT
@@ -38,3 +38,11 @@ MatterSim:
     functional: PBE+U
   pseudopotential:
     name: PBE
+
+MAD:
+  type: DFT
+  code: QuantumEspresso
+  method:
+    functional: PBEsol
+  pseudopotential:
+    name: PBEsol    
