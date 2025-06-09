@@ -1,4 +1,4 @@
-from . import abc
+from . import abc, spec
 from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
 from .nodes.compare_calculator import CompareCalculatorResults
@@ -64,5 +64,6 @@ __all__ = [
     "BuildASEslab",
     "RelaxAdsorptionConfigs",
     "OrcaSinglePoint",
+    "spec",
     "__version__",
 ]

@@ -5086,7 +5086,7 @@ wheels = [
 
 [[package]]
 name = "mlipx"
-version = "0.1.4"
+version = "0.1.5"
 source = { editable = "." }
 dependencies = [
     { name = "ase" },
@@ -5095,6 +5095,7 @@ dependencies = [
     { name = "mp-api" },
     { name = "mpcontribs-client" },
     { name = "plotly" },
+    { name = "pydantic" },
     { name = "rdkit2ase" },
     { name = "typer" },
     { name = "zndraw" },
@@ -5169,6 +5170,7 @@ requires-dist = [
     { name = "orb-models", marker = "extra == 'orb'", specifier = ">=0.5.0" },
     { name = "pet-mad", marker = "extra == 'pet-mad'", specifier = ">=1.2.0" },
     { name = "plotly", specifier = ">=6.0.0" },
+    { name = "pydantic", specifier = ">=2.10.6" },
     { name = "rdkit2ase", specifier = ">=0.1.4" },
     { name = "sevenn", marker = "extra == 'sevenn'", specifier = ">=0.11.0" },
     { name = "tensorpotential", marker = "extra == 'grace'", specifier = ">=0.5.1" },

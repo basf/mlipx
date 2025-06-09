@@ -1,0 +1,658 @@
+{
+  "$defs": {
+    "BasisSet": {
+      "additionalProperties": false,
+      "description": "Details of the basis set used.",
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "description": "Type of basis set.",
+          "enum": [
+            "plane-wave",
+            "gaussian"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "plane_wave_cutoff_eV": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Plane-wave kinetic energy cutoff in eV.",
+          "title": "Plane Wave Cutoff Ev"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of the basis set (e.g., 'def2-SVP').",
+          "title": "Name"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "BasisSet",
+      "type": "object"
+    },
+    "ConvergenceCriteria": {
+      "additionalProperties": false,
+      "description": "SCF and geometry optimization convergence criteria.",
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "scf_energy_threshold": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "SCF energy convergence criterion per atom in eV.",
+          "title": "Scf Energy Threshold"
+        }
+      },
+      "title": "ConvergenceCriteria",
+      "type": "object"
+    },
+    "DFTMethod": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "functional": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "enum": [
+                "PBE",
+                "rPBE",
+                "PBEsol",
+                "PBE+U"
+              ],
+              "type": "string"
+            }
+          ],
+          "description": "Name of the DFT exchange-correlation functional.",
+          "title": "Functional"
+        }
+      },
+      "required": [
+        "functional"
+      ],
+      "title": "DFTMethod",
+      "type": "object"
+    },
+    "DatasetInfo": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "const": "dataset",
+          "title": "Type",
+          "type": "string"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "enum": [
+                "MPtrj",
+                "OMat24",
+                "Alexandria",
+                "subsampled_Alexandria",
+                "MatterSim",
+                "MAD",
+                "OC20",
+                "SPICEv1"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "MPtrj",
+                  "OMat24",
+                  "Alexandria",
+                  "subsampled_Alexandria",
+                  "MatterSim",
+                  "MAD",
+                  "OC20",
+                  "SPICEv1"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "Name of the dataset.",
+          "title": "Name"
+        }
+      },
+      "required": [
+        "type",
+        "name"
+      ],
+      "title": "DatasetInfo",
+      "type": "object"
+    },
+    "DispersionCorrection": {
+      "additionalProperties": false,
+      "description": "Details of the dispersion correction applied.",
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "description": "Dispersion correction type.",
+          "enum": [
+            "DFT-D2",
+            "DFT-D3",
+            "DFT-D3(BJ)",
+            "DFT-D3(ABC)",
+            "DFT-D4",
+            "TS",
+            "other"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "DispersionCorrection",
+      "type": "object"
+    },
+    "GenericDFTSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "const": "DFT",
+          "title": "Type",
+          "type": "string"
+        },
+        "code_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Version of the DFT code used.",
+          "title": "Code Version"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DFTMethod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "basis_set": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasisSet"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "pseudopotential": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Pseudopotential"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dispersion_correction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DispersionCorrection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "convergence_criteria": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConvergenceCriteria"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "spin_polarized": {
+          "default": false,
+          "description": "Whether the calculation is spin-polarized.",
+          "title": "Spin Polarized",
+          "type": "boolean"
+        },
+        "code": {
+          "enum": [
+            "ORCA",
+            "CP2K",
+            "QuantumEspresso",
+            "GPAW",
+            "FHI-aims",
+            "PSI4",
+            "other"
+          ],
+          "title": "Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "code"
+      ],
+      "title": "GenericDFTSettings",
+      "type": "object"
+    },
+    "HFSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "const": "HF",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "HFSettings",
+      "type": "object"
+    },
+    "MLIPSpec": {
+      "additionalProperties": false,
+      "description": "MLIP specification for DFT/HF/public dataset settings.",
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "data": {
+          "discriminator": {
+            "mapping": {
+              "DFT": {
+                "discriminator": {
+                  "mapping": {
+                    "CP2K": "#/$defs/GenericDFTSettings",
+                    "FHI-aims": "#/$defs/GenericDFTSettings",
+                    "GPAW": "#/$defs/GenericDFTSettings",
+                    "ORCA": "#/$defs/GenericDFTSettings",
+                    "PSI4": "#/$defs/GenericDFTSettings",
+                    "QuantumEspresso": "#/$defs/GenericDFTSettings",
+                    "VASP": "#/$defs/VASPSettings",
+                    "other": "#/$defs/GenericDFTSettings"
+                  },
+                  "propertyName": "code"
+                },
+                "oneOf": [
+                  {
+                    "$ref": "#/$defs/VASPSettings"
+                  },
+                  {
+                    "$ref": "#/$defs/GenericDFTSettings"
+                  }
+                ]
+              },
+              "HF": "#/$defs/HFSettings",
+              "dataset": "#/$defs/DatasetInfo"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
+            {
+              "discriminator": {
+                "mapping": {
+                  "CP2K": "#/$defs/GenericDFTSettings",
+                  "FHI-aims": "#/$defs/GenericDFTSettings",
+                  "GPAW": "#/$defs/GenericDFTSettings",
+                  "ORCA": "#/$defs/GenericDFTSettings",
+                  "PSI4": "#/$defs/GenericDFTSettings",
+                  "QuantumEspresso": "#/$defs/GenericDFTSettings",
+                  "VASP": "#/$defs/VASPSettings",
+                  "other": "#/$defs/GenericDFTSettings"
+                },
+                "propertyName": "code"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/VASPSettings"
+                },
+                {
+                  "$ref": "#/$defs/GenericDFTSettings"
+                }
+              ]
+            },
+            {
+              "$ref": "#/$defs/HFSettings"
+            },
+            {
+              "$ref": "#/$defs/DatasetInfo"
+            }
+          ],
+          "title": "Data"
+        }
+      },
+      "required": [
+        "data"
+      ],
+      "title": "MLIPSpec",
+      "type": "object"
+    },
+    "MetaData": {
+      "description": "Metadata for the entry.",
+      "properties": {
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DOI of the publication, if available.",
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the publication, if available.",
+          "title": "Url"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short description of the entry.",
+          "title": "Description"
+        }
+      },
+      "title": "MetaData",
+      "type": "object"
+    },
+    "Pseudopotential": {
+      "additionalProperties": false,
+      "description": "Details of the pseudopotential or effective core potential used.",
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier for the pseudopotential",
+          "title": "Name"
+        }
+      },
+      "title": "Pseudopotential",
+      "type": "object"
+    },
+    "VASPSettings": {
+      "additionalProperties": false,
+      "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
+        "type": {
+          "const": "DFT",
+          "title": "Type",
+          "type": "string"
+        },
+        "code_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Version of the DFT code used.",
+          "title": "Code Version"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DFTMethod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "basis_set": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasisSet"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "pseudopotential": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Pseudopotential"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "dispersion_correction": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DispersionCorrection"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "convergence_criteria": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ConvergenceCriteria"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "spin_polarized": {
+          "default": false,
+          "description": "Whether the calculation is spin-polarized.",
+          "title": "Spin Polarized",
+          "type": "boolean"
+        },
+        "code": {
+          "const": "VASP",
+          "title": "Code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "code"
+      ],
+      "title": "VASPSettings",
+      "type": "object"
+    }
+  },
+  "additionalProperties": {
+    "$ref": "#/$defs/MLIPSpec"
+  },
+  "description": "Root model for MLIP specifications (model registry).",
+  "title": "MLIPS",
+  "type": "object"
+}

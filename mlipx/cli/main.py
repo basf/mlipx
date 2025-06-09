@@ -18,6 +18,7 @@ from typing_extensions import Annotated
 from zndraw import ZnDraw
 
 from mlipx import benchmark, recipes
+from mlipx.spec import MLIPS, Datasets
 
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
@@ -179,3 +180,50 @@ def compare(  # noqa C901
             pio.write_json(fig, pathlib.Path(figures_path) / f"{desc}.json")
 
     vis.socket.sleep(5)
+
+
+@app.command()
+def install_vscode_schema(
+    target: Annotated[
+        str, typer.Argument(help="Path to the VS Code settings directory")
+    ] = ".vscode",
+):
+    """Configure VS Code to use MLIP schema."""
+
+    vscode_dir = pathlib.Path(target)
+    vscode_dir.mkdir(exist_ok=True)
+
+    mlips_schema_path = (vscode_dir / "mlipx-mlips.schema.json").resolve()
+    mlips_schema_glob = ["**/*.mlips.yaml", "**/mlips.yaml"]
+    datasets_schema_path = (vscode_dir / "mlipx-datasets.schema.json").resolve()
+    datasets_schema_glob = ["**/*.datasets.yaml", "**/datasets.yaml"]
+
+    # write the schemas to files
+    mlips_schema_path.write_text(json.dumps(MLIPS.model_json_schema(), indent=2))
+    datasets_schema_path.write_text(json.dumps(Datasets.model_json_schema(), indent=2))
+
+    settings_path = vscode_dir / "settings.json"
+
+    # Load existing settings
+    if settings_path.exists():
+        with settings_path.open("r", encoding="utf-8") as f:
+            try:
+                settings = json.load(f)
+            except json.JSONDecodeError:
+                typer.echo("❌ settings.json is not valid JSON.")
+                raise typer.Exit(code=1)
+    else:
+        settings = {}
+
+    # # Update yaml.schemas
+    settings.setdefault("yaml.schemas", {})
+    settings["yaml.schemas"][mlips_schema_path.as_posix()] = mlips_schema_glob
+    settings["yaml.schemas"][datasets_schema_path.as_posix()] = datasets_schema_glob
+
+    with settings_path.open("w", encoding="utf-8") as f:
+        json.dump(settings, f, indent=2)
+
+    typer.echo(
+        "✅ VS Code schemas from mlipx have been"
+        f" configured in {vscode_dir.resolve()}/settings.json"
+    )

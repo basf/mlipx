@@ -29,7 +29,17 @@ class ASEKeys(str, Enum):
 
 
 class NodeWithCalculator(t.Protocol[T]):
-    def get_calculator(self, **kwargs) -> Calculator: ...
+    def get_calculator(self, **kwargs) -> Calculator:
+        """Load the ASE calculator for the desired MLIP."""
+        ...
+
+    def get_spec(self) -> dict | None:
+        """Get the meta data specification of the MLIP.
+
+        For details on the metadata specification, see:
+        https://mlipx.readthedocs.io/en/latest/contributing.html#new-nodes
+        """
+        ...
 
 
 class NodeWithMolecularDynamics(t.Protocol[T]):
