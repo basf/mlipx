@@ -71,6 +71,9 @@ class DFTSettingsBase(MethodBase):
     pseudopotential: Pseudopotential | None = None
     dispersion_correction: DispersionCorrection | None = None
     convergence_criteria: ConvergenceCriteria | None = None
+    spin_polarized: bool = Field(
+        False, description="Whether the calculation is spin-polarized."
+    )
 
 
 class VASPSettings(DFTSettingsBase):
