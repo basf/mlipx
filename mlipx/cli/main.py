@@ -18,6 +18,7 @@ from typing_extensions import Annotated
 from zndraw import ZnDraw
 
 from mlipx import benchmark, recipes
+from mlipx.spec import MLIPS, Datasets
 
 app = typer.Typer()
 app.add_typer(recipes.app, name="recipes")
@@ -188,7 +189,6 @@ def install_vscode_schema(
     ] = ".vscode",
 ):
     """Configure VS Code to use MLIP schema."""
-    from mlipx.spec import MLIPS, Datasets
 
     vscode_dir = pathlib.Path(target)
     vscode_dir.mkdir(exist_ok=True)
