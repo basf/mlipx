@@ -22,3 +22,8 @@ mattersim:
   data:
     type: dataset
     name: MatterSim
+
+pet-mad:
+  data:
+    type: dataset
+    name: MAD

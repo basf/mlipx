@@ -1719,6 +1719,18 @@ wheels = [
 ]
 
 [[package]]
+name = "deepdiff"
+version = "8.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "orderly-set" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0a/0f/9cd2624f7dcd755cbf1fa21fb7234541f19a1be96a56f387ec9053ebe220/deepdiff-8.5.0.tar.gz", hash = "sha256:a4dd3529fa8d4cd5b9cbb6e3ea9c95997eaa919ba37dac3966c1b8f872dc1cd1", size = 538517, upload-time = "2025-05-09T18:44:10.035Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4a/3b/2e0797200c51531a6d8c97a8e4c9fa6fb56de7e6e2a15c1c067b6b10a0b0/deepdiff-8.5.0-py3-none-any.whl", hash = "sha256:d4599db637f36a1c285f5fdfc2cd8d38bde8d8be8636b65ab5e425b67c54df26", size = 85112, upload-time = "2025-05-09T18:44:07.784Z" },
+]
+
+[[package]]
 name = "defusedxml"
 version = "0.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -5090,6 +5102,7 @@ version = "0.1.4"
 source = { editable = "." }
 dependencies = [
     { name = "ase" },
+    { name = "deepdiff" },
     { name = "dvc-s3" },
     { name = "lazy-loader" },
     { name = "mp-api" },
@@ -5158,6 +5171,7 @@ docs = [
 requires-dist = [
     { name = "ase", specifier = ">=3.24.0" },
     { name = "chgnet", marker = "extra == 'chgnet'", specifier = ">=0.4.0" },
+    { name = "deepdiff", specifier = ">=8.5.0" },
     { name = "dvc-s3", specifier = ">=3.2.0" },
     { name = "fairchem-core", marker = "extra == 'fairchem'", specifier = ">=2.1.0" },
     { name = "lazy-loader", specifier = ">=0.4" },
@@ -8550,6 +8564,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e8/c0/51b0d003b6b9073ef645d427f1fa85dd5637b150df68dceb27faee14d350/orb_models-0.5.0.tar.gz", hash = "sha256:e66c9bf5d54d9ea3b89ad520846197f8330419b049dbda42c0da5e26aadb0a1f", size = 82808, upload-time = "2025-04-08T22:39:28.791Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2b/9f/4aae3d9479cf6151b3c101b9cfb1065cad360bfe1be6437a9002eaf54c9e/orb_models-0.5.0-py3-none-any.whl", hash = "sha256:989e498c8d65f90b3c15004c49b3060d8f87921bacdd1dc62608e0c776dcb09c", size = 90950, upload-time = "2025-04-08T22:39:27.103Z" },
+]
+
+[[package]]
+name = "orderly-set"
+version = "5.4.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/03/4a/38030da31c13dcd5a531490006e63a0954083fb115113be9393179738e25/orderly_set-5.4.1.tar.gz", hash = "sha256:a1fb5a4fdc5e234e9e8d8e5c1bbdbc4540f4dfe50d12bf17c8bc5dbf1c9c878d", size = 20943, upload-time = "2025-05-06T22:34:13.512Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/bc/e0dfb4db9210d92b44e49d6e61ba5caefbd411958357fa9d7ff489eeb835/orderly_set-5.4.1-py3-none-any.whl", hash = "sha256:b5e21d21680bd9ef456885db800c5cb4f76a03879880c0175e1b077fb166fd83", size = 12339, upload-time = "2025-05-06T22:34:12.564Z" },
 ]
 
 [[package]]

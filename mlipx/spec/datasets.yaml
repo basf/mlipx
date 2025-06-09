@@ -3,8 +3,6 @@ MPtrj:
   code: VASP
   method:
     functional: PBE+U
-  pseudopotential:
-    name: PBE
   dispersion_correction: null
   metadata:
     doi: https://doi.org/10.6084/m9.figshare.23713842.v2
@@ -15,32 +13,29 @@ OMat24:
   code: VASP
   method:
     functional: PBE+U
-  pseudopotential:
-    name: PBE
 
 Alexandria:
   type: DFT
   code: VASP
   method:
     functional: PBE+U
-  pseudopotential:
-    name: PBE
 
 subsampled_Alexandria:
   type: DFT
   code: VASP
   method:
     functional: PBE+U
-  pseudopotential:
-    name: PBE
 
 MatterSim:
   type: DFT
-  code: CP2K
+  code: VASP
   method:
     functional: PBE+U
-  pseudopotential:
-    name: PBE
+  basis_set:
+    type: plane-wave
+    plane_wave_cutoff_eV: 520
+  metadata:
+    doi: https://doi.org/10.48550/arXiv.2405.04967
 
 MAD:
   type: DFT
@@ -55,8 +50,6 @@ OC20:
   code: VASP
   method:
     functional: rPBE
-  pseudopotential:
-    name: PAW
   basis_set:
     type: plane-wave
     plane_wave_cutoff_eV: 350
