@@ -80,6 +80,9 @@ class GenericASECalculator(NodeWithCalculator):
         """
         Load mlips.yaml from <top_level_package>/spec/mlips.yaml
         """
+        if self.spec is None:
+            return None
+
         try:
             # Get top-level package name (before first dot)
             top_level_package = self.module.split(".")[0]

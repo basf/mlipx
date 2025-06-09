@@ -43,7 +43,6 @@ def find_differences(a, b, prefix=""):
 def compare_specs(specs: dict[str, MLIPSpec | None]):
     """Compare resolved MLIPSpecs, returning a flat mapping of differences."""
 
-    # specs = {k: v.resolve_datasets() for k, v in specs.items()}
     class EmptyModel(BaseModel):
         """A model to represent an empty spec."""
 
