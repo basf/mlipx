@@ -31,12 +31,16 @@ def test_compare_specs(mlipx_spec):
 
     assert compare_specs({"mace-mpa-0": model_a, "pet-mad": model_b}) == {
         ("mace-mpa-0", "pet-mad"): {
-            "root['data']['code']": {
+            "data.code": {
                 "mace-mpa-0": "VASP",
                 "pet-mad": "QuantumEspresso",
             },
-            "root['data']['method']['functional']": {
+            "data.method.functional": {
                 "mace-mpa-0": "PBE+U",
+                "pet-mad": "PBEsol",
+            },
+            "data.pseudopotential.name": {
+                "mace-mpa-0": None,
                 "pet-mad": "PBEsol",
             },
         },
@@ -45,23 +49,49 @@ def test_compare_specs(mlipx_spec):
     assert compare_specs(
         {"mace-mpa-0": model_a, "pet-mad": model_b, "mattersim": model_c}
     ) == {
+        ("mace-mpa-0", "mattersim"): {
+            "data.basis_set.plane_wave_cutoff_eV": {
+                "mace-mpa-0": None,
+                "mattersim": 520.0,
+            },
+            "data.basis_set.type": {
+                "mace-mpa-0": None,
+                "mattersim": "plane-wave",
+            },
+        },
         ("mace-mpa-0", "pet-mad"): {
-            "root['data']['code']": {
+            "data.code": {
                 "mace-mpa-0": "VASP",
                 "pet-mad": "QuantumEspresso",
             },
-            "root['data']['method']['functional']": {
+            "data.method.functional": {
                 "mace-mpa-0": "PBE+U",
+                "pet-mad": "PBEsol",
+            },
+            "data.pseudopotential.name": {
+                "mace-mpa-0": None,
                 "pet-mad": "PBEsol",
             },
         },
         ("pet-mad", "mattersim"): {
-            "root['data']['code']": {
+            "data.basis_set.plane_wave_cutoff_eV": {
+                "mattersim": 520.0,
+                "pet-mad": None,
+            },
+            "data.basis_set.type": {
+                "mattersim": "plane-wave",
+                "pet-mad": None,
+            },
+            "data.code": {
                 "mattersim": "VASP",
                 "pet-mad": "QuantumEspresso",
             },
-            "root['data']['method']['functional']": {
+            "data.method.functional": {
                 "mattersim": "PBE+U",
+                "pet-mad": "PBEsol",
+            },
+            "data.pseudopotential.name": {
+                "mattersim": None,
                 "pet-mad": "PBEsol",
             },
         },
