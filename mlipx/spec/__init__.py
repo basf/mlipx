@@ -45,7 +45,7 @@ class ConvergenceCriteria(BaseModel):
 
 
 class DFTMethod(BaseModel):
-    functional: str = Field(
+    functional: str | Literal["PBE", "rPBE", "PBEsol", "PBE+U"] = Field(
         description="Name of the DFT exchange-correlation functional."
     )
 

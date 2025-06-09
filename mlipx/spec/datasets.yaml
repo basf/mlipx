@@ -46,3 +46,14 @@ MAD:
     functional: PBEsol
   pseudopotential:
     name: PBEsol
+
+OC20:
+  type: DFT
+  code: VASP
+  method:
+    functional: rPBE
+  pseudopotential:
+    name: PAW
+  basis_set:
+    type: plane-wave
+    plane_wave_cutoff_eV: 350
