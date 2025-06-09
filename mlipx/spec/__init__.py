@@ -3,14 +3,28 @@ from pathlib import Path
 from typing import Annotated, Literal, Union
 
 import yaml
-from pydantic import BaseModel, Field, PositiveFloat, RootModel
+from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, RootModel
 
 # ====================
 # === Common Types ===
 # ====================
 
 
-class BasisSet(BaseModel):
+class MetaData(BaseModel):
+    """Metadata for the entry."""
+
+    doi: str | None = Field(None, description="DOI of the publication, if available.")
+    url: str | None = Field(None, description="URL to the publication, if available.")
+    description: str | None = Field(None, description="Short description of the entry.")
+
+
+class StrictBaseModel(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    metadata: MetaData | None = Field(None, description="Metadata for this entry.")
+
+
+class BasisSet(StrictBaseModel):
     """Details of the basis set used."""
 
     type: Literal["plane-wave", "gaussian"] = Field(description="Type of basis set.")
@@ -22,13 +36,13 @@ class BasisSet(BaseModel):
     )
 
 
-class Pseudopotential(BaseModel):
+class Pseudopotential(StrictBaseModel):
     """Details of the pseudopotential or effective core potential used."""
 
     name: str | None = Field(None, description="Identifier for the pseudopotential")
 
 
-class DispersionCorrection(BaseModel):
+class DispersionCorrection(StrictBaseModel):
     """Details of the dispersion correction applied."""
 
     type: Literal[
@@ -36,7 +50,7 @@ class DispersionCorrection(BaseModel):
     ] = Field(description="Dispersion correction type.")
 
 
-class ConvergenceCriteria(BaseModel):
+class ConvergenceCriteria(StrictBaseModel):
     """SCF and geometry optimization convergence criteria."""
 
     scf_energy_threshold: PositiveFloat | None = Field(
@@ -44,7 +58,7 @@ class ConvergenceCriteria(BaseModel):
     )
 
 
-class DFTMethod(BaseModel):
+class DFTMethod(StrictBaseModel):
     functional: str | Literal["PBE", "rPBE", "PBEsol", "PBE+U"] = Field(
         description="Name of the DFT exchange-correlation functional."
     )
@@ -55,7 +69,7 @@ class DFTMethod(BaseModel):
 # ==========================
 
 
-class MethodBase(BaseModel):
+class MethodBase(StrictBaseModel):
     type: str
 
 
@@ -74,10 +88,6 @@ class DFTSettingsBase(MethodBase):
     spin_polarized: bool = Field(
         False, description="Whether the calculation is spin-polarized."
     )
-    doi: str | None = Field(
-        None, description="DOI of the dataset publication, if available."
-    )
-    url: str | None = Field(None, description="URL to the dataset, if available.")
 
 
 class VASPSettings(DFTSettingsBase):
@@ -109,7 +119,7 @@ def load_dataset_names() -> list:
     return list(data.keys())
 
 
-class DatasetInfo(BaseModel):
+class DatasetInfo(StrictBaseModel):
     type: Literal["dataset"]
     name: str | list[str] = Field(
         description="Name of the dataset.",
@@ -135,16 +145,10 @@ MLIPData = Annotated[
 ]
 
 
-class MLIPSpec(BaseModel):
+class MLIPSpec(StrictBaseModel):
     """MLIP specification for DFT/HF/public dataset settings."""
 
     data: MLIPData
-    doi: str | None = Field(
-        None, description="DOI of the MLIP publication, if available."
-    )
-    url: str | None = Field(
-        None, description="URL to the MLIP specification, if available."
-    )
 
 
 # =========================

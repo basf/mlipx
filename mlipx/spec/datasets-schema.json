@@ -1,8 +1,21 @@
 {
   "$defs": {
     "BasisSet": {
+      "additionalProperties": false,
       "description": "Details of the basis set used.",
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "type": {
           "description": "Type of basis set.",
           "enum": [
@@ -47,8 +60,21 @@
       "type": "object"
     },
     "ConvergenceCriteria": {
+      "additionalProperties": false,
       "description": "SCF and geometry optimization convergence criteria.",
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "scf_energy_threshold": {
           "anyOf": [
             {
@@ -68,7 +94,20 @@
       "type": "object"
     },
     "DFTMethod": {
+      "additionalProperties": false,
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "functional": {
           "anyOf": [
             {
@@ -95,8 +134,21 @@
       "type": "object"
     },
     "DispersionCorrection": {
+      "additionalProperties": false,
       "description": "Details of the dispersion correction applied.",
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "type": {
           "description": "Dispersion correction type.",
           "enum": [
@@ -119,7 +171,20 @@
       "type": "object"
     },
     "GenericDFTSettings": {
+      "additionalProperties": false,
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "type": {
           "const": "DFT",
           "title": "Type",
@@ -198,32 +263,6 @@
           "description": "Whether the calculation is spin-polarized.",
           "title": "Spin Polarized",
           "type": "boolean"
-        },
-        "doi": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "DOI of the dataset publication, if available.",
-          "title": "Doi"
-        },
-        "url": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "URL to the dataset, if available.",
-          "title": "Url"
         },
         "code": {
           "enum": [
@@ -246,7 +285,20 @@
       "type": "object"
     },
     "HFSettings": {
+      "additionalProperties": false,
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "type": {
           "const": "HF",
           "title": "Type",
@@ -259,9 +311,68 @@
       "title": "HFSettings",
       "type": "object"
     },
+    "MetaData": {
+      "description": "Metadata for the entry.",
+      "properties": {
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DOI of the publication, if available.",
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the publication, if available.",
+          "title": "Url"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short description of the entry.",
+          "title": "Description"
+        }
+      },
+      "title": "MetaData",
+      "type": "object"
+    },
     "Pseudopotential": {
+      "additionalProperties": false,
       "description": "Details of the pseudopotential or effective core potential used.",
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "name": {
           "anyOf": [
             {
@@ -280,7 +391,20 @@
       "type": "object"
     },
     "VASPSettings": {
+      "additionalProperties": false,
       "properties": {
+        "metadata": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetaData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Metadata for this entry."
+        },
         "type": {
           "const": "DFT",
           "title": "Type",
@@ -359,32 +483,6 @@
           "description": "Whether the calculation is spin-polarized.",
           "title": "Spin Polarized",
           "type": "boolean"
-        },
-        "doi": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "DOI of the dataset publication, if available.",
-          "title": "Doi"
-        },
-        "url": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "description": "URL to the dataset, if available.",
-          "title": "Url"
         },
         "code": {
           "const": "VASP",
