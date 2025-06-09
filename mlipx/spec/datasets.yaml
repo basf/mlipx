@@ -45,4 +45,4 @@ MAD:
   method:
     functional: PBEsol
   pseudopotential:
-    name: PBEsol    
+    name: PBEsol
