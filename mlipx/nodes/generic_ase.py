@@ -7,6 +7,7 @@ import yaml
 from ase.calculators.calculator import Calculator
 
 from mlipx.abc import NodeWithCalculator
+from mlipx.spec import MLIPSpec
 
 
 class Device:
@@ -75,7 +76,7 @@ class GenericASECalculator(NodeWithCalculator):
         except ImportError:
             return False
 
-    def get_spec(self) -> dict | None:
+    def get_spec(self) -> MLIPSpec | None:
         """
         Load mlips.yaml from <top_level_package>/spec/mlips.yaml
         """
@@ -89,7 +90,7 @@ class GenericASECalculator(NodeWithCalculator):
                 with spec_path.open("r") as f:
                     mlip_spec = yaml.safe_load(f)
                 if self.spec is not None:
-                    return mlip_spec.get(self.spec, None)
+                    spec_dict = mlip_spec.get(self.spec, None)
         except (ImportError, AttributeError, FileNotFoundError):
             # now try loading it from the mlipx package model spec
             package = importlib.import_module("mlipx")
@@ -98,8 +99,12 @@ class GenericASECalculator(NodeWithCalculator):
             with spec_path.open("r") as f:
                 mlip_spec = yaml.safe_load(f)
             if self.spec is not None:
-                return mlip_spec.get(self.spec, None)
-        return None
+                spec_dict = mlip_spec.get(self.spec, None)
+
+        if isinstance(spec_dict, dict):
+            # Ensure the spec is a dictionary
+            spec_dict = MLIPSpec.model_validate(spec_dict)
+        return spec_dict
 
 
 if __name__ == "__main__":

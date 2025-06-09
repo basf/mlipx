@@ -1,6 +1,8 @@
 import itertools
 from typing import Any
 
+from pydantic import BaseModel
+
 from mlipx.spec.spec import MLIPSpec
 
 
@@ -38,18 +40,28 @@ def find_differences(a, b, prefix=""):
     return differences
 
 
-def compare_specs(specs: dict[str, MLIPSpec]):
+def compare_specs(specs: dict[str, MLIPSpec | None]):
     """Compare resolved MLIPSpecs, returning a flat mapping of differences."""
-    specs = {k: v.resolve_datasets() for k, v in specs.items()}
+
+    # specs = {k: v.resolve_datasets() for k, v in specs.items()}
+    class EmptyModel(BaseModel):
+        """A model to represent an empty spec."""
+
+    resolved_specs = {}
+    for k, v in specs.items():
+        if v is None:
+            resolved_specs[k] = EmptyModel()
+        else:
+            resolved_specs[k] = v.resolve_datasets()
     differences = {}
 
-    keys = list(specs.keys())
+    keys = list(resolved_specs.keys())
     if len(keys) < 2:
         raise ValueError("compare_specs requires at least two specs to compare.")
 
     for key_a, key_b in itertools.combinations(keys, 2):
-        spec_a = strip_metadata(specs[key_a].model_dump())
-        spec_b = strip_metadata(specs[key_b].model_dump())
+        spec_a = strip_metadata(resolved_specs[key_a].model_dump())
+        spec_b = strip_metadata(resolved_specs[key_b].model_dump())
 
         raw_diff = find_differences(spec_a, spec_b)
         if raw_diff:

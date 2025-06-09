@@ -14,7 +14,6 @@ def mlipx_spec() -> MLIPS:
     package = importlib.import_module("mlipx")
     base_path = Path(package.__path__[0])
     spec_path = base_path / "spec" / "mlips.yaml"
-    # TODO: load via pydantic MLIPS class
     with spec_path.open("r") as f:
         mlip_spec = yaml.safe_load(f)
     return MLIPS.model_validate(mlip_spec)
@@ -93,6 +92,27 @@ def test_compare_specs(mlipx_spec):
             "data.pseudopotential.name": {
                 "mattersim": None,
                 "pet-mad": "PBEsol",
+            },
+        },
+    }
+
+    assert compare_specs({"a": model_a, "b": None}) == {
+        ("a", "b"): {
+            "data.code": {
+                "a": "VASP",
+                "b": None,
+            },
+            "data.method.functional": {
+                "a": "PBE+U",
+                "b": None,
+            },
+            "data.spin_polarized": {
+                "a": False,
+                "b": None,
+            },
+            "data.type": {
+                "a": "DFT",
+                "b": None,
             },
         },
     }

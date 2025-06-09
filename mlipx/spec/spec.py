@@ -97,7 +97,9 @@ class VASPSettings(DFTSettingsBase):
 
 
 class GenericDFTSettings(DFTSettingsBase):
-    code: Literal["ORCA", "CP2K", "QuantumEspresso", "GPAW", "FHI-aims", "other"]
+    code: Literal[
+        "ORCA", "CP2K", "QuantumEspresso", "GPAW", "FHI-aims", "PSI4", "other"
+    ]
 
 
 # Discriminated union by `code`
@@ -200,6 +202,3 @@ if __name__ == "__main__":
     (base_path / "datasets-schema.json").write_text(
         json.dumps(dataset_schema, indent=2)
     )
-
-    # TODO: a function that later resolved the datadsets to the
-    # Ab initio settings and compares them!

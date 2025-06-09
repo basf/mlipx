@@ -163,7 +163,8 @@
                 "subsampled_Alexandria",
                 "MatterSim",
                 "MAD",
-                "OC20"
+                "OC20",
+                "SPICEv1"
               ],
               "type": "string"
             },
@@ -176,7 +177,8 @@
                   "subsampled_Alexandria",
                   "MatterSim",
                   "MAD",
-                  "OC20"
+                  "OC20",
+                  "SPICEv1"
                 ],
                 "type": "string"
               },
@@ -332,6 +334,7 @@
             "QuantumEspresso",
             "GPAW",
             "FHI-aims",
+            "PSI4",
             "other"
           ],
           "title": "Code",
@@ -398,6 +401,7 @@
                     "FHI-aims": "#/$defs/GenericDFTSettings",
                     "GPAW": "#/$defs/GenericDFTSettings",
                     "ORCA": "#/$defs/GenericDFTSettings",
+                    "PSI4": "#/$defs/GenericDFTSettings",
                     "QuantumEspresso": "#/$defs/GenericDFTSettings",
                     "VASP": "#/$defs/VASPSettings",
                     "other": "#/$defs/GenericDFTSettings"
@@ -426,6 +430,7 @@
                   "FHI-aims": "#/$defs/GenericDFTSettings",
                   "GPAW": "#/$defs/GenericDFTSettings",
                   "ORCA": "#/$defs/GenericDFTSettings",
+                  "PSI4": "#/$defs/GenericDFTSettings",
                   "QuantumEspresso": "#/$defs/GenericDFTSettings",
                   "VASP": "#/$defs/VASPSettings",
                   "other": "#/$defs/GenericDFTSettings"
