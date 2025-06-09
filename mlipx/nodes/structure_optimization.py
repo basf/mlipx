@@ -1,4 +1,5 @@
 import pathlib
+import warnings
 
 import ase.io
 import ase.optimize as opt
@@ -8,6 +9,7 @@ import plotly.graph_objects as go
 import zntrack
 
 from mlipx.abc import ComparisonResults, NodeWithCalculator, Optimizer
+from mlipx.spec import compare_specs
 
 
 class StructureOptimization(zntrack.Node):
@@ -116,6 +118,22 @@ class StructureOptimization(zntrack.Node):
     @staticmethod
     def compare(*nodes: "StructureOptimization") -> ComparisonResults:
         frames = sum([node.frames for node in nodes], [])
+        specs = {}
+        for node in nodes:
+            try:
+                specs[node.name] = node.model.get_spec()
+            except Exception as e:
+                warnings.warn(
+                    f"Could not get spec for node {node.name}: {e}",
+                    UserWarning,
+                )
+        spec_diff = compare_specs(specs)
+        if len(spec_diff) > 0:
+            warnings.warn(
+                f"Found differences in specs for nodes: {spec_diff}",
+                UserWarning,
+            )
+
         offset = 0
         fig = go.Figure()
         for idx, node in enumerate(nodes):

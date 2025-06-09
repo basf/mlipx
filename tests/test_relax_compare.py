@@ -1,3 +1,7 @@
+import warnings
+
+import pytest
+
 import mlipx
 from mlipx.spec import compare_specs
 
@@ -52,3 +56,35 @@ def test_relax_compare(proj_path):
             },
         },
     }
+
+    with project:
+        struct = mlipx.Smiles2Conformers(
+            smiles="CCO",
+            num_confs=10,
+        )
+    with project.group(mace_mpa.spec):
+        m1 = mlipx.StructureOptimization(
+            data=struct.frames,
+            model=mace_mpa,
+        )
+        m1b = mlipx.StructureOptimization(
+            data=struct.frames,
+            model=mace_mpa,
+        )
+    with project.group(mace_off.spec):
+        m2 = mlipx.StructureOptimization(
+            data=struct.frames,
+            model=mace_off,
+        )
+
+    project.repro()
+
+    with pytest.warns(UserWarning, match="Found differences in specs for nodes:"):
+        _ = mlipx.StructureOptimization.compare(m1, m2)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        _ = mlipx.StructureOptimization.compare(
+            m1,
+            m1b,
+        )

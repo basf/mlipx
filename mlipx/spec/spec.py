@@ -1,11 +1,12 @@
 import json
-import warnings
+import logging
 from pathlib import Path
 from typing import Annotated, Literal, Union
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, PositiveFloat, RootModel
 
+log = logging.getLogger(__name__)
 # ====================
 # === Common Types ===
 # ====================
@@ -163,9 +164,7 @@ class MLIPSpec(StrictBaseModel):
             all_datasets = Datasets.model_validate(all_datasets_raw)
             names = self.data.name
             if isinstance(names, list):
-                warnings.warn(
-                    f"Multiple dataset names found: {names}. Using the first one."
-                )
+                log.info(f"Multiple dataset names found: {names}. Using {names[0]}.")
                 names = names[0]
             if names in all_datasets.root:
                 dataset_spec = all_datasets.root[names]

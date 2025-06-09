@@ -86,11 +86,10 @@ class GenericASECalculator(NodeWithCalculator):
             package = importlib.import_module(top_level_package)
             base_path = Path(package.__path__[0])
             spec_path = base_path / "spec" / "mlips.yaml"
-            if spec_path.is_file():
-                with spec_path.open("r") as f:
-                    mlip_spec = yaml.safe_load(f)
-                if self.spec is not None:
-                    spec_dict = mlip_spec.get(self.spec, None)
+            with spec_path.open("r") as f:
+                mlip_spec = yaml.safe_load(f)
+            if self.spec is not None:
+                spec_dict = mlip_spec.get(self.spec, None)
         except (ImportError, AttributeError, FileNotFoundError):
             # now try loading it from the mlipx package model spec
             package = importlib.import_module("mlipx")
