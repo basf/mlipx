@@ -70,9 +70,22 @@
     "DFTMethod": {
       "properties": {
         "functional": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "enum": [
+                "PBE",
+                "rPBE",
+                "PBEsol",
+                "PBE+U"
+              ],
+              "type": "string"
+            }
+          ],
           "description": "Name of the DFT exchange-correlation functional.",
-          "title": "Functional",
-          "type": "string"
+          "title": "Functional"
         }
       },
       "required": [
@@ -179,6 +192,38 @@
             }
           ],
           "default": null
+        },
+        "spin_polarized": {
+          "default": false,
+          "description": "Whether the calculation is spin-polarized.",
+          "title": "Spin Polarized",
+          "type": "boolean"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DOI of the dataset publication, if available.",
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the dataset, if available.",
+          "title": "Url"
         },
         "code": {
           "enum": [
@@ -308,6 +353,38 @@
             }
           ],
           "default": null
+        },
+        "spin_polarized": {
+          "default": false,
+          "description": "Whether the calculation is spin-polarized.",
+          "title": "Spin Polarized",
+          "type": "boolean"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DOI of the dataset publication, if available.",
+          "title": "Doi"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the dataset, if available.",
+          "title": "Url"
         },
         "code": {
           "const": "VASP",

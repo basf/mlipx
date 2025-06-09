@@ -74,6 +74,10 @@ class DFTSettingsBase(MethodBase):
     spin_polarized: bool = Field(
         False, description="Whether the calculation is spin-polarized."
     )
+    doi: str | None = Field(
+        None, description="DOI of the dataset publication, if available."
+    )
+    url: str | None = Field(None, description="URL to the dataset, if available.")
 
 
 class VASPSettings(DFTSettingsBase):
@@ -135,6 +139,12 @@ class MLIPSpec(BaseModel):
     """MLIP specification for DFT/HF/public dataset settings."""
 
     data: MLIPData
+    doi: str | None = Field(
+        None, description="DOI of the MLIP publication, if available."
+    )
+    url: str | None = Field(
+        None, description="URL to the MLIP specification, if available."
+    )
 
 
 # =========================

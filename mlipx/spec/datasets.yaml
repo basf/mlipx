@@ -6,6 +6,8 @@ MPtrj:
   pseudopotential:
     name: PBE
   dispersion_correction: null
+  doi: https://doi.org/10.6084/m9.figshare.23713842.v2
+
 
 OMat24:
   type: DFT
