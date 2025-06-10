@@ -40,6 +40,7 @@ docs = [
     "sphinx-mdinclude>=0.6.2",
     "sphinxcontrib-bibtex>=2.6.3",
     "sphinxcontrib-mermaid>=1.0.0",
+    "scikit-learn>=1.6.1",
 ]
 dev = [
     "ipykernel>=6.29.5",
