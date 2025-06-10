@@ -37,6 +37,6 @@ jobs:
           cd mlipx-hub && uv run dvc pull --allow-missing
       - name: build the docs
         run: |
-          pwd
+          cd ..
           uv run python --version
           uv run sphinx-build -b doctest docs/source docs/build/doctest
