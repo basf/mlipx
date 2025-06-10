@@ -2,5 +2,14 @@
     "python.analysis.typeCheckingMode": "basic",
     "[restructuredtext]": {
         "editor.wordWrap": "on"
+    },
+    "yaml.schemas": {
+        "./mlipx/spec/mlips-schema.json": [
+            "**/*.mlips.yaml",
+            "**/mlips.yaml"
+        ],
+        "./mlipx/spec/datasets-schema.json": [
+            "**/datasets.yaml"
+        ]
     }
 }

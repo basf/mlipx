@@ -1,0 +1,36 @@
+mace-mpa-0:
+  data:
+    type: dataset
+    name:
+    - MPtrj
+    - subsampled_Alexandria
+
+grace-2l-omat:
+  data:
+    type: dataset
+    name:
+    - MPtrj
+    - subsampled_Alexandria
+    - OMat24
+
+chgnet:
+  data:
+    type: dataset
+    name: MPtrj
+
+mattersim:
+  data:
+    type: dataset
+    name: MatterSim
+
+pet-mad:
+  data:
+    type: dataset
+    name: MAD
+
+mace-off:
+  data:
+    type: dataset
+    name: SPICEv1
+  metadata:
+    doi: https://doi.org/10.1021/jacs.4c07099

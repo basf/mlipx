@@ -1,6 +1,6 @@
 [project]
 name = "mlipx"
-version = "0.1.4"
+version = "0.1.5"
 description = "Machine-Learned Interatomic Potential eXploration"
 authors = [
     { name = "Sandip De", email = "sandip.de@basf.com" },
@@ -25,6 +25,7 @@ dependencies = [
     "zntrack>=0.8.5",
     "dvc-s3>=3.2.0",
     "mpcontribs-client>=5.10.2",
+    "pydantic>=2.10.6",
 ]
 
 [dependency-groups]
@@ -60,8 +61,32 @@ conflicts = [
       { extra = "mattersim" },
     ],
     [
+      { extra = "fairchem" },
+      { extra = "mace" }, # e3nn
+    ],
+    [
+      { extra = "fairchem" },
+      { extra = "grace" }, # numpy
+    ],
+    [
+      { extra = "fairchem" },
+      { extra = "mattersim" }, # numpy
+    ],
+    [
       { extra = "mace" },
       { extra = "sevenn" },
+    ],
+    [
+      { extra = "matpes" }, # torch
+      { extra = "chgnet" },
+    ],
+    [
+      { extra = "matpes" }, # torch
+      { extra = "orb" },
+    ],
+    [
+      { extra = "matpes" }, # numpy
+      { extra = "fairchem" },
     ]
 ]
 
@@ -84,7 +109,16 @@ mattersim = [
 grace = [
     "tensorpotential>=0.5.1",
 ]
-
+fairchem = [
+    "fairchem-core>=2.1.0",
+]
+matpes = [
+    "matpes>=0.0.3",
+    "matgl>=1.2.7"
+]
+pet-mad = [
+    "pet-mad>=1.2.0",
+]
 
 [build-system]
 requires = ["hatchling"]

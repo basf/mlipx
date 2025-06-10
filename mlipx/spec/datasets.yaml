@@ -1,0 +1,68 @@
+MPtrj:
+  type: DFT
+  code: VASP
+  method:
+    functional: PBE+U
+  dispersion_correction: null
+  metadata:
+    doi: https://doi.org/10.6084/m9.figshare.23713842.v2
+
+
+OMat24:
+  type: DFT
+  code: VASP
+  method:
+    functional: PBE+U
+
+Alexandria:
+  type: DFT
+  code: VASP
+  method:
+    functional: PBE+U
+
+subsampled_Alexandria:
+  type: DFT
+  code: VASP
+  method:
+    functional: PBE+U
+
+MatterSim:
+  type: DFT
+  code: VASP
+  method:
+    functional: PBE+U
+  basis_set:
+    type: plane-wave
+    plane_wave_cutoff_eV: 520
+  metadata:
+    doi: https://doi.org/10.48550/arXiv.2405.04967
+
+MAD:
+  type: DFT
+  code: QuantumEspresso
+  method:
+    functional: PBEsol
+  pseudopotential:
+    name: PBEsol
+
+OC20:
+  type: DFT
+  code: VASP
+  method:
+    functional: rPBE
+  basis_set:
+    type: plane-wave
+    plane_wave_cutoff_eV: 350
+
+SPICEv1:
+  type: DFT
+  code: PSI4
+  method:
+    functional: ωB97M
+  dispersion_correction:
+    type: DFT-D3(BJ)
+  basis_set:
+    type: plane-wave
+    name: def2-TZVPPD
+  metadata:
+    doi: https://doi.org/10.1038/s41597-022-01882-6
