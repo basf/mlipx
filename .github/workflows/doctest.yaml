@@ -39,4 +39,4 @@ jobs:
         run: |
           uv run python --version
           uv run sphinx-build -b doctest docs/source docs/build/doctest
-          
+
