@@ -1,0 +1,38 @@
+name: doctest
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  schedule:
+    - cron: '14 3 * * 1'  # at 03:14 on Monday.
+
+jobs:
+  doctest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.11"
+        os:
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the project
+        run: uv sync --group=docs
+      - name: Download data
+        run: |
+          cd mlipx-hub && uv run dvc pull --allow-missing
+      - name: build the docs
+        run: |
+          uv run python --version
+          uv run sphinx-build -b doctest docs/source docs/build/doctest
+          

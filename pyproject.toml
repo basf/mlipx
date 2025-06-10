@@ -119,6 +119,9 @@ matpes = [
 pet-mad = [
     "pet-mad>=1.2.0",
 ]
+"co-splitting" = [
+    "scikit-learn>=1.6.1",
+]
 
 [build-system]
 requires = ["hatchling"]

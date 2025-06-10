@@ -226,7 +226,7 @@ def pre_optimize(atoms, calc, path, relax_path, nats_mol=0, freeze_ratio=0.5):
 
 
 def property_implemented(atoms, generic_calculator):
-    calc = atoms.get_calculator()
+    calc = atoms.calc
 
     if (
         calc
