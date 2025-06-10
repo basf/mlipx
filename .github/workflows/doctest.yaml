@@ -38,4 +38,4 @@ jobs:
       - name: build the docs
         run: |
           uv run python --version
-          cd docs/ && uv run sphinx-build -b doctest source build/doctest
+          cd docs/source/ && uv run sphinx-build . ../build/doctest
