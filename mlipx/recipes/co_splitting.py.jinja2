@@ -1,0 +1,36 @@
+import mlipx
+import zntrack
+
+from models import MODELS
+
+project = zntrack.Project()
+
+frames = []
+{% if datapath %}
+with project.group("initialize"):
+    for path in {{ datapath }}:
+        frames.append(mlipx.LoadDataFile(path=path))
+{% endif %}{% if material_ids %}
+with project.group("initialize"):
+    for material_id in {{ material_ids }}:
+        frames.append(mlipx.MPRester(search_kwargs={"material_ids": [material_id]}))
+{% endif %}{% if smiles %}
+with project.group("initialize"):
+    for smiles in {{ smiles }}:
+        frames.append(mlipx.Smiles2Conformers(smiles=smiles, num_confs=1))
+{% endif %}
+
+for model_name, model in MODELS.items():
+    with project.group(model_name):
+        cosplit = mlipx.COSplitting(
+                model=model,
+                data=sum([x.frames for x in frames], []),
+                miller=[2,1,1],
+                supercell=[2,2,1],
+                layers=8,
+                vacuum=10.0,
+                grid_step=3.0,
+                freeze_ratio=0.5
+            )
+
+project.build()

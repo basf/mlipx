@@ -1,6 +1,7 @@
 from . import abc, spec
 from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
+from .nodes.co_splitting import COSplitting
 from .nodes.compare_calculator import CompareCalculatorResults
 from .nodes.diatomics import HomonuclearDiatomics
 from .nodes.energy_volume import EnergyVolumeCurve
@@ -48,6 +49,7 @@ __all__ = [
     "PhaseDiagram",
     "PourbaixDiagram",
     "VibrationalAnalysis",
+    "COSplitting",
     "HomonuclearDiatomics",
     "MPRester",
     "GenericASECalculator",

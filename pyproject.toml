@@ -1,6 +1,6 @@
 [project]
 name = "mlipx"
-version = "0.1.5"
+version = "0.1.6"
 description = "Machine-Learned Interatomic Potential eXploration"
 authors = [
     { name = "Sandip De", email = "sandip.de@basf.com" },
@@ -40,6 +40,7 @@ docs = [
     "sphinx-mdinclude>=0.6.2",
     "sphinxcontrib-bibtex>=2.6.3",
     "sphinxcontrib-mermaid>=1.0.0",
+    "scikit-learn>=1.6.1",
 ]
 dev = [
     "ipykernel>=6.29.5",
@@ -118,6 +119,9 @@ matpes = [
 ]
 pet-mad = [
     "pet-mad>=1.2.0",
+]
+"co-splitting" = [
+    "scikit-learn>=1.6.1",
 ]
 
 [build-system]

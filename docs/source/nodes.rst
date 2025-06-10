@@ -83,3 +83,6 @@ Each Node is documented in the following section.
 
     BuildASEslab
         .. autofunction:: mlipx.BuildASEslab
+
+    COSplitting
+        .. autofunction:: mlipx.COSplitting

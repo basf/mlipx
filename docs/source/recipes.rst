@@ -17,3 +17,4 @@ The following recipes are currently available within :code:`mlipx`.
    recipes/phase_diagram
    recipes/pourbaix_diagram
    recipes/vibrational_analysis
+   recipes/co_splitting

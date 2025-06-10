@@ -2,6 +2,7 @@ import dataclasses
 
 import mlipx
 from mlipx.nodes.generic_ase import Device
+from mlipx.abc import NodeWithCalculator
 from ase.calculators.calculator import Calculator
 
 ALL_MODELS = {}
@@ -38,7 +39,7 @@ ALL_MODELS["7net-mf-ompa-mpa"] = mlipx.GenericASECalculator(
 
 # https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
-class OrbCalc:
+class OrbCalc(NodeWithCalculator):
     name: str
     device: Device | None = None
     kwargs: dict = dataclasses.field(default_factory=dict)
@@ -107,7 +108,7 @@ ALL_MODELS["grace-2l-omat"] = mlipx.GenericASECalculator(
 )
 
 @dataclasses.dataclass
-class MatglModel:
+class MatglModel(NodeWithCalculator):
     path: str
 
     def get_calculator(self, **kwargs) -> Calculator:
@@ -131,7 +132,7 @@ ALL_MODELS["matpes-pbe"] = MatglModel(
 )
 
 @dataclasses.dataclass
-class FairchemModel:
+class FairchemModel(NodeWithCalculator):
     path: str
     task_name: str = "oc20"
     device: str = "auto"
