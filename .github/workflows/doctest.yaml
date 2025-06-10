@@ -34,9 +34,8 @@ jobs:
         run: uv sync --group=docs
       - name: Download data
         run: |
-          cd mlipx-hub && uv run dvc pull --allow-missing
+          cd mlipx-hub && uv run dvc pull --allow-missing && cd ..
       - name: build the docs
         run: |
-          cd ..
           uv run python --version
           uv run sphinx-build -b doctest docs/source docs/build/doctest
