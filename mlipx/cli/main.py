@@ -85,11 +85,11 @@ def info():  # noqa: C901
 
     node_names = []
     for name in __all__:
-        obj = getattr(mlipx, name, None)
         try:
+            obj = getattr(mlipx, name, None)
             if issubclass(obj, zntrack.Node):
                 node_names.append(name)
-        except TypeError:
+        except (TypeError, ModuleNotFoundError):
             continue  # Not a class
 
     # Create a nicely styled table with the total count in the title
