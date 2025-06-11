@@ -118,6 +118,7 @@ class MatglModel(NodeWithCalculator):
         potential = matgl.load_model(self.path)
         return PESCalculator(potential)
 
+    @property
     def available(self) -> bool:
         try:
             import matgl
@@ -144,6 +145,7 @@ class FairchemModel(NodeWithCalculator):
         predictor = load_predict_unit(self.path, device=device)
         return FAIRChemCalculator(predictor, task_name=self.task_name)
 
+    @property
     def available(self) -> bool:
         try:
             import fairchem
