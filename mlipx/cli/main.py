@@ -37,8 +37,10 @@ def main():
 
 
 @app.command()
-def info():
+def info():  # noqa: C901
     """Print the version of mlipx and the available models."""
+    import mlipx
+    from mlipx import __all__
     from mlipx.models import AVAILABLE_MODELS  # slow import
 
     console = Console()
@@ -81,10 +83,28 @@ def info():
             version = "[red]Not installed[/red]"
         mlipx_table.add_row(package, version)
 
+    node_names = []
+    for name in __all__:
+        try:
+            obj = getattr(mlipx, name, None)
+            if issubclass(obj, zntrack.Node):
+                node_names.append(name)
+        except (TypeError, ModuleNotFoundError):
+            continue  # Not a class
+
+    # Create a nicely styled table with the total count in the title
+    nodes_table = Table(
+        show_header=False,
+        title=f"🔍 Nodes in mlipx [Total: {len(node_names)}]",
+    )
+    for name in sorted(node_names):
+        nodes_table.add_row(name)
+
     # Display all
     console.print(mlipx_table)
     console.print(py_table)
     console.print(mlip_table)
+    console.print(nodes_table)
 
 
 @app.command()
