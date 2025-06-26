@@ -15,9 +15,6 @@
 [📜Recipes](https://mlipx.readthedocs.io/en/latest/recipes.html) |
 [🚀Quickstart](https://mlipx.readthedocs.io/en/latest/quickstart.html)
 
-
-
-
 </div>
 
 <div style="text-align: center;">
