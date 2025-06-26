@@ -8,11 +8,15 @@
 [![ZnDraw](https://img.shields.io/badge/works_with-ZnDraw-orange)](https://github.com/zincware/zndraw)
 [![open issues](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/basf/mlipx/issues)
 [![Documentation Status](https://readthedocs.org/projects/mlipx/badge/?version=latest)](https://mlipx.readthedocs.io/en/latest/?badge=latest)
+[![DOI](https://img.shields.io/badge/chemrxiv-2025.0v720-red)](https://doi.org/10.26434/chemrxiv-2025-0v720)
 
 [📘Documentation](https://mlipx.readthedocs.io) |
 [🛠️Installation](https://mlipx.readthedocs.io/en/latest/installation.html) |
 [📜Recipes](https://mlipx.readthedocs.io/en/latest/recipes.html) |
 [🚀Quickstart](https://mlipx.readthedocs.io/en/latest/quickstart.html)
+
+
+
 
 </div>
 
