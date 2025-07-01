@@ -158,7 +158,7 @@ class MolecularDynamics(zntrack.Node):
         fig.update_layout(
             title="Energy vs. step",
             xaxis_title="Step",
-            yaxis_title="Energy",
+            yaxis_title="Energy / eV",
         )
 
         fig.update_layout(
@@ -199,7 +199,7 @@ class MolecularDynamics(zntrack.Node):
         fig_adjusted.update_layout(
             title="Adjusted energy vs. step",
             xaxis_title="Step",
-            yaxis_title="Adjusted energy",
+            yaxis_title="Adjusted energy / eV",
         )
 
         fig_adjusted.update_layout(
