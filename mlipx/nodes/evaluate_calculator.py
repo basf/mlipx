@@ -13,7 +13,9 @@ from mlipx.abc import ComparisonResults
 from mlipx.utils import shallow_copy_atoms
 
 
-def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
+def get_figure(
+    key: str, nodes: list["EvaluateCalculatorResults"], yaxis_title: str
+) -> go.Figure:
     fig = go.Figure()
     for node in nodes:
         fig.add_trace(
@@ -35,12 +37,14 @@ def get_figure(key: str, nodes: list["EvaluateCalculatorResults"]) -> go.Figure:
         gridwidth=1,
         gridcolor="rgba(120, 120, 120, 0.3)",
         zeroline=False,
+        title="Index",
     )
     fig.update_yaxes(
         showgrid=True,
         gridwidth=1,
         gridcolor="rgba(120, 120, 120, 0.3)",
         zeroline=False,
+        title=yaxis_title,
     )
     return fig
 
@@ -121,7 +125,7 @@ zndraw {self.name}.frames --rev {self.state.rev} --remote {self.state.remote} --
         return plots
 
     @staticmethod
-    def compare(
+    def compare(  # noqa: C901
         *nodes: "EvaluateCalculatorResults", reference: str | None = None
     ) -> ComparisonResults:
         # TODO: if reference, shift energies by
@@ -132,7 +136,14 @@ zndraw {self.name}.frames --rev {self.state.rev} --remote {self.state.remote} --
             if not all(key in node.plots.columns for node in nodes):
                 raise ValueError(f"Key {key} not found in all nodes")
             # check frames are the same
-            figures[key] = get_figure(key, nodes)
+            yaxis_title = key.replace("_error", "")
+            if "energy" in key:
+                yaxis_title += " / eV"
+            elif "fmax" in key or "fnorm" in key or "force" in key:
+                yaxis_title += " / eV/Å"
+            else:
+                yaxis_title += ""
+            figures[key] = get_figure(key, nodes, yaxis_title=yaxis_title)
 
         for node in nodes:
             for key in node.plots.columns:

@@ -152,7 +152,7 @@ class StructureOptimization(zntrack.Node):
         fig.update_layout(
             title="Energy vs. Steps",
             xaxis_title="Step",
-            yaxis_title="Energy",
+            yaxis_title="Energy / eV",
             plot_bgcolor="rgba(0, 0, 0, 0)",
             paper_bgcolor="rgba(0, 0, 0, 0)",
         )
@@ -190,7 +190,7 @@ class StructureOptimization(zntrack.Node):
         fig_adjusted.update_layout(
             title="Adjusted energy vs. Steps",
             xaxis_title="Step",
-            yaxis_title="Adjusted energy",
+            yaxis_title="Adjusted energy / eV",
             plot_bgcolor="rgba(0, 0, 0, 0)",
             paper_bgcolor="rgba(0, 0, 0, 0)",
         )

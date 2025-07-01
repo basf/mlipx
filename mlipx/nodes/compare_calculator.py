@@ -81,7 +81,20 @@ class CompareCalculatorResults(zntrack.Node):
     def figures(self) -> FIGURES:
         figures = {}
         for key in self.plots.columns:
-            figures[key] = get_figure(key, [self])
+            yaxis_title = key.replace("_error", "")
+            if "energy_per_atom" in yaxis_title:
+                yaxis_title += " / eV/atom"
+            elif "energy" in yaxis_title:
+                yaxis_title += " / eV"
+            elif (
+                "fmax" in yaxis_title
+                or "fnorm" in yaxis_title
+                or "force" in yaxis_title
+            ):
+                yaxis_title += " / eV/Å"
+            else:
+                yaxis_title += ""
+            figures[key] = get_figure(key, [self], yaxis_title=yaxis_title)
         return figures
 
     def compare(self, *nodes: "CompareCalculatorResults") -> ComparisonResults:  # noqa C901
@@ -93,7 +106,20 @@ class CompareCalculatorResults(zntrack.Node):
             if not all(key in node.plots.columns for node in nodes):
                 raise ValueError(f"Key {key} not found in all nodes")
             # check frames are the same
-            figures[key] = get_figure(key, nodes)
+            yaxis_title = key.replace("_error", "")
+            if "energy_per_atom" in yaxis_title:
+                yaxis_title += " / eV/atom"
+            elif "energy" in yaxis_title:
+                yaxis_title += " / eV"
+            elif (
+                "fmax" in yaxis_title
+                or "fnorm" in yaxis_title
+                or "force" in yaxis_title
+            ):
+                yaxis_title += " / eV/Å"
+            else:
+                yaxis_title += ""
+            figures[key] = get_figure(key, nodes, yaxis_title=yaxis_title)
 
         for node in nodes:
             for key in node.plots.columns:

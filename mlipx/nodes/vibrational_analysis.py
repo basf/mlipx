@@ -284,7 +284,7 @@ class VibrationalAnalysis(zntrack.Node):
         fig.update_layout(
             title=f"Gibbs Free Energy at {self.temperature}K",
             xaxis_title="Frame",
-            yaxis_title="ddG (eV)",
+            yaxis_title="ddG / eV",
         )
         fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=-1))
         return {"Gibbs": fig}
@@ -311,7 +311,7 @@ class VibrationalAnalysis(zntrack.Node):
         fig.update_layout(
             title=f"Comparison of Gibbs Free Energies at {temperature}K",
             xaxis_title="Frame",
-            yaxis_title="ddG (eV)",
+            yaxis_title="ddG / eV",
             plot_bgcolor="rgba(0, 0, 0, 0)",
             paper_bgcolor="rgba(0, 0, 0, 0)",
         )

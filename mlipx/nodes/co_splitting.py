@@ -791,7 +791,7 @@ class COSplitting(zntrack.Node):
         fig.update_layout(
             title="Reaction Energy for H-assisted CO Splitting",
             xaxis_title="Formula",
-            yaxis_title="dE (eV)",
+            yaxis_title="dE / eV",
         )
         fig.update_traces(customdata=np.stack([np.arange(len(self.results))], axis=-1))
         return {"ReactionEnergy": fig}
@@ -848,7 +848,7 @@ class COSplitting(zntrack.Node):
         fig.update_layout(
             title="Comparison of Reaction Energies for H-assisted CO Splitting",
             xaxis_title="Formula",
-            yaxis_title="dE (eV)",
+            yaxis_title="dE / eV",
             barmode="group",
             scattermode="group",
             plot_bgcolor="rgba(0, 0, 0, 0)",

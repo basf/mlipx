@@ -72,7 +72,7 @@ class InvarianceNode(zntrack.Node):
         fig.update_layout(
             title=f"Energy vs step ({nodes[0].__class__.__name__})",
             xaxis_title="Steps",
-            yaxis_title="Adjusted energy",
+            yaxis_title="Adjusted energy / eV",
             plot_bgcolor="rgba(0, 0, 0, 0)",
             paper_bgcolor="rgba(0, 0, 0, 0)",
         )
