@@ -134,3 +134,6 @@ skip = "*.svg,*.lock,*.json"
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "C", "W"]
+
+[project.entry-points.'zntrack.nodes']
+mlipx = 'mlipx.entrypoints:nodes'
