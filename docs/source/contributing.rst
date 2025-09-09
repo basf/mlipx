@@ -47,6 +47,22 @@ Once you've developed your node, here's how to integrate it:
     To support this, ``mlipx`` offers a `JSON Schema <https://json-schema.org/>`_-based metadata format, defined at ``mlipx/spec/mlips-schema.json``.
     You can install schema support in VS Code using the CLI command: ``mlipx install-vscode-schema``.
 
+    .. dropdown:: Include the MLIP Schema in Your IDE
+
+        Most IDEs support JSON Schema validation.
+        If you want to include it in VS Code without using the CLI, you can use the schema from `here <https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/mlipx/spec/mlips-schema.json>`_ and include it in your workspace settings:
+        
+        .. code-block:: json
+
+            {
+                "yaml.schemas": {
+                    "https://raw.githubusercontent.com/basf/mlipx/refs/heads/main/mlipx/spec/mlips-schema.json": [
+                        "**/*.mlips.yaml",
+                        "**/mlips.yaml"
+                    ]
+                }
+            }
+
     We recommend including an ``mlips.yaml`` file in your model package at ``<your_package>/spec/mlips.yaml``.
     ``mlipx`` will automatically attempt to load this file and use it to inform users about the training data behind your model during comparisons.
 
