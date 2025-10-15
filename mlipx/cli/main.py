@@ -265,8 +265,16 @@ def serve_broker(
     ] = None,
     worker_timeout: Annotated[
         int,
-        typer.Option(help="Idle timeout for auto-started workers in seconds (default: 300)"),
+        typer.Option(
+            help="Idle timeout for auto-started workers in seconds (default: 300)"
+        ),
     ] = 300,
+    worker_start_timeout: Annotated[
+        int,
+        typer.Option(
+            help="Maximum time to wait for worker startup in seconds (default: 60)"
+        ),
+    ] = 60,
 ):
     """Start the ZeroMQ broker for MLIP workers.
 
@@ -308,11 +316,13 @@ def serve_broker(
             typer.echo(f"Broker path: {get_default_broker_path()}")
         typer.echo(f"Models file: {models}")
         typer.echo(f"Worker idle timeout: {worker_timeout}s")
+        typer.echo(f"Worker startup timeout: {worker_start_timeout}s")
 
         run_autostart_broker(
             frontend_path=path,
             models_file=models,
             worker_timeout=worker_timeout,
+            worker_start_timeout=worker_start_timeout,
         )
     else:
         from mlipx.serve import run_broker
@@ -436,7 +446,18 @@ def serve(
             # Prevent infinite recursion
             os.environ["_MLIPX_SERVE_UV_WRAPPED"] = "1"
 
-            typer.echo(f"Starting with dependencies: {' '.join(cmd)}")
+            # Print to stderr so it doesn't interfere with stdout
+            # The child process will inherit stdin/stdout/stderr as-is
+            if sys.stderr.isatty():
+                # In TTY mode, use rich formatting
+                from rich.console import Console
+
+                console = Console(stderr=True)
+                console.print(f"[dim]Starting with dependencies: {' '.join(cmd)}[/dim]")
+            else:
+                # Non-TTY mode, simple message to stderr
+                print(f"Starting with dependencies: {' '.join(cmd)}", file=sys.stderr)
+
             os.execvp("uv", cmd)  # Replace current process
             return  # Never reached
 
@@ -498,10 +519,16 @@ def serve_status(
 
     # Broker info table
     broker_table = Table(show_header=False, box=None, padding=(0, 1))
-    broker_table.add_column("Key", style="bold cyan", width=8)
+    broker_table.add_column("Key", style="bold cyan", width=10)
     broker_table.add_column("Value")
     broker_table.add_row("Status", broker_status)
     broker_table.add_row("Path", display_broker_path)
+
+    if status["broker_running"]:
+        autostart_status = (
+            "[green]✓ Enabled[/green]" if status["autostart"] else "[dim]Disabled[/dim]"
+        )
+        broker_table.add_row("Autostart", autostart_status)
 
     if status["error"]:
         broker_table.add_row("Error", f"[red]{status['error']}[/red]")
@@ -533,6 +560,19 @@ def serve_status(
 
         models_content = "\n".join(models_list)
 
+        # Show autostart info if enabled
+        if status["autostart"] and status["autostart_models"]:
+            # Find models that are available via autostart but not currently running
+            running_models = set(status["models"].keys())
+            autostart_only = sorted(
+                set(status["autostart_models"]) - running_models
+            )
+
+            if autostart_only:
+                models_content += "\n\n[dim]Additional models available via autostart:[/dim]"
+                for model_name in autostart_only:
+                    models_content += f"\n[dim][cyan]•[/cyan] {model_name}[/dim]"
+
         console.print(
             Panel(
                 models_content,
@@ -542,11 +582,29 @@ def serve_status(
             )
         )
     elif status["broker_running"]:
-        console.print(
-            Panel(
+        if status["autostart"] and status["autostart_models"]:
+            # Show autostart models when enabled
+            autostart_list = []
+            for model_name in sorted(status["autostart_models"]):
+                autostart_list.append(f"[cyan]•[/cyan] {model_name}")
+
+            autostart_content = "\n".join(autostart_list)
+            message = (
+                "[yellow]No workers currently running[/yellow]\n\n"
+                f"[bold]Autostart enabled[/bold] - workers will start automatically on first use.\n\n"
+                f"[dim]Available models for autostart ({len(status['autostart_models'])}):[/dim]\n"
+                f"{autostart_content}"
+            )
+        else:
+            message = (
                 "[yellow]No models currently available[/yellow]\n\n"
                 "Start a worker with:\n"
-                "  [bold cyan]mlipx serve <model-name>[/bold cyan]",
+                "  [bold cyan]mlipx serve <model-name>[/bold cyan]"
+            )
+
+        console.print(
+            Panel(
+                message,
                 title="📊 Available Models",
                 border_style="yellow",
                 padding=(1, 2),

@@ -26,8 +26,8 @@ from .protocol import (
 
 logger = logging.getLogger(__name__)
 
-# Heartbeat interval in seconds
-HEARTBEAT_INTERVAL = 5.0
+# Heartbeat interval in seconds (only sent when idle)
+HEARTBEAT_INTERVAL = 1.0
 
 
 class Worker:

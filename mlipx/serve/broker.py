@@ -21,7 +21,8 @@ from .protocol import (
 logger = logging.getLogger(__name__)
 
 # Worker timeout in seconds - if no heartbeat received in this time, consider worker dead
-WORKER_TIMEOUT = 15.0
+# Set to 5 seconds (5x the 1-second heartbeat interval) to allow for network delays
+WORKER_TIMEOUT = 5.0
 
 
 class Broker:
@@ -232,7 +233,13 @@ class Broker:
                         w.decode("utf-8", errors="replace") for w in list(workers)
                     ],
                 }
-            response = msgpack.packb({"models": model_details})
+            response = msgpack.packb(
+                {
+                    "models": model_details,
+                    "autostart": False,
+                    "autostart_models": [],
+                }
+            )
             self.frontend.send_multipart([client_id, b"", response])
             logger.debug(f"Sent detailed status to client {client_id}")
 

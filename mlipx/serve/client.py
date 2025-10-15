@@ -32,7 +32,7 @@ class RemoteCalculator(Calculator):
         self,
         model: str,
         broker: str | None = None,
-        timeout: int = 30000,
+        timeout: int = 60000,
         **kwargs,
     ):
         """Initialize the remote calculator.
@@ -44,7 +44,8 @@ class RemoteCalculator(Calculator):
         broker : str | None
             IPC path to broker. Defaults to platform-specific path.
         timeout : int
-            Timeout in milliseconds for receiving responses. Default: 30000 (30s).
+            Timeout in milliseconds for receiving responses. Default: 60000 (60s).
+            When using autostart broker, this should be long enough for workers to start.
         **kwargs
             Additional arguments passed to Calculator base class.
         """
@@ -163,7 +164,7 @@ class ModelProxy:
     This class provides a simple interface to get a calculator for a model.
     """
 
-    def __init__(self, model_name: str, broker_path: str):
+    def __init__(self, model_name: str, broker_path: str, timeout: int = 60000):
         """Initialize the model proxy.
 
         Parameters
@@ -172,9 +173,12 @@ class ModelProxy:
             Name of the model.
         broker_path : str
             IPC path to the broker.
+        timeout : int
+            Default timeout in milliseconds for calculators created from this proxy.
         """
         self.model_name = model_name
         self.broker_path = broker_path
+        self.timeout = timeout
 
     def get_calculator(self, **kwargs) -> RemoteCalculator:
         """Get a RemoteCalculator for this model.
@@ -183,12 +187,16 @@ class ModelProxy:
         ----------
         **kwargs
             Additional arguments passed to RemoteCalculator.
+            Can override 'timeout' from the default set in ModelProxy.
 
         Returns
         -------
         RemoteCalculator
             Calculator that communicates with remote workers.
         """
+        # Use proxy's timeout as default if not specified
+        if "timeout" not in kwargs:
+            kwargs["timeout"] = self.timeout
         return RemoteCalculator(
             model=self.model_name, broker=self.broker_path, **kwargs
         )
@@ -218,15 +226,19 @@ class Models(Mapping):
     >>> energy = atoms.get_potential_energy()
     """
 
-    def __init__(self, broker: str | None = None):
+    def __init__(self, broker: str | None = None, timeout: int = 60000):
         """Initialize the Models collection.
 
         Parameters
         ----------
         broker : str | None
             IPC path to broker. Defaults to platform-specific path.
+        timeout : int
+            Default timeout in milliseconds for calculators. Default: 60000 (60s).
+            When using autostart broker, this should be long enough for workers to start.
         """
         self.broker_path = broker or get_default_broker_path()
+        self.timeout = timeout
 
     def _fetch_models(self) -> list[str]:
         """Fetch the list of available models from the broker.
@@ -238,7 +250,7 @@ class Models(Mapping):
         """
         ctx = zmq.Context()
         socket = ctx.socket(zmq.REQ)
-        socket.setsockopt(zmq.RCVTIMEO, 5000)  # 5 second timeout
+        socket.setsockopt(zmq.RCVTIMEO, 10000)  # 10 second timeout
         socket.setsockopt(zmq.SNDTIMEO, 5000)
         socket.setsockopt(zmq.LINGER, 0)
 
@@ -298,7 +310,7 @@ class Models(Mapping):
             raise KeyError(
                 f"Model '{key}' not available. Available models: {self._get_models()}"
             )
-        return ModelProxy(key, self.broker_path)
+        return ModelProxy(key, self.broker_path, timeout=self.timeout)
 
     def __iter__(self):
         """Iterate over available model names."""
@@ -373,6 +385,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         - broker_running: bool
         - broker_path: str
         - models: dict[str, dict] with model_name -> {worker_count: int, workers: list[str]}
+        - autostart: bool (whether autostart is enabled)
+        - autostart_models: list[str] (models available for autostart)
         - error: str (if any)
     """
     from .protocol import get_default_broker_path
@@ -383,6 +397,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         "broker_running": False,
         "broker_path": broker_path,
         "models": {},
+        "autostart": False,
+        "autostart_models": [],
         "error": None,
     }
 
@@ -399,6 +415,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         response = msgpack.unpackb(response_data)
         status["broker_running"] = True
         status["models"] = response.get("models", {})
+        status["autostart"] = response.get("autostart", False)
+        status["autostart_models"] = response.get("autostart_models", [])
     except zmq.error.Again:
         status["error"] = (
             f"Timeout connecting to broker at {broker_path}. Is the broker running?"
