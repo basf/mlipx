@@ -71,6 +71,7 @@ class AutoStartBroker(Broker):
         self.worker_processes: dict[str, subprocess.Popen] = {}
         self.worker_timeout = worker_timeout
         self.worker_start_timeout = worker_start_timeout
+        self.models_file = models_file  # Store for passing to workers
 
     def _handle_frontend(self):
         """Handle client requests, auto-starting workers if needed."""
@@ -241,6 +242,10 @@ class AutoStartBroker(Broker):
 
             if self.backend_path != get_default_workers_path():
                 cmd.extend(["--broker", self.backend_path])
+
+        # Add models file path if specified
+        if self.models_file:
+            cmd.extend(["--models", str(self.models_file)])
 
         logger.info(f"Starting worker: {' '.join(cmd)}")
 
