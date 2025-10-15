@@ -10,6 +10,7 @@ from ase.calculators.calculator import Calculator
 
 from .protocol import (
     LIST_MODELS,
+    STATUS_DETAIL,
     get_default_broker_path,
     pack_request,
     unpack_response,
@@ -353,5 +354,61 @@ def get_broker_status(broker_path: str | None = None) -> dict:
         status["error"] = str(e)
     except Exception as e:
         status["error"] = f"Unexpected error: {e}"
+
+    return status
+
+
+def get_broker_detailed_status(broker_path: str | None = None) -> dict:
+    """Get detailed status information from the broker including worker counts.
+
+    Parameters
+    ----------
+    broker_path : str | None
+        IPC path to broker. Defaults to platform-specific path.
+
+    Returns
+    -------
+    dict
+        Status information with keys:
+        - broker_running: bool
+        - broker_path: str
+        - models: dict[str, dict] with model_name -> {worker_count: int, workers: list[str]}
+        - error: str (if any)
+    """
+    from .protocol import get_default_broker_path
+
+    broker_path = broker_path or get_default_broker_path()
+
+    status = {
+        "broker_running": False,
+        "broker_path": broker_path,
+        "models": {},
+        "error": None,
+    }
+
+    ctx = zmq.Context()
+    socket = ctx.socket(zmq.REQ)
+    socket.setsockopt(zmq.RCVTIMEO, 5000)  # 5 second timeout
+    socket.setsockopt(zmq.SNDTIMEO, 5000)
+    socket.setsockopt(zmq.LINGER, 0)
+
+    try:
+        socket.connect(broker_path)
+        socket.send_multipart([STATUS_DETAIL])
+        response_data = socket.recv()
+        response = msgpack.unpackb(response_data)
+        status["broker_running"] = True
+        status["models"] = response.get("models", {})
+    except zmq.error.Again:
+        status["error"] = (
+            f"Timeout connecting to broker at {broker_path}. Is the broker running?"
+        )
+    except zmq.error.ZMQError as e:
+        status["error"] = f"Failed to connect to broker: {e}"
+    except Exception as e:
+        status["error"] = f"Unexpected error: {e}"
+    finally:
+        socket.close()
+        ctx.term()
 
     return status

@@ -351,20 +351,21 @@ def serve_status(
 
         $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
     """
-    from mlipx.serve import get_broker_status, get_default_broker_path
     from rich.console import Console
     from rich.panel import Panel
     from rich.table import Table
 
+    from mlipx.serve import get_broker_detailed_status
+
     console = Console()
 
-    # Get status
-    status = get_broker_status(broker_path=broker)
+    # Get detailed status
+    status = get_broker_detailed_status(broker_path=broker)
 
     # Determine broker path to display
     display_broker_path = status["broker_path"]
     if broker is None:
-        display_broker_path = f"{display_broker_path} (default)"
+        display_broker_path = f"{display_broker_path} [dim](default)[/dim]"
 
     # Create status panel
     if status["broker_running"]:
@@ -376,42 +377,68 @@ def serve_status(
 
     # Broker info table
     broker_table = Table(show_header=False, box=None, padding=(0, 1))
-    broker_table.add_column("Key", style="bold")
+    broker_table.add_column("Key", style="bold cyan", width=8)
     broker_table.add_column("Value")
-    broker_table.add_row("Status:", broker_status)
-    broker_table.add_row("Path:", display_broker_path)
+    broker_table.add_row("Status", broker_status)
+    broker_table.add_row("Path", display_broker_path)
 
     if status["error"]:
-        broker_table.add_row("Error:", f"[red]{status['error']}[/red]")
+        broker_table.add_row("Error", f"[red]{status['error']}[/red]")
 
-    console.print(Panel(broker_table, title="🔌 Broker Status", border_style=panel_style))
-
-    # Models table
-    if status["broker_running"] and status["models"]:
-        models_table = Table(
-            title=f"📊 Available Models ({len(status['models'])})", show_header=False
+    console.print(
+        Panel(
+            broker_table,
+            title="🔌 Broker Status",
+            border_style=panel_style,
+            padding=(1, 2),
         )
-        models_table.add_column("Model", style="cyan")
+    )
 
-        for model in sorted(status["models"]):
-            models_table.add_row(f"  • {model}")
+    # Models panel
+    if status["broker_running"] and status["models"]:
+        total_workers = sum(
+            model_info["worker_count"] for model_info in status["models"].values()
+        )
 
-        console.print(models_table)
+        # Create bullet list of models with worker counts
+        models_list = []
+        for model_name in sorted(status["models"].keys()):
+            model_info = status["models"][model_name]
+            worker_count = model_info["worker_count"]
+            worker_text = "worker" if worker_count == 1 else "workers"
+            models_list.append(
+                f"[cyan]•[/cyan] [bold]{model_name}[/bold] [dim]({worker_count} {worker_text})[/dim]"
+            )
+
+        models_content = "\n".join(models_list)
+
+        console.print(
+            Panel(
+                models_content,
+                title=f"📊 Available Models ({len(status['models'])} models, {total_workers} workers)",
+                border_style="cyan",
+                padding=(1, 2),
+            )
+        )
     elif status["broker_running"]:
         console.print(
             Panel(
-                "[yellow]No models currently available[/yellow]\n"
-                "Start a worker with: [bold]mlipx serve <model-name>[/bold]",
+                "[yellow]No models currently available[/yellow]\n\n"
+                "Start a worker with:\n"
+                "  [bold cyan]mlipx serve <model-name>[/bold cyan]",
                 title="📊 Available Models",
                 border_style="yellow",
+                padding=(1, 2),
             )
         )
     else:
         console.print(
             Panel(
-                "[red]Cannot query models - broker is not running[/red]\n"
-                "Start the broker with: [bold]mlipx serve-broker[/bold]",
+                "[red]Cannot query models - broker is not running[/red]\n\n"
+                "Start the broker first:\n"
+                "  [bold cyan]mlipx serve-broker[/bold cyan]",
                 title="📊 Available Models",
                 border_style="red",
+                padding=(1, 2),
             )
         )

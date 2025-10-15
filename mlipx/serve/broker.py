@@ -13,6 +13,7 @@ from .protocol import (
     HEARTBEAT,
     LIST_MODELS,
     READY,
+    STATUS_DETAIL,
     get_default_broker_path,
     get_default_workers_path,
 )
@@ -204,6 +205,7 @@ class Broker:
         # Client message format:
         # [client_id, b"", model_name, request_data] - for calculation requests
         # [client_id, b"", LIST_MODELS] - for model list requests
+        # [client_id, b"", STATUS_DETAIL] - for detailed status requests
         parts = self.frontend.recv_multipart()
 
         if len(parts) < 3:
@@ -219,6 +221,20 @@ class Broker:
             response = msgpack.packb({"models": models})
             self.frontend.send_multipart([client_id, b"", response])
             logger.debug(f"Sent model list to client {client_id}: {models}")
+
+        elif message_type == STATUS_DETAIL:
+            # Return detailed status with worker counts per model
+            model_details = {}
+            for model_name, workers in self.worker_queue.items():
+                model_details[model_name] = {
+                    "worker_count": len(workers),
+                    "workers": [
+                        w.decode("utf-8", errors="replace") for w in list(workers)
+                    ],
+                }
+            response = msgpack.packb({"models": model_details})
+            self.frontend.send_multipart([client_id, b"", response])
+            logger.debug(f"Sent detailed status to client {client_id}")
 
         else:
             # Regular calculation request

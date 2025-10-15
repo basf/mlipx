@@ -29,7 +29,13 @@ Use in Python:
 """
 
 from .broker import Broker, run_broker
-from .client import ModelProxy, Models, RemoteCalculator, get_broker_status
+from .client import (
+    ModelProxy,
+    Models,
+    RemoteCalculator,
+    get_broker_detailed_status,
+    get_broker_status,
+)
 from .protocol import get_default_broker_path, get_default_workers_path
 from .worker import Worker, run_worker
 
@@ -39,6 +45,7 @@ __all__ = [
     "RemoteCalculator",
     "ModelProxy",
     "get_broker_status",
+    "get_broker_detailed_status",
     # Broker
     "Broker",
     "run_broker",

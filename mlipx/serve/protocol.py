@@ -211,3 +211,4 @@ def unpack_response(data: bytes) -> dict[str, Any]:
 READY = b"READY"
 HEARTBEAT = b"HEARTBEAT"
 LIST_MODELS = b"LIST_MODELS"
+STATUS_DETAIL = b"STATUS_DETAIL"
