@@ -247,3 +247,171 @@ def install_vscode_schema(
         "✅ VS Code schemas from mlipx have been"
         f" configured in {vscode_dir.resolve()}/settings.json"
     )
+
+
+@app.command(name="serve-broker")
+def serve_broker(
+    path: Annotated[
+        str | None,
+        typer.Option(help="IPC path for broker frontend (clients connect here)"),
+    ] = None,
+):
+    """Start the ZeroMQ broker for MLIP workers.
+
+    The broker handles load balancing and routing between clients and workers
+    using the LRU (Least Recently Used) pattern.
+
+    Examples
+    --------
+    Start broker with default path:
+
+        $ mlipx serve-broker
+
+    Start broker with custom path:
+
+        $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
+    """
+    from mlipx.serve import run_broker
+
+    typer.echo("Starting MLIP broker...")
+    if path:
+        typer.echo(f"Broker path: {path}")
+    else:
+        from mlipx.serve import get_default_broker_path
+
+        typer.echo(f"Broker path: {get_default_broker_path()}")
+
+    run_broker(frontend_path=path)
+
+
+@app.command()
+def serve(
+    model_name: Annotated[str, typer.Argument(help="Name of the model to serve")],
+    broker: Annotated[
+        str | None,
+        typer.Option(help="IPC path to broker backend"),
+    ] = None,
+    models: Annotated[
+        pathlib.Path | None,
+        typer.Option(help="Path to models.py file containing ALL_MODELS dict"),
+    ] = None,
+):
+    """Start a worker process to serve an MLIP model.
+
+    The worker connects to the broker backend and serves calculations for the
+    specified model. Multiple workers can serve the same model for load balancing.
+
+    Examples
+    --------
+    Serve a single model:
+
+        $ uv run --extra mace mlipx serve mace-mpa-0
+
+    Serve with custom broker path:
+
+        $ uv run --extra mace mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
+
+    Load model from custom models.py file:
+
+        $ uv run --extra mace mlipx serve mace-mpa-0 --models /path/to/models.py
+
+    Run multiple workers for load balancing:
+
+        $ uv run --extra mace mlipx serve mace-mpa-0 &
+        $ uv run --extra mace mlipx serve mace-mpa-0 &
+        $ uv run --extra mace mlipx serve mace-mpa-0 &
+    """
+    from mlipx.serve import run_worker
+
+    typer.echo(f"Starting worker for model '{model_name}'...")
+    if broker:
+        typer.echo(f"Broker backend: {broker}")
+    if models:
+        typer.echo(f"Loading models from: {models}")
+
+    run_worker(model_name=model_name, backend_path=broker, models_file=models)
+
+
+@app.command(name="serve-status")
+def serve_status(
+    broker: Annotated[
+        str | None,
+        typer.Option(help="IPC path to broker"),
+    ] = None,
+):
+    """Check the status of the MLIP broker and available models.
+
+    Examples
+    --------
+    Check status with default broker:
+
+        $ mlipx serve-status
+
+    Check status with custom broker path:
+
+        $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
+    """
+    from mlipx.serve import get_broker_status, get_default_broker_path
+    from rich.console import Console
+    from rich.panel import Panel
+    from rich.table import Table
+
+    console = Console()
+
+    # Get status
+    status = get_broker_status(broker_path=broker)
+
+    # Determine broker path to display
+    display_broker_path = status["broker_path"]
+    if broker is None:
+        display_broker_path = f"{display_broker_path} (default)"
+
+    # Create status panel
+    if status["broker_running"]:
+        broker_status = "[green]✓ Running[/green]"
+        panel_style = "green"
+    else:
+        broker_status = "[red]✗ Not Running[/red]"
+        panel_style = "red"
+
+    # Broker info table
+    broker_table = Table(show_header=False, box=None, padding=(0, 1))
+    broker_table.add_column("Key", style="bold")
+    broker_table.add_column("Value")
+    broker_table.add_row("Status:", broker_status)
+    broker_table.add_row("Path:", display_broker_path)
+
+    if status["error"]:
+        broker_table.add_row("Error:", f"[red]{status['error']}[/red]")
+
+    console.print(Panel(broker_table, title="🔌 Broker Status", border_style=panel_style))
+
+    # Models table
+    if status["broker_running"] and status["models"]:
+        models_table = Table(
+            title=f"📊 Available Models ({len(status['models'])})", show_header=False
+        )
+        models_table.add_column("Model", style="cyan")
+
+        for model in sorted(status["models"]):
+            models_table.add_row(f"  • {model}")
+
+        console.print(models_table)
+    elif status["broker_running"]:
+        console.print(
+            Panel(
+                "[yellow]No models currently available[/yellow]\n"
+                "Start a worker with: [bold]mlipx serve <model-name>[/bold]",
+                title="📊 Available Models",
+                border_style="yellow",
+            )
+        )
+    else:
+        console.print(
+            Panel(
+                "[red]Cannot query models - broker is not running[/red]\n"
+                "Start the broker with: [bold]mlipx serve-broker[/bold]",
+                title="📊 Available Models",
+                border_style="red",
+            )
+        )
