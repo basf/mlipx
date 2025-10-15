@@ -72,6 +72,44 @@ The :code:`SevenCalc` class, used in the example above, is defined in :code:`src
 
 For more details, refer to the :ref:`custom_nodes` section.
 
+.. _serve-integration:
+
+Serve Integration
+-----------------
+
+The dependencies of MLIPs can be incompatible, making it impossible to run multiple MLIPs in the same environment.
+To address this, ``mlipx`` can circumvent this using ``uv`` (https://docs.astral.sh/uv/) in combination with ZeroMQ (https://zeromq.org/) to automatically serve models from different environments.
+
+To make a model available for serving, you need to make it installable through an extra for ``mlipx``.
+For this, you need to configure a new extra in the ``mlipx`` ``pyproject.toml`` using ``[tool.uv]
+conflicts`` to specify dependencies that cannot be installed in the same environment.
+
+Additionally, you need to include this extra in the model definition.
+
+.. code-block:: python
+
+   import mlipx
+
+   ALL_MODELS["mace-mpa-0"] = mlipx.GenericASECalculator(
+       module="mace.calculators",
+       class_name="mace_mp",
+       device="auto",
+       extra=["mace"],  #  mlipx extras for this model
+   )
+
+**Using served models:**
+
+.. code-block:: python
+
+   # Environment variable (global control)
+   import os
+   os.environ["MLIPX_USE_SERVE"] = "true"
+
+   # Or explicit per-model control
+   calc = model.get_calculator(use_serve=True)
+
+See :ref:`serve` for details on starting brokers, managing workers, and DVC integration.
+
 .. _update-frames-calc:
 
 Updating Dataset Keys
