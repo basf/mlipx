@@ -28,6 +28,7 @@ Use in Python:
     >>> energy = atoms.get_potential_energy()
 """
 
+from .autostart_broker import AutoStartBroker, run_autostart_broker
 from .broker import Broker, run_broker
 from .client import (
     ModelProxy,
@@ -49,6 +50,8 @@ __all__ = [
     # Broker
     "Broker",
     "run_broker",
+    "AutoStartBroker",
+    "run_autostart_broker",
     # Worker
     "Worker",
     "run_worker",

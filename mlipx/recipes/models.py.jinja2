@@ -12,7 +12,8 @@ ALL_MODELS["mace-mpa-0"] = mlipx.GenericASECalculator(
     module="mace.calculators",
     class_name="mace_mp",
     device="auto",
-    kwargs={"model": "../../models/mace-mpa-0-medium.model"}
+    kwargs={"model": "../../models/mace-mpa-0-medium.model"},
+    extra=["mace"],
     # MLIPX-hub model path, adjust as needed
 )
 # https://github.com/ACEsuit/mace
@@ -185,3 +186,8 @@ MODELS = {
     "{{ model }}": ALL_MODELS["{{ model }}"],
 {%- endfor %}
 }
+
+# Auto-inject model names for serve integration
+for _model_key, _model_instance in ALL_MODELS.items():
+    if hasattr(_model_instance, 'name') and _model_instance.name is None:
+        _model_instance.name = _model_key

@@ -43,6 +43,7 @@ class Worker:
         model_name: str,
         model_node: NodeWithCalculator,
         backend_path: str | None = None,
+        timeout: int = 300,
     ):
         """Initialize the worker.
 
@@ -54,10 +55,15 @@ class Worker:
             Node that provides get_calculator() method.
         backend_path : str | None
             IPC path to connect to broker backend.
+        timeout : int
+            Idle timeout in seconds. Worker will shut down after this
+            period of inactivity. Default is 300 seconds (5 minutes).
+            Timeout resets with every calculation request.
         """
         self.model_name = model_name
         self.model_node = model_node
         self.backend_path = backend_path or get_default_workers_path()
+        self.timeout = timeout
 
         # Generate a unique worker identity with hostname and random suffix
         # to prevent collisions across machines or PID reuse
@@ -77,6 +83,9 @@ class Worker:
 
         # Heartbeat tracking
         self.last_heartbeat = 0.0
+
+        # Timeout tracking - reset on every request
+        self.last_request_time = 0.0
 
         # Signal handling for graceful shutdown
         self.running = False
@@ -130,13 +139,23 @@ class Worker:
         # Send initial READY message
         self._send_ready()
         self.last_heartbeat = time.time()
+        self.last_request_time = time.time()
         logger.info(
-            f"Worker {self.worker_id.decode('utf-8')} ready to serve model '{self.model_name}'"
+            f"Worker {self.worker_id.decode('utf-8')} ready to serve model '{self.model_name}' "
+            f"(timeout: {self.timeout}s)"
         )
 
         # Event loop
         while self.running:
             try:
+                # Check for timeout
+                if time.time() - self.last_request_time > self.timeout:
+                    logger.info(
+                        f"Worker timeout reached ({self.timeout}s idle), shutting down"
+                    )
+                    self.running = False
+                    break
+
                 # Send heartbeat if needed
                 if time.time() - self.last_heartbeat >= HEARTBEAT_INTERVAL:
                     self._send_heartbeat()
@@ -176,6 +195,9 @@ class Worker:
 
     def _handle_request(self):
         """Handle a calculation request from the broker."""
+        # Reset timeout on every request
+        self.last_request_time = time.time()
+
         # Request format: [b"", client_id, b"", model_name, request_data]
         parts = self.socket.recv_multipart()
 
@@ -275,6 +297,7 @@ def run_worker(
     model_name: str,
     backend_path: str | None = None,
     models_file: Path | None = None,
+    timeout: int = 300,
 ):
     """Run a worker process.
 
@@ -286,6 +309,9 @@ def run_worker(
         IPC path to connect to broker backend.
     models_file : Path | None
         Path to models.py file. Defaults to mlipx/recipes/models.py.jinja2.
+    timeout : int
+        Idle timeout in seconds. Worker will shut down after this
+        period of inactivity. Default is 300 seconds (5 minutes).
     """
     logging.basicConfig(
         level=logging.INFO,
@@ -310,7 +336,10 @@ def run_worker(
 
     # Start worker
     worker = Worker(
-        model_name=model_name, model_node=model_node, backend_path=backend_path
+        model_name=model_name,
+        model_node=model_node,
+        backend_path=backend_path,
+        timeout=timeout,
     )
 
     try:

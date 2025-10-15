@@ -255,6 +255,18 @@ def serve_broker(
         str | None,
         typer.Option(help="IPC path for broker frontend (clients connect here)"),
     ] = None,
+    autostart: Annotated[
+        bool,
+        typer.Option(help="Enable automatic worker startup on demand"),
+    ] = False,
+    models: Annotated[
+        pathlib.Path | None,
+        typer.Option(help="Path to models.py file (required for autostart)"),
+    ] = None,
+    worker_timeout: Annotated[
+        int,
+        typer.Option(help="Idle timeout for auto-started workers in seconds (default: 300)"),
+    ] = 300,
 ):
     """Start the ZeroMQ broker for MLIP workers.
 
@@ -263,25 +275,57 @@ def serve_broker(
 
     Examples
     --------
-    Start broker with default path:
+    Start basic broker:
 
         $ mlipx serve-broker
+
+    Start broker with autostart (spawns workers on demand):
+
+        $ mlipx serve-broker --autostart --models models.py
+
+    Workers automatically:
+    - Start when first request arrives for a model
+    - Shutdown themselves after worker_timeout seconds of inactivity
 
     Start broker with custom path:
 
         $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
     """
-    from mlipx.serve import run_broker
+    if autostart:
+        from mlipx.serve import run_autostart_broker
 
-    typer.echo("Starting MLIP broker...")
-    if path:
-        typer.echo(f"Broker path: {path}")
+        if models is None:
+            from mlipx import recipes
+
+            models = pathlib.Path(recipes.__file__).parent / "models.py.jinja2"
+
+        typer.echo("Starting MLIP broker with autostart...")
+        if path:
+            typer.echo(f"Broker path: {path}")
+        else:
+            from mlipx.serve import get_default_broker_path
+
+            typer.echo(f"Broker path: {get_default_broker_path()}")
+        typer.echo(f"Models file: {models}")
+        typer.echo(f"Worker idle timeout: {worker_timeout}s")
+
+        run_autostart_broker(
+            frontend_path=path,
+            models_file=models,
+            worker_timeout=worker_timeout,
+        )
     else:
-        from mlipx.serve import get_default_broker_path
+        from mlipx.serve import run_broker
 
-        typer.echo(f"Broker path: {get_default_broker_path()}")
+        typer.echo("Starting MLIP broker...")
+        if path:
+            typer.echo(f"Broker path: {path}")
+        else:
+            from mlipx.serve import get_default_broker_path
 
-    run_broker(frontend_path=path)
+            typer.echo(f"Broker path: {get_default_broker_path()}")
+
+        run_broker(frontend_path=path)
 
 
 @app.command()
@@ -295,41 +339,118 @@ def serve(
         pathlib.Path | None,
         typer.Option(help="Path to models.py file containing ALL_MODELS dict"),
     ] = None,
+    no_uv: Annotated[
+        bool,
+        typer.Option(help="Disable UV wrapper (already in correct environment)"),
+    ] = False,
+    timeout: Annotated[
+        int,
+        typer.Option(help="Idle timeout in seconds (default: 300)"),
+    ] = 300,
 ):
     """Start a worker process to serve an MLIP model.
 
     The worker connects to the broker backend and serves calculations for the
     specified model. Multiple workers can serve the same model for load balancing.
 
+    The worker will automatically shut down after the timeout period of inactivity.
+    The timeout resets with every incoming calculation request.
+
     Examples
     --------
-    Serve a single model:
+    Serve with auto-detected dependencies:
 
-        $ uv run --extra mace mlipx serve mace-mpa-0
+        $ uv run mlipx serve mace-mpa-0
+        # Internally becomes: uv run --extra mace mlipx serve mace-mpa-0 --no-uv
+
+    Serve with custom timeout:
+
+        $ uv run mlipx serve mace-mpa-0 --timeout 600  # 10 minutes
+
+    Disable UV wrapper (already in correct environment):
+
+        $ uv run --extra mace mlipx serve mace-mpa-0 --no-uv
 
     Serve with custom broker path:
 
-        $ uv run --extra mace mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
+        $ uv run mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
 
     Load model from custom models.py file:
 
-        $ uv run --extra mace mlipx serve mace-mpa-0 --models /path/to/models.py
+        $ uv run mlipx serve mace-mpa-0 --models /path/to/models.py
 
     Run multiple workers for load balancing:
 
-        $ uv run --extra mace mlipx serve mace-mpa-0 &
-        $ uv run --extra mace mlipx serve mace-mpa-0 &
-        $ uv run --extra mace mlipx serve mace-mpa-0 &
+        $ uv run mlipx serve mace-mpa-0 &
+        $ uv run mlipx serve mace-mpa-0 &
+        $ uv run mlipx serve mace-mpa-0 &
     """
-    from mlipx.serve import run_worker
+    import os
+    import shutil
 
+    from mlipx.serve.worker import load_models_from_file, run_worker
+
+    # Load models to inspect dependencies
+    if models is None:
+        from mlipx import recipes
+
+        models = pathlib.Path(recipes.__file__).parent / "models.py.jinja2"
+
+    all_models = load_models_from_file(models)
+
+    if model_name not in all_models:
+        typer.echo(f"Error: Model '{model_name}' not found in {models}")
+        typer.echo(f"Available: {', '.join(all_models.keys())}")
+        raise typer.Exit(1)
+
+    model = all_models[model_name]
+
+    # Check if we need to wrap with UV
+    needs_uv_wrap = (
+        hasattr(model, "extra")
+        and model.extra
+        and not no_uv
+        and not os.getenv("_MLIPX_SERVE_UV_WRAPPED")
+    )
+
+    if needs_uv_wrap:
+        # Check if uv is available
+        uv_path = shutil.which("uv")
+        if not uv_path:
+            typer.echo(
+                "Warning: Model specifies 'extra' dependencies but 'uv' is not available. "
+                "Proceeding without UV wrapper - dependencies may be missing."
+            )
+            typer.echo("Install uv with: pip install uv")
+        else:
+            # Re-execute with UV wrapper
+            cmd = ["uv", "run"]
+            for extra_dep in model.extra:
+                cmd.extend(["--extra", extra_dep])
+            cmd.extend(["mlipx", "serve", model_name, "--no-uv"])
+
+            if broker:
+                cmd.extend(["--broker", broker])
+            cmd.extend(["--timeout", str(timeout)])
+
+            # Prevent infinite recursion
+            os.environ["_MLIPX_SERVE_UV_WRAPPED"] = "1"
+
+            typer.echo(f"Starting with dependencies: {' '.join(cmd)}")
+            os.execvp("uv", cmd)  # Replace current process
+            return  # Never reached
+
+    # Normal serve execution
     typer.echo(f"Starting worker for model '{model_name}'...")
     if broker:
         typer.echo(f"Broker backend: {broker}")
     if models:
         typer.echo(f"Loading models from: {models}")
+    typer.echo(f"Worker timeout: {timeout}s")
 
-    run_worker(model_name=model_name, backend_path=broker, models_file=models)
+    run_worker(
+        model_name=model_name, backend_path=broker, models_file=models, timeout=timeout
+    )
 
 
 @app.command(name="serve-status")
