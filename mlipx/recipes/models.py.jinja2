@@ -21,7 +21,8 @@ ALL_MODELS["mace-matpes-pbe-0"] = mlipx.GenericASECalculator(
     module="mace.calculators",
     class_name="mace_mp",
     device="auto",
-    kwargs={"model": "../../models/mace-matpes-pbe-omat-ft.model"}
+    kwargs={"model": "../../models/mace-matpes-pbe-omat-ft.model"},
+    extra=["mace"],
     # MLIPX-hub model path, adjust as needed
 )
 # https://github.com/MDIL-SNU/SevenNet
@@ -29,13 +30,15 @@ ALL_MODELS["7net-0"] = mlipx.GenericASECalculator(
     module="sevenn.sevennet_calculator",
     class_name="SevenNetCalculator",
     device="auto",
-    kwargs={"model": "7net-0"}
+    kwargs={"model": "7net-0"},
+    extra=["sevenn"],
 )
 ALL_MODELS["7net-mf-ompa-mpa"] = mlipx.GenericASECalculator(
     module="sevenn.sevennet_calculator",
     class_name="SevenNetCalculator",
     device="auto",
-    kwargs={"model": "7net-mf-ompa", "modal": "mpa"}
+    kwargs={"model": "7net-mf-ompa", "modal": "mpa"},
+    extra=["sevenn"],
 )
 
 # https://github.com/orbital-materials/orb-models
@@ -44,6 +47,8 @@ class OrbCalc(NodeWithCalculator):
     name: str
     device: Device | None = None
     kwargs: dict = dataclasses.field(default_factory=dict)
+    model_name: str | None = None  # For serve integration (auto-injected)
+    extra: list[str] | None = None
 
     def get_calculator(self, **kwargs):
         from orb_models.forcefield import pretrained
@@ -72,23 +77,27 @@ class OrbCalc(NodeWithCalculator):
 
 ALL_MODELS["orb-v2"] = OrbCalc(
     name="orb_v2",
-    device="auto"
+    device="auto",
+    extra=["orb"],
 )
 ALL_MODELS["orb-v3"] = OrbCalc(
     name="orb_v3_conservative_inf_omat",
-    device="auto"
+    device="auto",
+    extra=["orb"],
 )
 
 # https://github.com/CederGroupHub/chgnet
 ALL_MODELS["chgnet"] = mlipx.GenericASECalculator(
     module="chgnet.model",
     class_name="CHGNetCalculator",
+    extra=["chgnet"],
 )
 # https://github.com/microsoft/mattersim
 ALL_MODELS["mattersim"] = mlipx.GenericASECalculator(
     module="mattersim.forcefield",
     class_name="MatterSimCalculator",
     device="auto",
+    extra=["mattersim"],
 )
 # https://www.faccts.de/orca/
 ALL_MODELS["orca"] = mlipx.OrcaSinglePoint(
@@ -105,12 +114,15 @@ ALL_MODELS["grace-2l-omat"] = mlipx.GenericASECalculator(
     kwargs={
         "model": "../../models/GRACE-2L-OMAT",
     },
+    extra=["grace"],
     # MLIPX-hub model path, adjust as needed
 )
 
 @dataclasses.dataclass
 class MatglModel(NodeWithCalculator):
     path: str
+    name: str | None = None  # For serve integration (auto-injected)
+    extra: list[str] | None = None
 
     def get_calculator(self, **kwargs) -> Calculator:
         import matgl
@@ -129,7 +141,8 @@ class MatglModel(NodeWithCalculator):
             return False
 
 ALL_MODELS["matpes-pbe"] = MatglModel(
-    path="../../models/TensorNet-MatPES-PBE-v2025.1-PES"
+    path="../../models/TensorNet-MatPES-PBE-v2025.1-PES",
+    extra=["matpes"],
     # MLIPX-hub model path, adjust as needed
 )
 
@@ -138,6 +151,8 @@ class FairchemModel(NodeWithCalculator):
     path: str
     task_name: str = "oc20"
     device: str = "auto"
+    name: str | None = None  # For serve integration (auto-injected)
+    extra: list[str] | None = None
 
     def get_calculator(self, **kwargs) -> Calculator:
         from fairchem.core import pretrained_mlip, FAIRChemCalculator
@@ -157,7 +172,8 @@ class FairchemModel(NodeWithCalculator):
 
 ALL_MODELS["meta-uma-sm"] = FairchemModel(
     path="../../models/meta-uam.pt",
-    task_name="oc20"
+    task_name="oc20",
+    extra=["fairchem"],
     # MLIPX-hub model path, adjust as needed
 )
 
@@ -165,6 +181,7 @@ ALL_MODELS["pet-mad"] = mlipx.GenericASECalculator(
     module="pet_mad.calculator",
     class_name="PETMADCalculator",
     kwargs={"checkpoint_path": "../../models/pet-mad-latest.ckpt"},
+    extra=["pet-mad"],
     # MLIPX-hub model path, adjust as needed
 )
 # OPTIONAL
