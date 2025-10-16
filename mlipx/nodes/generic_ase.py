@@ -1,5 +1,7 @@
 import dataclasses
 import importlib
+import logging
+import os
 import typing as t
 from pathlib import Path
 
@@ -8,6 +10,8 @@ from ase.calculators.calculator import Calculator
 
 from mlipx.abc import NodeWithCalculator
 from mlipx.spec import MLIPSpec
+
+logger = logging.getLogger(__name__)
 
 
 class Device:
@@ -47,6 +51,12 @@ class GenericASECalculator(NodeWithCalculator):
         Can be 'auto', 'cpu', or 'cuda'.
         Utilizes the pytorch Device class to resolve
         the device automatically.
+    name : str, default=None
+        Model name (auto-injected in models.py.jinja2).
+        Used for serve integration.
+    extra : list[str], default=None
+        UV extras from mlipx (e.g., ["mace", "sevenn"]).
+        Used for automatic dependency handling in serve.
 
     """
 
@@ -55,8 +65,52 @@ class GenericASECalculator(NodeWithCalculator):
     kwargs: dict[str, t.Any] | None = None
     device: t.Literal["auto", "cpu", "cuda"] | None = None
     spec: str | None = None
+    name: str | None = None
+    extra: list[str] | None = None
 
-    def get_calculator(self, **kwargs) -> Calculator:
+    def get_calculator(self, use_serve: bool | None = None, **kwargs) -> Calculator:
+        """Get calculator instance, optionally using remote serve.
+
+        Parameters
+        ----------
+        use_serve : bool | None
+            If True, try to use remote served model first.
+            If None, check MLIPX_USE_SERVE environment variable (default: false).
+        **kwargs
+            Additional arguments for calculator initialization.
+
+        Returns
+        -------
+        Calculator
+            ASE calculator instance (remote or local).
+        """
+        # Determine if we should try remote serve
+        if use_serve is None:
+            use_serve = os.getenv("MLIPX_USE_SERVE", "false").lower() == "true"
+
+        # Try remote first if enabled
+        if use_serve and self.name:
+            try:
+                from mlipx.serve import Models
+
+                models = Models()
+                if self.name in models:
+                    logger.info(f"✓ Using remote calculator: {self.name}")
+                    return models[self.name].get_calculator(**kwargs)
+                else:
+                    logger.debug(
+                        f"Model {self.name} not available via serve, using local"
+                    )
+            except Exception as e:
+                logger.debug(
+                    f"Serve unavailable ({e}), falling back to local calculator"
+                )
+
+        # Fallback: original local calculator implementation
+        return self._get_local_calculator(**kwargs)
+
+    def _get_local_calculator(self, **kwargs) -> Calculator:
+        """Get local calculator instance (original implementation)."""
         if self.kwargs is not None:
             kwargs.update(self.kwargs)
         module = importlib.import_module(self.module)

@@ -26,6 +26,8 @@ dependencies = [
     "dvc-s3>=3.2.0",
     "mpcontribs-client>=5.10.2",
     "pydantic>=2.10.6",
+    "pyzmq>=26.4.0",
+    "msgpack>=1.1.0",
 ]
 
 [dependency-groups]
