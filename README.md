@@ -8,7 +8,7 @@
 [![ZnDraw](https://img.shields.io/badge/works_with-ZnDraw-orange)](https://github.com/zincware/zndraw)
 [![open issues](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/basf/mlipx/issues)
 [![Documentation Status](https://readthedocs.org/projects/mlipx/badge/?version=latest)](https://mlipx.readthedocs.io/en/latest/?badge=latest)
-[![DOI](https://img.shields.io/badge/chemrxiv-2025.0v720-red)](https://doi.org/10.26434/chemrxiv-2025-0v720)
+[![DOI](https://img.shields.io/badge/J.Phys.-Condens.Matter-red)](http://doi.org/10.1088/1361-648X/ae0111)
 
 [📘Documentation](https://mlipx.readthedocs.io) |
 [🛠️Installation](https://mlipx.readthedocs.io/en/latest/installation.html) |
