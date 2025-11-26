@@ -52,7 +52,17 @@ The simplest way to use serve is with the autostart broker, which automatically 
 
    $ mlipx serve-broker --autostart
 
+This will automatically discover your ``models.py`` file (see :ref:`model-discovery` below) and start workers as needed.
+
 Workers will be started automatically when the first calculation request arrives for a model, and will shutdown after 5 minutes of inactivity (configurable with ``--worker-timeout``).
+
+**Serve only specific models**:
+
+.. code-block:: console
+
+   $ mlipx serve-broker --autostart mace-mpa-0 orb-v2
+
+This limits the broker to only serve the specified models, even if more are defined in ``models.py``.
 
 Using Served Models
 ~~~~~~~~~~~~~~~~~~~
@@ -207,6 +217,69 @@ The client provides a transparent interface for using served models. It's integr
    # Check if specific model is available
    if "mace-mpa-0" in models:
        calc = models["mace-mpa-0"].get_calculator()
+
+.. _model-discovery:
+
+Model Discovery
+---------------
+
+When you run ``mlipx serve-broker --autostart`` or ``mlipx serve``, mlipx automatically searches for a ``models.py`` file. This makes it easy to use project-specific model configurations without explicit ``--models`` flags.
+
+Discovery Order
+~~~~~~~~~~~~~~~
+
+The discovery follows this priority (highest to lowest):
+
+1. **--models flag**: Explicit path always wins
+2. **MLIPX_MODELS environment variable**: For CI/shared configurations
+3. **Upward search for models.py**: Searches from current directory up to root
+4. **Built-in package default**: Falls back to ``mlipx/recipes/models.py.jinja2``
+
+Upward Search
+~~~~~~~~~~~~~
+
+The upward search (like git finding ``.git``) is particularly useful for project layouts:
+
+.. code-block:: text
+
+   /my-project/
+   ├── models.py              ← Found! (contains ALL_MODELS)
+   ├── pyproject.toml
+   └── recipes/
+       └── md/
+           └── .dvc/          ← cwd when running dvc repro
+
+Running ``mlipx serve-broker --autostart`` from ``/my-project/recipes/md/`` will find ``/my-project/models.py``.
+
+.. note::
+
+   Only ``models.py`` files containing ``ALL_MODELS`` are recognized as valid mlipx model files.
+   This prevents false positives from unrelated ``models.py`` files.
+
+Using MLIPX_MODELS Environment Variable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For CI/CD or shared configurations:
+
+.. code-block:: console
+
+   $ export MLIPX_MODELS=/shared/team-models.py
+   $ mlipx serve-broker --autostart
+
+Typical Workflow
+~~~~~~~~~~~~~~~~
+
+1. Run ``mlipx recipes`` to generate ``models.py`` in your project root
+2. Run ``mlipx serve-broker --autostart`` from anywhere in the project
+3. The broker automatically finds your ``models.py``
+
+.. code-block:: console
+
+   $ cd /my-project
+   $ mlipx recipes ev --models mace-mpa-0,orb-v2 --material-ids mp-1143
+   $ mlipx serve-broker --autostart
+   Models file: /my-project/models.py (discovered at /my-project)
+   ...
 
 Model Configuration
 -------------------

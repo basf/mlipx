@@ -38,6 +38,7 @@ class AutoStartBroker(Broker):
         models_file: Path | None = None,
         worker_timeout: int = 300,
         worker_start_timeout: int = 30,
+        allowed_models: list[str] | None = None,
     ):
         """Initialize the autostart broker.
 
@@ -55,6 +56,10 @@ class AutoStartBroker(Broker):
         worker_start_timeout : int
             Maximum time in seconds to wait for a worker to start and register.
             Default is 30 seconds.
+        allowed_models : list[str] | None
+            Optional list of model names to serve. If None, all models from
+            the registry are available. If specified, only these models can
+            be auto-started.
         """
         super().__init__(frontend_path, backend_path)
 
@@ -65,8 +70,23 @@ class AutoStartBroker(Broker):
             models_file = Path(recipes.__file__).parent / "models.py.jinja2"
 
         logger.info(f"Loading models from {models_file}")
-        self.models_registry = load_models_from_file(models_file)
-        logger.info(f"Loaded {len(self.models_registry)} models from registry")
+        all_models = load_models_from_file(models_file)
+
+        # Filter models if allowed_models specified
+        if allowed_models:
+            # Validate that all requested models exist
+            missing = set(allowed_models) - set(all_models.keys())
+            if missing:
+                available = ", ".join(sorted(all_models.keys()))
+                raise ValueError(
+                    f"Models not found in registry: {', '.join(sorted(missing))}. "
+                    f"Available models: {available}"
+                )
+            self.models_registry = {k: all_models[k] for k in allowed_models}
+            logger.info(f"Serving {len(self.models_registry)} models: {allowed_models}")
+        else:
+            self.models_registry = all_models
+            logger.info(f"Serving all {len(self.models_registry)} models from registry")
 
         # Track worker processes to avoid duplicate starts
         self.worker_processes: dict[str, subprocess.Popen] = {}
@@ -418,6 +438,7 @@ def run_autostart_broker(
     models_file: Path | None = None,
     worker_timeout: int = 300,
     worker_start_timeout: int = 30,
+    allowed_models: list[str] | None = None,
 ):
     """Run the autostart broker process.
 
@@ -433,6 +454,8 @@ def run_autostart_broker(
         Idle timeout in seconds for auto-started workers.
     worker_start_timeout : int
         Maximum time in seconds to wait for a worker to start and register.
+    allowed_models : list[str] | None
+        Optional list of model names to serve. If None, all models are available.
     """
     logging.basicConfig(
         level=logging.INFO,
@@ -445,6 +468,7 @@ def run_autostart_broker(
         models_file=models_file,
         worker_timeout=worker_timeout,
         worker_start_timeout=worker_start_timeout,
+        allowed_models=allowed_models,
     )
     try:
         broker.start()

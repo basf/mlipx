@@ -251,6 +251,12 @@ def install_vscode_schema(
 
 @app.command(name="serve-broker")
 def serve_broker(
+    model_names: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help="Model names to serve (optional, defaults to all models in models.py)"
+        ),
+    ] = None,
     path: Annotated[
         str | None,
         typer.Option(help="IPC path for broker frontend (clients connect here)"),
@@ -261,7 +267,10 @@ def serve_broker(
     ] = False,
     models: Annotated[
         pathlib.Path | None,
-        typer.Option(help="Path to models.py file (required for autostart)"),
+        typer.Option(
+            help="Path to models.py file. If not specified, searches upward from "
+            "current directory for models.py, or uses built-in defaults."
+        ),
     ] = None,
     worker_timeout: Annotated[
         int,
@@ -281,31 +290,41 @@ def serve_broker(
     The broker handles load balancing and routing between clients and workers
     using the LRU (Least Recently Used) pattern.
 
+    Model Discovery:
+    ----------------
+    If --models is not specified, mlipx searches for models.py:
+    1. MLIPX_MODELS environment variable
+    2. models.py in current or parent directories (must contain ALL_MODELS)
+    3. Built-in package defaults
+
     Examples
     --------
-    Start basic broker:
-
-        $ mlipx serve-broker
-
     Start broker with autostart (spawns workers on demand):
 
-        $ mlipx serve-broker --autostart --models models.py
+        $ mlipx serve-broker --autostart
 
-    Workers automatically:
-    - Start when first request arrives for a model
-    - Shutdown themselves after worker_timeout seconds of inactivity
+    Serve only specific models:
+
+        $ mlipx serve-broker --autostart mace-mpa-0 orb-v2
+
+    Use explicit models file:
+
+        $ mlipx serve-broker --autostart --models /path/to/models.py
+
+    Start basic broker (no autostart):
+
+        $ mlipx serve-broker
 
     Start broker with custom path:
 
         $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
     """
     if autostart:
-        from mlipx.serve import run_autostart_broker
+        from mlipx.serve import discover_models_file, run_autostart_broker
 
-        if models is None:
-            from mlipx import recipes
-
-            models = pathlib.Path(recipes.__file__).parent / "models.py.jinja2"
+        # Discover models file
+        models_path, source = discover_models_file(models)
+        typer.echo(f"Models file: {models_path} ({source})")
 
         typer.echo("Starting MLIP broker with autostart...")
         if path:
@@ -314,15 +333,17 @@ def serve_broker(
             from mlipx.serve import get_default_broker_path
 
             typer.echo(f"Broker path: {get_default_broker_path()}")
-        typer.echo(f"Models file: {models}")
         typer.echo(f"Worker idle timeout: {worker_timeout}s")
         typer.echo(f"Worker startup timeout: {worker_start_timeout}s")
+        if model_names:
+            typer.echo(f"Serving models: {', '.join(model_names)}")
 
         run_autostart_broker(
             frontend_path=path,
-            models_file=models,
+            models_file=models_path,
             worker_timeout=worker_timeout,
             worker_start_timeout=worker_start_timeout,
+            allowed_models=model_names,
         )
     else:
         from mlipx.serve import run_broker
@@ -347,7 +368,10 @@ def serve(
     ] = None,
     models: Annotated[
         pathlib.Path | None,
-        typer.Option(help="Path to models.py file containing ALL_MODELS dict"),
+        typer.Option(
+            help="Path to models.py file. If not specified, searches upward from "
+            "current directory for models.py, or uses built-in defaults."
+        ),
     ] = None,
     no_uv: Annotated[
         bool,
@@ -365,6 +389,13 @@ def serve(
 
     The worker will automatically shut down after the timeout period of inactivity.
     The timeout resets with every incoming calculation request.
+
+    Model Discovery:
+    ----------------
+    If --models is not specified, mlipx searches for models.py:
+    1. MLIPX_MODELS environment variable
+    2. models.py in current or parent directories (must contain ALL_MODELS)
+    3. Built-in package defaults
 
     Examples
     --------
@@ -398,21 +429,21 @@ def serve(
     import os
     import shutil
 
+    from mlipx.serve import discover_models_file
     from mlipx.serve.worker import load_models_from_file, run_worker
 
-    # Load models to inspect dependencies
-    if models is None:
-        from mlipx import recipes
+    # Discover models file
+    models_path, source = discover_models_file(models)
 
-        models = pathlib.Path(recipes.__file__).parent / "models.py.jinja2"
-
-    all_models = load_models_from_file(models)
+    all_models = load_models_from_file(models_path)
 
     if model_name not in all_models:
         from rich.console import Console
 
         console = Console(stderr=True)
-        console.print(f"[red]Error:[/red] Model '{model_name}' not found in {models}")
+        console.print(
+            f"[red]Error:[/red] Model '{model_name}' not found in {models_path}"
+        )
         available = ", ".join(sorted(all_models.keys()))
         console.print(f"[dim]Available models:[/dim] {available}")
         raise typer.Exit(1)
@@ -449,6 +480,8 @@ def serve(
             if broker:
                 cmd.extend(["--broker", broker])
             cmd.extend(["--timeout", str(timeout)])
+            # Pass the discovered models file to the wrapped process
+            cmd.extend(["--models", str(models_path)])
 
             # Prevent infinite recursion
             os.environ["_MLIPX_SERVE_UV_WRAPPED"] = "1"
@@ -470,14 +503,16 @@ def serve(
 
     # Normal serve execution
     typer.echo(f"Starting worker for model '{model_name}'...")
+    typer.echo(f"Models file: {models_path} ({source})")
     if broker:
         typer.echo(f"Broker backend: {broker}")
-    if models:
-        typer.echo(f"Loading models from: {models}")
     typer.echo(f"Worker timeout: {timeout}s")
 
     run_worker(
-        model_name=model_name, backend_path=broker, models_file=models, timeout=timeout
+        model_name=model_name,
+        backend_path=broker,
+        models_file=models_path,
+        timeout=timeout,
     )
 
 

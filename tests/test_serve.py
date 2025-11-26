@@ -260,3 +260,204 @@ class TestGenericASECalculatorServeIntegration:
         )
 
         assert calc.serve_name is None
+
+
+class TestDiscoverModelsFile:
+    """Test the discover_models_file function."""
+
+    def test_explicit_path_exists(self, tmp_path):
+        """Test discovery with explicit path that exists."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Create a valid models file
+        models_file = tmp_path / "custom_models.py"
+        models_file.write_text("ALL_MODELS = {}")
+
+        path, source = discover_models_file(explicit_path=models_file)
+
+        assert path == models_file
+        assert source == "explicit --models flag"
+
+    def test_explicit_path_not_exists(self, tmp_path):
+        """Test discovery with explicit path that doesn't exist."""
+        from mlipx.serve.discovery import discover_models_file
+
+        nonexistent = tmp_path / "nonexistent.py"
+
+        with pytest.raises(FileNotFoundError, match="Models file not found"):
+            discover_models_file(explicit_path=nonexistent)
+
+    def test_env_var_override(self, tmp_path, monkeypatch):
+        """Test discovery via MLIPX_MODELS environment variable."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Create a models file
+        models_file = tmp_path / "env_models.py"
+        models_file.write_text("ALL_MODELS = {'test': None}")
+
+        monkeypatch.setenv("MLIPX_MODELS", str(models_file))
+
+        path, source = discover_models_file()
+
+        assert path == models_file
+        assert source == "MLIPX_MODELS environment variable"
+
+    def test_env_var_not_exists(self, tmp_path, monkeypatch):
+        """Test discovery with MLIPX_MODELS pointing to nonexistent file."""
+        from mlipx.serve.discovery import discover_models_file
+
+        monkeypatch.setenv("MLIPX_MODELS", str(tmp_path / "nonexistent.py"))
+
+        with pytest.raises(FileNotFoundError, match="MLIPX_MODELS"):
+            discover_models_file()
+
+    def test_upward_search_finds_models_py(self, tmp_path):
+        """Test discovery searches upward for models.py."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Create directory structure: tmp_path/models.py, tmp_path/sub/sub2/
+        models_file = tmp_path / "models.py"
+        models_file.write_text("ALL_MODELS = {'found': True}")
+
+        subdir = tmp_path / "sub" / "sub2"
+        subdir.mkdir(parents=True)
+
+        # Search from subdir should find models.py in parent
+        path, source = discover_models_file(start_dir=subdir)
+
+        assert path == models_file
+        assert "discovered" in source
+
+    def test_upward_search_ignores_non_mlipx_models(self, tmp_path):
+        """Test that models.py without ALL_MODELS is ignored."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Create a models.py without ALL_MODELS (e.g., Django models)
+        models_file = tmp_path / "models.py"
+        models_file.write_text("class User:\n    pass")
+
+        # Should fall back to built-in default
+        path, source = discover_models_file(start_dir=tmp_path)
+
+        assert "models.py.jinja2" in str(path)
+        assert source == "built-in package default"
+
+    def test_fallback_to_builtin(self, tmp_path):
+        """Test fallback to built-in default when nothing found."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Empty directory, no models.py
+        path, source = discover_models_file(start_dir=tmp_path)
+
+        assert "models.py.jinja2" in str(path)
+        assert source == "built-in package default"
+
+    def test_explicit_path_takes_precedence(self, tmp_path, monkeypatch):
+        """Test that explicit path takes precedence over env var."""
+        from mlipx.serve.discovery import discover_models_file
+
+        # Create two models files
+        explicit_file = tmp_path / "explicit.py"
+        explicit_file.write_text("ALL_MODELS = {'explicit': True}")
+
+        env_file = tmp_path / "env.py"
+        env_file.write_text("ALL_MODELS = {'env': True}")
+
+        monkeypatch.setenv("MLIPX_MODELS", str(env_file))
+
+        # Explicit should win
+        path, source = discover_models_file(explicit_path=explicit_file)
+
+        assert path == explicit_file
+        assert source == "explicit --models flag"
+
+
+class TestAutoStartBrokerModelFiltering:
+    """Test AutoStartBroker model filtering functionality."""
+
+    def test_allowed_models_filters_registry(self, tmp_path):
+        """Test that allowed_models filters the registry."""
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        # Create a models file with multiple models
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+ALL_MODELS = {
+    'model-a': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+    'model-b': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+    'model-c': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+}
+""")
+
+        # Create broker with only model-a and model-b allowed
+        broker = AutoStartBroker(
+            frontend_path=f"ipc://{tmp_path}/broker.ipc",
+            models_file=models_file,
+            allowed_models=["model-a", "model-b"],
+        )
+
+        assert "model-a" in broker.models_registry
+        assert "model-b" in broker.models_registry
+        assert "model-c" not in broker.models_registry
+        assert len(broker.models_registry) == 2
+
+        # Clean up
+        broker._release_lock()
+
+    def test_allowed_models_validates_existence(self, tmp_path):
+        """Test that allowed_models validates model names exist."""
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+ALL_MODELS = {
+    'model-a': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+}
+""")
+
+        with pytest.raises(ValueError, match="Models not found in registry"):
+            AutoStartBroker(
+                frontend_path=f"ipc://{tmp_path}/broker.ipc",
+                models_file=models_file,
+                allowed_models=["model-a", "nonexistent"],
+            )
+
+    def test_no_allowed_models_serves_all(self, tmp_path):
+        """Test that None allowed_models serves all models."""
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+ALL_MODELS = {
+    'model-a': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+    'model-b': GenericASECalculator(
+        module='ase.calculators.lj', class_name='LennardJones'
+    ),
+}
+""")
+
+        broker = AutoStartBroker(
+            frontend_path=f"ipc://{tmp_path}/broker.ipc",
+            models_file=models_file,
+            allowed_models=None,
+        )
+
+        assert len(broker.models_registry) == 2
+        assert "model-a" in broker.models_registry
+        assert "model-b" in broker.models_registry
+
+        # Clean up
+        broker._release_lock()

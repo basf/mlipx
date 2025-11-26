@@ -52,6 +52,7 @@ from .client import (
     get_broker_detailed_status,
     get_broker_status,
 )
+from .discovery import discover_models_file
 from .protocol import get_default_broker_path, get_default_workers_path
 from .worker import Worker, run_worker
 
@@ -73,4 +74,5 @@ __all__ = [
     # Utilities
     "get_default_broker_path",
     "get_default_workers_path",
+    "discover_models_file",
 ]
