@@ -21,6 +21,84 @@ from mlipx import benchmark, recipes
 from mlipx.spec import MLIPS, Datasets
 
 app = typer.Typer()
+
+
+def _get_local_pyproject_extras() -> set[str]:
+    """Get optional-dependencies (extras) from local pyproject.toml if it exists.
+
+    Returns
+    -------
+    set[str]
+        Set of extra names defined in the local pyproject.toml,
+        or empty set if not found.
+    """
+    pyproject_path = pathlib.Path("pyproject.toml")
+    if not pyproject_path.exists():
+        return set()
+
+    try:
+        import tomllib
+    except ImportError:
+        # Python < 3.11
+        try:
+            import tomli as tomllib
+        except ImportError:
+            return set()
+
+    try:
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+        optional_deps = data.get("project", {}).get("optional-dependencies", {})
+        return set(optional_deps.keys())
+    except Exception:
+        return set()
+
+
+def _get_mlipx_package_spec(extras: list[str]) -> str:
+    """Build a package spec for uvx based on mlipx version.
+
+    For release versions (e.g., "0.1.6"), uses PyPI with pinned version.
+    For dev versions, uses the "Source Commit" URL from package metadata.
+
+    Parameters
+    ----------
+    extras : list[str]
+        List of extras to include (e.g., ["mace", "serve"]).
+
+    Returns
+    -------
+    str
+        Package specification for uvx --from.
+    """
+    import mlipx
+
+    mlipx_version = mlipx.__version__
+    extras_str = ",".join(extras)
+
+    if mlipx_version and ("+" in mlipx_version or ".dev" in mlipx_version):
+        # Dev version - get commit URL from package metadata
+        metadata = importlib.metadata.metadata("mlipx")
+        # Look for "Source Commit" URL which contains the commit hash
+        for key, value in metadata.items():
+            if key == "Project-URL" and value.startswith("Source Commit,"):
+                # Format: "Source Commit, https://github.com/basf/mlipx/tree/abc123"
+                url = value.split(", ", 1)[1]
+                # Extract commit hash from URL
+                commit_hash = url.rstrip("/").split("/")[-1]
+                return (
+                    f"mlipx[{extras_str}] @ "
+                    f"git+https://github.com/basf/mlipx@{commit_hash}"
+                )
+        # No Source Commit URL found, use latest from PyPI
+        return f"mlipx[{extras_str}]"
+    elif mlipx_version:
+        # Release version, use PyPI with pinned version
+        return f"mlipx[{extras_str}]=={mlipx_version}"
+    else:
+        # No version available, use latest from PyPI
+        return f"mlipx[{extras_str}]"
+
+
 app.add_typer(recipes.app, name="recipes")
 app.add_typer(benchmark.app, name="benchmark")
 
@@ -471,11 +549,28 @@ def serve(
             )
             console.print("[dim]Install uv with: pip install uv[/dim]")
         else:
-            # Re-execute with UV wrapper
-            cmd = ["uv", "run"]
-            for extra_dep in model.extra:
-                cmd.extend(["--extra", extra_dep])
-            cmd.extend(["mlipx", "serve", model_name, "--no-uv"])
+            # Smart detection: check if extras exist in local pyproject.toml
+            local_extras = _get_local_pyproject_extras()
+            required_extras = set(model.extra)
+
+            if required_extras.issubset(local_extras):
+                # Use uv run --extra (extras available in local project)
+                cmd = ["uv", "run"]
+                for extra_dep in model.extra:
+                    cmd.extend(["--extra", extra_dep])
+                cmd.extend(["mlipx", "serve", model_name, "--no-uv"])
+            else:
+                # Use uvx --from mlipx[extras,serve] (extras from mlipx package)
+                pkg_spec = _get_mlipx_package_spec(list(model.extra) + ["serve"])
+                cmd = [
+                    "uvx",
+                    "--from",
+                    pkg_spec,
+                    "mlipx",
+                    "serve",
+                    model_name,
+                    "--no-uv",
+                ]
 
             if broker:
                 cmd.extend(["--broker", broker])
@@ -498,7 +593,7 @@ def serve(
                 # Non-TTY mode, simple message to stderr
                 print(f"Starting with dependencies: {' '.join(cmd)}", file=sys.stderr)
 
-            os.execvp("uv", cmd)  # Replace current process
+            os.execvp(cmd[0], cmd)  # Replace current process
             return  # Never reached
 
     # Normal serve execution
@@ -522,6 +617,13 @@ def serve_status(  # noqa: C901
         str | None,
         typer.Option(help="IPC path to broker"),
     ] = None,
+    shutdown: Annotated[
+        bool,
+        typer.Option(
+            "--shutdown",
+            help="Shutdown the broker and all workers gracefully",
+        ),
+    ] = False,
 ):
     """Check the status of the MLIP broker and available models.
 
@@ -534,14 +636,30 @@ def serve_status(  # noqa: C901
     Check status with custom broker path:
 
         $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
+
+    Shutdown the broker and all workers:
+
+        $ mlipx serve-status --shutdown
     """
     from rich.console import Console
     from rich.panel import Panel
     from rich.table import Table
 
-    from mlipx.serve import get_broker_detailed_status
+    from mlipx.serve import get_broker_detailed_status, shutdown_broker
 
     console = Console()
+
+    # Handle shutdown first
+    if shutdown:
+        result = shutdown_broker(broker_path=broker)
+        if result["success"]:
+            console.print("[green]✓ Broker shutdown initiated[/green]")
+            console.print(f"[dim]{result['message']}[/dim]")
+        elif result["error"]:
+            console.print(f"[red]✗ Shutdown failed:[/red] {result['error']}")
+        else:
+            console.print("[red]✗ Shutdown failed[/red]")
+        return
 
     # Get detailed status
     status = get_broker_detailed_status(broker_path=broker)

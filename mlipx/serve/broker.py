@@ -15,6 +15,7 @@ from .protocol import (
     HEARTBEAT,
     LIST_MODELS,
     READY,
+    SHUTDOWN,
     STATUS_DETAIL,
     get_default_broker_path,
     get_default_workers_path,
@@ -294,6 +295,13 @@ class Broker:
             )
             self.frontend.send_multipart([client_id, b"", response])
             logger.debug(f"Sent detailed status to client {client_id}")
+
+        elif message_type == SHUTDOWN:
+            # Shutdown the broker gracefully
+            logger.info(f"Received shutdown request from client {client_id}")
+            response = msgpack.packb({"success": True, "message": "Shutting down"})
+            self.frontend.send_multipart([client_id, b"", response])
+            self.running = False
 
         else:
             # Regular calculation request

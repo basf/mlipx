@@ -38,7 +38,7 @@ Key Features
 - **Transparent Integration**: Existing code works without modification via environment variables
 - **Cross-platform Locking**: Prevents duplicate broker instances on shared systems
 - **User Isolation**: Socket paths are user-specific to prevent conflicts on shared systems
-- **Worker Logging**: Auto-started worker stderr is captured to log files for debugging
+- **Smart Dependency Resolution**: Automatically detects whether to use local project extras or install from mlipx package
 
 Quick Start
 -----------
@@ -50,7 +50,7 @@ The simplest way to use serve is with the autostart broker, which automatically 
 
 .. code-block:: console
 
-   $ mlipx serve-broker --autostart
+   (.venv) $ mlipx serve-broker --autostart
 
 This will automatically discover your ``models.py`` file (see :ref:`model-discovery` below) and start workers as needed.
 
@@ -60,7 +60,7 @@ Workers will be started automatically when the first calculation request arrives
 
 .. code-block:: console
 
-   $ mlipx serve-broker --autostart mace-mpa-0 orb-v2
+   (.venv) $ mlipx serve-broker --autostart mace-mpa-0 orb-v2
 
 This limits the broker to only serve the specified models, even if more are defined in ``models.py``.
 
@@ -71,8 +71,8 @@ Enable serve globally via environment variable:
 
 .. code-block:: console
 
-   $ export MLIPX_USE_SERVE=true
-   $ # Now all mlipx calculations will use served models if available
+   (.venv) $ export MLIPX_USE_SERVE=true
+   (.venv) $ # Now all mlipx calculations will use served models if available
 
 Or control it programmatically:
 
@@ -101,7 +101,16 @@ Check which models are available and how many workers are running:
 
 .. code-block:: console
 
-   $ mlipx serve-status
+   (.venv) $ mlipx serve-status
+
+Shutting Down
+~~~~~~~~~~~~~
+
+Gracefully stop the broker and all workers:
+
+.. code-block:: console
+
+   (.venv) $ mlipx serve-status --shutdown
 
 
 Architecture
@@ -116,13 +125,13 @@ The broker acts as a load balancer, routing calculation requests from clients to
 
 .. code-block:: console
 
-   $ mlipx serve-broker
+   (.venv) $ mlipx serve-broker
 
 **Starting with autostart** (recommended):
 
 .. code-block:: console
 
-   $ mlipx serve-broker --autostart --worker-timeout 600
+   (.venv) $ mlipx serve-broker --autostart --worker-timeout 600
 
 Options:
 
@@ -146,13 +155,14 @@ Workers are processes that load a specific MLIP model and serve calculations. Ea
 
 .. code-block:: console
 
-   $ uv run mlipx serve mace-mpa-0
+   (.venv) $ uv run mlipx serve mace-mpa-0
 
-The command automatically detects that ``mace-mpa-0`` requires the ``mace`` extra and internally becomes:
+The command automatically detects that ``mace-mpa-0`` requires the ``mace`` extra and uses smart dependency resolution:
 
-.. code-block:: console
+1. **Local project has the extra**: If your ``pyproject.toml`` defines the ``mace`` extra, it uses ``uv run --extra mace``
+2. **Extra not in local project**: Uses ``uvx --from mlipx[mace,serve]`` to install from the mlipx package
 
-   $ uv run --extra mace mlipx serve mace-mpa-0 --no-uv
+For development installs (non-release versions), mlipx automatically uses the exact git commit via ``git+https://github.com/basf/mlipx@<commit>`` to ensure consistency
 
 Options:
 
@@ -263,8 +273,8 @@ For CI/CD or shared configurations:
 
 .. code-block:: console
 
-   $ export MLIPX_MODELS=/shared/team-models.py
-   $ mlipx serve-broker --autostart
+   (.venv) $ export MLIPX_MODELS=/shared/team-models.py
+   (.venv) $ mlipx serve-broker --autostart
 
 Typical Workflow
 ~~~~~~~~~~~~~~~~
@@ -275,9 +285,9 @@ Typical Workflow
 
 .. code-block:: console
 
-   $ cd /my-project
-   $ mlipx recipes ev --models mace-mpa-0,orb-v2 --material-ids mp-1143
-   $ mlipx serve-broker --autostart
+   (.venv) $ cd /my-project
+   (.venv) $ mlipx recipes ev --models mace-mpa-0,orb-v2 --material-ids mp-1143
+   (.venv) $ mlipx serve-broker --autostart
    Models file: /my-project/models.py (discovered at /my-project)
    ...
 
@@ -335,10 +345,10 @@ Use a custom models file for specialized model registries:
 .. code-block:: console
 
    # Start broker with custom models
-   $ mlipx serve-broker --autostart --models /path/to/custom-models.py
+   (.venv) $ mlipx serve-broker --autostart --models /path/to/custom-models.py
 
    # Start worker with custom models
-   $ uv run mlipx serve my-custom-model --models /path/to/custom-models.py
+   (.venv) $ uv run mlipx serve my-custom-model --models /path/to/custom-models.py
 
 Custom IPC Paths
 ~~~~~~~~~~~~~~~~
@@ -348,13 +358,13 @@ Specify custom IPC socket paths for multiple broker instances:
 .. code-block:: console
 
    # Start broker on custom path
-   $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
+   (.venv) $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
 
    # Start worker connecting to custom broker
-   $ uv run mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
+   (.venv) $ uv run mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
 
    # Check status of custom broker
-   $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
+   (.venv) $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
 
 Multiple Workers per Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -363,9 +373,9 @@ Start multiple workers for the same model to enable parallel processing:
 
 .. code-block:: console
 
-   $ uv run mlipx serve mace-mpa-0 &
-   $ uv run mlipx serve mace-mpa-0 &
-   $ uv run mlipx serve mace-mpa-0 &
+   (.venv) $ uv run mlipx serve mace-mpa-0 &
+   (.venv) $ uv run mlipx serve mace-mpa-0 &
+   (.venv) $ uv run mlipx serve mace-mpa-0 &
 
 The broker will distribute requests across all available workers using LRU scheduling.
 
@@ -377,28 +387,23 @@ Use serve transparently with DVC workflows:
 .. code-block:: console
 
    # Start broker with autostart
-   $ mlipx serve-broker --autostart &
+   (.venv) $ mlipx serve-broker --autostart &
 
    # Enable serve globally
-   $ export MLIPX_USE_SERVE=true
+   (.venv) $ export MLIPX_USE_SERVE=true
 
    # Run DVC pipeline - automatically uses served models!
-   $ dvc repro
+   (.venv) $ dvc repro
 
 All model calculations will now use the serve infrastructure, with workers starting automatically as needed.
 
 Troubleshooting
 ---------------
 
-Worker Logs
-~~~~~~~~~~~
+Worker Output
+~~~~~~~~~~~~~
 
-When using the autostart broker, worker stderr is captured to log files for debugging. Logs are stored in:
-
-- **Linux/macOS**: ``/tmp/mlipx/worker_logs/<model>-<timestamp>.log``
-- **Windows**: ``%TEMP%/mlipx/worker_logs/<model>-<timestamp>.log``
-
-Check these logs if a worker fails to start or encounters errors during calculation.
+Auto-started workers inherit the broker's stdout/stderr, so worker logs appear directly in the terminal where the broker is running. This makes it easy to monitor worker startup and any errors in real-time.
 
 Broker Already Running
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -426,7 +431,7 @@ Use ``mlipx serve-status`` to diagnose issues:
 
 .. code-block:: console
 
-   $ mlipx serve-status
+   (.venv) $ mlipx serve-status
 
 This shows:
 

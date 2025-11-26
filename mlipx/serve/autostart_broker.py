@@ -3,7 +3,6 @@
 import logging
 import shutil
 import subprocess
-import tempfile
 import time
 from pathlib import Path
 
@@ -11,7 +10,7 @@ import msgpack
 import zmq
 
 from .broker import Broker
-from .protocol import LIST_MODELS, STATUS_DETAIL
+from .protocol import LIST_MODELS, SHUTDOWN, STATUS_DETAIL
 from .worker import load_models_from_file
 
 logger = logging.getLogger(__name__)
@@ -97,10 +96,6 @@ class AutoStartBroker(Broker):
         # Queue for requests that arrive during worker startup
         self._pending_requests: list[list[bytes]] = []
 
-        # Worker log directory
-        self._worker_log_dir = Path(tempfile.gettempdir()) / "mlipx" / "worker_logs"
-        self._worker_log_dir.mkdir(parents=True, exist_ok=True)
-
     def _handle_frontend(self):  # noqa: C901
         """Handle client requests, auto-starting workers if needed."""
         parts = self.frontend.recv_multipart()
@@ -141,6 +136,14 @@ class AutoStartBroker(Broker):
             )
             self.frontend.send_multipart([client_id, b"", response])
             logger.debug(f"Sent detailed status to client {client_id}")
+            return
+
+        elif message_type == SHUTDOWN:
+            # Shutdown the broker gracefully
+            logger.info(f"Received shutdown request from client {client_id}")
+            response = msgpack.packb({"success": True, "message": "Shutting down"})
+            self.frontend.send_multipart([client_id, b"", response])
+            self.running = False
             return
 
         # Regular calculation request
@@ -229,7 +232,7 @@ class AutoStartBroker(Broker):
                     error_msg = (
                         f"Failed to auto-start worker for '{model_name}' "
                         f"within {self.worker_start_timeout}s. "
-                        f"Check logs in {self._worker_log_dir}"
+                        f"Check terminal output for details."
                     )
                     error_response = msgpack.packb(
                         {"success": False, "error": error_msg}
@@ -369,25 +372,16 @@ class AutoStartBroker(Broker):
         cmd = self._build_worker_command(model_name, model)
         logger.info(f"Starting worker: {' '.join(cmd)}")
 
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        log_file = self._worker_log_dir / f"{model_name}-{timestamp}.log"
-
         try:
-            stderr_file = open(log_file, "w")
+            # Inherit stdout/stderr for terminal logging
             proc = subprocess.Popen(
                 cmd,
                 start_new_session=True,
-                stdout=subprocess.DEVNULL,
-                stderr=stderr_file,
             )
             self.worker_processes[model_name] = proc
-            logger.info(
-                f"Worker started for {model_name} (PID: {proc.pid}), logs: {log_file}"
-            )
+            logger.info(f"Worker started for {model_name} (PID: {proc.pid})")
         except Exception as e:
             logger.error(f"Failed to start worker for {model_name}: {e}", exc_info=True)
-            if "stderr_file" in dir() and stderr_file:
-                stderr_file.close()
 
     def _check_worker_health(self):
         """Check for stale workers and remove them, cleaning up processes too."""

@@ -5498,7 +5498,6 @@ wheels = [
 
 [[package]]
 name = "mlipx"
-version = "0.1.6"
 source = { editable = "." }
 dependencies = [
     { name = "ase" },
@@ -5604,7 +5603,7 @@ requires-dist = [
     { name = "znh5md", specifier = ">=0.4.4" },
     { name = "zntrack", specifier = ">=0.8.5" },
 ]
-provides-extras = ["serve", "chgnet", "mace", "sevenn", "orb", "mattersim", "grace", "fairchem", "matpes", "pet-mad", "co-splitting"]
+provides-extras = ["chgnet", "co-splitting", "fairchem", "grace", "mace", "matpes", "mattersim", "orb", "pet-mad", "serve", "sevenn"]
 
 [package.metadata.requires-dev]
 dev = [

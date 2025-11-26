@@ -3,9 +3,132 @@
 import subprocess
 import sys
 import time
+from email.message import Message
+from unittest.mock import MagicMock, patch
 
 import numpy as np
 import pytest
+
+
+class TestGetMlipxPackageSpec:
+    """Test the _get_mlipx_package_spec helper function."""
+
+    def test_release_version_uses_pypi(self):
+        """Test that release versions use PyPI with pinned version."""
+        from mlipx.cli.main import _get_mlipx_package_spec
+
+        with patch("mlipx.__version__", "0.1.6"):
+            # Mock metadata to not have Source Commit URL
+            mock_metadata = Message()
+            with patch("importlib.metadata.metadata", return_value=mock_metadata):
+                result = _get_mlipx_package_spec(["mace", "serve"])
+
+        assert result == "mlipx[mace,serve]==0.1.6"
+
+    def test_dev_version_uses_git_url_from_metadata(self):
+        """Test that dev versions use git URL from Source Commit metadata."""
+        from mlipx.cli.main import _get_mlipx_package_spec
+
+        with patch("mlipx.__version__", "0.1.6.dev17+gabc123def"):
+            # Mock metadata with Source Commit URL
+            mock_metadata = MagicMock()
+            mock_metadata.items.return_value = [
+                ("Project-URL", "Homepage, https://github.com/basf/mlipx"),
+                (
+                    "Project-URL",
+                    "Source Commit, https://github.com/basf/mlipx/tree/abc123def",
+                ),
+            ]
+            with patch("importlib.metadata.metadata", return_value=mock_metadata):
+                result = _get_mlipx_package_spec(["mace", "serve"])
+
+        assert result == (
+            "mlipx[mace,serve] @ git+https://github.com/basf/mlipx@abc123def"
+        )
+
+    def test_dev_version_without_source_commit_uses_pypi(self):
+        """Test that dev versions without Source Commit fall back to PyPI."""
+        from mlipx.cli.main import _get_mlipx_package_spec
+
+        with patch("mlipx.__version__", "0.1.6.dev0"):
+            # Mock metadata without Source Commit URL
+            mock_metadata = MagicMock()
+            mock_metadata.items.return_value = [
+                ("Project-URL", "Homepage, https://github.com/basf/mlipx"),
+            ]
+            with patch("importlib.metadata.metadata", return_value=mock_metadata):
+                result = _get_mlipx_package_spec(["mace", "serve"])
+
+        assert result == "mlipx[mace,serve]"
+
+    def test_no_version_uses_latest_pypi(self):
+        """Test that no version uses latest from PyPI."""
+        from mlipx.cli.main import _get_mlipx_package_spec
+
+        with patch("mlipx.__version__", None):
+            result = _get_mlipx_package_spec(["mace", "serve"])
+
+        assert result == "mlipx[mace,serve]"
+
+    def test_single_extra(self):
+        """Test with a single extra."""
+        from mlipx.cli.main import _get_mlipx_package_spec
+
+        with patch("mlipx.__version__", "1.0.0"):
+            mock_metadata = Message()
+            with patch("importlib.metadata.metadata", return_value=mock_metadata):
+                result = _get_mlipx_package_spec(["serve"])
+
+        assert result == "mlipx[serve]==1.0.0"
+
+
+class TestGetLocalPyprojectExtras:
+    """Test the _get_local_pyproject_extras helper function."""
+
+    def test_returns_extras_from_pyproject(self, tmp_path, monkeypatch):
+        """Test that it returns extras from local pyproject.toml."""
+        from mlipx.cli.main import _get_local_pyproject_extras
+
+        # Create a pyproject.toml with extras
+        pyproject = tmp_path / "pyproject.toml"
+        pyproject.write_text("""
+[project]
+name = "test"
+
+[project.optional-dependencies]
+mace = ["mace-torch"]
+serve = ["pyzmq"]
+dev = ["pytest"]
+""")
+
+        monkeypatch.chdir(tmp_path)
+        result = _get_local_pyproject_extras()
+
+        assert result == {"mace", "serve", "dev"}
+
+    def test_returns_empty_when_no_pyproject(self, tmp_path, monkeypatch):
+        """Test that it returns empty set when no pyproject.toml exists."""
+        from mlipx.cli.main import _get_local_pyproject_extras
+
+        monkeypatch.chdir(tmp_path)
+        result = _get_local_pyproject_extras()
+
+        assert result == set()
+
+    def test_returns_empty_when_no_extras(self, tmp_path, monkeypatch):
+        """Test that it returns empty set when pyproject has no extras."""
+        from mlipx.cli.main import _get_local_pyproject_extras
+
+        pyproject = tmp_path / "pyproject.toml"
+        pyproject.write_text("""
+[project]
+name = "test"
+""")
+
+        monkeypatch.chdir(tmp_path)
+        result = _get_local_pyproject_extras()
+
+        assert result == set()
 
 
 def _serve_available() -> bool:

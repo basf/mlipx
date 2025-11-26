@@ -1,6 +1,6 @@
 [project]
 name = "mlipx"
-version = "0.1.6"
+dynamic = ["version", "urls"]
 description = "Machine-Learned Interatomic Potential eXploration"
 authors = [
     { name = "Sandip De", email = "sandip.de@basf.com" },
@@ -130,8 +130,21 @@ pet-mad = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "mlipx/_version.py"
+
+[tool.hatch.metadata.hooks.vcs]
+
+[tool.hatch.metadata.hooks.vcs.urls]
+Homepage = "https://github.com/basf/mlipx"
+Repository = "https://github.com/basf/mlipx"
+"Source Commit" = "https://github.com/basf/mlipx/tree/{commit_hash}"
 
 [tool.codespell]
 ignore-words-list = "basf"

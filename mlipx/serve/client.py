@@ -10,6 +10,7 @@ from ase.calculators.calculator import Calculator
 
 from .protocol import (
     LIST_MODELS,
+    SHUTDOWN,
     STATUS_DETAIL,
     get_default_broker_path,
     pack_request,
@@ -430,3 +431,59 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         ctx.term()
 
     return status
+
+
+def shutdown_broker(broker_path: str | None = None) -> dict:
+    """Send shutdown command to the broker.
+
+    This will gracefully stop the broker and all workers it manages.
+
+    Parameters
+    ----------
+    broker_path : str | None
+        IPC path to broker. Defaults to platform-specific path.
+
+    Returns
+    -------
+    dict
+        Result with keys:
+        - success: bool
+        - message: str
+        - error: str (if any)
+    """
+    from .protocol import get_default_broker_path
+
+    broker_path = broker_path or get_default_broker_path()
+
+    result = {
+        "success": False,
+        "message": "",
+        "error": None,
+    }
+
+    ctx = zmq.Context()
+    socket = ctx.socket(zmq.REQ)
+    socket.setsockopt(zmq.RCVTIMEO, 5000)  # 5 second timeout
+    socket.setsockopt(zmq.SNDTIMEO, 5000)
+    socket.setsockopt(zmq.LINGER, 0)
+
+    try:
+        socket.connect(broker_path)
+        socket.send_multipart([SHUTDOWN])
+        response_data = socket.recv()
+        response = msgpack.unpackb(response_data)
+        result["success"] = response.get("success", False)
+        result["message"] = response.get("message", "")
+    except zmq.error.Again:
+        result["error"] = (
+            f"Timeout connecting to broker at {broker_path}. Is the broker running?"
+        )
+    except zmq.error.ZMQError as e:
+        result["error"] = f"Failed to connect to broker: {e}"
+    except Exception as e:
+        result["error"] = f"Unexpected error: {e}"
+    finally:
+        socket.close()
+        ctx.term()
+
+    return result

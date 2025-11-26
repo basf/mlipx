@@ -51,6 +51,7 @@ from .client import (
     RemoteCalculator,
     get_broker_detailed_status,
     get_broker_status,
+    shutdown_broker,
 )
 from .discovery import discover_models_file
 from .protocol import get_default_broker_path, get_default_workers_path
@@ -63,6 +64,7 @@ __all__ = [
     "ModelProxy",
     "get_broker_status",
     "get_broker_detailed_status",
+    "shutdown_broker",
     # Broker
     "Broker",
     "run_broker",
