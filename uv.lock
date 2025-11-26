@@ -5503,13 +5503,12 @@ source = { editable = "." }
 dependencies = [
     { name = "ase" },
     { name = "dvc-s3" },
+    { name = "flufl-lock" },
     { name = "lazy-loader" },
     { name = "mp-api" },
     { name = "mpcontribs-client" },
-    { name = "msgpack" },
     { name = "plotly" },
     { name = "pydantic" },
-    { name = "pyzmq" },
     { name = "rdkit2ase" },
     { name = "typer" },
     { name = "zndraw" },
@@ -5546,6 +5545,10 @@ orb = [
 pet-mad = [
     { name = "pet-mad" },
 ]
+serve = [
+    { name = "msgpack" },
+    { name = "pyzmq" },
+]
 sevenn = [
     { name = "sevenn" },
 ]
@@ -5578,6 +5581,7 @@ requires-dist = [
     { name = "chgnet", marker = "extra == 'chgnet'", specifier = ">=0.4.0" },
     { name = "dvc-s3", specifier = ">=3.2.0" },
     { name = "fairchem-core", marker = "extra == 'fairchem'", specifier = ">=2.1.0" },
+    { name = "flufl-lock", specifier = ">=8.2.0" },
     { name = "lazy-loader", specifier = ">=0.4" },
     { name = "mace-torch", marker = "extra == 'mace'", specifier = ">=0.3.12" },
     { name = "matgl", marker = "extra == 'matpes'", specifier = ">=1.2.7" },
@@ -5585,12 +5589,12 @@ requires-dist = [
     { name = "mattersim", marker = "extra == 'mattersim'", specifier = ">=1.1.2" },
     { name = "mp-api", specifier = ">=0.45.3" },
     { name = "mpcontribs-client", specifier = ">=5.10.2" },
-    { name = "msgpack", specifier = ">=1.1.0" },
+    { name = "msgpack", marker = "extra == 'serve'", specifier = ">=1.1.0" },
     { name = "orb-models", marker = "extra == 'orb'", specifier = ">=0.5.0" },
     { name = "pet-mad", marker = "extra == 'pet-mad'", specifier = ">=1.2.0" },
     { name = "plotly", specifier = ">=6.0.0" },
     { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "pyzmq", specifier = ">=26.4.0" },
+    { name = "pyzmq", marker = "extra == 'serve'", specifier = ">=26.4.0" },
     { name = "rdkit2ase", specifier = ">=0.1.4" },
     { name = "scikit-learn", marker = "extra == 'co-splitting'", specifier = ">=1.6.1" },
     { name = "sevenn", marker = "extra == 'sevenn'", specifier = ">=0.11.0" },
@@ -5600,7 +5604,7 @@ requires-dist = [
     { name = "znh5md", specifier = ">=0.4.4" },
     { name = "zntrack", specifier = ">=0.8.5" },
 ]
-provides-extras = ["chgnet", "mace", "sevenn", "orb", "mattersim", "grace", "fairchem", "matpes", "pet-mad", "co-splitting"]
+provides-extras = ["serve", "chgnet", "mace", "sevenn", "orb", "mattersim", "grace", "fairchem", "matpes", "pet-mad", "co-splitting"]
 
 [package.metadata.requires-dev]
 dev = [

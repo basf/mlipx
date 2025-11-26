@@ -44,10 +44,10 @@ ALL_MODELS["7net-mf-ompa-mpa"] = mlipx.GenericASECalculator(
 # https://github.com/orbital-materials/orb-models
 @dataclasses.dataclass
 class OrbCalc(NodeWithCalculator):
-    name: str
+    name: str  # Pretrained model name (e.g., "orb_v2")
     device: Device | None = None
     kwargs: dict = dataclasses.field(default_factory=dict)
-    model_name: str | None = None  # For serve integration (auto-injected)
+    serve_name: str | None = None  # For serve integration (auto-injected)
     extra: list[str] | None = None
 
     def get_calculator(self, **kwargs):
@@ -121,7 +121,7 @@ ALL_MODELS["grace-2l-omat"] = mlipx.GenericASECalculator(
 @dataclasses.dataclass
 class MatglModel(NodeWithCalculator):
     path: str
-    name: str | None = None  # For serve integration (auto-injected)
+    serve_name: str | None = None  # For serve integration (auto-injected)
     extra: list[str] | None = None
 
     def get_calculator(self, **kwargs) -> Calculator:
@@ -151,7 +151,7 @@ class FairchemModel(NodeWithCalculator):
     path: str
     task_name: str = "oc20"
     device: str = "auto"
-    name: str | None = None  # For serve integration (auto-injected)
+    serve_name: str | None = None  # For serve integration (auto-injected)
     extra: list[str] | None = None
 
     def get_calculator(self, **kwargs) -> Calculator:
@@ -206,5 +206,5 @@ MODELS = {
 
 # Auto-inject model names for serve integration
 for _model_key, _model_instance in ALL_MODELS.items():
-    if hasattr(_model_instance, 'name') and _model_instance.name is None:
-        _model_instance.name = _model_key
+    if hasattr(_model_instance, 'serve_name') and _model_instance.serve_name is None:
+        _model_instance.serve_name = _model_key

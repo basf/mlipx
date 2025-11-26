@@ -51,9 +51,9 @@ class GenericASECalculator(NodeWithCalculator):
         Can be 'auto', 'cpu', or 'cuda'.
         Utilizes the pytorch Device class to resolve
         the device automatically.
-    name : str, default=None
-        Model name (auto-injected in models.py.jinja2).
-        Used for serve integration.
+    serve_name : str, default=None
+        Model name for serve integration (auto-injected in models.py.jinja2).
+        Used to identify this model when served via mlipx serve.
     extra : list[str], default=None
         UV extras from mlipx (e.g., ["mace", "sevenn"]).
         Used for automatic dependency handling in serve.
@@ -65,7 +65,7 @@ class GenericASECalculator(NodeWithCalculator):
     kwargs: dict[str, t.Any] | None = None
     device: t.Literal["auto", "cpu", "cuda"] | None = None
     spec: str | None = None
-    name: str | None = None
+    serve_name: str | None = None
     extra: list[str] | None = None
 
     def get_calculator(self, use_serve: bool | None = None, **kwargs) -> Calculator:
@@ -89,18 +89,22 @@ class GenericASECalculator(NodeWithCalculator):
             use_serve = os.getenv("MLIPX_USE_SERVE", "false").lower() == "true"
 
         # Try remote first if enabled
-        if use_serve and self.name:
+        if use_serve and self.serve_name:
             try:
                 from mlipx.serve import Models
 
                 models = Models()
-                if self.name in models:
-                    logger.info(f"✓ Using remote calculator: {self.name}")
-                    return models[self.name].get_calculator(**kwargs)
+                if self.serve_name in models:
+                    logger.debug(f"Using remote calculator: {self.serve_name}")
+                    return models[self.serve_name].get_calculator(**kwargs)
                 else:
                     logger.debug(
-                        f"Model {self.name} not available via serve, using local"
+                        f"Model {self.serve_name} not available via serve, using local"
                     )
+            except ImportError:
+                logger.debug(
+                    "mlipx[serve] not installed, using local calculator"
+                )
             except Exception as e:
                 logger.debug(
                     f"Serve unavailable ({e}), falling back to local calculator"

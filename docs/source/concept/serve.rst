@@ -7,7 +7,11 @@ Model Serving
 
 .. note::
 
-   The serve API is only available if ``uv`` is installed. More information about ``uv`` can be found at https://docs.astral.sh/uv/
+   The serve module requires additional dependencies. Install them with::
+
+      pip install mlipx[serve]
+
+   The serve API also requires ``uv`` for automatic dependency management. More information about ``uv`` can be found at https://docs.astral.sh/uv/
 
 .. warning::
 
@@ -32,6 +36,9 @@ Key Features
 - **Self-terminating Workers**: Workers shutdown automatically after idle timeout
 - **Load Balancing**: LRU (Least Recently Used) pattern distributes work efficiently
 - **Transparent Integration**: Existing code works without modification via environment variables
+- **Cross-platform Locking**: Prevents duplicate broker instances on shared systems
+- **User Isolation**: Socket paths are user-specific to prevent conflicts on shared systems
+- **Worker Logging**: Auto-started worker stderr is captured to log files for debugging
 
 Quick Start
 -----------
@@ -67,7 +74,7 @@ Or control it programmatically:
        module="mace.calculators",
        class_name="mace_mp",
        device="auto",
-       name="mace-mpa-0",
+       serve_name="mace-mpa-0",  # Model name for serve lookups
        extra=["mace"],
    )
 
@@ -173,7 +180,7 @@ The client provides a transparent interface for using served models. It's integr
        module="mace.calculators",
        class_name="mace_mp",
        device="auto",
-       name="mace-mpa-0",
+       serve_name="mace-mpa-0",  # Model name for serve lookups
        extra=["mace"],
    )
 
@@ -206,7 +213,7 @@ Model Configuration
 
 To make a model available for serving, it needs two additional fields in the model definition:
 
-**name** (str | None)
+**serve_name** (str | None)
    Model identifier used for serve lookups. Auto-injected from the dictionary key in ``models.py.jinja2``.
 
 **extra** (list[str] | None)
@@ -225,24 +232,24 @@ Example Model Definition
        device="auto",
        kwargs={"model": "../../models/mace-mpa-0-medium.model"},
        extra=["mace"],  # UV extra for dependencies
-       # name="mace-mpa-0"  # typically auto-injected, at the end of models.py.jinja2
+       # serve_name="mace-mpa-0"  # typically auto-injected
    )
 
    ALL_MODELS["chgnet"] = GenericASECalculator(
-       module="chgnet.model.model", 
+       module="chgnet.model.model",
        class_name="CHGNet",
        device="auto",
        extra=["chgnet"],
    )
 
-The ``name`` field is automatically injected by the template at the end of ``models.py.jinja2``:
+The ``serve_name`` field is automatically injected by the template at the end of ``models.py.jinja2``:
 
 .. code-block:: python
 
    # Auto-inject model names for serve integration
    for _model_key, _model_instance in ALL_MODELS.items():
-       if hasattr(_model_instance, 'name') and _model_instance.name is None:
-           _model_instance.name = _model_key
+       if hasattr(_model_instance, 'serve_name') and _model_instance.serve_name is None:
+           _model_instance.serve_name = _model_key
 
 Advanced Usage
 --------------
@@ -306,3 +313,51 @@ Use serve transparently with DVC workflows:
    $ dvc repro
 
 All model calculations will now use the serve infrastructure, with workers starting automatically as needed.
+
+Troubleshooting
+---------------
+
+Worker Logs
+~~~~~~~~~~~
+
+When using the autostart broker, worker stderr is captured to log files for debugging. Logs are stored in:
+
+- **Linux/macOS**: ``/tmp/mlipx/worker_logs/<model>-<timestamp>.log``
+- **Windows**: ``%TEMP%/mlipx/worker_logs/<model>-<timestamp>.log``
+
+Check these logs if a worker fails to start or encounters errors during calculation.
+
+Broker Already Running
+~~~~~~~~~~~~~~~~~~~~~~
+
+If you see "Another broker is already running", it means a broker is already active on the same socket path. Either:
+
+1. Use the existing broker
+2. Stop the existing broker and start a new one
+3. Use a different ``--path`` for a separate broker instance
+
+Socket Path Conflicts on Shared Systems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On shared systems (e.g., HPC clusters), socket paths are automatically isolated by username:
+
+- With ``XDG_RUNTIME_DIR``: ``/run/user/<uid>/mlipx/broker.ipc``
+- Fallback: ``/tmp/mlipx-<username>/broker.ipc``
+
+This prevents conflicts between different users on the same machine.
+
+Checking Broker Status
+~~~~~~~~~~~~~~~~~~~~~~
+
+Use ``mlipx serve-status`` to diagnose issues:
+
+.. code-block:: console
+
+   $ mlipx serve-status
+
+This shows:
+
+- Whether the broker is running
+- Which models have active workers
+- Number of workers per model
+- Available models for autostart (if enabled)

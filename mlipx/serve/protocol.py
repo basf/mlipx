@@ -1,5 +1,6 @@
 """Protocol utilities for ZeroMQ communication with msgpack serialization."""
 
+import getpass
 import os
 import sys
 import tempfile
@@ -21,27 +22,32 @@ def get_default_broker_path() -> str:
 
     Notes
     -----
-    - Linux: `ipc:///run/user/{uid}/mlipx/broker.ipc` (if available) or `ipc:///tmp/mlipx/broker.ipc`
-    - macOS: `ipc:///tmp/mlipx/broker.ipc`
-    - Windows: `ipc:///{TEMP}/mlipx/broker.ipc`
+    - Linux: `ipc:///run/user/{uid}/mlipx/broker.ipc` (if XDG_RUNTIME_DIR available)
+             or `ipc:///tmp/mlipx-{username}/broker.ipc`
+    - macOS: `ipc:///tmp/mlipx-{username}/broker.ipc`
+    - Windows: `ipc:///{TEMP}/mlipx-{username}/broker.ipc`
+
+    The username is included in fallback paths to prevent conflicts on shared systems.
     """
+    username = getpass.getuser()
+
     if sys.platform == "win32":
-        base_dir = Path(tempfile.gettempdir()) / "mlipx"
+        base_dir = Path(tempfile.gettempdir()) / f"mlipx-{username}"
         base_dir.mkdir(parents=True, exist_ok=True)
         return f"ipc:///{base_dir}/broker.ipc"
     elif sys.platform == "linux":
-        # Try XDG_RUNTIME_DIR first
+        # Try XDG_RUNTIME_DIR first (already user-specific)
         runtime_dir = os.environ.get("XDG_RUNTIME_DIR")
         if runtime_dir:
             base_dir = Path(runtime_dir) / "mlipx"
             base_dir.mkdir(parents=True, exist_ok=True)
             return f"ipc://{base_dir}/broker.ipc"
-        # Fall back to /tmp
-        base_dir = Path("/tmp/mlipx")
+        # Fall back to /tmp with username
+        base_dir = Path(f"/tmp/mlipx-{username}")
         base_dir.mkdir(parents=True, exist_ok=True)
         return f"ipc://{base_dir}/broker.ipc"
     else:  # macOS and other Unix-like systems
-        base_dir = Path("/tmp/mlipx")
+        base_dir = Path(f"/tmp/mlipx-{username}")
         base_dir.mkdir(parents=True, exist_ok=True)
         return f"ipc://{base_dir}/broker.ipc"
 

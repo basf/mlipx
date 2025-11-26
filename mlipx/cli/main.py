@@ -409,8 +409,12 @@ def serve(
     all_models = load_models_from_file(models)
 
     if model_name not in all_models:
-        typer.echo(f"Error: Model '{model_name}' not found in {models}")
-        typer.echo(f"Available: {', '.join(all_models.keys())}")
+        from rich.console import Console
+
+        console = Console(stderr=True)
+        console.print(f"[red]Error:[/red] Model '{model_name}' not found in {models}")
+        available = ", ".join(sorted(all_models.keys()))
+        console.print(f"[dim]Available models:[/dim] {available}")
         raise typer.Exit(1)
 
     model = all_models[model_name]
@@ -427,11 +431,14 @@ def serve(
         # Check if uv is available
         uv_path = shutil.which("uv")
         if not uv_path:
-            typer.echo(
-                "Warning: Model specifies 'extra' dependencies but 'uv' is not available. "
-                "Proceeding without UV wrapper - dependencies may be missing."
+            from rich.console import Console
+
+            console = Console(stderr=True)
+            console.print(
+                "[yellow]Warning:[/yellow] Model specifies 'extra' dependencies "
+                "but 'uv' is not available. Proceeding without UV wrapper."
             )
-            typer.echo("Install uv with: pip install uv")
+            console.print("[dim]Install uv with: pip install uv[/dim]")
         else:
             # Re-execute with UV wrapper
             cmd = ["uv", "run"]

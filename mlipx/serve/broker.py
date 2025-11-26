@@ -4,10 +4,12 @@ import logging
 import signal
 import time
 from collections import defaultdict, deque
+from datetime import timedelta
 from pathlib import Path
 
 import msgpack
 import zmq
+from flufl.lock import Lock, AlreadyLockedError
 
 from .protocol import (
     HEARTBEAT,
@@ -65,6 +67,9 @@ class Broker:
         self.frontend: zmq.Socket | None = None
         self.backend: zmq.Socket | None = None
 
+        # Lock for preventing duplicate brokers (cross-platform via flufl.lock)
+        self._lock: Lock | None = None
+
         # Signal handling for graceful shutdown
         self.running = False
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -100,6 +105,48 @@ class Broker:
                 except Exception as e:
                     logger.warning(f"Failed to cleanup socket {socket_path}: {e}")
 
+    def _acquire_lock(self) -> bool:
+        """Acquire exclusive lock to prevent duplicate brokers.
+
+        Uses flufl.lock for cross-platform file locking (works on Windows, Linux, macOS).
+
+        Returns
+        -------
+        bool
+            True if lock acquired successfully, False if another broker is running.
+        """
+        lock_path = self._get_socket_path(self.frontend_path)
+        if lock_path is None:
+            return True  # Non-IPC paths don't need locking
+
+        lock_file_path = str(lock_path.with_suffix(".lock"))
+        try:
+            self._lock = Lock(lock_file_path, lifetime=timedelta(hours=24))
+            self._lock.lock(timeout=timedelta(seconds=0))  # Non-blocking
+            logger.debug(f"Acquired broker lock: {lock_file_path}")
+            return True
+        except AlreadyLockedError:
+            logger.error(
+                f"Another broker is already running (lock file: {lock_file_path})"
+            )
+            self._lock = None
+            return False
+        except Exception as e:
+            logger.error(f"Failed to acquire lock: {e}")
+            self._lock = None
+            return False
+
+    def _release_lock(self):
+        """Release the broker lock."""
+        if self._lock is not None:
+            try:
+                self._lock.unlock()
+                logger.debug("Released broker lock")
+            except Exception as e:
+                logger.warning(f"Error releasing lock: {e}")
+            finally:
+                self._lock = None
+
     def start(self):
         """Start the broker and begin processing messages."""
         self.running = True
@@ -107,6 +154,13 @@ class Broker:
         # Ensure socket directories exist
         self._ensure_socket_dir(self.frontend_path)
         self._ensure_socket_dir(self.backend_path)
+
+        # Acquire lock to prevent duplicate brokers
+        if not self._acquire_lock():
+            raise RuntimeError(
+                "Another broker is already running on this path. "
+                "Use a different --path or stop the existing broker."
+            )
 
         # Clean up any stale socket files from previous unclean shutdown
         self._cleanup_socket_files()
@@ -365,6 +419,9 @@ class Broker:
 
         # Clean up socket files
         self._cleanup_socket_files()
+
+        # Release lock
+        self._release_lock()
 
         logger.info("Broker stopped")
 

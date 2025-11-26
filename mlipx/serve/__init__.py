@@ -26,7 +26,22 @@ Use in Python:
     >>> calc = models['mace-mpa-0'].get_calculator()
     >>> atoms.calc = calc
     >>> energy = atoms.get_potential_energy()
+
+Note
+----
+This module requires the ``serve`` extra to be installed:
+
+    pip install mlipx[serve]
 """
+
+try:
+    import msgpack  # noqa: F401
+    import zmq  # noqa: F401
+except ImportError as e:
+    raise ImportError(
+        "The serve module requires additional dependencies. "
+        "Install with: pip install mlipx[serve]"
+    ) from e
 
 from .autostart_broker import AutoStartBroker, run_autostart_broker
 from .broker import Broker, run_broker
