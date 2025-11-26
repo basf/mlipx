@@ -549,19 +549,35 @@ def serve(
             )
             console.print("[dim]Install uv with: pip install uv[/dim]")
         else:
+            from rich.console import Console
+
+            console = Console(stderr=True)
+
             # Smart detection: check if extras exist in local pyproject.toml
             local_extras = _get_local_pyproject_extras()
             required_extras = set(model.extra)
+            extras_str = ", ".join(sorted(required_extras))
+
+            console.print(
+                f"[dim]Checking local pyproject.toml for extras: {extras_str}[/dim]"
+            )
 
             if required_extras.issubset(local_extras):
                 # Use uv run --extra (extras available in local project)
+                console.print(
+                    "[dim]Found in local project, using: uv run --extra[/dim]"
+                )
                 cmd = ["uv", "run"]
                 for extra_dep in model.extra:
                     cmd.extend(["--extra", extra_dep])
                 cmd.extend(["mlipx", "serve", model_name, "--no-uv"])
             else:
                 # Use uvx --from mlipx[extras,serve] (extras from mlipx package)
+                console.print(
+                    "[dim]Not found locally, using mlipx package extras via uvx[/dim]"
+                )
                 pkg_spec = _get_mlipx_package_spec(list(model.extra) + ["serve"])
+                console.print(f"[dim]Package spec: {pkg_spec}[/dim]")
                 cmd = [
                     "uvx",
                     "--from",
