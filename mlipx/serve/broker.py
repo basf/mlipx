@@ -9,7 +9,7 @@ from pathlib import Path
 
 import msgpack
 import zmq
-from flufl.lock import Lock, AlreadyLockedError
+from flufl.lock import AlreadyLockedError, Lock
 
 from .protocol import (
     HEARTBEAT,
@@ -22,8 +22,8 @@ from .protocol import (
 
 logger = logging.getLogger(__name__)
 
-# Worker timeout in seconds - if no heartbeat received in this time, consider worker dead
-# Set to 5 seconds (5x the 1-second heartbeat interval) to allow for network delays
+# Worker timeout in seconds - if no heartbeat received, consider worker dead.
+# Set to 5 seconds (5x the 1-second heartbeat interval) for network delays.
 WORKER_TIMEOUT = 5.0
 
 
@@ -108,7 +108,7 @@ class Broker:
     def _acquire_lock(self) -> bool:
         """Acquire exclusive lock to prevent duplicate brokers.
 
-        Uses flufl.lock for cross-platform file locking (works on Windows, Linux, macOS).
+        Uses flufl.lock for cross-platform file locking (Windows, Linux, macOS).
 
         Returns
         -------
@@ -236,9 +236,8 @@ class Broker:
 
             # Update heartbeat timestamp
             self.worker_heartbeat[worker_id] = time.time()
-            logger.debug(
-                f"Received heartbeat from worker {worker_id.decode('utf-8', errors='replace')}"
-            )
+            worker_name = worker_id.decode("utf-8", errors="replace")
+            logger.debug(f"Received heartbeat from worker {worker_name}")
 
         else:
             # Response message: [worker_id, b"", client_id, b"", response_data]
@@ -251,9 +250,8 @@ class Broker:
 
             # Forward response to client
             self.frontend.send_multipart([client_id, b"", response_data])
-            logger.debug(
-                f"Routed response from worker {worker_id.decode('utf-8', errors='replace')} to client {client_id}"
-            )
+            worker_name = worker_id.decode("utf-8", errors="replace")
+            logger.debug(f"Routed response from {worker_name} to {client_id}")
 
     def _handle_frontend(self):
         """Handle messages from clients."""
@@ -321,7 +319,8 @@ class Broker:
             # Get LRU worker for this model
             worker_id = self.worker_queue[model_name].popleft()
 
-            # Route request to worker: [worker_id, b"", client_id, b"", model_name, request_data]
+            # Route request to worker
+            # Format: [worker_id, b"", client_id, b"", model_name, request_data]
             self.backend.send_multipart(
                 [
                     worker_id,
@@ -333,7 +332,7 @@ class Broker:
                 ]
             )
             logger.debug(
-                f"Routed request from client {client_id} to worker {worker_id} (model: {model_name})"
+                f"Routed request from {client_id} to {worker_id} ({model_name})"
             )
 
     def _register_worker(self, worker_id: bytes, model_name: str):
@@ -391,15 +390,13 @@ class Broker:
                 # Remove from queue
                 if worker_id in self.worker_queue[model_name]:
                     self.worker_queue[model_name].remove(worker_id)
-                    logger.warning(
-                        f"Worker {worker_name} for model '{model_name}' timed out (no heartbeat)"
-                    )
+                    logger.warning(f"Worker {worker_name} for '{model_name}' timed out")
 
                 # Clean up empty queues
                 if not self.worker_queue[model_name]:
                     del self.worker_queue[model_name]
                     logger.info(
-                        f"No workers left for model '{model_name}', removed from available models"
+                        f"No workers left for '{model_name}', removed from models"
                     )
 
             # Clean up tracking dicts

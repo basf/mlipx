@@ -102,9 +102,7 @@ class GenericASECalculator(NodeWithCalculator):
                         f"Model {self.serve_name} not available via serve, using local"
                     )
             except ImportError:
-                logger.debug(
-                    "mlipx[serve] not installed, using local calculator"
-                )
+                logger.debug("mlipx[serve] not installed, using local calculator")
             except Exception as e:
                 logger.debug(
                     f"Serve unavailable ({e}), falling back to local calculator"

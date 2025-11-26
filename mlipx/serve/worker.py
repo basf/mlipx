@@ -132,16 +132,15 @@ class Worker:
         # Set the identity for readable worker names
         self.socket.setsockopt(zmq.IDENTITY, self.worker_id)
         self.socket.connect(self.backend_path)
-        logger.info(
-            f"Worker {self.worker_id.decode('utf-8')} connected to broker at {self.backend_path}"
-        )
+        worker_name = self.worker_id.decode("utf-8")
+        logger.info(f"Worker {worker_name} connected to broker at {self.backend_path}")
 
         # Send initial READY message
         self._send_ready()
         self.last_heartbeat = time.time()
         self.last_request_time = time.time()
         logger.info(
-            f"Worker {self.worker_id.decode('utf-8')} ready to serve model '{self.model_name}' "
+            f"Worker {worker_name} ready for model '{self.model_name}' "
             f"(timeout: {self.timeout}s)"
         )
 
@@ -236,9 +235,7 @@ class Worker:
                 success=True, energy=energy, forces=forces, stress=stress
             )
 
-            logger.debug(
-                f"Completed calculation for {len(atoms)} atoms, properties: {properties}"
-            )
+            logger.debug(f"Completed calculation for {len(atoms)} atoms: {properties}")
 
         except Exception as e:
             logger.error(f"Calculation failed: {e}", exc_info=True)

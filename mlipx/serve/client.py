@@ -44,8 +44,8 @@ class RemoteCalculator(Calculator):
         broker : str | None
             IPC path to broker. Defaults to platform-specific path.
         timeout : int
-            Timeout in milliseconds for receiving responses. Default: 60000 (60s).
-            When using autostart broker, this should be long enough for workers to start.
+            Timeout in milliseconds for responses. Default: 60000 (60s).
+            For autostart broker, should be long enough for workers to start.
         **kwargs
             Additional arguments passed to Calculator base class.
         """
@@ -235,7 +235,7 @@ class Models(Mapping):
             IPC path to broker. Defaults to platform-specific path.
         timeout : int
             Default timeout in milliseconds for calculators. Default: 60000 (60s).
-            When using autostart broker, this should be long enough for workers to start.
+            For autostart broker, should be long enough for workers to start.
         """
         self.broker_path = broker or get_default_broker_path()
         self.timeout = timeout
@@ -384,7 +384,7 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         Status information with keys:
         - broker_running: bool
         - broker_path: str
-        - models: dict[str, dict] with model_name -> {worker_count: int, workers: list[str]}
+        - models: dict[str, dict] with model_name -> {worker_count, workers}
         - autostart: bool (whether autostart is enabled)
         - autostart_models: list[str] (models available for autostart)
         - error: str (if any)

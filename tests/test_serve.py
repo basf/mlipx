@@ -92,9 +92,7 @@ class TestProtocolSerializaton:
         # Verify
         assert len(unpacked_atoms) == len(atoms)
         assert list(unpacked_atoms.numbers) == list(atoms.numbers)
-        np.testing.assert_array_almost_equal(
-            unpacked_atoms.positions, atoms.positions
-        )
+        np.testing.assert_array_almost_equal(unpacked_atoms.positions, atoms.positions)
         np.testing.assert_array_almost_equal(
             np.array(unpacked_atoms.cell), np.array(atoms.cell)
         )

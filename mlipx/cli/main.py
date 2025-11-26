@@ -482,7 +482,7 @@ def serve(
 
 
 @app.command(name="serve-status")
-def serve_status(
+def serve_status(  # noqa: C901
     broker: Annotated[
         str | None,
         typer.Option(help="IPC path to broker"),
@@ -562,7 +562,8 @@ def serve_status(
             worker_count = model_info["worker_count"]
             worker_text = "worker" if worker_count == 1 else "workers"
             models_list.append(
-                f"[cyan]•[/cyan] [bold]{model_name}[/bold] [dim]({worker_count} {worker_text})[/dim]"
+                f"[cyan]•[/cyan] [bold]{model_name}[/bold] "
+                f"[dim]({worker_count} {worker_text})[/dim]"
             )
 
         models_content = "\n".join(models_list)
@@ -571,19 +572,21 @@ def serve_status(
         if status["autostart"] and status["autostart_models"]:
             # Find models that are available via autostart but not currently running
             running_models = set(status["models"].keys())
-            autostart_only = sorted(
-                set(status["autostart_models"]) - running_models
-            )
+            autostart_only = sorted(set(status["autostart_models"]) - running_models)
 
             if autostart_only:
-                models_content += "\n\n[dim]Additional models available via autostart:[/dim]"
+                models_content += (
+                    "\n\n[dim]Additional models available via autostart:[/dim]"
+                )
                 for model_name in autostart_only:
                     models_content += f"\n[dim][cyan]•[/cyan] {model_name}[/dim]"
 
+        num_models = len(status["models"])
+        title = f"📊 Available Models ({num_models} models, {total_workers} workers)"
         console.print(
             Panel(
                 models_content,
-                title=f"📊 Available Models ({len(status['models'])} models, {total_workers} workers)",
+                title=title,
                 border_style="cyan",
                 padding=(1, 2),
             )
@@ -596,10 +599,12 @@ def serve_status(
                 autostart_list.append(f"[cyan]•[/cyan] {model_name}")
 
             autostart_content = "\n".join(autostart_list)
+            num_autostart = len(status["autostart_models"])
             message = (
                 "[yellow]No workers currently running[/yellow]\n\n"
-                f"[bold]Autostart enabled[/bold] - workers will start automatically on first use.\n\n"
-                f"[dim]Available models for autostart ({len(status['autostart_models'])}):[/dim]\n"
+                "[bold]Autostart enabled[/bold] - workers will start "
+                "automatically on first use.\n\n"
+                f"[dim]Available models for autostart ({num_autostart}):[/dim]\n"
                 f"{autostart_content}"
             )
         else:

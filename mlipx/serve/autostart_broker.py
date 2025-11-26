@@ -78,12 +78,10 @@ class AutoStartBroker(Broker):
         self._pending_requests: list[list[bytes]] = []
 
         # Worker log directory
-        self._worker_log_dir = (
-            Path(tempfile.gettempdir()) / "mlipx" / "worker_logs"
-        )
+        self._worker_log_dir = Path(tempfile.gettempdir()) / "mlipx" / "worker_logs"
         self._worker_log_dir.mkdir(parents=True, exist_ok=True)
 
-    def _handle_frontend(self):
+    def _handle_frontend(self):  # noqa: C901
         """Handle client requests, auto-starting workers if needed."""
         parts = self.frontend.recv_multipart()
 
@@ -140,7 +138,7 @@ class AutoStartBroker(Broker):
                 logger.info(f"No workers for {model_name}, auto-starting...")
                 self._start_worker(model_name)
 
-                # Wait for worker to register (with timeout), also processing other messages
+                # Wait for worker to register (with timeout), processing other messages
                 start_time = time.time()
                 poller = zmq.Poller()
                 poller.register(self.backend, zmq.POLLIN)
@@ -157,13 +155,17 @@ class AutoStartBroker(Broker):
                     if self.frontend in socks:
                         other_parts = self.frontend.recv_multipart()
                         other_client_id = other_parts[0] if other_parts else None
-                        other_msg_type = other_parts[2] if len(other_parts) > 2 else None
+                        other_msg_type = (
+                            other_parts[2] if len(other_parts) > 2 else None
+                        )
 
                         if other_msg_type == LIST_MODELS:
                             # Respond to LIST_MODELS immediately
                             models = list(self.models_registry.keys())
                             response = msgpack.packb({"models": models})
-                            self.frontend.send_multipart([other_client_id, b"", response])
+                            self.frontend.send_multipart(
+                                [other_client_id, b"", response]
+                            )
                         elif other_msg_type == STATUS_DETAIL:
                             # Respond to STATUS_DETAIL immediately
                             model_details = {}
@@ -179,15 +181,20 @@ class AutoStartBroker(Broker):
                                 {
                                     "models": model_details,
                                     "autostart": True,
-                                    "autostart_models": list(self.models_registry.keys()),
+                                    "autostart_models": list(
+                                        self.models_registry.keys()
+                                    ),
                                 }
                             )
-                            self.frontend.send_multipart([other_client_id, b"", response])
+                            self.frontend.send_multipart(
+                                [other_client_id, b"", response]
+                            )
                         else:
                             # Queue calculation requests for later processing
                             self._pending_requests.append(other_parts)
                             logger.debug(
-                                f"Queued request from {other_client_id} during worker startup"
+                                f"Queued request from {other_client_id} "
+                                "during worker startup"
                             )
 
                     # Check if worker registered
@@ -199,15 +206,18 @@ class AutoStartBroker(Broker):
                         break
                 else:
                     # Worker failed to start
+                    error_msg = (
+                        f"Failed to auto-start worker for '{model_name}' "
+                        f"within {self.worker_start_timeout}s. "
+                        f"Check logs in {self._worker_log_dir}"
+                    )
                     error_response = msgpack.packb(
-                        {
-                            "success": False,
-                            "error": f"Failed to auto-start worker for '{model_name}' within {self.worker_start_timeout}s. Check logs in {self._worker_log_dir}",
-                        }
+                        {"success": False, "error": error_msg}
                     )
                     self.frontend.send_multipart([client_id, b"", error_response])
                     logger.error(
-                        f"Worker for {model_name} failed to register within {self.worker_start_timeout}s"
+                        f"Worker for {model_name} failed to register "
+                        f"within {self.worker_start_timeout}s"
                     )
                     # Process pending requests with error
                     self._process_pending_requests()
@@ -230,7 +240,8 @@ class AutoStartBroker(Broker):
         # Get LRU worker for this model
         worker_id = self.worker_queue[model_name].popleft()
 
-        # Route request to worker: [worker_id, b"", client_id, b"", model_name, request_data]
+        # Route request to worker
+        # Format: [worker_id, b"", client_id, b"", model_name, request_data]
         self.backend.send_multipart(
             [
                 worker_id,
@@ -241,9 +252,7 @@ class AutoStartBroker(Broker):
                 request_data,
             ]
         )
-        logger.debug(
-            f"Routed request from client {client_id} to worker {worker_id} (model: {model_name})"
-        )
+        logger.debug(f"Routed request from {client_id} to {worker_id} ({model_name})")
 
     def _process_pending_requests(self):
         """Process any requests that were queued during worker startup."""
@@ -257,7 +266,11 @@ class AutoStartBroker(Broker):
                 model_name = msg_type.decode("utf-8") if msg_type else None
                 request_data = parts[3]
 
-                if model_name and model_name in self.worker_queue and self.worker_queue[model_name]:
+                if (
+                    model_name
+                    and model_name in self.worker_queue
+                    and self.worker_queue[model_name]
+                ):
                     # Route to available worker
                     worker_id = self.worker_queue[model_name].popleft()
                     self.backend.send_multipart(
@@ -271,7 +284,7 @@ class AutoStartBroker(Broker):
                         ]
                     )
                     logger.debug(
-                        f"Processed queued request from {client_id} to worker {worker_id}"
+                        f"Processed queued request from {client_id} to {worker_id}"
                     )
                 else:
                     # No workers available for this model
@@ -283,8 +296,33 @@ class AutoStartBroker(Broker):
                     )
                     self.frontend.send_multipart([client_id, b"", error_response])
                     logger.warning(
-                        f"No workers for queued request from {client_id} (model: {model_name})"
+                        f"No workers for queued request from {client_id} ({model_name})"
                     )
+
+    def _build_worker_command(self, model_name: str, model) -> list[str]:
+        """Build the command to start a worker process."""
+        cmd = ["uv", "run"]
+        if hasattr(model, "extra") and model.extra:
+            for dep in model.extra:
+                cmd.extend(["--extra", dep])
+        cmd.extend(
+            [
+                "mlipx",
+                "serve",
+                model_name,
+                "--timeout",
+                str(self.worker_timeout),
+                "--no-uv",
+            ]
+        )
+        if self.backend_path:
+            from .protocol import get_default_workers_path
+
+            if self.backend_path != get_default_workers_path():
+                cmd.extend(["--broker", self.backend_path])
+        if self.models_file:
+            cmd.extend(["--models", str(self.models_file)])
+        return cmd
 
     def _start_worker(self, model_name: str):
         """Start a worker using mlipx serve.
@@ -301,72 +339,34 @@ class AutoStartBroker(Broker):
                 logger.debug(
                     f"Worker for {model_name} already running (PID: {proc.pid})"
                 )
-                return  # Already running
+                return
 
-        model = self.models_registry[model_name]
-
-        # Check if uv is available
-        uv_path = shutil.which("uv")
-        if not uv_path:
-            logger.error(
-                f"Cannot auto-start worker for {model_name}: 'uv' not found in PATH"
-            )
+        if not shutil.which("uv"):
+            logger.error(f"Cannot auto-start {model_name}: 'uv' not found in PATH")
             return
 
-        # Build command: uv run --extra <deps> mlipx serve <model> --timeout <timeout> --no-uv
-        cmd = ["uv", "run"]
-
-        if hasattr(model, "extra") and model.extra:
-            for dep in model.extra:
-                cmd.extend(["--extra", dep])
-
-        cmd.extend(
-            [
-                "mlipx",
-                "serve",
-                model_name,
-                "--timeout",
-                str(self.worker_timeout),
-                "--no-uv",  # Already wrapped
-            ]
-        )
-
-        # Add backend path if not default
-        if self.backend_path:
-            from .protocol import get_default_workers_path
-
-            if self.backend_path != get_default_workers_path():
-                cmd.extend(["--broker", self.backend_path])
-
-        # Add models file path if specified
-        if self.models_file:
-            cmd.extend(["--models", str(self.models_file)])
-
+        model = self.models_registry[model_name]
+        cmd = self._build_worker_command(model_name, model)
         logger.info(f"Starting worker: {' '.join(cmd)}")
 
-        # Create log file for worker output
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         log_file = self._worker_log_dir / f"{model_name}-{timestamp}.log"
 
         try:
-            # Open log file for stderr capture
             stderr_file = open(log_file, "w")
-
             proc = subprocess.Popen(
                 cmd,
-                start_new_session=True,  # Detach from parent
+                start_new_session=True,
                 stdout=subprocess.DEVNULL,
                 stderr=stderr_file,
             )
-
             self.worker_processes[model_name] = proc
             logger.info(
-                f"Worker process started for {model_name} (PID: {proc.pid}), "
-                f"logs: {log_file}"
+                f"Worker started for {model_name} (PID: {proc.pid}), logs: {log_file}"
             )
         except Exception as e:
             logger.error(f"Failed to start worker for {model_name}: {e}", exc_info=True)
-            if 'stderr_file' in dir() and stderr_file:
+            if "stderr_file" in dir() and stderr_file:
                 stderr_file.close()
 
     def _check_worker_health(self):
