@@ -29,6 +29,8 @@ class ASEKeys(str, Enum):
 
 
 class NodeWithCalculator(t.Protocol[T]):
+    """Protocol for nodes that provide ASE calculators."""
+
     def get_calculator(self, **kwargs) -> Calculator:
         """Load the ASE calculator for the desired MLIP."""
         ...
@@ -39,6 +41,20 @@ class NodeWithCalculator(t.Protocol[T]):
         For details on the metadata specification, see:
         https://mlipx.readthedocs.io/en/latest/contributing.html#new-nodes
         """
+        ...
+
+
+class ModelProxy(t.Protocol):
+    """Protocol for model proxies (local and remote).
+
+    Both LocalModelProxy and serve.ModelProxy implement this interface,
+    ensuring consistent access to models regardless of execution mode.
+    """
+
+    model_name: str
+
+    def get_calculator(self, **kwargs) -> Calculator:
+        """Get an ASE calculator for this model."""
         ...
 
 

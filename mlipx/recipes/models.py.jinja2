@@ -99,11 +99,15 @@ ALL_MODELS["mattersim"] = mlipx.GenericASECalculator(
     device="auto",
     extra=["mattersim"],
 )
+# ORCA - External quantum chemistry code
 # https://www.faccts.de/orca/
+# To use ORCA, set the MLIPX_ORCA environment variable:
+#   export MLIPX_ORCA=/path/to/orca
+# Or specify orca_shell directly below.
 ALL_MODELS["orca"] = mlipx.OrcaSinglePoint(
-    orcasimpleinput= "PBE def2-TZVP TightSCF EnGrad",
-    orcablocks ="%pal nprocs 8 end",
-    orca_shell="{{ orcashell }}",
+    orcasimpleinput="PBE def2-TZVP TightSCF EnGrad",
+    orcablocks="%pal nprocs 8 end",
+    # orca_shell="/path/to/orca",  # Uncomment to specify path directly
 )
 
 # https://gracemaker.readthedocs.io/en/latest/gracemaker/foundation/
@@ -184,15 +188,6 @@ ALL_MODELS["pet-mad"] = mlipx.GenericASECalculator(
     extra=["pet-mad"],
     # MLIPX-hub model path, adjust as needed
 )
-# OPTIONAL
-# ========
-# If you have custom property names you can use the UpdatedFramesCalc
-# to set the energy, force and isolated_energies keys mlipx expects.
-
-# REFERENCE = mlipx.UpdateFramesCalc(
-#     results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
-#     info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
-# )
 
 # ============================================================
 # THE SELECTED MODELS!

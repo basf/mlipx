@@ -1,4 +1,5 @@
 from . import abc, spec
+from .models import Models
 from .nodes.adsorption import BuildASEslab, RelaxAdsorptionConfigs
 from .nodes.apply_calculator import ApplyCalculator
 from .nodes.co_splitting import COSplitting
@@ -67,5 +68,6 @@ __all__ = [
     "RelaxAdsorptionConfigs",
     "OrcaSinglePoint",
     "spec",
+    "Models",
     "__version__",
 ]

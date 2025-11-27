@@ -4,7 +4,7 @@ This module provides a broker-based architecture for serving MLIP models:
 
 - Broker: Central routing process using LRU load balancing
 - Workers: Model servers that perform calculations
-- Clients: Connect via the Models class to get RemoteCalculator instances
+- Clients: Connect via mlipx.Models to get calculators (unified local/serve interface)
 
 Examples
 --------
@@ -17,10 +17,10 @@ Start workers (in separate terminals):
     $ uv run --extra mace mlipx serve mace-mpa-0
     $ uv run --extra sevenn mlipx serve 7net-0
 
-Use in Python:
+Use in Python (unified interface - works with or without serve mode):
 
-    >>> from mlipx.serve import Models
-    >>> models = Models()
+    >>> from mlipx import Models
+    >>> models = Models()  # auto-detects serve vs local mode
     >>> list(models)
     ['mace-mpa-0', '7net-0']
     >>> calc = models['mace-mpa-0'].get_calculator()
@@ -47,7 +47,6 @@ from .autostart_broker import AutoStartBroker, run_autostart_broker
 from .broker import Broker, run_broker
 from .client import (
     ModelProxy,
-    Models,
     RemoteCalculator,
     get_broker_detailed_status,
     get_broker_status,
@@ -60,7 +59,7 @@ from .worker import Worker, run_worker
 
 __all__ = [
     # Client API (main user-facing interface)
-    "Models",
+    # Note: Models class moved to mlipx.Models for unified local/serve access
     "RemoteCalculator",
     "ModelProxy",
     "get_broker_status",

@@ -115,17 +115,20 @@ See :ref:`serve` for details on starting brokers, managing workers, and DVC inte
 Updating Dataset Keys
 ---------------------
 
-In some cases, models may need to be defined to convert existing dataset keys into the format :code:`mlipx` expects.
-For example, you may need to provide isolated atom energies or convert data where energies are stored as :code:`atoms.info['DFT_ENERGY']`
-and forces as :code:`atoms.arrays['DFT_FORCES']`.
+In some cases, you may need to convert existing dataset keys into the format :code:`mlipx` expects.
+For example, your dataset may store energies as :code:`atoms.info['DFT_ENERGY']` and forces as :code:`atoms.arrays['DFT_FORCES']`.
 
-Here’s how to define a model for such a scenario:
+Use :code:`mlipx.UpdateFramesCalc` to remap these keys:
 
 .. code-block:: python
 
     import mlipx
 
-    REFERENCE = mlipx.UpdateFramesCalc(
+    # Remap existing dataset keys to mlipx format
+    data_remapper = mlipx.UpdateFramesCalc(
         results_mapping={"energy": "DFT_ENERGY", "forces": "DFT_FORCES"},
         info_mapping={mlipx.abc.ASEKeys.isolated_energies.value: "isol_ene"},
     )
+
+This is typically used in the :code:`metrics` recipe when comparing MLIP predictions against pre-computed reference data (e.g., DFT results).
+The generated :code:`main.py` includes a commented section showing how to configure this.

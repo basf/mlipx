@@ -1,7 +1,6 @@
 """Client interface for connecting to MLIP servers via ZeroMQ broker."""
 
 import logging
-from collections.abc import Mapping
 
 import msgpack
 import zmq
@@ -207,127 +206,42 @@ class ModelProxy:
         return f"ModelProxy(model={self.model_name!r})"
 
 
-class Models(Mapping):
-    """Collection interface to discover and connect to running model servers.
+def _fetch_models_from_broker(broker_path: str) -> list[str]:
+    """Fetch the list of available models from the broker.
 
-    This class implements the Mapping protocol, allowing dict-like access to models:
-    - `list(models)` - List available models
-    - `len(models)` - Number of available models
-    - `model_name in models` - Check if model is available
-    - `models[model_name]` - Get a ModelProxy for the model
+    Parameters
+    ----------
+    broker_path : str
+        IPC path to the broker.
 
-    Examples
-    --------
-    >>> from mlipx.serve import Models
-    >>> models = Models()
-    >>> list(models)
-    ['mace-mpa-0', '7net-0', 'chgnet']
-    >>> calc = models['mace-mpa-0'].get_calculator()
-    >>> atoms.calc = calc
-    >>> energy = atoms.get_potential_energy()
+    Returns
+    -------
+    list[str]
+        List of model names.
     """
+    ctx = zmq.Context()
+    socket = ctx.socket(zmq.REQ)
+    socket.setsockopt(zmq.RCVTIMEO, 10000)  # 10 second timeout
+    socket.setsockopt(zmq.SNDTIMEO, 5000)
+    socket.setsockopt(zmq.LINGER, 0)
 
-    def __init__(self, broker: str | None = None, timeout: int = 60000):
-        """Initialize the Models collection.
+    try:
+        socket.connect(broker_path)
+        # REQ socket adds empty delimiter automatically, so just send LIST_MODELS
+        socket.send_multipart([LIST_MODELS])
+        response_data = socket.recv()
+        response = msgpack.unpackb(response_data)
+        return response.get("models", [])
 
-        Parameters
-        ----------
-        broker : str | None
-            IPC path to broker. Defaults to platform-specific path.
-        timeout : int
-            Default timeout in milliseconds for calculators. Default: 60000 (60s).
-            For autostart broker, should be long enough for workers to start.
-        """
-        self.broker_path = broker or get_default_broker_path()
-        self.timeout = timeout
-
-    def _fetch_models(self) -> list[str]:
-        """Fetch the list of available models from the broker.
-
-        Returns
-        -------
-        list[str]
-            List of model names.
-        """
-        ctx = zmq.Context()
-        socket = ctx.socket(zmq.REQ)
-        socket.setsockopt(zmq.RCVTIMEO, 10000)  # 10 second timeout
-        socket.setsockopt(zmq.SNDTIMEO, 5000)
-        socket.setsockopt(zmq.LINGER, 0)
-
-        try:
-            socket.connect(self.broker_path)
-            # REQ socket adds empty delimiter automatically, so just send LIST_MODELS
-            socket.send_multipart([LIST_MODELS])
-            response_data = socket.recv()
-            response = msgpack.unpackb(response_data)
-            return response.get("models", [])
-
-        except zmq.error.Again:
-            raise RuntimeError(
-                f"Timeout connecting to broker at {self.broker_path}. "
-                "Is the broker running?"
-            )
-        except zmq.error.ZMQError as e:
-            raise RuntimeError(f"Failed to connect to broker: {e}")
-        finally:
-            socket.close()
-            ctx.term()
-
-    def _get_models(self) -> list[str]:
-        """Get the list of models from the broker.
-
-        Returns
-        -------
-        list[str]
-            List of model names.
-
-        Notes
-        -----
-        Always fetches fresh data from the broker. This is fast for local IPC
-        and ensures the model list is always up-to-date.
-        """
-        return self._fetch_models()
-
-    def __getitem__(self, key: str) -> ModelProxy:
-        """Get a ModelProxy for the given model name.
-
-        Parameters
-        ----------
-        key : str
-            Model name.
-
-        Returns
-        -------
-        ModelProxy
-            Proxy for the model.
-
-        Raises
-        ------
-        KeyError
-            If the model is not available.
-        """
-        if key not in self._get_models():
-            raise KeyError(
-                f"Model '{key}' not available. Available models: {self._get_models()}"
-            )
-        return ModelProxy(key, self.broker_path, timeout=self.timeout)
-
-    def __iter__(self):
-        """Iterate over available model names."""
-        return iter(self._get_models())
-
-    def __len__(self) -> int:
-        """Return the number of available models."""
-        return len(self._get_models())
-
-    def __repr__(self) -> str:
-        """Return string representation."""
-        try:
-            models = self._get_models()
-            return f"Models({models})"
-        except Exception:
-            return f"Models(broker={self.broker_path!r})"
+    except zmq.error.Again:
+        raise RuntimeError(
+            f"Timeout connecting to broker at {broker_path}. Is the broker running?"
+        )
+    except zmq.error.ZMQError as e:
+        raise RuntimeError(f"Failed to connect to broker: {e}")
+    finally:
+        socket.close()
+        ctx.term()
 
 
 def get_broker_status(broker_path: str | None = None) -> dict:
@@ -359,8 +273,7 @@ def get_broker_status(broker_path: str | None = None) -> dict:
     }
 
     try:
-        models = Models(broker=broker_path)
-        model_list = list(models)
+        model_list = _fetch_models_from_broker(broker_path)
         status["broker_running"] = True
         status["models"] = model_list
     except RuntimeError as e:

@@ -1,5 +1,4 @@
 import json
-import os
 import pathlib
 import subprocess
 import typing as t
@@ -33,15 +32,14 @@ def repro_if_requested(repro: bool):
         subprocess.run(["dvc", "repro"], check=True)
 
 
-def render_models(models: str | None):
-    """Render the models.py file if models are specified."""
-    if models:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
-
-
-def parse_inputs(datapath: str | None, material_ids: str | None, smiles: str | None):
+def parse_inputs(
+    datapath: str | None,
+    material_ids: str | None,
+    smiles: str | None,
+    require_input: bool = True,
+):
     """Parse and validate input arguments."""
-    if not any([datapath, material_ids, smiles]):
+    if require_input and not any([datapath, material_ids, smiles]):
         raise ValueError(
             "Provide at least one of `datapath`, `material_ids`, or `smiles`."
         )
@@ -60,14 +58,24 @@ def handle_recipe(
     datapath: str | None,
     material_ids: str | None,
     smiles: str | None,
+    models: str | None = None,
+    require_input: bool = True,
     **additional_context,
 ):
     """Common logic for handling recipes."""
     if initialize:
         initialize_directory()
 
-    inputs = parse_inputs(datapath, material_ids, smiles)
-    render_template(template_name, "main.py", **inputs, **additional_context)
+    inputs = parse_inputs(datapath, material_ids, smiles, require_input=require_input)
+    models_list = models.split(",") if models else []
+
+    # Generate models.py if models are specified
+    if models_list:
+        render_template("models.py.jinja2", "models.py", models=models_list)
+
+    render_template(
+        template_name, "main.py", **inputs, models=models_list, **additional_context
+    )
     repro_if_requested(repro)
 
 
@@ -81,8 +89,6 @@ def relax(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Perform a relaxation task."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         CWD / "relax.py.jinja2",
         initialize=initialize,
@@ -90,6 +96,7 @@ def relax(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -98,17 +105,19 @@ def neb(
     initialize: bool = False,
     datapath: str = "...",
     repro: bool = False,
-    models: str | None = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build a NEB recipe."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
-    if initialize:
-        initialize_directory()
-    template = jinja2.Template((CWD / "neb.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(template.render(datapath=datapath))
-    repro_if_requested(repro)
+    handle_recipe(
+        "neb.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=None,
+        smiles=None,
+        models=models,
+        require_input=False,
+    )
 
 
 @app.command()
@@ -121,8 +130,6 @@ def co_splitting(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Run CO splitting analysis."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "co_splitting.py.jinja2",
         initialize=initialize,
@@ -130,6 +137,7 @@ def co_splitting(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -143,8 +151,6 @@ def vibrational_analysis(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Run vibrational analysis."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "vibrational_analysis.py.jinja2",
         initialize=initialize,
@@ -152,6 +158,7 @@ def vibrational_analysis(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -165,8 +172,6 @@ def phase_diagram(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build a phase diagram."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "phase_diagram.py.jinja2",
         initialize=initialize,
@@ -174,6 +179,7 @@ def phase_diagram(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -186,8 +192,6 @@ def pourbaix_diagram(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build a Pourbaix diagram."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "pourbaix_diagram.py.jinja2",
         initialize=initialize,
@@ -195,6 +199,7 @@ def pourbaix_diagram(
         datapath=datapath,
         material_ids=material_ids,
         smiles=None,
+        models=models,
     )
 
 
@@ -208,8 +213,6 @@ def md(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Build an MD recipe."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "md.py.jinja2",
         initialize=initialize,
@@ -217,6 +220,7 @@ def md(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -230,22 +234,6 @@ def homonuclear_diatomics(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Run homonuclear diatomics calculations."""
-    if models is not None:
-        models_lst = models.split(",")
-        orcashell = ""
-        if "orca" in models_lst:
-            if "MLIPX_ORCA" not in os.environ:
-                orcashell = typer.prompt("Enter the path to the Orca executable")
-            else:
-                orcashell = None
-
-        render_template(
-            CWD / "models.py.jinja2",
-            "models.py",
-            models=models_lst,
-            orcashell=orcashell,
-        )
-
     handle_recipe(
         "homonuclear_diatomics.py.jinja2",
         initialize=initialize,
@@ -253,6 +241,7 @@ def homonuclear_diatomics(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -266,8 +255,6 @@ def ev(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Compute Energy-Volume curves."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "energy_volume.py.jinja2",
         initialize=initialize,
@@ -275,6 +262,7 @@ def ev(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -284,7 +272,7 @@ def metrics(
     datapath: str = "...",
     isolated_atom_energies: bool = False,
     repro: bool = False,
-    models: str | None = None,
+    models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Compute Energy and Force Metrics.
 
@@ -297,18 +285,17 @@ def metrics(
     isolated_atom_energies: bool
         Compute metrics based on isolated atom energies.
     """
-    if initialize:
-        initialize_directory()
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
-    template = jinja2.Template((CWD / "metrics.py").read_text())
-    with open("main.py", "w") as f:
-        f.write(
-            template.render(
-                datapath=datapath, isolated_atom_energies=isolated_atom_energies
-            )
-        )
-    repro_if_requested(repro)
+    handle_recipe(
+        "metrics.py.jinja2",
+        initialize=initialize,
+        repro=repro,
+        datapath=datapath,
+        material_ids=None,
+        smiles=None,
+        models=models,
+        require_input=False,
+        isolated_atom_energies=isolated_atom_energies,
+    )
 
 
 @app.command()
@@ -321,8 +308,6 @@ def invariances(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Test rotational, permutational, and translational invariance."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     handle_recipe(
         "invariances.py.jinja2",
         initialize=initialize,
@@ -330,6 +315,7 @@ def invariances(
         datapath=datapath,
         material_ids=material_ids,
         smiles=smiles,
+        models=models,
     )
 
 
@@ -343,8 +329,6 @@ def adsorption(
     models: t.Annotated[str | None, typer.Option()] = None,
 ):
     """Test rotational, permutational, and translational invariance."""
-    if models is not None:
-        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
     if slab_config is not None:
         slab_config = json.loads(slab_config)
     handle_recipe(
@@ -354,5 +338,6 @@ def adsorption(
         datapath=None,
         material_ids=None,
         smiles=smiles,
+        models=models,
         slab_config=slab_config,
     )

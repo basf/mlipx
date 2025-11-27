@@ -298,31 +298,31 @@ class TestModelsClass:
 
     def test_models_empty_when_no_workers(self, broker_process):
         """Test Models class returns empty when no workers registered."""
-        from mlipx.serve import Models
+        from mlipx import Models
 
         broker_path, _ = broker_process
-        models = Models(broker=broker_path)
+        models = Models(broker=broker_path, local=False)
 
         assert list(models) == []
         assert len(models) == 0
 
     def test_models_contains_returns_false(self, broker_process):
         """Test __contains__ returns False for unavailable model."""
-        from mlipx.serve import Models
+        from mlipx import Models
 
         broker_path, _ = broker_process
-        models = Models(broker=broker_path)
+        models = Models(broker=broker_path, local=False)
 
         assert "nonexistent-model" not in models
 
     def test_models_getitem_raises_keyerror(self, broker_process):
         """Test __getitem__ raises KeyError for unavailable model."""
-        from mlipx.serve import Models
+        from mlipx import Models
 
         broker_path, _ = broker_process
-        models = Models(broker=broker_path)
+        models = Models(broker=broker_path, local=False)
 
-        with pytest.raises(KeyError, match="not available"):
+        with pytest.raises(KeyError, match="not found"):
             _ = models["nonexistent-model"]
 
 

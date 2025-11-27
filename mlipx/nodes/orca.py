@@ -27,8 +27,17 @@ class OrcaSinglePoint:
     orca_shell: str | None = None
 
     def get_calculator(self, directory: str | Path) -> ORCA:
-        profile = OrcaProfile(command=self.orca_shell or os.environ["MLIPX_ORCA"])
+        orca_path = self.orca_shell or os.environ.get("MLIPX_ORCA")
+        if not orca_path:
+            raise EnvironmentError(
+                "ORCA executable not configured. Either:\n"
+                "  1. Set MLIPX_ORCA environment variable:"
+                " export MLIPX_ORCA=/path/to/orca\n"
+                "  2. Specify orca_shell in "
+                "OrcaSinglePoint(..., orca_shell='/path/to/orca')"
+            )
 
+        profile = OrcaProfile(command=orca_path)
         calc = ORCA(
             profile=profile,
             orcasimpleinput=self.orcasimpleinput,

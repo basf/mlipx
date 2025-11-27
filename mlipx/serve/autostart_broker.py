@@ -132,6 +132,7 @@ class AutoStartBroker(Broker):
                     "models": model_details,
                     "autostart": True,
                     "autostart_models": list(self.models_registry.keys()),
+                    "worker_start_timeout": self.worker_start_timeout,
                 }
             )
             self.frontend.send_multipart([client_id, b"", response])
@@ -207,6 +208,7 @@ class AutoStartBroker(Broker):
                                     "autostart_models": list(
                                         self.models_registry.keys()
                                     ),
+                                    "worker_start_timeout": self.worker_start_timeout,
                                 }
                             )
                             self.frontend.send_multipart(
