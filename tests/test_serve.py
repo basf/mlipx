@@ -584,3 +584,264 @@ ALL_MODELS = {
 
         # Clean up
         broker._release_lock()
+
+
+class TestModelsLocalWithLJCalculator:
+    """Integration tests for Models class with a dummy LJ calculator."""
+
+    @pytest.fixture
+    def lj_models_file(self, tmp_path):
+        """Create a models.py file with a Lennard-Jones calculator."""
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+
+ALL_MODELS = {
+    'lj-test': GenericASECalculator(
+        module='ase.calculators.lj',
+        class_name='LennardJones',
+    ),
+}
+""")
+        return models_file
+
+    def test_models_local_loads_lj_model(self, lj_models_file):
+        """Test that Models can load a local LJ model."""
+        from mlipx import Models
+
+        models = Models(path=lj_models_file, local=True)
+
+        assert "lj-test" in models
+        assert len(models) == 1
+        assert list(models) == ["lj-test"]
+
+    def test_models_local_get_calculator(self, lj_models_file):
+        """Test that get_calculator returns a working calculator."""
+        from ase import Atoms
+
+        from mlipx import Models
+
+        models = Models(path=lj_models_file, local=True)
+        calc = models["lj-test"].get_calculator()
+
+        # Create simple atoms and compute energy
+        atoms = Atoms("Ar2", positions=[[0, 0, 0], [3.0, 0, 0]])
+        atoms.calc = calc
+
+        energy = atoms.get_potential_energy()
+        forces = atoms.get_forces()
+
+        assert isinstance(energy, float)
+        assert forces.shape == (2, 3)
+
+    def test_models_local_geometry_optimization(self, lj_models_file):
+        """Test running a geometry optimization with local LJ model."""
+        from ase import Atoms
+        from ase.optimize import BFGS
+
+        from mlipx import Models
+
+        models = Models(path=lj_models_file, local=True)
+        calc = models["lj-test"].get_calculator()
+
+        # Create two Ar atoms at non-equilibrium distance (too far apart)
+        atoms = Atoms("Ar2", positions=[[0, 0, 0], [4.0, 0, 0]])
+        atoms.calc = calc
+
+        # Run optimization
+        optimizer = BFGS(atoms, logfile=None)
+        converged = optimizer.run(fmax=0.01, steps=50)
+
+        # Should converge
+        assert converged
+        # Final forces should be small
+        max_force = max(abs(atoms.get_forces().flatten()))
+        assert max_force < 0.02
+
+    def test_models_local_repr(self, lj_models_file):
+        """Test Models repr includes model names."""
+        from mlipx import Models
+
+        models = Models(path=lj_models_file, local=True)
+
+        repr_str = repr(models)
+        assert "lj-test" in repr_str
+        assert "local" in repr_str
+
+    def test_models_local_keyerror_for_missing_model(self, lj_models_file):
+        """Test KeyError is raised for non-existent model."""
+        from mlipx import Models
+
+        models = Models(path=lj_models_file, local=True)
+
+        with pytest.raises(KeyError, match="nonexistent"):
+            _ = models["nonexistent"]
+
+
+class TestModelsServeWithLJCalculator:
+    """Integration tests for Models in serve mode with LJ calculator.
+
+    These tests start an actual broker + worker to verify end-to-end functionality.
+    """
+
+    @pytest.fixture
+    def lj_models_file(self, tmp_path):
+        """Create a models.py file with a Lennard-Jones calculator."""
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+
+ALL_MODELS = {
+    'lj-test': GenericASECalculator(
+        module='ase.calculators.lj',
+        class_name='LennardJones',
+    ),
+}
+""")
+        return models_file
+
+    @pytest.fixture
+    def lj_broker_and_worker(self, tmp_path, lj_models_file):
+        """Start a broker and worker with the LJ model."""
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        # Start broker
+        broker_proc = subprocess.Popen(
+            [
+                sys.executable,
+                "-c",
+                f"""
+import sys
+sys.path.insert(0, '.')
+from mlipx.serve import Broker
+broker = Broker(frontend_path='{broker_path}', backend_path='{workers_path}')
+broker.start()
+""",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=str(tmp_path.parent.parent.parent),  # mlipx root
+        )
+
+        # Wait for broker to start
+        max_wait = 5.0
+        start_time = time.time()
+        while time.time() - start_time < max_wait:
+            if broker_socket.exists():
+                break
+            time.sleep(0.1)
+
+        # Start worker - note: backend_path is the workers path, not broker path
+        worker_proc = subprocess.Popen(
+            [
+                sys.executable,
+                "-c",
+                f"""
+import sys
+from pathlib import Path
+sys.path.insert(0, '.')
+from mlipx.serve.worker import run_worker
+run_worker(
+    model_name='lj-test',
+    models_file=Path('{lj_models_file}'),
+    backend_path='{workers_path}',
+    timeout=60,
+)
+""",
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=str(tmp_path.parent.parent.parent),
+        )
+
+        # Wait for worker to register - poll until model is available
+        from mlipx.serve import get_broker_status
+
+        max_wait = 10.0
+        start_time = time.time()
+        while time.time() - start_time < max_wait:
+            status = get_broker_status(broker_path)
+            if status.get("broker_running") and "lj-test" in status.get("models", []):
+                break
+            time.sleep(0.2)
+
+        yield broker_path, broker_proc, worker_proc
+
+        # Cleanup
+        worker_proc.terminate()
+        broker_proc.terminate()
+        try:
+            worker_proc.wait(timeout=5)
+            broker_proc.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            worker_proc.kill()
+            broker_proc.kill()
+            worker_proc.wait()
+            broker_proc.wait()
+
+    def test_models_serve_lists_model(self, lj_broker_and_worker):
+        """Test that Models in serve mode lists the LJ model."""
+        from mlipx import Models
+
+        broker_path, _, _ = lj_broker_and_worker
+        models = Models(broker=broker_path, local=False)
+
+        assert "lj-test" in models
+        assert len(models) == 1
+
+    def test_models_serve_get_calculator(self, lj_broker_and_worker):
+        """Test getting a calculator in serve mode."""
+        from mlipx import Models
+
+        broker_path, _, _ = lj_broker_and_worker
+        models = Models(broker=broker_path, local=False)
+        calc = models["lj-test"].get_calculator()
+
+        assert calc is not None
+        assert calc.model == "lj-test"
+
+    def test_models_serve_compute_energy(self, lj_broker_and_worker):
+        """Test computing energy via remote calculator."""
+        from ase import Atoms
+
+        from mlipx import Models
+
+        broker_path, _, _ = lj_broker_and_worker
+        models = Models(broker=broker_path, local=False)
+        calc = models["lj-test"].get_calculator()
+
+        atoms = Atoms("Ar2", positions=[[0, 0, 0], [3.0, 0, 0]])
+        atoms.calc = calc
+
+        energy = atoms.get_potential_energy()
+        forces = atoms.get_forces()
+
+        assert isinstance(energy, float)
+        assert forces.shape == (2, 3)
+
+    def test_models_serve_geometry_optimization(self, lj_broker_and_worker):
+        """Test running geometry optimization via serve mode."""
+        from ase import Atoms
+        from ase.optimize import BFGS
+
+        from mlipx import Models
+
+        broker_path, _, _ = lj_broker_and_worker
+        models = Models(broker=broker_path, local=False)
+        calc = models["lj-test"].get_calculator()
+
+        # Create two Ar atoms at non-equilibrium distance (too far apart)
+        atoms = Atoms("Ar2", positions=[[0, 0, 0], [4.0, 0, 0]])
+        atoms.calc = calc
+
+        optimizer = BFGS(atoms, logfile=None)
+        converged = optimizer.run(fmax=0.01, steps=50)
+
+        # Should converge
+        assert converged
+        # Final forces should be small
+        max_force = max(abs(atoms.get_forces().flatten()))
+        assert max_force < 0.02

@@ -102,7 +102,9 @@ class _ServeBackend(_ModelBackend):
         self._timeout = timeout or self._query_broker_timeout()
         self._cached_models: list[str] | None = None
 
-    def _query_broker_timeout(self) -> int | None:
+    def _query_broker_timeout(self) -> int:
+        """Query broker for worker_start_timeout, return default if unavailable."""
+        default_timeout = 60000  # 60 seconds default
         try:
             from mlipx.serve.client import get_broker_detailed_status
 
@@ -111,7 +113,7 @@ class _ServeBackend(_ModelBackend):
                 return status["worker_start_timeout"] * 1000
         except Exception as e:
             logger.debug(f"Could not query broker timeout: {e}")
-        return None
+        return default_timeout
 
     def _fetch_models(self) -> list[str]:
         from mlipx.serve.client import _fetch_models_from_broker

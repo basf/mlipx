@@ -82,10 +82,15 @@ class AutoStartBroker(Broker):
                     f"Available models: {available}"
                 )
             self.models_registry = {k: all_models[k] for k in allowed_models}
-            logger.info(f"Serving {len(self.models_registry)} models: {allowed_models}")
+            model_names = ", ".join(sorted(self.models_registry.keys()))
+            logger.info(f"Serving {len(self.models_registry)} models: [{model_names}]")
         else:
             self.models_registry = all_models
-            logger.info(f"Serving all {len(self.models_registry)} models from registry")
+            model_names = ", ".join(sorted(self.models_registry.keys()))
+            logger.info(
+                f"Serving all {len(self.models_registry)} models from registry: "
+                f"[{model_names}]"
+            )
 
         # Track worker processes to avoid duplicate starts
         self.worker_processes: dict[str, subprocess.Popen] = {}
