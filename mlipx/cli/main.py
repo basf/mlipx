@@ -292,6 +292,12 @@ def serve_broker(
             help="Maximum time for a single calculation in seconds (default: 30)"
         ),
     ] = 30,
+    concurrency: Annotated[
+        int,
+        typer.Option(
+            help="Maximum worker processes to auto-start per model (default: 1)"
+        ),
+    ] = 1,
 ):
     """Start the ZeroMQ broker for MLIP workers.
 
@@ -344,6 +350,7 @@ def serve_broker(
         typer.echo(f"Worker idle timeout: {worker_timeout}s")
         typer.echo(f"Worker startup timeout: {worker_start_timeout}s")
         typer.echo(f"Worker run timeout: {worker_run_timeout}s")
+        typer.echo(f"Concurrency per model: {concurrency}")
         if model_names:
             typer.echo(f"Serving models: {', '.join(model_names)}")
 
@@ -354,6 +361,7 @@ def serve_broker(
             worker_start_timeout=worker_start_timeout,
             worker_run_timeout=worker_run_timeout,
             allowed_models=model_names,
+            concurrency=concurrency,
         )
     else:
         from mlipx.serve import run_broker
