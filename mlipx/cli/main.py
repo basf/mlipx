@@ -283,9 +283,15 @@ def serve_broker(
     worker_start_timeout: Annotated[
         int,
         typer.Option(
-            help="Maximum time to wait for worker startup in seconds (default: 60)"
+            help="Maximum time to wait for worker startup in seconds (default: 180)"
         ),
-    ] = 60,
+    ] = 180,
+    worker_run_timeout: Annotated[
+        int,
+        typer.Option(
+            help="Maximum time for a single calculation in seconds (default: 30)"
+        ),
+    ] = 30,
 ):
     """Start the ZeroMQ broker for MLIP workers.
 
@@ -337,6 +343,7 @@ def serve_broker(
             typer.echo(f"Broker path: {get_default_broker_path()}")
         typer.echo(f"Worker idle timeout: {worker_timeout}s")
         typer.echo(f"Worker startup timeout: {worker_start_timeout}s")
+        typer.echo(f"Worker run timeout: {worker_run_timeout}s")
         if model_names:
             typer.echo(f"Serving models: {', '.join(model_names)}")
 
@@ -345,6 +352,7 @@ def serve_broker(
             models_file=models_path,
             worker_timeout=worker_timeout,
             worker_start_timeout=worker_start_timeout,
+            worker_run_timeout=worker_run_timeout,
             allowed_models=model_names,
         )
     else:
@@ -502,7 +510,7 @@ def serve(
     typer.echo(f"Models file: {models_path} ({source})")
     if broker:
         typer.echo(f"Broker backend: {broker}")
-    typer.echo(f"Worker timeout: {timeout}s")
+    typer.echo(f"Worker idle timeout: {timeout}s")
 
     run_worker(
         model_name=model_name,

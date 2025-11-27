@@ -23,9 +23,9 @@ from .protocol import (
 
 logger = logging.getLogger(__name__)
 
-# Worker timeout in seconds - if no heartbeat received, consider worker dead.
-# Set to 5 seconds (5x the 1-second heartbeat interval) for network delays.
-WORKER_TIMEOUT = 5.0
+# Default worker run timeout in seconds - if no heartbeat received, worker is dead.
+# Must be long enough for the longest expected calculation.
+DEFAULT_WORKER_RUN_TIMEOUT = 30.0
 
 
 class Broker:
@@ -40,7 +40,10 @@ class Broker:
     """
 
     def __init__(
-        self, frontend_path: str | None = None, backend_path: str | None = None
+        self,
+        frontend_path: str | None = None,
+        backend_path: str | None = None,
+        worker_run_timeout: float = DEFAULT_WORKER_RUN_TIMEOUT,
     ):
         """Initialize the broker.
 
@@ -50,9 +53,13 @@ class Broker:
             IPC path for client connections. Defaults to platform-specific path.
         backend_path : str | None
             IPC path for worker connections. Defaults to platform-specific path.
+        worker_run_timeout : float
+            Maximum time in seconds for a calculation. If no heartbeat is received
+            within this time, the worker is considered dead. Default is 60 seconds.
         """
         self.frontend_path = frontend_path or get_default_broker_path()
         self.backend_path = backend_path or get_default_workers_path()
+        self.worker_run_timeout = worker_run_timeout
 
         # LRU queue per model: {model_name: deque([worker_id, ...])}
         self.worker_queue: dict[str, deque[bytes]] = defaultdict(deque)
@@ -386,7 +393,7 @@ class Broker:
 
         # Find workers that haven't sent heartbeat in too long
         for worker_id, last_heartbeat in self.worker_heartbeat.items():
-            if current_time - last_heartbeat > WORKER_TIMEOUT:
+            if current_time - last_heartbeat > self.worker_run_timeout:
                 stale_workers.append(worker_id)
 
         # Remove stale workers

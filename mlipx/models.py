@@ -103,14 +103,29 @@ class _ServeBackend(_ModelBackend):
         self._cached_models: list[str] | None = None
 
     def _query_broker_timeout(self) -> int:
-        """Query broker for worker_start_timeout, return default if unavailable."""
-        default_timeout = 60000  # 60 seconds default
+        """Query broker for timeouts, return default if unavailable.
+
+        The client timeout needs to account for:
+        1. Worker startup time (worker_start_timeout from broker)
+        2. Actual calculation time (worker_run_timeout from broker)
+
+        Returns timeout in milliseconds.
+        """
+        # Default: 60s startup + 60s run = 120s total
+        default_timeout = 120000
         try:
             from mlipx.serve.client import get_broker_detailed_status
 
             status = get_broker_detailed_status(self._broker_path)
-            if "worker_start_timeout" in status:
-                return status["worker_start_timeout"] * 1000
+            worker_start_timeout = status.get("worker_start_timeout")  # seconds
+            worker_run_timeout = status.get("worker_run_timeout")  # seconds
+
+            if worker_start_timeout is not None and worker_run_timeout is not None:
+                # Total timeout = startup + run (both in seconds, convert to ms)
+                return (worker_start_timeout + worker_run_timeout) * 1000
+            elif worker_start_timeout is not None:
+                # Only start timeout available, add default run timeout
+                return (worker_start_timeout + 60) * 1000
         except Exception as e:
             logger.debug(f"Could not query broker timeout: {e}")
         return default_timeout

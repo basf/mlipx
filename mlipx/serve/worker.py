@@ -213,8 +213,9 @@ class Worker:
             atoms, properties = unpack_request(request_data)
 
             # Perform calculation
+            # Note: The broker monitors heartbeats and will kill the worker
+            # if calculation exceeds worker_run_timeout
             atoms.calc = self.calculator
-            response_dict = {"success": True}
 
             energy = None
             forces = None
@@ -222,7 +223,6 @@ class Worker:
 
             if "energy" in properties:
                 energy = atoms.get_potential_energy()
-                response_dict["energy"] = float(energy)
 
             if "forces" in properties:
                 forces = atoms.get_forces()

@@ -137,7 +137,8 @@ def build_serve_command(
         method = "no extras required"
         cmd = ["uv", "run", "mlipx", "serve", model_name]
 
-    cmd.extend(["--timeout", str(timeout), "--no-uv"])
+    cmd.extend(["--timeout", str(timeout)])
+    cmd.append("--no-uv")
 
     if broker:
         cmd.extend(["--broker", broker])

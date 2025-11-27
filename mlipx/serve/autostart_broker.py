@@ -36,7 +36,8 @@ class AutoStartBroker(Broker):
         backend_path: str | None = None,
         models_file: Path | None = None,
         worker_timeout: int = 300,
-        worker_start_timeout: int = 30,
+        worker_start_timeout: int = 180,
+        worker_run_timeout: int = 30,
         allowed_models: list[str] | None = None,
     ):
         """Initialize the autostart broker.
@@ -54,13 +55,16 @@ class AutoStartBroker(Broker):
             Default is 300 seconds (5 minutes).
         worker_start_timeout : int
             Maximum time in seconds to wait for a worker to start and register.
+            Default is 180 seconds.
+        worker_run_timeout : int
+            Maximum time in seconds for a single calculation.
             Default is 30 seconds.
         allowed_models : list[str] | None
             Optional list of model names to serve. If None, all models from
             the registry are available. If specified, only these models can
             be auto-started.
         """
-        super().__init__(frontend_path, backend_path)
+        super().__init__(frontend_path, backend_path, worker_run_timeout)
 
         # Load model registry
         if models_file is None:
@@ -96,10 +100,15 @@ class AutoStartBroker(Broker):
         self.worker_processes: dict[str, subprocess.Popen] = {}
         self.worker_timeout = worker_timeout
         self.worker_start_timeout = worker_start_timeout
+        self.worker_run_timeout = worker_run_timeout
         self.models_file = models_file  # Store for passing to workers
 
         # Queue for requests that arrive during worker startup
         self._pending_requests: list[list[bytes]] = []
+
+        # Track in-flight requests: {worker_id: (start_time, model_name)}
+        # Used to detect workers that are stuck and need to be killed
+        self._in_flight_requests: dict[bytes, tuple[float, str]] = {}
 
     def _handle_frontend(self):  # noqa: C901
         """Handle client requests, auto-starting workers if needed."""
@@ -138,6 +147,7 @@ class AutoStartBroker(Broker):
                     "autostart": True,
                     "autostart_models": list(self.models_registry.keys()),
                     "worker_start_timeout": self.worker_start_timeout,
+                    "worker_run_timeout": self.worker_run_timeout,
                 }
             )
             self.frontend.send_multipart([client_id, b"", response])
@@ -164,7 +174,17 @@ class AutoStartBroker(Broker):
         if model_name not in self.worker_queue or not self.worker_queue[model_name]:
             # Try to autostart
             if model_name in self.models_registry:
-                logger.info(f"No workers for {model_name}, auto-starting...")
+                # Check if worker process is already running (just busy or starting up)
+                worker_running = (
+                    model_name in self.worker_processes
+                    and self.worker_processes[model_name].poll() is None
+                )
+                if worker_running:
+                    logger.debug(
+                        f"Worker for {model_name} is busy or starting up, waiting..."
+                    )
+                else:
+                    logger.info(f"No workers for {model_name}, auto-starting...")
                 self._start_worker(model_name)
 
                 # Wait for worker to register (with timeout), processing other messages
@@ -214,6 +234,7 @@ class AutoStartBroker(Broker):
                                         self.models_registry.keys()
                                     ),
                                     "worker_start_timeout": self.worker_start_timeout,
+                                    "worker_run_timeout": self.worker_run_timeout,
                                 }
                             )
                             self.frontend.send_multipart(
@@ -232,7 +253,11 @@ class AutoStartBroker(Broker):
                         model_name in self.worker_queue
                         and self.worker_queue[model_name]
                     ):
-                        logger.info(f"Worker for {model_name} registered successfully")
+                        if not worker_running:
+                            # Only log if we actually started a new worker
+                            logger.info(
+                                f"Worker for {model_name} registered successfully"
+                            )
                         break
                 else:
                     # Worker failed to start
@@ -395,11 +420,45 @@ class AutoStartBroker(Broker):
             logger.error(f"Failed to start worker for {model_name}: {e}", exc_info=True)
 
     def _check_worker_health(self):
-        """Check for stale workers and remove them, cleaning up processes too."""
-        # Call parent implementation first
+        """Check for stale workers and remove them, killing processes if needed.
+
+        This extends the parent implementation to:
+        1. Detect workers that exceeded worker_run_timeout (no heartbeat)
+        2. Kill the worker process if we started it
+        3. Clean up terminated processes
+        """
+        current_time = time.time()
+
+        # Find workers that need to be killed (exceeded run timeout)
+        workers_to_kill = []
+        for worker_id, last_heartbeat in self.worker_heartbeat.items():
+            if current_time - last_heartbeat > self.worker_run_timeout:
+                model_name = self.worker_model.get(worker_id)
+                if model_name and model_name in self.worker_processes:
+                    proc = self.worker_processes[model_name]
+                    if proc.poll() is None:  # Still running
+                        workers_to_kill.append((model_name, proc, worker_id))
+
+        # Kill stuck workers
+        for model_name, proc, worker_id in workers_to_kill:
+            worker_name = worker_id.decode("utf-8", errors="replace")
+            logger.warning(
+                f"Worker {worker_name} for '{model_name}' exceeded run_timeout "
+                f"({self.worker_run_timeout}s), killing process (PID: {proc.pid})"
+            )
+            try:
+                proc.kill()  # SIGKILL - immediate termination
+                proc.wait(timeout=5)
+                logger.info(f"Killed stuck worker for {model_name}")
+            except Exception as e:
+                logger.error(f"Error killing worker for {model_name}: {e}")
+            # Remove from tracked processes
+            self.worker_processes.pop(model_name, None)
+
+        # Call parent implementation to clean up tracking dicts
         super()._check_worker_health()
 
-        # Also check if any worker processes have died and clean them up
+        # Also check if any worker processes have died on their own and clean them up
         for model_name, proc in list(self.worker_processes.items()):
             if proc.poll() is not None:  # Process has terminated
                 logger.info(
@@ -442,7 +501,8 @@ def run_autostart_broker(
     backend_path: str | None = None,
     models_file: Path | None = None,
     worker_timeout: int = 300,
-    worker_start_timeout: int = 30,
+    worker_start_timeout: int = 180,
+    worker_run_timeout: int = 30,
     allowed_models: list[str] | None = None,
 ):
     """Run the autostart broker process.
@@ -459,6 +519,8 @@ def run_autostart_broker(
         Idle timeout in seconds for auto-started workers.
     worker_start_timeout : int
         Maximum time in seconds to wait for a worker to start and register.
+    worker_run_timeout : int
+        Maximum time in seconds for a single calculation.
     allowed_models : list[str] | None
         Optional list of model names to serve. If None, all models are available.
     """
@@ -473,6 +535,7 @@ def run_autostart_broker(
         models_file=models_file,
         worker_timeout=worker_timeout,
         worker_start_timeout=worker_start_timeout,
+        worker_run_timeout=worker_run_timeout,
         allowed_models=allowed_models,
     )
     try:

@@ -301,6 +301,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         - models: dict[str, dict] with model_name -> {worker_count, workers}
         - autostart: bool (whether autostart is enabled)
         - autostart_models: list[str] (models available for autostart)
+        - worker_start_timeout: int | None (seconds to wait for worker startup)
+        - worker_run_timeout: int | None (max seconds for a single calculation)
         - error: str (if any)
     """
     from .protocol import get_default_broker_path
@@ -313,6 +315,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         "models": {},
         "autostart": False,
         "autostart_models": [],
+        "worker_start_timeout": None,
+        "worker_run_timeout": None,
         "error": None,
     }
 
@@ -331,6 +335,8 @@ def get_broker_detailed_status(broker_path: str | None = None) -> dict:
         status["models"] = response.get("models", {})
         status["autostart"] = response.get("autostart", False)
         status["autostart_models"] = response.get("autostart_models", [])
+        status["worker_start_timeout"] = response.get("worker_start_timeout")
+        status["worker_run_timeout"] = response.get("worker_run_timeout")
     except zmq.error.Again:
         status["error"] = (
             f"Timeout connecting to broker at {broker_path}. Is the broker running?"
