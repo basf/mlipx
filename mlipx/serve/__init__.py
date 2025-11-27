@@ -53,6 +53,7 @@ from .client import (
     get_broker_status,
     shutdown_broker,
 )
+from .command import build_serve_command
 from .discovery import discover_models_file
 from .protocol import get_default_broker_path, get_default_workers_path
 from .worker import Worker, run_worker
@@ -77,4 +78,5 @@ __all__ = [
     "get_default_broker_path",
     "get_default_workers_path",
     "discover_models_file",
+    "build_serve_command",
 ]

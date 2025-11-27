@@ -15,7 +15,7 @@ class TestGetMlipxPackageSpec:
 
     def test_release_version_uses_pypi(self):
         """Test that release versions use PyPI with pinned version."""
-        from mlipx.cli.main import _get_mlipx_package_spec
+        from mlipx.serve.command import _get_mlipx_package_spec
 
         with patch("mlipx.__version__", "0.1.6"):
             # Mock metadata to not have Source Commit URL
@@ -27,7 +27,7 @@ class TestGetMlipxPackageSpec:
 
     def test_dev_version_uses_git_url_from_metadata(self):
         """Test that dev versions use git URL from Source Commit metadata."""
-        from mlipx.cli.main import _get_mlipx_package_spec
+        from mlipx.serve.command import _get_mlipx_package_spec
 
         with patch("mlipx.__version__", "0.1.6.dev17+gabc123def"):
             # Mock metadata with Source Commit URL
@@ -48,7 +48,7 @@ class TestGetMlipxPackageSpec:
 
     def test_dev_version_without_source_commit_uses_pypi(self):
         """Test that dev versions without Source Commit fall back to PyPI."""
-        from mlipx.cli.main import _get_mlipx_package_spec
+        from mlipx.serve.command import _get_mlipx_package_spec
 
         with patch("mlipx.__version__", "0.1.6.dev0"):
             # Mock metadata without Source Commit URL
@@ -63,7 +63,7 @@ class TestGetMlipxPackageSpec:
 
     def test_no_version_uses_latest_pypi(self):
         """Test that no version uses latest from PyPI."""
-        from mlipx.cli.main import _get_mlipx_package_spec
+        from mlipx.serve.command import _get_mlipx_package_spec
 
         with patch("mlipx.__version__", None):
             result = _get_mlipx_package_spec(["mace", "serve"])
@@ -72,7 +72,7 @@ class TestGetMlipxPackageSpec:
 
     def test_single_extra(self):
         """Test with a single extra."""
-        from mlipx.cli.main import _get_mlipx_package_spec
+        from mlipx.serve.command import _get_mlipx_package_spec
 
         with patch("mlipx.__version__", "1.0.0"):
             mock_metadata = Message()
@@ -87,7 +87,7 @@ class TestGetLocalPyprojectExtras:
 
     def test_returns_extras_from_pyproject(self, tmp_path, monkeypatch):
         """Test that it returns extras from local pyproject.toml."""
-        from mlipx.cli.main import _get_local_pyproject_extras
+        from mlipx.serve.command import _get_local_pyproject_extras
 
         # Create a pyproject.toml with extras
         pyproject = tmp_path / "pyproject.toml"
@@ -108,7 +108,7 @@ dev = ["pytest"]
 
     def test_returns_empty_when_no_pyproject(self, tmp_path, monkeypatch):
         """Test that it returns empty set when no pyproject.toml exists."""
-        from mlipx.cli.main import _get_local_pyproject_extras
+        from mlipx.serve.command import _get_local_pyproject_extras
 
         monkeypatch.chdir(tmp_path)
         result = _get_local_pyproject_extras()
@@ -117,7 +117,7 @@ dev = ["pytest"]
 
     def test_returns_empty_when_no_extras(self, tmp_path, monkeypatch):
         """Test that it returns empty set when pyproject has no extras."""
-        from mlipx.cli.main import _get_local_pyproject_extras
+        from mlipx.serve.command import _get_local_pyproject_extras
 
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text("""

@@ -325,51 +325,30 @@ class AutoStartBroker(Broker):
     def _build_worker_command(self, model_name: str, model) -> list[str]:
         """Build the command to start a worker process.
 
-        Uses smart dependency resolution:
+        Uses smart dependency resolution via build_serve_command:
         - If extras exist in local pyproject.toml: uv run --extra
         - Otherwise: uvx --from mlipx[extras,serve]
         """
-        from mlipx.cli.main import _get_local_pyproject_extras, _get_mlipx_package_spec
+        from .command import build_serve_command
+        from .protocol import get_default_workers_path
 
-        has_extras = hasattr(model, "extra") and model.extra
+        # Determine broker path (only pass if non-default)
+        broker_path = None
+        if self.backend_path and self.backend_path != get_default_workers_path():
+            broker_path = self.backend_path
 
-        if has_extras:
-            local_extras = _get_local_pyproject_extras()
-            required_extras = set(model.extra)
-            extras_str = ", ".join(sorted(required_extras))
+        model_extras = model.extra if hasattr(model, "extra") else None
+        models_file = str(self.models_file) if self.models_file else None
 
-            if required_extras.issubset(local_extras):
-                # Use uv run --extra (extras available in local project)
-                logger.info(
-                    f"Extras [{extras_str}] found in local pyproject.toml, "
-                    "using: uv run --extra"
-                )
-                cmd = ["uv", "run"]
-                for dep in model.extra:
-                    cmd.extend(["--extra", dep])
-                cmd.extend(["mlipx", "serve", model_name])
-            else:
-                # Use uvx --from mlipx[extras,serve] (extras from mlipx package)
-                logger.info(
-                    f"Extras [{extras_str}] not in local project, "
-                    "using mlipx package extras via uvx"
-                )
-                pkg_spec = _get_mlipx_package_spec(list(model.extra) + ["serve"])
-                logger.info(f"Package spec: {pkg_spec}")
-                cmd = ["uvx", "--from", pkg_spec, "mlipx", "serve", model_name]
-        else:
-            # No extras needed, simple uv run
-            cmd = ["uv", "run", "mlipx", "serve", model_name]
+        cmd, method = build_serve_command(
+            model_name=model_name,
+            model_extras=model_extras,
+            timeout=self.worker_timeout,
+            broker=broker_path,
+            models_file=models_file,
+        )
 
-        cmd.extend(["--timeout", str(self.worker_timeout), "--no-uv"])
-
-        if self.backend_path:
-            from .protocol import get_default_workers_path
-
-            if self.backend_path != get_default_workers_path():
-                cmd.extend(["--broker", self.backend_path])
-        if self.models_file:
-            cmd.extend(["--models", str(self.models_file)])
+        logger.info(f"Dependency resolution: {method}")
         return cmd
 
     def _start_worker(self, model_name: str):

@@ -23,82 +23,6 @@ from mlipx.spec import MLIPS, Datasets
 app = typer.Typer()
 
 
-def _get_local_pyproject_extras() -> set[str]:
-    """Get optional-dependencies (extras) from local pyproject.toml if it exists.
-
-    Returns
-    -------
-    set[str]
-        Set of extra names defined in the local pyproject.toml,
-        or empty set if not found.
-    """
-    pyproject_path = pathlib.Path("pyproject.toml")
-    if not pyproject_path.exists():
-        return set()
-
-    try:
-        import tomllib
-    except ImportError:
-        # Python < 3.11
-        try:
-            import tomli as tomllib
-        except ImportError:
-            return set()
-
-    try:
-        with open(pyproject_path, "rb") as f:
-            data = tomllib.load(f)
-        optional_deps = data.get("project", {}).get("optional-dependencies", {})
-        return set(optional_deps.keys())
-    except Exception:
-        return set()
-
-
-def _get_mlipx_package_spec(extras: list[str]) -> str:
-    """Build a package spec for uvx based on mlipx version.
-
-    For release versions (e.g., "0.1.6"), uses PyPI with pinned version.
-    For dev versions, uses the "Source Commit" URL from package metadata.
-
-    Parameters
-    ----------
-    extras : list[str]
-        List of extras to include (e.g., ["mace", "serve"]).
-
-    Returns
-    -------
-    str
-        Package specification for uvx --from.
-    """
-    import mlipx
-
-    mlipx_version = mlipx.__version__
-    extras_str = ",".join(extras)
-
-    if mlipx_version and ("+" in mlipx_version or ".dev" in mlipx_version):
-        # Dev version - get commit URL from package metadata
-        metadata = importlib.metadata.metadata("mlipx")
-        # Look for "Source Commit" URL which contains the commit hash
-        for key, value in metadata.items():
-            if key == "Project-URL" and value.startswith("Source Commit,"):
-                # Format: "Source Commit, https://github.com/basf/mlipx/tree/abc123"
-                url = value.split(", ", 1)[1]
-                # Extract commit hash from URL
-                commit_hash = url.rstrip("/").split("/")[-1]
-                return (
-                    f"mlipx[{extras_str}] @ "
-                    f"git+https://github.com/basf/mlipx@{commit_hash}"
-                )
-        # No Source Commit URL found, use latest from PyPI
-        return f"mlipx[{extras_str}]"
-    elif mlipx_version:
-        # Release version, use PyPI with pinned version
-        return f"mlipx[{extras_str}]=={mlipx_version}"
-    else:
-        # No version available, use latest from PyPI
-        return f"mlipx[{extras_str}]"
-
-
 app.add_typer(recipes.app, name="recipes")
 app.add_typer(benchmark.app, name="benchmark")
 
@@ -549,65 +473,26 @@ def serve(
             )
             console.print("[dim]Install uv with: pip install uv[/dim]")
         else:
-            from rich.console import Console
+            # Build command with smart dependency resolution
+            from mlipx.serve import build_serve_command
 
-            console = Console(stderr=True)
-
-            # Smart detection: check if extras exist in local pyproject.toml
-            local_extras = _get_local_pyproject_extras()
-            required_extras = set(model.extra)
-            extras_str = ", ".join(sorted(required_extras))
-
-            console.print(
-                f"[dim]Checking local pyproject.toml for extras: {extras_str}[/dim]"
+            cmd, method = build_serve_command(
+                model_name=model_name,
+                model_extras=model.extra,
+                timeout=timeout,
+                broker=broker,
+                models_file=str(models_path),
             )
-
-            if required_extras.issubset(local_extras):
-                # Use uv run --extra (extras available in local project)
-                console.print(
-                    "[dim]Found in local project, using: uv run --extra[/dim]"
-                )
-                cmd = ["uv", "run"]
-                for extra_dep in model.extra:
-                    cmd.extend(["--extra", extra_dep])
-                cmd.extend(["mlipx", "serve", model_name, "--no-uv"])
-            else:
-                # Use uvx --from mlipx[extras,serve] (extras from mlipx package)
-                console.print(
-                    "[dim]Not found locally, using mlipx package extras via uvx[/dim]"
-                )
-                pkg_spec = _get_mlipx_package_spec(list(model.extra) + ["serve"])
-                console.print(f"[dim]Package spec: {pkg_spec}[/dim]")
-                cmd = [
-                    "uvx",
-                    "--from",
-                    pkg_spec,
-                    "mlipx",
-                    "serve",
-                    model_name,
-                    "--no-uv",
-                ]
-
-            if broker:
-                cmd.extend(["--broker", broker])
-            cmd.extend(["--timeout", str(timeout)])
-            # Pass the discovered models file to the wrapped process
-            cmd.extend(["--models", str(models_path)])
 
             # Prevent infinite recursion
             os.environ["_MLIPX_SERVE_UV_WRAPPED"] = "1"
 
             # Print to stderr so it doesn't interfere with stdout
-            # The child process will inherit stdin/stdout/stderr as-is
-            if sys.stderr.isatty():
-                # In TTY mode, use rich formatting
-                from rich.console import Console
+            from rich.console import Console
 
-                console = Console(stderr=True)
-                console.print(f"[dim]Starting with dependencies: {' '.join(cmd)}[/dim]")
-            else:
-                # Non-TTY mode, simple message to stderr
-                print(f"Starting with dependencies: {' '.join(cmd)}", file=sys.stderr)
+            console = Console(stderr=True)
+            console.print(f"[dim]Dependency resolution: {method}[/dim]")
+            console.print(f"[dim]Command: {' '.join(cmd)}[/dim]")
 
             os.execvp(cmd[0], cmd)  # Replace current process
             return  # Never reached
@@ -712,7 +597,7 @@ def serve_status(  # noqa: C901
     console.print(
         Panel(
             broker_table,
-            title="🔌 Broker Status",
+            title="Broker Status",
             border_style=panel_style,
             padding=(1, 2),
         )
@@ -751,7 +636,7 @@ def serve_status(  # noqa: C901
                     models_content += f"\n[dim][cyan]•[/cyan] {model_name}[/dim]"
 
         num_models = len(status["models"])
-        title = f"📊 Available Models ({num_models} models, {total_workers} workers)"
+        title = f"Available Models ({num_models} models, {total_workers} workers)"
         console.print(
             Panel(
                 models_content,
@@ -786,7 +671,7 @@ def serve_status(  # noqa: C901
         console.print(
             Panel(
                 message,
-                title="📊 Available Models",
+                title="Available Models",
                 border_style="yellow",
                 padding=(1, 2),
             )
@@ -797,7 +682,7 @@ def serve_status(  # noqa: C901
                 "[red]Cannot query models - broker is not running[/red]\n\n"
                 "Start the broker first:\n"
                 "  [bold cyan]mlipx serve-broker[/bold cyan]",
-                title="📊 Available Models",
+                title="Available Models",
                 border_style="red",
                 padding=(1, 2),
             )
