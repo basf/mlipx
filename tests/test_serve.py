@@ -845,3 +845,193 @@ run_worker(
         # Final forces should be small
         max_force = max(abs(atoms.get_forces().flatten()))
         assert max_force < 0.02
+
+
+class TestAutoStartBrokerConcurrency:
+    """Test AutoStartBroker handles concurrent requests and stale workers correctly."""
+
+    @pytest.fixture
+    def lj_models_file(self, tmp_path):
+        """Create a models.py file with a Lennard-Jones calculator."""
+        models_file = tmp_path / "models.py"
+        models_file.write_text("""
+from mlipx import GenericASECalculator
+
+ALL_MODELS = {
+    'lj-test': GenericASECalculator(
+        module='ase.calculators.lj',
+        class_name='LennardJones',
+    ),
+}
+""")
+        return models_file
+
+    def test_stale_in_flight_request_cleanup(self, tmp_path, lj_models_file):
+        """Test that stale in-flight entries are cleaned up correctly.
+
+        This tests the scenario where:
+        1. A worker registers and handles a request
+        2. The worker is removed from tracking (e.g., disconnected)
+        3. A new request comes in
+        4. The broker should NOT kill new workers due to stale tracking
+        """
+        from unittest.mock import MagicMock
+
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        # Create broker with short timeouts for testing
+        broker = AutoStartBroker(
+            frontend_path=broker_path,
+            backend_path=workers_path,
+            models_file=lj_models_file,
+            worker_timeout=300,
+            worker_start_timeout=10,
+            worker_run_timeout=5,  # Short timeout for testing
+        )
+
+        # Simulate a stale in-flight request from an old worker
+        # that is no longer in worker_model
+        old_worker_id = b"worker-old-defunct-12345"
+        old_client_id = b"client-old-12345"
+
+        broker._in_flight_requests[old_worker_id] = (
+            old_client_id,
+            time.time() - 100,  # Started 100 seconds ago (way past timeout)
+            "lj-test",
+        )
+
+        # The old worker is NOT in worker_model (simulating it disconnected)
+        assert old_worker_id not in broker.worker_model
+
+        # Now add a "new" worker that IS tracked
+        new_worker_id = b"worker-new-active-67890"
+        new_client_id = b"client-new-67890"
+        broker.worker_model[new_worker_id] = "lj-test"
+        broker.worker_heartbeat[new_worker_id] = time.time()
+
+        # Add an in-flight request for the new worker (within timeout)
+        broker._in_flight_requests[new_worker_id] = (
+            new_client_id,
+            time.time(),  # Just started
+            "lj-test",
+        )
+
+        # Before cleanup: both entries exist
+        assert old_worker_id in broker._in_flight_requests
+        assert new_worker_id in broker._in_flight_requests
+
+        # Run health check - this should clean up stale entry but NOT timeout new one
+        # We need to mock the frontend socket to avoid sending actual messages
+        broker.frontend = MagicMock()
+
+        broker._check_worker_health()
+
+        # Old stale entry should be cleaned up
+        assert old_worker_id not in broker._in_flight_requests
+
+        # New entry should still exist (not timed out, started recently)
+        assert new_worker_id in broker._in_flight_requests
+
+        # Should have sent error to old client
+        broker.frontend.send_multipart.assert_called()
+
+        # Clean up
+        broker._release_lock()
+
+    def test_multiple_concurrent_requests_queued(self, tmp_path, lj_models_file):
+        """Test that multiple concurrent requests are properly queued."""
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        broker = AutoStartBroker(
+            frontend_path=broker_path,
+            backend_path=workers_path,
+            models_file=lj_models_file,
+            worker_timeout=300,
+            worker_start_timeout=10,
+            worker_run_timeout=30,
+            concurrency=1,  # Only 1 worker at a time
+        )
+
+        # Simulate 3 requests coming in when no worker is available
+        for i in range(3):
+            client_id = f"client-{i}".encode()
+            request_data = f"request-{i}".encode()
+            broker._route_or_queue_request(client_id, "lj-test", request_data)
+
+        # All 3 should be queued
+        assert len(broker._request_queue["lj-test"]) == 3
+
+        # Verify FIFO order
+        assert broker._request_queue["lj-test"][0][0] == b"client-0"
+        assert broker._request_queue["lj-test"][1][0] == b"client-1"
+        assert broker._request_queue["lj-test"][2][0] == b"client-2"
+
+        # Clean up
+        broker._release_lock()
+
+    def test_worker_timeout_does_not_affect_queued_requests(
+        self, tmp_path, lj_models_file
+    ):
+        """Test that when a worker times out, queued requests are preserved."""
+        from unittest.mock import MagicMock
+
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        broker = AutoStartBroker(
+            frontend_path=broker_path,
+            backend_path=workers_path,
+            models_file=lj_models_file,
+            worker_timeout=300,
+            worker_start_timeout=10,
+            worker_run_timeout=5,
+        )
+
+        # Set up a worker with an in-flight request that will timeout
+        worker_id = b"worker-will-timeout"
+        client_id_inflight = b"client-inflight"
+        broker.worker_model[worker_id] = "lj-test"
+        broker.worker_heartbeat[worker_id] = time.time() - 100  # Old heartbeat
+        broker._in_flight_requests[worker_id] = (
+            client_id_inflight,
+            time.time() - 10,  # Started 10s ago, past 5s timeout
+            "lj-test",
+        )
+
+        # Add queued requests
+        broker._request_queue["lj-test"] = [
+            (b"client-queued-1", b"data-1"),
+            (b"client-queued-2", b"data-2"),
+        ]
+
+        # Mock frontend
+        broker.frontend = MagicMock()
+
+        # Run health check
+        broker._check_worker_health()
+
+        # In-flight request should be cleared and error sent
+        assert worker_id not in broker._in_flight_requests
+        broker.frontend.send_multipart.assert_called()
+
+        # Queued requests should still be there
+        assert len(broker._request_queue["lj-test"]) == 2
+        assert broker._request_queue["lj-test"][0][0] == b"client-queued-1"
+        assert broker._request_queue["lj-test"][1][0] == b"client-queued-2"
+
+        # Clean up
+        broker._release_lock()

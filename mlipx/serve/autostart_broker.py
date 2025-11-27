@@ -8,7 +8,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import msgpack
-import zmq
 
 from .broker import Broker
 from .protocol import LIST_MODELS, SHUTDOWN, STATUS_DETAIL
@@ -110,8 +109,9 @@ class AutoStartBroker(Broker):
         self.concurrency = concurrency
         self.models_file = models_file  # Store for passing to workers
 
-        # Queue for requests waiting for a worker: {model_name: [(client_id, request_data), ...]}
-        # This implements FIFO ordering for requests when workers are busy
+        # Queue for requests waiting for a worker:
+        # {model_name: [(client_id, request_data), ...]}
+        # Implements FIFO ordering for requests when workers are busy
         self._request_queue: dict[str, list[tuple[bytes, bytes]]] = defaultdict(list)
 
         # Track in-flight requests: {worker_id: (client_id, start_time, model_name)}
@@ -306,9 +306,11 @@ class AutoStartBroker(Broker):
                     self.worker_queue[model_name].remove(worker_id)
 
                 self._send_to_worker(worker_id, client_id, model_name, request_data)
+                worker_name = worker_id.decode("utf-8", errors="replace")
+                remaining = len(self._request_queue[model_name])
                 logger.debug(
-                    f"Dispatched queued request to {worker_id.decode('utf-8', errors='replace')} "
-                    f"(queue remaining: {len(self._request_queue[model_name])})"
+                    f"Dispatched queued request to {worker_name} "
+                    f"(queue remaining: {remaining})"
                 )
 
         elif message_type == HEARTBEAT:
@@ -420,7 +422,7 @@ class AutoStartBroker(Broker):
         except Exception as e:
             logger.error(f"Failed to start worker for {model_name}: {e}", exc_info=True)
 
-    def _check_worker_health(self):
+    def _check_worker_health(self):  # noqa: C901
         """Check for stale workers and remove them, killing processes if needed.
 
         This extends the parent implementation to:
@@ -432,13 +434,42 @@ class AutoStartBroker(Broker):
         """
         current_time = time.time()
 
+        # First, clean up stale in-flight entries for workers that no longer exist
+        # This can happen when a worker terminates gracefully (idle timeout)
+        stale_entries = []
+        for worker_id in list(self._in_flight_requests.keys()):
+            if worker_id not in self.worker_model:
+                stale_entries.append(worker_id)
+
+        for worker_id in stale_entries:
+            client_id, start_time, model_name = self._in_flight_requests.pop(worker_id)
+            worker_name = worker_id.decode("utf-8", errors="replace")
+            logger.warning(
+                f"Cleaning up stale in-flight entry for defunct worker {worker_name}"
+            )
+            # The worker is gone but the client never got a response - send error
+            error_response = msgpack.packb(
+                {
+                    "success": False,
+                    "error": "Worker disconnected unexpectedly",
+                }
+            )
+            self.frontend.send_multipart([client_id, b"", error_response])
+
+            # Re-queue this request or start a new worker
+            if self._request_queue[model_name] or True:  # Always try to recover
+                logger.info(f"Will restart worker for {model_name} after cleanup")
+                self._start_worker(model_name)
+
         # Find workers with in-flight requests that exceeded timeout
         workers_to_kill = []
         for worker_id, (client_id, start_time, model_name) in list(
             self._in_flight_requests.items()
         ):
-            if current_time - start_time > self.worker_run_timeout:
-                workers_to_kill.append((worker_id, client_id, model_name))
+            # Only timeout if worker is still known (not already cleaned up)
+            if worker_id in self.worker_model:
+                if current_time - start_time > self.worker_run_timeout:
+                    workers_to_kill.append((worker_id, client_id, model_name))
 
         # Handle stuck workers
         for worker_id, client_id, model_name in workers_to_kill:
@@ -484,7 +515,10 @@ class AutoStartBroker(Broker):
                 del self.worker_model[worker_id]
             if worker_id in self.worker_heartbeat:
                 del self.worker_heartbeat[worker_id]
-            if model_name in self.worker_queue and worker_id in self.worker_queue[model_name]:
+            if (
+                model_name in self.worker_queue
+                and worker_id in self.worker_queue[model_name]
+            ):
                 self.worker_queue[model_name].remove(worker_id)
                 if not self.worker_queue[model_name]:
                     del self.worker_queue[model_name]
@@ -518,7 +552,7 @@ class AutoStartBroker(Broker):
                     )
                     self._start_worker(model_name)
 
-    def stop(self):
+    def stop(self):  # noqa: C901
         """Stop the broker and clean up worker processes."""
         logger.info("Stopping autostart broker...")
 
@@ -555,14 +589,18 @@ class AutoStartBroker(Broker):
         for model_name, procs in list(self.worker_processes.items()):
             for proc in procs:
                 if proc.poll() is None:  # Process still running
-                    logger.info(f"Terminating worker for {model_name} (PID: {proc.pid})")
+                    logger.info(
+                        f"Terminating worker for {model_name} (PID: {proc.pid})"
+                    )
                     try:
                         proc.terminate()  # Send SIGTERM
                         try:
                             proc.wait(
                                 timeout=5
                             )  # Wait up to 5 seconds for graceful shutdown
-                            logger.info(f"Worker for {model_name} terminated gracefully")
+                            logger.info(
+                                f"Worker for {model_name} terminated gracefully"
+                            )
                         except subprocess.TimeoutExpired:
                             logger.warning(
                                 f"Worker for {model_name} did not terminate, killing..."
