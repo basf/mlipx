@@ -383,6 +383,55 @@ class AutoStartBroker(Broker):
         self.worker_processes[model_name] = running
         return len(running)
 
+    def _cleanup_dead_workers_for_model(self, model_name: str):
+        """Clean up broker tracking for workers that are no longer alive.
+
+        When a worker process terminates gracefully (e.g., idle timeout),
+        it still has entries in worker_model, worker_heartbeat, worker_queue,
+        and potentially _in_flight_requests. This method cleans all of those up.
+        """
+        # Find workers for this model that are in tracking but process is gone
+        dead_workers = []
+        for worker_id, tracked_model in list(self.worker_model.items()):
+            if tracked_model == model_name:
+                dead_workers.append(worker_id)
+
+        # Clean up each dead worker
+        for worker_id in dead_workers:
+            worker_name = worker_id.decode("utf-8", errors="replace")
+            logger.debug(f"Cleaning up dead worker {worker_name}")
+
+            # Remove from worker_model
+            self.worker_model.pop(worker_id, None)
+
+            # Remove from worker_heartbeat
+            self.worker_heartbeat.pop(worker_id, None)
+
+            # Remove from worker_queue
+            if model_name in self.worker_queue:
+                if worker_id in self.worker_queue[model_name]:
+                    self.worker_queue[model_name].remove(worker_id)
+                if not self.worker_queue[model_name]:
+                    del self.worker_queue[model_name]
+
+            # Remove from _in_flight_requests
+            if worker_id in self._in_flight_requests:
+                client_id, _, _ = self._in_flight_requests.pop(worker_id)
+                # Send error to client whose request was in-flight
+                error_response = msgpack.packb(
+                    {
+                        "success": False,
+                        "error": "Worker terminated unexpectedly",
+                    }
+                )
+                try:
+                    self.frontend.send_multipart([client_id, b"", error_response])
+                    logger.warning(
+                        f"Sent error to client {client_id} - worker terminated"
+                    )
+                except Exception:
+                    pass  # Socket might be closed
+
     def _start_worker(self, model_name: str):
         """Start a worker using mlipx serve.
 
@@ -543,6 +592,11 @@ class AutoStartBroker(Broker):
                 logger.info(
                     f"{terminated_count} worker process(es) for {model_name} terminated"
                 )
+
+                # Also clean up workers from broker tracking that are no longer alive
+                # Workers that terminate gracefully (idle timeout) still have entries
+                # in worker_model, worker_heartbeat, worker_queue
+                self._cleanup_dead_workers_for_model(model_name)
 
                 # If there are queued requests, try to restart workers
                 if self._request_queue[model_name]:

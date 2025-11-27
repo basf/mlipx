@@ -1035,3 +1035,148 @@ ALL_MODELS = {
 
         # Clean up
         broker._release_lock()
+
+    def test_graceful_worker_termination_cleans_up_tracking(
+        self, tmp_path, lj_models_file
+    ):
+        """Test that when a worker terminates gracefully, its tracking is cleaned up.
+
+        This tests the specific scenario:
+        1. Worker registers and handles request
+        2. Worker terminates gracefully (e.g., idle timeout)
+        3. Process is gone but broker still has tracking entries
+        4. New request comes in
+        5. Broker should NOT report timeout for the old worker
+
+        This was a bug where _cleanup_dead_workers_for_model wasn't being called
+        when processes terminated.
+        """
+        from unittest.mock import MagicMock
+
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        broker = AutoStartBroker(
+            frontend_path=broker_path,
+            backend_path=workers_path,
+            models_file=lj_models_file,
+            worker_timeout=300,
+            worker_start_timeout=10,
+            worker_run_timeout=5,
+        )
+
+        # Simulate a worker that was registered and is tracked
+        old_worker_id = b"worker-gracefully-terminated"
+        broker.worker_model[old_worker_id] = "lj-test"
+        broker.worker_heartbeat[old_worker_id] = time.time() - 100  # Old heartbeat
+        broker.worker_queue["lj-test"].append(old_worker_id)
+
+        # Add the model to worker_processes with a mock terminated process
+        mock_terminated_process = MagicMock()
+        mock_terminated_process.poll.return_value = 0  # Process has exited
+        broker.worker_processes["lj-test"] = [mock_terminated_process]
+
+        # Mock frontend
+        broker.frontend = MagicMock()
+
+        # Before health check: old worker is tracked
+        assert old_worker_id in broker.worker_model
+        assert old_worker_id in broker.worker_heartbeat
+
+        # Run health check - should detect terminated process and clean up tracking
+        broker._check_worker_health()
+
+        # After health check: old worker should be cleaned up
+        # The terminated process should be removed from worker_processes
+        assert len(broker.worker_processes["lj-test"]) == 0
+
+        # Broker tracking should be cleaned up by _cleanup_dead_workers_for_model
+        assert old_worker_id not in broker.worker_model
+        assert old_worker_id not in broker.worker_heartbeat
+        # worker_queue for this model should be empty or removed
+        assert old_worker_id not in broker.worker_queue.get("lj-test", [])
+
+        # Clean up
+        broker._release_lock()
+
+    def test_new_request_after_worker_graceful_termination(
+        self, tmp_path, lj_models_file
+    ):
+        """Test that a new request works after worker gracefully terminates.
+
+        This is the end-to-end test for the bug where:
+        1. Start broker, run job, worker finishes
+        2. Worker idle times out and terminates gracefully
+        3. Run another job
+        4. Should NOT see old worker timeout error
+        """
+        from unittest.mock import MagicMock
+
+        from mlipx.serve.autostart_broker import AutoStartBroker
+
+        broker_socket = tmp_path / "broker.ipc"
+        workers_socket = tmp_path / "workers.ipc"
+        broker_path = f"ipc://{broker_socket}"
+        workers_path = f"ipc://{workers_socket}"
+
+        broker = AutoStartBroker(
+            frontend_path=broker_path,
+            backend_path=workers_path,
+            models_file=lj_models_file,
+            worker_timeout=300,
+            worker_start_timeout=10,
+            worker_run_timeout=5,
+        )
+
+        # Step 1: Simulate a worker that registered and handled a request
+        old_worker_id = b"worker-old-graceful"
+        broker.worker_model[old_worker_id] = "lj-test"
+        broker.worker_heartbeat[old_worker_id] = time.time() - 100
+        broker.worker_queue["lj-test"].append(old_worker_id)
+
+        # Simulate the process that started this worker (now terminated)
+        mock_terminated_process = MagicMock()
+        mock_terminated_process.poll.return_value = 0  # Exited gracefully
+        broker.worker_processes["lj-test"] = [mock_terminated_process]
+
+        # Step 2: Run health check (simulates broker noticing process terminated)
+        broker.frontend = MagicMock()
+        broker._check_worker_health()
+
+        # Verify cleanup happened
+        assert old_worker_id not in broker.worker_model
+        assert old_worker_id not in broker.worker_heartbeat
+
+        # Step 3: Simulate a new request coming in
+        # This should NOT cause any false timeout errors
+        new_client_id = b"new-client"
+        new_request_data = b"new-request"
+
+        # The request should be queued (no workers available)
+        broker._route_or_queue_request(new_client_id, "lj-test", new_request_data)
+
+        # Should be in the queue
+        assert len(broker._request_queue["lj-test"]) == 1
+        assert broker._request_queue["lj-test"][0][0] == new_client_id
+
+        # Step 4: Simulate a new worker coming up and registering
+        new_worker_id = b"worker-new"
+        broker.worker_model[new_worker_id] = "lj-test"
+        broker.worker_heartbeat[new_worker_id] = time.time()
+
+        # Run health check again - should NOT report any timeout errors
+        # because the old worker was properly cleaned up
+        call_count_before = broker.frontend.send_multipart.call_count
+        broker._check_worker_health()
+        call_count_after = broker.frontend.send_multipart.call_count
+
+        # No new error messages should have been sent
+        # (the only previous call was the "worker terminated" message during cleanup)
+        assert call_count_after == call_count_before
+
+        # Clean up
+        broker._release_lock()
