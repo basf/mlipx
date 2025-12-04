@@ -137,3 +137,6 @@ select = ["I", "F", "E", "C", "W"]
 
 [project.entry-points.'zntrack.nodes']
 mlipx = 'mlipx.entrypoints:nodes'
+
+[project.entry-points.'aserpc.calculators']
+mlipx = 'mlipx.aserpc:get_calculators'
