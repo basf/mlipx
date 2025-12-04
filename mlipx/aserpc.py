@@ -26,30 +26,6 @@ def _create_orb_calculator(name: str = "orb_v2", device: str = "auto"):
     return ORBCalculator(orbff, device=device)
 
 
-def _create_matgl_calculator(path: str):
-    """Wrapper for matgl models that need load_model first."""
-    import matgl
-    from matgl.ext.ase import PESCalculator
-
-    potential = matgl.load_model(path)
-    return PESCalculator(potential)
-
-
-def _create_fairchem_calculator(
-    path: str, task_name: str = "oc20", device: str = "auto"
-):
-    """Wrapper for fairchem models."""
-    from fairchem.core import FAIRChemCalculator
-    from fairchem.core.units.mlip_unit import load_predict_unit
-
-    if device == "auto":
-        import torch
-
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-    predictor = load_predict_unit(path, device=device)
-    return FAIRChemCalculator(predictor, task_name=task_name)
-
-
 def get_calculators() -> dict[str, dict]:
     """Return metadata for available calculators.
 
@@ -64,11 +40,6 @@ def get_calculators() -> dict[str, dict]:
     if importlib.util.find_spec("mace") is not None:
         calcs["mace-mpa-0"] = {
             "factory": "mace.calculators:mace_mp",
-            "kwargs": {"model": "../../models/mace-mpa-0-medium.model"},
-        }
-        calcs["mace-matpes-pbe-0"] = {
-            "factory": "mace.calculators:mace_mp",
-            "kwargs": {"model": "../../models/mace-matpes-pbe-omat-ft.model"},
         }
 
     # SevenNet models
@@ -101,34 +72,6 @@ def get_calculators() -> dict[str, dict]:
     if importlib.util.find_spec("mattersim") is not None:
         calcs["mattersim"] = {
             "factory": "mattersim.forcefield:MatterSimCalculator",
-        }
-
-    # GRACE (tensorpotential)
-    if importlib.util.find_spec("tensorpotential") is not None:
-        calcs["grace-2l-omat"] = {
-            "factory": "tensorpotential.calculator:TPCalculator",
-            "kwargs": {"model": "../../models/GRACE-2L-OMAT"},
-        }
-
-    # MatGL models (custom init)
-    if importlib.util.find_spec("matgl") is not None:
-        calcs["matpes-pbe"] = {
-            "factory_fn": _create_matgl_calculator,
-            "kwargs": {"path": "../../models/TensorNet-MatPES-PBE-v2025.1-PES"},
-        }
-
-    # FairChem models (custom init)
-    if importlib.util.find_spec("fairchem") is not None:
-        calcs["meta-uma-sm"] = {
-            "factory_fn": _create_fairchem_calculator,
-            "kwargs": {"path": "../../models/meta-uam.pt"},
-        }
-
-    # PET-MAD
-    if importlib.util.find_spec("pet_mad") is not None:
-        calcs["pet-mad"] = {
-            "factory": "pet_mad.calculator:PETMADCalculator",
-            "kwargs": {"checkpoint_path": "../../models/pet-mad-latest.ckpt"},
         }
 
     return calcs
