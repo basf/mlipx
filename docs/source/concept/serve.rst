@@ -3,21 +3,12 @@
 Model Serving
 =============
 
-``mlipx`` provides a powerful model serving infrastructure that enables remote execution of MLIP calculations with automatic dependency management and resource scaling. The serve system is built on ZeroMQ and supports automatic worker startup, load balancing, and graceful shutdown.
+``mlipx`` provides model serving infrastructure using `aserpc <https://github.com/zincware/aserpc>`_, a lightweight RPC framework for serving ASE calculators over ZeroMQ. This enables remote execution of MLIP calculations with automatic dependency management and load balancing.
 
 .. note::
 
-   The serve module requires additional dependencies. Install them with::
-
-      pip install mlipx[serve]
-
-   The serve API also requires ``uv`` for automatic dependency management. More information about ``uv`` can be found at https://docs.astral.sh/uv/
-
-.. warning::
-
-   UV by default uses your home directory for caching. If UV cannot link between your home directory and the current working directory, it will copy the dependencies.
-   In such cases, for good performance it is crucial to set the ``UV_CACHE_DIR`` as described at https://docs.astral.sh/uv/reference/cli/#uv-cache-dir.
-   You can use ``direnv`` to automatically set this variable for different mount points.
+   The serve API requires ``uv`` for automatic dependency management when spawning workers.
+   More information about ``uv`` can be found at https://docs.astral.sh/uv/
 
 Overview
 --------
@@ -26,92 +17,119 @@ The serve architecture consists of three main components:
 
 1. **Broker**: Load balancer that routes calculation requests to available workers
 2. **Workers**: Calculator instances that process requests for specific models
-3. **Client**: Transparent interface that works seamlessly with existing mlipx code
+3. **Client**: Transparent interface using ``aserpc.RemoteCalculator`` or the ``mlipx.Models`` class
 
 Key Features
 ~~~~~~~~~~~~
 
-- **Automatic Dependency Management**: Workers automatically install required dependencies using UV extras
-- **Auto-scaling**: Broker can automatically start workers on demand
-- **Self-terminating Workers**: Workers shutdown automatically after idle timeout
+- **Built on aserpc**: Uses the dedicated aserpc RPC framework for ASE calculators
+- **Entry Point Discovery**: Calculators are discovered via Python entry points
+- **Automatic Dependency Management**: Workers can be started with smart UV/UVX dependency resolution
 - **Load Balancing**: LRU (Least Recently Used) pattern distributes work efficiently
-- **Transparent Integration**: Existing code works without modification via environment variables
-- **Cross-platform Locking**: Prevents duplicate broker instances on shared systems
-- **User Isolation**: Socket paths are user-specific to prevent conflicts on shared systems
-- **Smart Dependency Resolution**: Automatically detects whether to use local project extras or install from mlipx package
+- **Transparent Integration**: The ``Models`` class auto-detects serve vs local mode
 
 Quick Start
 -----------
 
-Starting the Broker with Autostart
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Autostart Mode (Recommended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The simplest way to use serve is with the autostart broker, which automatically spawns workers on demand:
+Start the broker with on-demand worker spawning:
 
 .. code-block:: console
 
    (.venv) $ mlipx serve-broker --autostart
 
-This will automatically discover your ``models.py`` file (see :ref:`model-discovery` below) and start workers as needed.
+This will:
 
-Workers will be started automatically when the first calculation request arrives for a model, and will shutdown after 5 minutes of inactivity (configurable with ``--worker-timeout``).
+1. Start the aserpc broker
+2. Start the aserpc manager (discovers spawn configs from mlipx entry points)
+3. Workers are spawned **on-demand** when a client requests a model
+4. Workers auto-shutdown after idle timeout (default: 300s)
 
-**Serve only specific models**:
+The manager uses spawn configurations registered via the ``aserpc.spawn`` entry point.
+Each model has a pre-configured command that uses ``uv run`` or ``uvx`` with the
+correct dependencies.
+
+Starting the Broker
+~~~~~~~~~~~~~~~~~~~
+
+Start the aserpc broker without autostart:
 
 .. code-block:: console
 
-   (.venv) $ mlipx serve-broker --autostart mace-mpa-0 orb-v2
+   (.venv) $ mlipx serve-broker
+   # or directly:
+   (.venv) $ aserpc broker
 
-This limits the broker to only serve the specified models, even if more are defined in ``models.py``.
+Starting Workers
+~~~~~~~~~~~~~~~~
+
+Start a worker for a specific model:
+
+.. code-block:: console
+
+   (.venv) $ mlipx serve mace-mpa-0
+   # or directly:
+   (.venv) $ aserpc worker mace-mpa-0
+
+The ``mlipx serve`` command provides smart dependency resolution:
+
+- If the model's extras are available in your local project, uses ``uv run --extra``
+- Otherwise, uses ``uvx --from mlipx[extras]`` to install from the mlipx package
 
 Using Served Models
 ~~~~~~~~~~~~~~~~~~~
 
-Enable serve globally via environment variable:
-
-.. code-block:: console
-
-   (.venv) $ export MLIPX_USE_SERVE=true
-   (.venv) $ # Now all mlipx calculations will use served models if available
-
-Or control it programmatically:
+Use the ``Models`` class for a unified interface:
 
 .. code-block:: python
 
-   from mlipx import GenericASECalculator
+   from mlipx import Models
 
-   model = GenericASECalculator(
-       module="mace.calculators",
-       class_name="mace_mp",
-       device="auto",
-       serve_name="mace-mpa-0",  # Model name for serve lookups
-       extra=["mace"],
-   )
+   # Auto-detects serve vs local mode
+   models = Models()
 
-   # Use served model
-   calc = model.get_calculator(use_serve=True)
+   # List available models
+   print(list(models))
 
-   # Force local calculator
-   calc = model.get_calculator(use_serve=False)
+   # Get a calculator (uses aserpc.RemoteCalculator in serve mode)
+   calc = models["mace-mpa-0"].get_calculator()
+
+Or use ``aserpc.RemoteCalculator`` directly:
+
+.. code-block:: python
+
+   from aserpc import RemoteCalculator
+   from ase.build import molecule
+
+   water = molecule("H2O")
+   water.calc = RemoteCalculator("mace-mpa-0")
+   energy = water.get_potential_energy()
 
 Checking Status
 ~~~~~~~~~~~~~~~
 
-Check which models are available and how many workers are running:
+Check which models have active workers:
 
 .. code-block:: console
 
    (.venv) $ mlipx serve-status
 
+List available calculators registered via entry points:
+
+.. code-block:: console
+
+   (.venv) $ aserpc list
+
 Shutting Down
 ~~~~~~~~~~~~~
 
-Gracefully stop the broker and all workers:
+Shutdown all workers:
 
 .. code-block:: console
 
    (.venv) $ mlipx serve-status --shutdown
-
 
 Architecture
 ------------
@@ -119,252 +137,199 @@ Architecture
 Broker
 ~~~~~~
 
-The broker acts as a load balancer, routing calculation requests from clients to available workers. It implements the LRU (Least Recently Used) pattern to ensure fair load distribution.
+The broker acts as a load balancer, routing calculation requests from clients to available workers.
 
-**Starting a basic broker**:
+**Starting the broker**:
 
 .. code-block:: console
 
    (.venv) $ mlipx serve-broker
-
-**Starting with autostart** (recommended):
-
-.. code-block:: console
-
-   (.venv) $ mlipx serve-broker --autostart --worker-timeout 600
+   # With custom options:
+   (.venv) $ mlipx serve-broker --timeout 60.0 --log-level DEBUG
 
 Options:
 
-- ``--path``: Custom IPC path for broker frontend
-- ``--autostart``: Enable automatic worker startup
-- ``--models``: Path to custom models.py file
-- ``--worker-timeout``: Idle timeout for auto-started workers in seconds (default: 300)
-- ``--worker-start-timeout``: Maximum time to wait for worker startup (default: 60)
+- ``--frontend``: Custom IPC path for broker frontend (clients connect here)
+- ``--backend``: Custom IPC path for broker backend (workers connect here)
+- ``--timeout``: Worker timeout in seconds (default: 30.0)
+- ``--queue-timeout``: Request queue timeout in seconds (default: 60.0)
+- ``--log-level``: Log level (default: INFO)
+- ``--autostart``: Enable on-demand worker spawning via manager
 
 Workers
 ~~~~~~~
 
-Workers are processes that load a specific MLIP model and serve calculations. Each worker:
+Workers are processes that load a specific MLIP calculator and serve calculations. Each worker:
 
-- Automatically installs required dependencies using UV extras
-- Registers with the broker and receives calculation requests
+- Registers with the broker via entry points
 - Sends heartbeats to maintain availability
-- Shuts down after idle timeout (resets on each request)
+- Shuts down after idle timeout
 
-**Manual worker startup**:
+**Starting workers with mlipx**:
 
 .. code-block:: console
 
-   (.venv) $ uv run mlipx serve mace-mpa-0
+   (.venv) $ mlipx serve mace-mpa-0 --idle-timeout 600
 
-The command automatically detects that ``mace-mpa-0`` requires the ``mace`` extra and uses smart dependency resolution:
+**Starting workers directly with aserpc**:
 
-1. **Local project has the extra**: If your ``pyproject.toml`` defines the ``mace`` extra, it uses ``uv run --extra mace``
-2. **Extra not in local project**: Uses ``uvx --from mlipx[mace,serve]`` to install from the mlipx package
+.. code-block:: console
 
-For development installs (non-release versions), mlipx automatically uses the exact git commit via ``git+https://github.com/basf/mlipx@<commit>`` to ensure consistency
+   (.venv) $ aserpc worker mace-mpa-0 --idle-timeout 600
 
-Options:
+Options (mlipx serve):
 
 - ``--broker``: Custom broker backend path
-- ``--models``: Path to custom models.py file
-- ``--timeout``: Idle timeout in seconds (default: 300)
-- ``--no-uv``: Disable UV wrapper (if already in correct environment)
+- ``--idle-timeout``: Idle timeout in seconds (default: 300)
+- ``--heartbeat``: Heartbeat interval in seconds (default: 5.0)
+- ``--log-level``: Log level (default: INFO)
 
-.. note::
+Calculator Entry Points
+-----------------------
 
-   With autostart enabled, you typically don't need to manually start workers!
+mlipx registers its calculators via Python entry points. This allows ``aserpc`` to discover available calculators automatically.
 
-Client API
-~~~~~~~~~~
+The entry point is defined in ``pyproject.toml``:
 
-The client provides a transparent interface for using served models. It's integrated directly into the ``GenericASECalculator`` class.
+.. code-block:: toml
 
-**Environment Variable Control**:
+   [project.entry-points.'aserpc.calculators']
+   mlipx = 'mlipx.aserpc:get_calculators'
+
+The ``get_calculators()`` function returns metadata for available calculators:
+
+.. code-block:: python
+
+   def get_calculators() -> dict[str, dict]:
+       """Return metadata for available calculators."""
+       calcs = {}
+
+       # Check if mace is installed
+       if importlib.util.find_spec("mace") is not None:
+           calcs["mace-mpa-0"] = {
+               "factory": "mace.calculators:mace_mp",
+           }
+
+       # Check if chgnet is installed
+       if importlib.util.find_spec("chgnet") is not None:
+           calcs["chgnet"] = {"factory": "chgnet.model:CHGNetCalculator"}
+
+       return calcs
+
+This approach:
+
+- Uses ``importlib.util.find_spec()`` for lightweight package detection without importing
+- Supports ``factory`` (module:class) and ``factory_fn`` (callable) patterns
+- Allows optional ``kwargs`` for calculator initialization
+
+Configuration
+-------------
+
+Environment Variables
+~~~~~~~~~~~~~~~~~~~~~
+
+aserpc can be configured via environment variables:
 
 .. code-block:: bash
 
-   # Enable serve globally
-   export MLIPX_USE_SERVE=true
+   export ASERPC_IPC_DIR=/tmp/aserpc
+   export ASERPC_WORKER_TIMEOUT=30.0
+   export ASERPC_HEARTBEAT_INTERVAL=5.0
+   export ASERPC_IDLE_TIMEOUT=300.0
+   export ASERPC_REQUEST_QUEUE_TIMEOUT=60.0
+   export ASERPC_CLIENT_TIMEOUT_MS=60000
 
-   # Disable serve globally
-   export MLIPX_USE_SERVE=false  # or unset
+pyproject.toml Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**Programmatic Control**:
+.. code-block:: toml
 
-.. code-block:: python
+   [tool.aserpc]
+   ipc_dir = "/tmp/aserpc"
+   worker_timeout = 30.0
+   heartbeat_interval = 5.0
+   idle_timeout = 300.0
+   request_queue_timeout = 60.0
+   client_timeout_ms = 60000
 
-   from mlipx import GenericASECalculator
+The Models Class
+----------------
 
-   model = GenericASECalculator(
-       module="mace.calculators",
-       class_name="mace_mp",
-       device="auto",
-       serve_name="mace-mpa-0",  # Model name for serve lookups
-       extra=["mace"],
-   )
-
-   # Try served model first, fallback to local if unavailable
-   calc = model.get_calculator(use_serve=True)
-
-   # Use only local calculator
-   calc = model.get_calculator(use_serve=False)
-
-   # Use environment variable setting (default)
-   calc = model.get_calculator()  # Respects MLIPX_USE_SERVE
-
-**Using the Models API directly**:
+The ``Models`` class provides a unified interface that works in both local and serve modes:
 
 .. code-block:: python
 
-   from mlipx.serve import Models
+   from mlipx import Models
 
+   # Auto-detect mode (serve if broker running, else local)
    models = Models()
 
-   # Check available models
-   print(list(models))
+   # Force local mode
+   models = Models(local=True)
 
-   # Check if specific model is available
-   if "mace-mpa-0" in models:
-       calc = models["mace-mpa-0"].get_calculator()
+   # Force serve mode
+   models = Models(local=False)
 
-.. _model-discovery:
+   # With custom timeout (milliseconds) for serve mode
+   models = Models(timeout=60000)
 
-Model Discovery
----------------
+   # Access models
+   calc = models["mace-mpa-0"].get_calculator()
 
-When you run ``mlipx serve-broker --autostart`` or ``mlipx serve``, mlipx automatically searches for a ``models.py`` file. This makes it easy to use project-specific model configurations without explicit ``--models`` flags.
+Parameters:
 
-Discovery Order
-~~~~~~~~~~~~~~~
+- ``path``: Path to models.py file (for local mode). If None, uses discovery.
+- ``timeout``: Timeout in milliseconds for serve mode. If None, uses aserpc defaults.
+- ``local``: Force local mode (True), force serve mode (False), or auto-detect (None).
 
-The discovery follows this priority (highest to lowest):
+Properties and Methods:
 
-1. **--models flag**: Explicit path always wins
+- ``models.mode``: Returns current mode ('local' or 'serve')
+- ``models.refresh()``: Refresh model list from broker (serve mode only)
+
+In serve mode, it uses ``aserpc.RemoteCalculator`` under the hood.
+In local mode, it loads models from a ``models.py`` file.
+
+Scale-to-Zero with Manager
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The aserpc Manager enables automatic worker spawning on demand. When using
+``mlipx serve-broker --autostart``, workers are only started when a client
+requests a model, and they automatically shut down after an idle timeout.
+
+**How it works:**
+
+1. Client requests a calculator (e.g., ``mace-mpa-0``)
+2. Broker checks if a worker is available
+3. If not, broker sends SPAWN_REQUEST to manager
+4. Manager spawns worker using pre-configured command
+5. Worker registers with broker and handles the request
+6. Worker shuts down after idle timeout (default: 300s)
+
+**Spawn configurations** are registered via entry points in ``pyproject.toml``:
+
+.. code-block:: toml
+
+   [project.entry-points."aserpc.spawn"]
+   mlipx = "mlipx.aserpc:get_spawn_configs"
+
+Each spawn config specifies how to start a worker with the correct dependencies:
+
+- Uses ``uv run --extra <dep>`` if extras are in local ``pyproject.toml``
+- Uses ``uvx --from mlipx[<dep>]`` otherwise (installs from PyPI)
+
+Model Discovery (Local Mode)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using local mode, mlipx searches for a ``models.py`` file:
+
+1. **--models flag / path parameter**: Explicit path always wins
 2. **MLIPX_MODELS environment variable**: For CI/shared configurations
 3. **Upward search for models.py**: Searches from current directory up to root
 4. **Built-in package default**: Falls back to ``mlipx/recipes/models.py.jinja2``
 
-Upward Search
-~~~~~~~~~~~~~
-
-The upward search (like git finding ``.git``) is particularly useful for project layouts:
-
-.. code-block:: text
-
-   /my-project/
-   ├── models.py              ← Found! (contains ALL_MODELS)
-   ├── pyproject.toml
-   └── recipes/
-       └── md/
-           └── .dvc/          ← cwd when running dvc repro
-
-Running ``mlipx serve-broker --autostart`` from ``/my-project/recipes/md/`` will find ``/my-project/models.py``.
-
-.. note::
-
-   Only ``models.py`` files containing ``ALL_MODELS`` are recognized as valid mlipx model files.
-   This prevents false positives from unrelated ``models.py`` files.
-
-Using MLIPX_MODELS Environment Variable
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-For CI/CD or shared configurations:
-
-.. code-block:: console
-
-   (.venv) $ export MLIPX_MODELS=/shared/team-models.py
-   (.venv) $ mlipx serve-broker --autostart
-
-Typical Workflow
-~~~~~~~~~~~~~~~~
-
-1. Run ``mlipx recipes`` to generate ``models.py`` in your project root
-2. Run ``mlipx serve-broker --autostart`` from anywhere in the project
-3. The broker automatically finds your ``models.py``
-
-.. code-block:: console
-
-   (.venv) $ cd /my-project
-   (.venv) $ mlipx recipes ev --models mace-mpa-0,orb-v2 --material-ids mp-1143
-   (.venv) $ mlipx serve-broker --autostart
-   Models file: /my-project/models.py (discovered at /my-project)
-   ...
-
-Model Configuration
--------------------
-
-To make a model available for serving, it needs two additional fields in the model definition:
-
-**serve_name** (str | None)
-   Model identifier used for serve lookups. Auto-injected from the dictionary key in ``models.py.jinja2``.
-
-**extra** (list[str] | None)
-   List of UV extras required for this model (e.g., ``["mace"]``, ``["sevenn"]``).
-
-Example Model Definition
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   # In models.py or custom models file
-
-   ALL_MODELS["mace-mpa-0"] = GenericASECalculator(
-       module="mace.calculators",
-       class_name="mace_mp",
-       device="auto",
-       kwargs={"model": "../../models/mace-mpa-0-medium.model"},
-       extra=["mace"],  # UV extra for dependencies
-       # serve_name="mace-mpa-0"  # typically auto-injected
-   )
-
-   ALL_MODELS["chgnet"] = GenericASECalculator(
-       module="chgnet.model.model",
-       class_name="CHGNet",
-       device="auto",
-       extra=["chgnet"],
-   )
-
-The ``serve_name`` field is automatically injected by the template at the end of ``models.py.jinja2``:
-
-.. code-block:: python
-
-   # Auto-inject model names for serve integration
-   for _model_key, _model_instance in ALL_MODELS.items():
-       if hasattr(_model_instance, 'serve_name') and _model_instance.serve_name is None:
-           _model_instance.serve_name = _model_key
-
 Advanced Usage
 --------------
-
-Custom Models File
-~~~~~~~~~~~~~~~~~~
-
-Use a custom models file for specialized model registries:
-
-.. code-block:: console
-
-   # Start broker with custom models
-   (.venv) $ mlipx serve-broker --autostart --models /path/to/custom-models.py
-
-   # Start worker with custom models
-   (.venv) $ uv run mlipx serve my-custom-model --models /path/to/custom-models.py
-
-Custom IPC Paths
-~~~~~~~~~~~~~~~~
-
-Specify custom IPC socket paths for multiple broker instances:
-
-.. code-block:: console
-
-   # Start broker on custom path
-   (.venv) $ mlipx serve-broker --path ipc:///tmp/my-broker.ipc
-
-   # Start worker connecting to custom broker
-   (.venv) $ uv run mlipx serve mace-mpa-0 --broker ipc:///tmp/my-broker-workers.ipc
-
-   # Check status of custom broker
-   (.venv) $ mlipx serve-status --broker ipc:///tmp/my-broker.ipc
 
 Multiple Workers per Model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -373,56 +338,43 @@ Start multiple workers for the same model to enable parallel processing:
 
 .. code-block:: console
 
-   (.venv) $ uv run mlipx serve mace-mpa-0 &
-   (.venv) $ uv run mlipx serve mace-mpa-0 &
-   (.venv) $ uv run mlipx serve mace-mpa-0 &
+   (.venv) $ mlipx serve mace-mpa-0 &
+   (.venv) $ mlipx serve mace-mpa-0 &
+   (.venv) $ mlipx serve mace-mpa-0 &
 
 The broker will distribute requests across all available workers using LRU scheduling.
+
+Custom IPC Paths
+~~~~~~~~~~~~~~~~
+
+Specify custom IPC socket paths:
+
+.. code-block:: console
+
+   # Start broker on custom path
+   (.venv) $ mlipx serve-broker --frontend ipc:///tmp/my-frontend.ipc --backend ipc:///tmp/my-backend.ipc
+
+   # Start worker connecting to custom broker
+   (.venv) $ mlipx serve mace-mpa-0 --broker ipc:///tmp/my-backend.ipc
 
 DVC Integration
 ~~~~~~~~~~~~~~~
 
-Use serve transparently with DVC workflows:
+Use serve with DVC workflows:
 
 .. code-block:: console
 
-   # Start broker with autostart
-   (.venv) $ mlipx serve-broker --autostart &
+   # Start broker
+   (.venv) $ aserpc broker &
 
-   # Enable serve globally
-   (.venv) $ export MLIPX_USE_SERVE=true
+   # Start workers
+   (.venv) $ aserpc worker mace-mpa-0 &
 
-   # Run DVC pipeline - automatically uses served models!
+   # Run DVC pipeline
    (.venv) $ dvc repro
-
-All model calculations will now use the serve infrastructure, with workers starting automatically as needed.
 
 Troubleshooting
 ---------------
-
-Worker Output
-~~~~~~~~~~~~~
-
-Auto-started workers inherit the broker's stdout/stderr, so worker logs appear directly in the terminal where the broker is running. This makes it easy to monitor worker startup and any errors in real-time.
-
-Broker Already Running
-~~~~~~~~~~~~~~~~~~~~~~
-
-If you see "Another broker is already running", it means a broker is already active on the same socket path. Either:
-
-1. Use the existing broker
-2. Stop the existing broker and start a new one
-3. Use a different ``--path`` for a separate broker instance
-
-Socket Path Conflicts on Shared Systems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On shared systems (e.g., HPC clusters), socket paths are automatically isolated by username:
-
-- With ``XDG_RUNTIME_DIR``: ``/run/user/<uid>/mlipx/broker.ipc``
-- Fallback: ``/tmp/mlipx-<username>/broker.ipc``
-
-This prevents conflicts between different users on the same machine.
 
 Checking Broker Status
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -438,4 +390,14 @@ This shows:
 - Whether the broker is running
 - Which models have active workers
 - Number of workers per model
-- Available models for autostart (if enabled)
+
+Listing Available Calculators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+List all calculators registered via entry points:
+
+.. code-block:: console
+
+   (.venv) $ aserpc list
+
+This shows calculators from all packages that provide the ``aserpc.calculators`` entry point.

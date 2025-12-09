@@ -1,7 +1,7 @@
 """Unified interface for accessing MLIP models.
 
 This module provides the `Models` class: a unified interface that works with
-local files or serve mode.
+local files or serve mode (via aserpc).
 """
 
 from __future__ import annotations
@@ -11,6 +11,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
+
+from mlipx.serve import is_broker_running
 
 if TYPE_CHECKING:
     from ase.calculators.calculator import Calculator
@@ -39,6 +41,29 @@ class LocalModelProxy:
         return f"LocalModelProxy(model={self.model_name!r})"
 
 
+class ServeModelProxy:
+    """Proxy for a model served via aserpc.
+
+    Provides the same interface as LocalModelProxy but uses aserpc.RemoteCalculator.
+    """
+
+    def __init__(self, model_name: str, timeout_ms: int | None = None):
+        self.model_name = model_name
+        self.timeout_ms = timeout_ms
+
+    def get_calculator(self, **kwargs) -> "Calculator":
+        """Get an aserpc RemoteCalculator for this model."""
+        from aserpc import RemoteCalculator
+
+        # Pass timeout if specified and not overridden
+        if self.timeout_ms is not None and "timeout_ms" not in kwargs:
+            kwargs["timeout_ms"] = self.timeout_ms
+        return RemoteCalculator(self.model_name, **kwargs)
+
+    def __repr__(self) -> str:
+        return f"ServeModelProxy(model={self.model_name!r})"
+
+
 class _ModelBackend(ABC):
     """Abstract backend for model access."""
 
@@ -63,7 +88,7 @@ class _LocalBackend(_ModelBackend):
         self._models = self._load_models()
 
     def _resolve_path(self, path: str | Path | None) -> Path:
-        from mlipx.serve.discovery import discover_models_file
+        from mlipx.serve import discover_models_file
 
         path_obj = Path(path) if isinstance(path, str) else path
         models_path, source = discover_models_file(explicit_path=path_obj)
@@ -71,7 +96,7 @@ class _LocalBackend(_ModelBackend):
         return models_path
 
     def _load_models(self) -> dict[str, "NodeWithCalculator"]:
-        from mlipx.serve.worker import load_models_from_file
+        from mlipx.serve import load_models_from_file
 
         return load_models_from_file(self._models_path)
 
@@ -93,49 +118,27 @@ class _LocalBackend(_ModelBackend):
 
 
 class _ServeBackend(_ModelBackend):
-    """Backend for serve mode model access with caching."""
+    """Backend for serve mode model access via aserpc."""
 
-    def __init__(self, broker: str | None, timeout: int | None):
-        from mlipx.serve.protocol import get_default_broker_path
-
-        self._broker_path = broker or get_default_broker_path()
-        self._timeout = timeout or self._query_broker_timeout()
+    def __init__(self, timeout: int | None):
+        self._timeout = timeout  # timeout in milliseconds
         self._cached_models: list[str] | None = None
 
-    def _query_broker_timeout(self) -> int:
-        """Query broker for timeouts, return default if unavailable.
-
-        The client timeout needs to account for:
-        1. Worker startup time (worker_start_timeout from broker)
-        2. Actual calculation time (worker_run_timeout from broker)
-
-        Returns timeout in milliseconds.
-        """
-        # Default: 60s startup + 60s run = 120s total
-        default_timeout = 120000
-        try:
-            from mlipx.serve.client import get_broker_detailed_status
-
-            status = get_broker_detailed_status(self._broker_path)
-            worker_start_timeout = status.get("worker_start_timeout")  # seconds
-            worker_run_timeout = status.get("worker_run_timeout")  # seconds
-
-            if worker_start_timeout is not None and worker_run_timeout is not None:
-                # Total timeout = startup + run (both in seconds, convert to ms)
-                return (worker_start_timeout + worker_run_timeout) * 1000
-            elif worker_start_timeout is not None:
-                # Only start timeout available, add default run timeout
-                return (worker_start_timeout + 60) * 1000
-        except Exception as e:
-            logger.debug(f"Could not query broker timeout: {e}")
-        return default_timeout
-
     def _fetch_models(self) -> list[str]:
-        from mlipx.serve.client import _fetch_models_from_broker
+        """Fetch available models from broker (includes spawnable models with 0 workers)."""
+        from aserpc import list_calculators
 
-        return _fetch_models_from_broker(self._broker_path)
+        try:
+            # list_calculators returns {model: worker_count}
+            # With manager, spawnable models show with count=0
+            calcs = list_calculators()
+            return list(calcs.keys())
+        except Exception as e:
+            logger.warning(f"Failed to list calculators from broker: {e}")
+            return []
 
     def get_model_names(self) -> list[str]:
+        """Return available models (from broker, includes spawnable models)."""
         if self._cached_models is None:
             self._cached_models = self._fetch_models()
         return self._cached_models
@@ -144,32 +147,12 @@ class _ServeBackend(_ModelBackend):
         """Clear the cached model list, forcing a fresh fetch on next access."""
         self._cached_models = None
 
-    def get_proxy(self, key: str):
-        from mlipx.serve.client import ModelProxy
-
-        models = self.get_model_names()
-        if key not in models:
-            available = ", ".join(sorted(models))
-            raise KeyError(f"Model '{key}' not found. Available: {available}")
-        return ModelProxy(key, self._broker_path, timeout=self._timeout)
+    def get_proxy(self, key: str) -> ServeModelProxy:
+        # With manager running, just return proxy - manager handles spawning
+        return ServeModelProxy(key, timeout_ms=self._timeout)
 
     def get_repr_info(self) -> str:
-        return f"mode='serve', broker={self._broker_path!r}"
-
-
-def _is_broker_available(broker: str | None) -> bool:
-    """Check if the broker is available."""
-    try:
-        from mlipx.serve import get_broker_status
-        from mlipx.serve.protocol import get_default_broker_path
-
-        broker_path = broker or get_default_broker_path()
-        status = get_broker_status(broker_path)
-        return status.get("broker_running", False)
-    except ImportError:
-        return False
-    except Exception:
-        return False
+        return "mode='serve'"
 
 
 class Models(Mapping):
@@ -177,7 +160,7 @@ class Models(Mapping):
 
     Works seamlessly in two modes:
     - Local: Load models directly from models.py file
-    - Serve: Connect to running broker for remote execution
+    - Serve: Connect to running aserpc broker for remote execution
 
     Mode is auto-detected based on broker availability, unless explicitly set.
 
@@ -208,7 +191,6 @@ class Models(Mapping):
     def __init__(
         self,
         path: str | Path | None = None,
-        broker: str | None = None,
         timeout: int | None = None,
         local: bool | None = None,
     ):
@@ -217,14 +199,11 @@ class Models(Mapping):
         Parameters
         ----------
         path : str | Path | None
-            Path to models.py file. If None, uses discovery (upward search).
-            If just a filename (e.g., "models.py"), searches upward for it.
-            If a path with directory (e.g., "./models.py"), uses as-is.
-        broker : str | None
-            IPC path to broker for serve mode. Defaults to platform-specific path.
+            Path to models.py file (for local mode). If None, uses discovery
+            (upward search). If just a filename (e.g., "models.py"), searches
+            upward for it. If a path with directory (e.g., "./models.py"), uses as-is.
         timeout : int | None
-            Timeout in milliseconds for serve mode. If None, uses broker's
-            worker_start_timeout (queried via STATUS_DETAIL).
+            Timeout in milliseconds for serve mode. If None, uses aserpc defaults.
         local : bool | None
             Force local mode (True), force serve mode (False), or auto-detect (None).
             Auto-detect tries serve first if broker is available, falls back to local.
@@ -237,10 +216,10 @@ class Models(Mapping):
             self._backend = _LocalBackend(path)
         elif local is False:
             self._mode = "serve"
-            self._backend = _ServeBackend(broker, timeout)
-        elif _is_broker_available(broker):
+            self._backend = _ServeBackend(timeout)
+        elif is_broker_running():
             self._mode = "serve"
-            self._backend = _ServeBackend(broker, timeout)
+            self._backend = _ServeBackend(timeout)
         else:
             self._mode = "local"
             self._backend = _LocalBackend(path)
