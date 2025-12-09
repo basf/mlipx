@@ -296,7 +296,9 @@ def serve_broker(
     ] = "INFO",
     autostart: Annotated[
         bool,
-        typer.Option("--autostart", help="Enable on-demand worker spawning via manager"),
+        typer.Option(
+            "--autostart", help="Enable on-demand worker spawning via manager"
+        ),
     ] = False,
 ):
     """Start the aserpc broker for MLIP workers.
@@ -452,6 +454,42 @@ def serve(
     subprocess.run(cmd)
 
 
+def _format_worker_info(model_name: str, worker_info: dict | int) -> tuple[str, int]:
+    """Format worker info for display and return (formatted_line, count)."""
+    if isinstance(worker_info, dict):
+        count = worker_info.get("total", 0)
+        idle = worker_info.get("idle", 0)
+        busy = worker_info.get("busy", 0)
+        status_text = f": {idle} idle, {busy} busy"
+    else:
+        count = worker_info
+        status_text = ""
+
+    worker_text = "worker" if count == 1 else "workers"
+    line = (
+        f"[cyan]•[/cyan] [bold]{model_name}[/bold] "
+        f"[dim]({count} {worker_text}{status_text})[/dim]"
+    )
+    return line, count
+
+
+def _display_workers_panel(console, workers: dict) -> None:
+    """Display panel showing active workers."""
+    from rich.panel import Panel
+
+    total_workers = 0
+    models_list = []
+    for model_name in sorted(workers.keys()):
+        line, count = _format_worker_info(model_name, workers[model_name])
+        models_list.append(line)
+        total_workers += count
+
+    title = f"Active Workers ({len(workers)} models, {total_workers} workers)"
+    console.print(
+        Panel("\n".join(models_list), title=title, border_style="cyan", padding=(1, 2))
+    )
+
+
 @app.command(name="serve-status")
 def serve_status(
     shutdown: Annotated[
@@ -501,27 +539,24 @@ def serve_status(
 
         status = broker_status()
         broker_running = status is not None
+        error_msg = None
     except Exception as e:
         broker_running = False
         status = None
         error_msg = str(e)
 
-    # Create status panel
-    if broker_running:
-        broker_status_text = "[green]✓ Running[/green]"
-        panel_style = "green"
-    else:
-        broker_status_text = "[red]✗ Not Running[/red]"
-        panel_style = "red"
-
     # Broker info table
     broker_table = Table(show_header=False, box=None, padding=(0, 1))
     broker_table.add_column("Key", style="bold cyan", width=10)
     broker_table.add_column("Value")
-    broker_table.add_row("Status", broker_status_text)
 
-    if not broker_running:
-        broker_table.add_row("Error", f"[red]{error_msg if 'error_msg' in dir() else 'Broker not running'}[/red]")
+    if broker_running:
+        broker_table.add_row("Status", "[green]✓ Running[/green]")
+        panel_style = "green"
+    else:
+        broker_table.add_row("Status", "[red]✗ Not Running[/red]")
+        broker_table.add_row("Error", f"[red]{error_msg or 'Broker not running'}[/red]")
+        panel_style = "red"
 
     console.print(
         Panel(
@@ -536,60 +571,16 @@ def serve_status(
     if broker_running and status:
         workers = status.get("workers", {})
         if workers:
-            # Workers format: {model: {total, idle, busy}} or {model: count}
-            total_workers = 0
-            models_list = []
-            for model_name in sorted(workers.keys()):
-                worker_info = workers[model_name]
-                if isinstance(worker_info, dict):
-                    # New format: {total, idle, busy}
-                    count = worker_info.get("total", 0)
-                    idle = worker_info.get("idle", 0)
-                    busy = worker_info.get("busy", 0)
-                    status_text = f"{idle} idle, {busy} busy"
-                else:
-                    # Old format: just count
-                    count = worker_info
-                    status_text = ""
-
-                total_workers += count
-                worker_text = "worker" if count == 1 else "workers"
-                if status_text:
-                    models_list.append(
-                        f"[cyan]•[/cyan] [bold]{model_name}[/bold] "
-                        f"[dim]({count} {worker_text}: {status_text})[/dim]"
-                    )
-                else:
-                    models_list.append(
-                        f"[cyan]•[/cyan] [bold]{model_name}[/bold] "
-                        f"[dim]({count} {worker_text})[/dim]"
-                    )
-
-            models_content = "\n".join(models_list)
-
-            num_models = len(workers)
-            title = f"Active Workers ({num_models} models, {total_workers} workers)"
-            console.print(
-                Panel(
-                    models_content,
-                    title=title,
-                    border_style="cyan",
-                    padding=(1, 2),
-                )
-            )
+            _display_workers_panel(console, workers)
         else:
-            message = (
-                "[yellow]No workers currently running[/yellow]\n\n"
-                "Start a worker with:\n"
-                "  [bold cyan]mlipx serve <model-name>[/bold cyan]\n"
-                "  [bold cyan]aserpc worker <model-name>[/bold cyan]\n\n"
-                "List available calculators with:\n"
-                "  [bold cyan]aserpc list[/bold cyan]"
-            )
-
             console.print(
                 Panel(
-                    message,
+                    "[yellow]No workers currently running[/yellow]\n\n"
+                    "Start a worker with:\n"
+                    "  [bold cyan]mlipx serve <model-name>[/bold cyan]\n"
+                    "  [bold cyan]aserpc worker <model-name>[/bold cyan]\n\n"
+                    "List available calculators with:\n"
+                    "  [bold cyan]aserpc list[/bold cyan]",
                     title="Active Workers",
                     border_style="yellow",
                     padding=(1, 2),

@@ -125,7 +125,7 @@ class _ServeBackend(_ModelBackend):
         self._cached_models: list[str] | None = None
 
     def _fetch_models(self) -> list[str]:
-        """Fetch available models from broker (includes spawnable models with 0 workers)."""
+        """Fetch available models from broker (includes spawnable models)."""
         from aserpc import list_calculators
 
         try:

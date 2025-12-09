@@ -33,13 +33,12 @@ from typing import TYPE_CHECKING
 
 import jinja2
 
+from mlipx.aserpc import MODEL_EXTRAS, _build_spawn_command
+
 if TYPE_CHECKING:
     from mlipx.abc import NodeWithCalculator
 
 logger = logging.getLogger(__name__)
-
-# Re-export from mlipx.aserpc
-from mlipx.aserpc import MODEL_EXTRAS, _build_spawn_command
 
 # Re-export useful aserpc functions
 try:
@@ -273,5 +272,3 @@ def build_worker_command(
     ]
 
     return cmd, method
-
-
