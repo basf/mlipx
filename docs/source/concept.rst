@@ -39,6 +39,7 @@ providing a quick overview of all past evaluations.
    concept/data
    concept/models
    concept/recipes
+   concept/serve
    concept/zntrack
    concept/zndraw
    concept/metrics

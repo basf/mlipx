@@ -1,6 +1,6 @@
 [project]
 name = "mlipx"
-version = "0.1.6"
+dynamic = ["version", "urls"]
 description = "Machine-Learned Interatomic Potential eXploration"
 authors = [
     { name = "Sandip De", email = "sandip.de@basf.com" },
@@ -10,11 +10,12 @@ authors = [
 
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords=["data-version-control", "machine-learning", "reproducibility", "collaboration", "machine-learned interatomic potential", "mlip", "mlff"]
 
 dependencies = [
     "ase>=3.24.0",
+    "aserpc>=0.1.3",
     "lazy-loader>=0.4",
     "mp-api>=0.45.3",
     "plotly>=6.0.0",
@@ -22,7 +23,7 @@ dependencies = [
     "typer>=0.15.1",
     "zndraw>=0.5.10",
     "znh5md>=0.4.4",
-    "zntrack>=0.8.5",
+    "zntrack>=0.8.10",
     "dvc-s3>=3.2.0",
     "mpcontribs-client>=5.10.2",
     "pydantic>=2.10.6",
@@ -125,8 +126,21 @@ pet-mad = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "mlipx/_version.py"
+
+[tool.hatch.metadata.hooks.vcs]
+
+[tool.hatch.metadata.hooks.vcs.urls]
+Homepage = "https://github.com/basf/mlipx"
+Repository = "https://github.com/basf/mlipx"
+"Source Commit" = "https://github.com/basf/mlipx/tree/{commit_hash}"
 
 [tool.codespell]
 ignore-words-list = "basf"
@@ -137,3 +151,9 @@ select = ["I", "F", "E", "C", "W"]
 
 [project.entry-points.'zntrack.nodes']
 mlipx = 'mlipx.entrypoints:nodes'
+
+[project.entry-points.'aserpc.calculators']
+mlipx = 'mlipx.aserpc:get_calculators'
+
+[project.entry-points.'aserpc.spawn']
+mlipx = 'mlipx.aserpc:get_spawn_configs'

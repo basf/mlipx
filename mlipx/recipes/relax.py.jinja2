@@ -1,7 +1,8 @@
 import mlipx
 import zntrack
 
-from models import MODELS
+models = mlipx.Models()
+RECIPE_MODELS = {{ models }}
 
 project = zntrack.Project()
 
@@ -22,7 +23,8 @@ with project.group("initialize"):
 {% endif %}
 
 
-for model_name, model in MODELS.items():
+for model_name in RECIPE_MODELS:
+    model = models[model_name]
     for idx, data in enumerate(frames):
         with project.group(model_name, str(idx)):
             geom_opt = mlipx.StructureOptimization(data=data.frames, model=model, fmax=0.1)
