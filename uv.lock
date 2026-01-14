@@ -6147,7 +6147,7 @@ requires-dist = [
     { name = "typer", specifier = ">=0.15.1" },
     { name = "zndraw", specifier = ">=0.5.10" },
     { name = "znh5md", specifier = ">=0.4.4" },
-    { name = "zntrack", specifier = ">=0.8.5" },
+    { name = "zntrack", specifier = ">=0.8.7" },
 ]
 provides-extras = ["chgnet", "mace", "sevenn", "orb", "mattersim", "grace", "fairchem", "matpes", "pet-mad", "co-splitting"]
 
