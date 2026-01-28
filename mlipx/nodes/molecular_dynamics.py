@@ -76,14 +76,19 @@ class MolecularDynamics(zntrack.Node):
     plots: pd.DataFrame = zntrack.plots(y=["energy", "fmax"], autosave=True)
 
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
+    model_outs: pathlib.Path = zntrack.outs_path(zntrack.nwd / "model")
 
     def run(self):
         if self.observers is None:
             self.observers = []
         if self.modifiers is None:
             self.modifiers = []
+        self.model_outs.mkdir(parents=True, exist_ok=True)
+        # Create placeholder to ensure DVC tracks the directory even if calculator
+        # doesn't create files (following ipsuite pattern)
+        (self.model_outs / "outs.txt").write_text("")
         atoms = self.data[self.data_id]
-        atoms.calc = self.model.get_calculator()
+        atoms.calc = self.model.get_calculator(directory=self.model_outs)
         dyn = self.thermostat.get_molecular_dynamics(atoms)
         for obs in self.observers:
             obs.initialize(atoms)

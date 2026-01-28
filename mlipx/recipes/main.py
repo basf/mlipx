@@ -356,3 +356,26 @@ def adsorption(
         smiles=smiles,
         slab_config=slab_config,
     )
+
+
+@app.command()
+def metadynamics(
+    initialize: bool = False,
+    repro: bool = False,
+    models: t.Annotated[str | None, typer.Option()] = None,
+    steps: t.Annotated[int, typer.Option()] = 2_000_000,
+):
+    """Run alanine dipeptide metadynamics with phi/psi collective variables.
+
+    This recipe sets up a well-tempered metadynamics simulation of alanine
+    dipeptide solvated in water, using phi and psi backbone torsion angles
+    as collective variables. Produces free energy surface and CV time series.
+    """
+    if initialize:
+        initialize_directory()
+    if models is not None:
+        render_template(CWD / "models.py.jinja2", "models.py", models=models.split(","))
+    template = jinja2.Template((CWD / "metadynamics.py.jinja2").read_text())
+    with open("main.py", "w") as f:
+        f.write(template.render(n_steps=steps))
+    repro_if_requested(repro)

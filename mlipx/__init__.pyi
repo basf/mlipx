@@ -15,6 +15,7 @@ from .nodes.invariances import (
     TranslationalInvariance,
 )
 from .nodes.io import LoadDataFile
+from .nodes.metadynamics_analysis import MetadynamicsAnalysis
 from .nodes.modifier import TemperatureRampModifier
 from .nodes.molecular_dynamics import LangevinConfig, MolecularDynamics
 from .nodes.mp_api import MPRester
@@ -66,6 +67,7 @@ __all__ = [
     "BuildASEslab",
     "RelaxAdsorptionConfigs",
     "OrcaSinglePoint",
+    "MetadynamicsAnalysis",
     "spec",
     "__version__",
 ]
