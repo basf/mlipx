@@ -10,7 +10,7 @@ authors = [
 
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 keywords=["data-version-control", "machine-learning", "reproducibility", "collaboration", "machine-learned interatomic potential", "mlip", "mlff"]
 
 dependencies = [
@@ -26,6 +26,8 @@ dependencies = [
     "dvc-s3>=3.2.0",
     "mpcontribs-client>=5.10.2",
     "pydantic>=2.10.6",
+    "hillclimber>=0.1.8",
+    "molify>=0.2.2",
 ]
 
 [dependency-groups]

@@ -66,7 +66,7 @@ class BuildBox(zntrack.Node):
     frames_path: pathlib.Path = zntrack.outs_path(zntrack.nwd / "frames.xyz")
 
     def run(self):
-        from rdkit2ase import pack
+        from molify import pack
 
         atoms = pack(data=self.data, counts=self.counts, density=self.density)
         aio.write(self.frames_path, atoms)
